@@ -1,15 +1,30 @@
-import { useAuthStore } from '../store/authStore';
-import { login as apiLogin, logout as apiLogout, register as apiRegister } from '../api/auth';
-import type { User } from '../types';
+import * as SecureStore from 'expo-secure-store';
+import { useAppDispatch, useAppSelector } from '../store';
+import { setCredentials, clearCredentials, setLoading } from '../store/slices/authSlice';
+import { login as apiLogin, logout as apiLogout, register as apiRegister, getProfile } from '../api/auth';
+import { connectSocket, disconnectSocket } from '../services/socketService';
+import type { User } from '../utils/types/user.types';
 
 export function useAuth() {
-  const { user, token, loading, setUser, clearAuth } = useAuthStore();
+  const dispatch = useAppDispatch();
+  const { user, token, loading } = useAppSelector((state) => state.auth);
 
   async function login(email: string, password: string): Promise<User> {
     const response = await apiLogin(email, password);
-    const userData = response.user ?? (response as any);
-    const authToken = response.token ?? userData.token;
-    await setUser(userData, authToken);
+    const userData: User = {
+      ...(response.user ?? response as any),
+      id: response.user?.id || (response as any).id || '',
+      _id: response.user?._id || (response as any)._id || response.user?.id || '',
+      isAdmin: response.user?.isAdmin ?? false,
+      isManager: response.user?.isManager ?? false,
+      isSupport: response.user?.isSupport ?? false,
+      token: response.token,
+    };
+    const authToken = response.token;
+    await SecureStore.setItemAsync('karaadi_token', authToken);
+    await SecureStore.setItemAsync('karaadi_user', JSON.stringify(userData));
+    dispatch(setCredentials({ user: userData, token: authToken }));
+    if (userData.id) connectSocket(userData.id);
     return userData;
   }
 
@@ -23,10 +38,35 @@ export function useAuth() {
   }
 
   async function logout() {
+    await apiLogout();
+    await SecureStore.deleteItemAsync('karaadi_token');
+    await SecureStore.deleteItemAsync('karaadi_user');
+    disconnectSocket();
+    dispatch(clearCredentials());
+  }
+
+  async function loadFromStorage() {
+    dispatch(setLoading(true));
     try {
-      await apiLogout();
-    } catch {}
-    await clearAuth();
+      const token = await SecureStore.getItemAsync('karaadi_token');
+      const userJson = await SecureStore.getItemAsync('karaadi_user');
+      if (token && userJson) {
+        const userData = JSON.parse(userJson) as User;
+        dispatch(setCredentials({ user: userData, token }));
+        if (userData.id) connectSocket(userData.id);
+        getProfile().then((fresh) => {
+          if (fresh) {
+            const updated = { ...userData, ...fresh, token };
+            dispatch(setCredentials({ user: updated, token }));
+            SecureStore.setItemAsync('karaadi_user', JSON.stringify(updated));
+          }
+        }).catch(() => {});
+      } else {
+        dispatch(clearCredentials());
+      }
+    } catch {
+      dispatch(clearCredentials());
+    }
   }
 
   return {
@@ -37,5 +77,6 @@ export function useAuth() {
     login,
     register,
     logout,
+    loadFromStorage,
   };
 }

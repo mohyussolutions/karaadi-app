@@ -3,8 +3,8 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { apiClient } from '../../src/api/client';
-import EmptyState from '../../src/components/shared/EmptyState';
-import LoadingSpinner from '../../src/components/shared/LoadingSpinner';
+import { SEARCH_HISTORY_ENDPOINTS } from '../../src/constants/endpoints';
+import { EmptyState, LoadingSpinner } from '../../src/components/shared';
 import { Colors } from '../../src/constants/colors';
 import { useAuthStore } from '../../src/store/authStore';
 
@@ -15,7 +15,7 @@ export default function SavedSearchesScreen() {
 
   useEffect(() => {
     if (!user) { setLoading(false); return; }
-    apiClient.get('/api/history-search')
+    apiClient.get(SEARCH_HISTORY_ENDPOINTS.LIST)
       .then(({ data }) => setSearches(Array.isArray(data) ? data : data?.searches || []))
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -23,7 +23,7 @@ export default function SavedSearchesScreen() {
 
   async function deleteSearch(id: string) {
     setSearches((prev) => prev.filter((s) => (s._id || s.id) !== id));
-    await apiClient.delete(`/api/history-search/${id}`).catch(() => {});
+    await apiClient.delete(SEARCH_HISTORY_ENDPOINTS.DELETE(id)).catch(() => {});
   }
 
   if (loading) return <LoadingSpinner fullScreen />;

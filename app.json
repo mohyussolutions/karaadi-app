@@ -4,19 +4,23 @@
     "slug": "karaadi",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.jpg",
     "userInterfaceStyle": "automatic",
     "scheme": "karaadi",
+    "splash": {
+      "image": "./assets/logo.jpg",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.karaadi.app"
     },
     "android": {
+      "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png",
-        "backgroundColor": "#2563EB"
+        "foregroundImage": "./assets/logo.jpg",
+        "backgroundColor": "#ffffff"
       },
       "package": "com.karaadi.app",
       "permissions": [
@@ -38,7 +42,7 @@
       ]
     },
     "web": {
-      "favicon": "./assets/favicon.png",
+      "favicon": "./assets/logo.jpg",
       "bundler": "metro"
     },
     "plugins": [
@@ -58,7 +62,7 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/icon.png",
+          "icon": "./assets/logo.jpg",
           "color": "#2563EB",
           "sounds": []
         }

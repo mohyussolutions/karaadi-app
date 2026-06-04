@@ -6,9 +6,8 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { apiClient } from '../../src/api/client';
-import { BUSINESSES_ENDPOINTS } from '../../src/api/urls';
-import LoadingSpinner from '../../src/components/shared/LoadingSpinner';
-import EmptyState from '../../src/components/shared/EmptyState';
+import { BUSINESSES_ENDPOINTS } from '../../src/constants/endpoints';
+import { LoadingSpinner, EmptyState } from '../../src/components/shared';
 import { Colors } from '../../src/constants/colors';
 import { useAuthStore } from '../../src/store/authStore';
 
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', gap: 12,
     backgroundColor: Colors.white, borderRadius: 12, padding: 14,
     marginBottom: 10,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 3, elevation: 2,
+    borderWidth: 1, borderColor: '#F3F4F6',
   },
   logo: { width: 52, height: 52, borderRadius: 10, backgroundColor: Colors.border },
   info: { flex: 1 },

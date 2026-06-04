@@ -1,6 +1,7 @@
-import { apiClient, extractList } from './client';
-import { FAVORITES_ENDPOINTS } from './urls';
-import type { Favorite } from '../types';
+import { apiClient } from './client';
+import { extractList } from '../components/normalize';
+import { FAVORITES_ENDPOINTS } from '../constants/endpoints';
+import type { Favorite } from '../utils/types';
 
 export async function getFavorites(): Promise<Favorite[]> {
   const { data } = await apiClient.get(FAVORITES_ENDPOINTS.LIST);

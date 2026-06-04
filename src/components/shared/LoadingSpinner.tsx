@@ -1,34 +1,45 @@
 import React from 'react';
-import { View, ActivityIndicator, Text, StyleSheet } from 'react-native';
-import { Colors } from '../../constants/colors';
+import { ActivityIndicator, View, Image, StyleSheet } from 'react-native';
+import COLORS from '../../constants/colors';
 
 interface Props {
-  message?: string;
   fullScreen?: boolean;
+  size?: 'small' | 'large';
+  color?: string;
 }
 
-export default function LoadingSpinner({ message, fullScreen = false }: Props) {
-  return (
-    <View style={[styles.container, fullScreen && styles.fullScreen]}>
-      <ActivityIndicator size="large" color={Colors.primary} />
-      {message && <Text style={styles.message}>{message}</Text>}
-    </View>
-  );
+export default function LoadingSpinner({
+  fullScreen = false,
+  size = 'large',
+  color = COLORS.primary,
+}: Props) {
+  if (fullScreen) {
+    return (
+      <View style={styles.fullScreen}>
+        <Image
+          source={require('../../../assets/logo.jpg')}
+          style={styles.logo}
+          resizeMode="contain"
+        />
+        <ActivityIndicator size={size} color={color} style={styles.spinner} />
+      </View>
+    );
+  }
+  return <ActivityIndicator size={size} color={color} />;
 }
 
 const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 24,
-  },
   fullScreen: {
     flex: 1,
-    backgroundColor: Colors.background,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.white,
   },
-  message: {
-    marginTop: 12,
-    fontSize: 14,
-    color: Colors.textSecondary,
+  logo: {
+    width: 200,
+    height: 72,
+  },
+  spinner: {
+    marginTop: 32,
   },
 });

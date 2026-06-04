@@ -3,12 +3,11 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { apiClient } from '../../src/api/client';
-import { NOTIFICATIONS_ENDPOINTS } from '../../src/api/urls';
-import LoadingSpinner from '../../src/components/shared/LoadingSpinner';
-import EmptyState from '../../src/components/shared/EmptyState';
+import { NOTIFICATIONS_ENDPOINTS } from '../../src/constants/endpoints';
+import { LoadingSpinner, EmptyState } from '../../src/components/shared';
 import { Colors } from '../../src/constants/colors';
 import { useAuthStore } from '../../src/store/authStore';
-import type { Notification } from '../../src/types';
+import type { Notification } from '../../src/utils/types';
 
 export default function NotificationsScreen() {
   const { user } = useAuthStore();

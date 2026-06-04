@@ -6,48 +6,92 @@ import {
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { getConversation, sendMessage } from '../../src/api/messages';
-import LoadingSpinner from '../../src/components/shared/LoadingSpinner';
+import { getChatMessages, sendMessage } from '../../src/api/messages';
+import {
+  joinChat, leaveChat, emitSendMessage, emitMarkAsRead, getSocket,
+} from '../../src/services/socketService';
+import { LoadingSpinner } from '../../src/components/shared';
 import { Colors } from '../../src/constants/colors';
 import { useAuthStore } from '../../src/store/authStore';
-import type { Message } from '../../src/types';
+import type { ChatMessage } from '../../src/utils/types';
 
 export default function ChatScreen() {
-  const { userId, username, listingId } = useLocalSearchParams<{
+  const { chatId, userId, username } = useLocalSearchParams<{
+    chatId: string;
     userId: string;
     username: string;
-    listingId?: string;
   }>();
   const navigation = useNavigation();
   const { user } = useAuthStore();
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
   const listRef = useRef<FlatList>(null);
+  const chatIdNum = chatId ? parseInt(chatId, 10) : 0;
 
   useEffect(() => {
     navigation.setOptions({ title: username || 'Chat' });
-    if (!userId) { setLoading(false); return; }
-    getConversation(userId)
+    if (!chatIdNum || !user?.id) { setLoading(false); return; }
+
+    getChatMessages(chatIdNum, user.id)
       .then(setMessages)
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [userId]);
+
+    joinChat(chatIdNum);
+    emitMarkAsRead(chatIdNum);
+
+    return () => {
+      leaveChat(chatIdNum);
+    };
+  }, [chatIdNum, user?.id]);
+
+  useEffect(() => {
+    const socket = getSocket();
+    if (!socket) return;
+
+    const onReceive = (msg: ChatMessage) => {
+      setMessages((prev) => {
+        if (prev.find((m) => m.id === msg.id)) return prev;
+        return [...prev, msg];
+      });
+      emitMarkAsRead(chatIdNum);
+      setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 100);
+    };
+
+    socket.on('receiveMessage', onReceive);
+    return () => { socket.off('receiveMessage', onReceive); };
+  }, [chatIdNum]);
 
   async function handleSend() {
-    if (!text.trim() || !userId) return;
+    if (!text.trim() || !chatIdNum || !user?.id || !userId) return;
     const content = text.trim();
     setText('');
     setSending(true);
-    try {
-      const msg = await sendMessage({ receiverId: userId, content, listingId });
-      setMessages((prev) => [...prev, msg]);
-      setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 100);
-    } catch {
-      setText(content);
-    } finally {
+
+    const tempId = Date.now().toString();
+    const socket = getSocket();
+
+    if (socket?.connected) {
+      emitSendMessage(chatIdNum, content, tempId);
       setSending(false);
+      setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 100);
+    } else {
+      try {
+        const msg = await sendMessage({
+          chatId: chatIdNum,
+          senderId: user.id,
+          receiverId: userId,
+          content,
+        });
+        setMessages((prev) => [...prev, msg]);
+        setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 100);
+      } catch {
+        setText(content);
+      } finally {
+        setSending(false);
+      }
     }
   }
 
@@ -57,13 +101,13 @@ export default function ChatScreen() {
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        behavior="padding"
         keyboardVerticalOffset={90}
       >
         <FlatList
           ref={listRef}
           data={messages}
-          keyExtractor={(item) => item._id}
+          keyExtractor={(item) => String(item.id)}
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
           onContentSizeChange={() => listRef.current?.scrollToEnd({ animated: false })}
@@ -73,14 +117,14 @@ export default function ChatScreen() {
             </View>
           }
           renderItem={({ item }) => {
-            const isMe = item.senderId === (user?._id || user?.id);
+            const isMe = item.senderId === user?.id;
             return (
               <View style={[styles.bubble, isMe ? styles.bubbleMe : styles.bubbleThem]}>
                 <Text style={[styles.bubbleText, isMe && styles.bubbleTextMe]}>
                   {item.content}
                 </Text>
                 <Text style={[styles.bubbleTime, isMe && styles.bubbleTimeMe]}>
-                  {new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </Text>
               </View>
             );

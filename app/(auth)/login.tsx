@@ -1,89 +1,67 @@
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
-  ScrollView, KeyboardAvoidingView, Platform, Alert, Image,
+  ScrollView, KeyboardAvoidingView, Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useAuth } from '../../src/hooks/useAuth';
+import { useTranslation } from 'react-i18next';
+import { useLogin } from '../../src/hooks/useLogin';
 import { Colors } from '../../src/constants/colors';
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { login } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { t } = useTranslation();
+  const { email, setEmail, password, setPassword, isLoading, error, handleSubmit } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  async function handleLogin() {
+  async function onPress() {
     if (!email.trim() || !password.trim()) {
-      Alert.alert('Error', 'Please enter your email and password.');
+      Alert.alert(t('auth.common.error'), t('auth.register.fillAll'));
       return;
     }
-    setLoading(true);
-    try {
-      await login(email.trim().toLowerCase(), password);
-      router.replace('/(tabs)');
-    } catch (err: any) {
-      const msg = err?.response?.data?.message || err?.message || 'Login failed. Please try again.';
-      Alert.alert('Login Failed', msg);
-    } finally {
-      setLoading(false);
-    }
+    await handleSubmit();
   }
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
+    <KeyboardAvoidingView style={styles.root} behavior="padding">
       <StatusBar style="dark" />
       <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.content}
+        contentContainerStyle={styles.scroll}
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
-        <View style={styles.header}>
-          <View style={styles.logoContainer}>
-            <Text style={styles.logoText}>K</Text>
-          </View>
-          <Text style={styles.title}>Welcome back</Text>
-          <Text style={styles.subtitle}>Sign in to your Karaadi account</Text>
-        </View>
+        <View style={styles.card}>
+          <Text style={styles.title}>{t('auth.login.title')}</Text>
+          <Text style={styles.subtitle}>{t('auth.login.subtitle')}</Text>
 
-        <View style={styles.form}>
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Email</Text>
             <TextInput
               style={styles.input}
               value={email}
               onChangeText={setEmail}
-              placeholder="you@example.com"
+              placeholder={t('auth.login.emailPlaceholder')}
               placeholderTextColor={Colors.placeholder}
               keyboardType="email-address"
               autoCapitalize="none"
               autoComplete="email"
+              autoFocus
             />
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Password</Text>
             <View style={styles.passwordWrapper}>
               <TextInput
-                style={[styles.input, { flex: 1, marginBottom: 0 }]}
+                style={styles.passwordInput}
                 value={password}
                 onChangeText={setPassword}
-                placeholder="Your password"
+                placeholder={t('auth.login.passwordPlaceholder')}
                 placeholderTextColor={Colors.placeholder}
                 secureTextEntry={!showPassword}
                 autoComplete="password"
               />
-              <TouchableOpacity
-                style={styles.eyeBtn}
-                onPress={() => setShowPassword((v) => !v)}
-              >
+              <TouchableOpacity style={styles.eyeBtn} onPress={() => setShowPassword((v) => !v)}>
                 <MaterialCommunityIcons
                   name={showPassword ? 'eye-off' : 'eye'}
                   size={20}
@@ -91,29 +69,34 @@ export default function LoginScreen() {
                 />
               </TouchableOpacity>
             </View>
+            <TouchableOpacity
+              style={styles.forgotRow}
+              onPress={() => router.push('/(auth)/forgot-password')}
+            >
+              <Text style={styles.forgotLink}>{t('auth.login.forgotPassword')}</Text>
+            </TouchableOpacity>
           </View>
 
           <TouchableOpacity
-            style={styles.forgotLink}
-            onPress={() => router.push('/(auth)/forgot-password')}
+            style={[styles.btn, isLoading && styles.btnDisabled]}
+            onPress={onPress}
+            disabled={isLoading}
           >
-            <Text style={styles.forgotText}>Forgot password?</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.loginBtn, loading && styles.disabledBtn]}
-            onPress={handleLogin}
-            disabled={loading}
-          >
-            <Text style={styles.loginBtnText}>
-              {loading ? 'Signing in...' : 'Sign In'}
+            <Text style={styles.btnText}>
+              {isLoading ? t('auth.login.signingIn') : t('auth.login.loginButton')}
             </Text>
           </TouchableOpacity>
 
+          {error && (
+            <View style={styles.errorBox}>
+              <Text style={styles.errorText}>{error}</Text>
+            </View>
+          )}
+
           <View style={styles.registerRow}>
-            <Text style={styles.registerText}>Don't have an account? </Text>
-            <TouchableOpacity onPress={() => router.push('/(auth)/register')}>
-              <Text style={styles.registerLink}>Create account</Text>
+            <Text style={styles.registerText}>{t('auth.login.noAccount')} </Text>
+            <TouchableOpacity onPress={() => router.replace('/(auth)/register')}>
+              <Text style={styles.registerLink}>{t('auth.login.register')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -123,62 +106,30 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  root: { flex: 1, backgroundColor: Colors.surface },
+  scroll: { flexGrow: 1, justifyContent: 'center', padding: 20, paddingVertical: 40 },
+  card: {
     backgroundColor: Colors.white,
+    borderRadius: 24,
+    padding: 28,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 16,
+    elevation: 6,
   },
-  content: {
-    flexGrow: 1,
-    padding: 24,
-    justifyContent: 'center',
-  },
-  header: {
-    alignItems: 'center',
-    marginBottom: 36,
-  },
-  logoContainer: {
-    width: 72,
-    height: 72,
-    borderRadius: 20,
-    backgroundColor: Colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 16,
-  },
-  logoText: {
-    fontSize: 36,
-    fontWeight: '800',
-    color: Colors.white,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: '800',
-    color: Colors.text,
-    marginBottom: 6,
-  },
-  subtitle: {
-    fontSize: 15,
-    color: Colors.textSecondary,
-  },
-  form: {
-    gap: 4,
-  },
-  inputGroup: {
-    marginBottom: 16,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: Colors.text,
-    marginBottom: 6,
-  },
+  title: { fontSize: 26, fontWeight: '800', color: Colors.textPrimary, textAlign: 'center', marginBottom: 4 },
+  subtitle: { fontSize: 14, color: Colors.textMuted, textAlign: 'center', marginBottom: 28 },
+  inputGroup: { marginBottom: 16 },
   input: {
     backgroundColor: Colors.inputBg,
-    borderRadius: 10,
-    paddingHorizontal: 14,
+    borderRadius: 12,
+    paddingHorizontal: 16,
     paddingVertical: 13,
     fontSize: 15,
-    color: Colors.text,
+    color: Colors.textPrimary,
     borderWidth: 1,
     borderColor: Colors.border,
   },
@@ -186,51 +137,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.inputBg,
-    borderRadius: 10,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: Colors.border,
     paddingRight: 12,
   },
-  eyeBtn: {
-    padding: 4,
-  },
-  forgotLink: {
-    alignSelf: 'flex-end',
-    marginBottom: 20,
-    marginTop: 2,
-  },
-  forgotText: {
-    color: Colors.primary,
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  loginBtn: {
+  passwordInput: { flex: 1, paddingHorizontal: 16, paddingVertical: 13, fontSize: 15, color: Colors.textPrimary },
+  eyeBtn: { padding: 4 },
+  forgotRow: { alignItems: 'flex-end', marginTop: 6 },
+  forgotLink: { fontSize: 13, color: Colors.primary, fontWeight: '500' },
+  btn: {
     backgroundColor: Colors.primary,
-    borderRadius: 12,
+    borderRadius: 14,
     paddingVertical: 15,
     alignItems: 'center',
-    marginBottom: 20,
+    marginTop: 4,
+    marginBottom: 16,
   },
-  disabledBtn: {
-    opacity: 0.65,
+  btnDisabled: { opacity: 0.65 },
+  btnText: { color: Colors.white, fontSize: 16, fontWeight: '700' },
+  errorBox: {
+    backgroundColor: '#FEF2F2',
+    borderWidth: 1,
+    borderColor: '#FCA5A5',
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 12,
   },
-  loginBtnText: {
-    color: Colors.white,
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  registerRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  registerText: {
-    color: Colors.textSecondary,
-    fontSize: 14,
-  },
-  registerLink: {
-    color: Colors.primary,
-    fontSize: 14,
-    fontWeight: '600',
-  },
+  errorText: { color: '#DC2626', fontSize: 13, textAlign: 'center', fontWeight: '500' },
+  registerRow: { flexDirection: 'row', justifyContent: 'center' },
+  registerText: { fontSize: 14, color: Colors.textSecondary },
+  registerLink: { fontSize: 14, color: Colors.primary, fontWeight: '600' },
 });

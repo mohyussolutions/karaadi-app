@@ -1,136 +1,237 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import {
-  View, Text, ScrollView, StyleSheet, TouchableOpacity, RefreshControl,
+  View, Text, StyleSheet, TouchableOpacity, RefreshControl,
+  Dimensions, FlatList,
 } from 'react-native';
-import { useRouter } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Colors } from '../../src/constants/colors';
-import CategoryGrid from '../../src/components/shared/CategoryGrid';
-import ListingCard from '../../src/components/shared/ListingCard';
-import { getFeed } from '../../src/api/search';
-import { useAuthStore } from '../../src/store/authStore';
-import type { ListingBase } from '../../src/types';
+import { useRouter } from 'expo-router';
+import COLORS from '../../src/constants/colors';
+import { useAppSelector } from '../../src/store';
+import {
+  fetchCars, fetchRealEstate, fetchMotorcycles,
+  fetchMarketplace, fetchBoats, fetchFarmEquipment,
+} from '../../src/api/listings';
+import { CategoryGrid, ListingCard } from '../../src/components/shared';
+import { useAppTranslation } from '../../src/hooks/useAppTranslation';
+import {
+  getMemCache, setMemCache, isCacheFresh, readDiskCache, writeDiskCache, mergeListings,
+} from '../../src/services/feedCacheService';
+import type { ListingBase } from '../../src/utils/types/listing.types';
+
+const { width } = Dimensions.get('window');
+const H_PAD = 12;
+const COL_GAP = 8;
+const CARD_W = (width - H_PAD * 2 - COL_GAP) / 2;
+const INITIAL_VISIBLE = 20;
+const READ_MORE_STEP = 10;
+
+const FEED_SOURCES = [
+  () => fetchCars({ limit: 6 }),
+  () => fetchRealEstate({ limit: 6 }),
+  () => fetchMotorcycles({ limit: 4 }),
+  () => fetchMarketplace({ limit: 6 }),
+  () => fetchBoats({ limit: 4 }),
+  () => fetchFarmEquipment({ limit: 4 }),
+];
+
+async function fetchAll(): Promise<ListingBase[]> {
+  const bucket: ListingBase[] = [];
+  await Promise.allSettled(
+    FEED_SOURCES.map((fn) => fn().then((items) => bucket.push(...items)).catch(() => {})),
+  );
+  return bucket;
+}
+
+function ListHeader({
+  user,
+  onPostPress,
+  sectionTitle,
+  seeAllLabel,
+  onSeeAll,
+  t,
+}: {
+  user: any;
+  onPostPress: () => void;
+  sectionTitle: string;
+  seeAllLabel: string;
+  onSeeAll: () => void;
+  t: (k: string) => string;
+}) {
+  return (
+    <View>
+      <View style={styles.section}>
+        <CategoryGrid />
+      </View>
+
+      <TouchableOpacity style={styles.postBtn} onPress={onPostPress} activeOpacity={0.88}>
+        <MaterialCommunityIcons name="plus" size={20} color={COLORS.white} />
+        <Text style={styles.postBtnText}>{t('wantSell.title')}</Text>
+        <MaterialCommunityIcons name="chevron-right" size={20} color={COLORS.white} style={styles.postBtnArrow} />
+      </TouchableOpacity>
+
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>{sectionTitle}</Text>
+        <TouchableOpacity onPress={onSeeAll}>
+          <Text style={styles.seeAll}>{seeAllLabel}</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { user } = useAuthStore();
-  const [feed, setFeed] = useState<ListingBase[]>([]);
-  const [loading, setLoading] = useState(true);
+  const user = useAppSelector((s) => s.auth.user);
+  const { t } = useAppTranslation();
+
+  const [listings, setListings] = useState<ListingBase[]>(() => getMemCache() ?? []);
   const [refreshing, setRefreshing] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
 
-  async function loadFeed() {
-    try {
-      const data = await getFeed(1);
-      setFeed(data);
-    } catch {}
-    setLoading(false);
+  useEffect(() => {
+    let cancelled = false;
+
+    async function init() {
+      if (listings.length === 0) {
+        const disk = await readDiskCache();
+        if (disk && disk.length > 0 && !cancelled) {
+          setListings(disk);
+          setMemCache(disk);
+        }
+      }
+
+      if (isCacheFresh()) return;
+
+      const fresh = await fetchAll();
+      if (cancelled || fresh.length === 0) return;
+
+      setListings((prev) => {
+        const merged = mergeListings(prev, fresh);
+        setMemCache(merged);
+        writeDiskCache(merged);
+        return merged;
+      });
+    }
+
+    init();
+    return () => { cancelled = true; };
+  }, []);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    setVisibleCount(INITIAL_VISIBLE);
+    const fresh = await fetchAll();
+    if (fresh.length > 0) {
+      setListings(fresh);
+      setMemCache(fresh);
+      writeDiskCache(fresh);
+    }
     setRefreshing(false);
-  }
+  }, []);
 
-  useEffect(() => { loadFeed(); }, []);
+  const visibleListings = listings.slice(0, visibleCount);
+  const hasMore = visibleCount < listings.length;
+
+  const header = (
+    <ListHeader
+      user={user}
+      onPostPress={() => router.push(user ? '/(tabs)/new-ad' : '/(auth)/login')}
+      sectionTitle={t('recentListings')}
+      seeAllLabel={t('seeAll')}
+      onSeeAll={() => router.push('/(tabs)/search')}
+      t={t}
+    />
+  );
+
+  const footer = hasMore ? (
+    <TouchableOpacity
+      style={styles.readMoreBtn}
+      onPress={() => setVisibleCount((c) => c + READ_MORE_STEP)}
+      activeOpacity={0.8}
+    >
+      <Text style={styles.readMoreText}>Read more</Text>
+      <MaterialCommunityIcons name="chevron-down" size={16} color={COLORS.primary} />
+    </TouchableOpacity>
+  ) : null;
+
+  const empty = listings.length === 0 ? (
+    <Text style={styles.empty}>{t('noListings')}</Text>
+  ) : null;
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
-      <ScrollView
-        style={styles.container}
-        showsVerticalScrollIndicator={false}
+    <View style={styles.safe}>
+      <FlatList
+        data={visibleListings}
+        numColumns={2}
+        keyExtractor={(item) => item.id || item._id}
+        removeClippedSubviews
+        windowSize={5}
+        maxToRenderPerBatch={8}
+        initialNumToRender={8}
         refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => { setRefreshing(true); loadFeed(); }}
-            tintColor={Colors.primary}
-          />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={COLORS.primary} />
         }
-      >
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.greeting}>
-              {user ? `Hello, ${user.username}` : 'Welcome to Karaadi'}
-            </Text>
-            <Text style={styles.subGreeting}>Find what you're looking for</Text>
-          </View>
-          <TouchableOpacity onPress={() => router.push('/profile/notifications')} style={styles.notifBtn}>
-            <MaterialCommunityIcons name="bell-outline" size={24} color={Colors.text} />
-          </TouchableOpacity>
-        </View>
-
-        <TouchableOpacity style={styles.searchTap} onPress={() => router.push('/(tabs)/search')}>
-          <MaterialCommunityIcons name="magnify" size={20} color={Colors.textMuted} />
-          <Text style={styles.searchPlaceholder}>Search listings...</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.sectionTitle}>Categories</Text>
-        <CategoryGrid />
-
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Recent Listings</Text>
-          <TouchableOpacity onPress={() => router.push('/browse/cars')}>
-            <Text style={styles.seeAll}>See all</Text>
-          </TouchableOpacity>
-        </View>
-
-        {loading ? (
-          <View style={styles.loadingRow}>
-            {[1, 2].map((k) => <View key={k} style={styles.skeleton} />)}
-          </View>
-        ) : feed.length === 0 ? (
-          <Text style={styles.emptyText}>No listings available yet.</Text>
-        ) : (
-          <View style={styles.listingsContainer}>
-            {feed.slice(0, 10).map((item) => (
-              <ListingCard
-                key={item._id || item.id}
-                item={item}
-                onPress={() =>
-                  router.push({
-                    pathname: '/listing/[id]',
-                    params: { id: item._id || item.id, category: (item as any).mainCategory || 'cars' },
-                  })
-                }
-              />
-            ))}
+        contentContainerStyle={styles.scroll}
+        columnWrapperStyle={styles.row}
+        ListHeaderComponent={header}
+        ListFooterComponent={footer}
+        ListEmptyComponent={empty}
+        renderItem={({ item }) => (
+          <View style={styles.gridItem}>
+            <ListingCard item={item} />
           </View>
         )}
-        <View style={{ height: 24 }} />
-      </ScrollView>
-    </SafeAreaView>
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Colors.background },
-  container: { flex: 1 },
-  header: {
+  safe: { flex: 1, backgroundColor: COLORS.background },
+  scroll: { paddingBottom: 32 },
+  section: { paddingTop: 8 },
+  sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingHorizontal: H_PAD,
+    paddingTop: 24,
+    paddingBottom: 12,
+  },
+  sectionTitle: { fontSize: 16, fontWeight: '700', color: COLORS.textPrimary },
+  seeAll: { fontSize: 14, color: COLORS.primary, fontWeight: '600' },
+  postBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.primary,
+    marginHorizontal: H_PAD,
+    marginTop: 8,
+    borderRadius: 10,
+    paddingVertical: 13,
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    gap: 8,
   },
-  greeting: { fontSize: 20, fontWeight: '800', color: Colors.text },
-  subGreeting: { fontSize: 13, color: Colors.textSecondary, marginTop: 2 },
-  notifBtn: {
-    width: 40, height: 40, borderRadius: 20,
-    backgroundColor: Colors.inputBg, alignItems: 'center', justifyContent: 'center',
+  postBtnText: { flex: 1, color: COLORS.white, fontWeight: '700', fontSize: 15, letterSpacing: 0.3 },
+  postBtnArrow: { marginLeft: 'auto' },
+  row: {
+    paddingHorizontal: H_PAD,
+    gap: COL_GAP,
+    marginBottom: COL_GAP,
   },
-  searchTap: {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
-    backgroundColor: Colors.inputBg, borderRadius: 10, marginHorizontal: 16,
-    paddingHorizontal: 14, paddingVertical: 12, marginBottom: 20,
+  gridItem: { width: CARD_W },
+  empty: { textAlign: 'center', color: COLORS.textMuted, padding: 32 },
+  readMoreBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+    marginHorizontal: H_PAD,
+    marginTop: 4,
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.surface,
   },
-  searchPlaceholder: { fontSize: 15, color: Colors.placeholder },
-  sectionHeader: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    paddingHorizontal: 16, marginBottom: 12,
-  },
-  sectionTitle: {
-    fontSize: 17, fontWeight: '700', color: Colors.text,
-    paddingHorizontal: 16, marginBottom: 12, marginTop: 8,
-  },
-  seeAll: { fontSize: 13, color: Colors.primary, fontWeight: '600' },
-  listingsContainer: { paddingHorizontal: 16 },
-  loadingRow: { paddingHorizontal: 16, gap: 12 },
-  skeleton: { height: 220, backgroundColor: Colors.border, borderRadius: 12, marginBottom: 12 },
-  emptyText: { textAlign: 'center', color: Colors.textMuted, fontSize: 14, marginTop: 24 },
+  readMoreText: { fontSize: 14, fontWeight: '600', color: COLORS.primary },
 });

@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { apiClient } from '../../src/api/client';
-import { AUTH_ENDPOINTS, UPLOAD_ENDPOINTS } from '../../src/api/urls';
+import { AUTH_ENDPOINTS, UPLOAD_ENDPOINTS } from '../../src/constants/endpoints';
 import { useAuthStore } from '../../src/store/authStore';
 import { Colors } from '../../src/constants/colors';
 
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   infoCard: {
     backgroundColor: Colors.white, borderRadius: 12, width: '100%',
     padding: 4, marginBottom: 16,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 3, elevation: 2,
+    borderWidth: 1, borderColor: '#F3F4F6',
   },
   infoRow: { flexDirection: 'row', justifyContent: 'space-between', padding: 14 },
   infoLabel: { fontSize: 14, color: Colors.textSecondary },

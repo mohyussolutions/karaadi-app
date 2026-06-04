@@ -1,47 +1,45 @@
-import { create } from 'zustand';
+import { useAuth } from '../hooks/useAuth';
+import { useAppSelector, useAppDispatch } from './index';
+import { clearCredentials, setCredentials } from './slices/authSlice';
 import * as SecureStore from 'expo-secure-store';
-import type { User } from '../types';
+import { disconnectSocket, connectSocket } from '../services/socketService';
+import type { User } from '../utils/types/user.types';
 
-interface AuthState {
-  user: User | null;
-  token: string | null;
-  loading: boolean;
-  setUser: (user: User | null, token?: string) => Promise<void>;
-  clearAuth: () => Promise<void>;
-  loadFromStorage: () => Promise<void>;
+export function useAuthStore() {
+  const user = useAppSelector((s) => s.auth.user);
+  const token = useAppSelector((s) => s.auth.token);
+  const loading = useAppSelector((s) => s.auth.loading);
+  const dispatch = useAppDispatch();
+  const { login, register, logout, loadFromStorage } = useAuth();
+
+  async function setUser(newUser: User | null, newToken?: string) {
+    if (newUser && newToken) {
+      await SecureStore.setItemAsync('karaadi_token', newToken);
+      await SecureStore.setItemAsync('karaadi_user', JSON.stringify(newUser));
+      dispatch(setCredentials({ user: newUser, token: newToken }));
+      if (newUser.id) connectSocket(newUser.id);
+    } else {
+      dispatch(clearCredentials());
+    }
+  }
+
+  async function clearAuth() {
+    await SecureStore.deleteItemAsync('karaadi_token');
+    await SecureStore.deleteItemAsync('karaadi_user');
+    disconnectSocket();
+    dispatch(clearCredentials());
+  }
+
+  return {
+    user,
+    token,
+    loading,
+    isAuthenticated: !!user,
+    setUser,
+    clearAuth,
+    login,
+    register,
+    logout,
+    loadFromStorage,
+  };
 }
-
-export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  token: null,
-  loading: true,
-
-  setUser: async (user, token) => {
-    if (user && token) {
-      await SecureStore.setItemAsync('token', token);
-      await SecureStore.setItemAsync('user', JSON.stringify(user));
-    }
-    set({ user, token: token ?? null, loading: false });
-  },
-
-  clearAuth: async () => {
-    await SecureStore.deleteItemAsync('token');
-    await SecureStore.deleteItemAsync('user');
-    set({ user: null, token: null, loading: false });
-  },
-
-  loadFromStorage: async () => {
-    try {
-      const token = await SecureStore.getItemAsync('token');
-      const userJson = await SecureStore.getItemAsync('user');
-      if (token && userJson) {
-        const user = JSON.parse(userJson) as User;
-        set({ user, token, loading: false });
-      } else {
-        set({ loading: false });
-      }
-    } catch {
-      set({ loading: false });
-    }
-  },
-}));

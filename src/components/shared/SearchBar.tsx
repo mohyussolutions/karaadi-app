@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Colors } from '../../constants/colors';
+import COLORS from '../../constants/colors';
 
 interface Props {
   value: string;
@@ -11,22 +11,30 @@ interface Props {
   onClear?: () => void;
 }
 
-export default function SearchBar({ value, onChangeText, placeholder, onSubmit, onClear }: Props) {
+export default function SearchBar({
+  value,
+  onChangeText,
+  placeholder = 'Search listings...',
+  onSubmit,
+  onClear,
+}: Props) {
   return (
     <View style={styles.container}>
-      <MaterialCommunityIcons name="magnify" size={20} color={Colors.textMuted} style={styles.icon} />
+      <MaterialCommunityIcons name="magnify" size={20} color={COLORS.textMuted} />
       <TextInput
         style={styles.input}
         value={value}
         onChangeText={onChangeText}
-        placeholder={placeholder || 'Search listings...'}
-        placeholderTextColor={Colors.placeholder}
+        placeholder={placeholder}
+        placeholderTextColor={COLORS.placeholder}
         returnKeyType="search"
         onSubmitEditing={onSubmit}
+        autoCorrect={false}
+        autoCapitalize="none"
       />
       {value.length > 0 && (
         <TouchableOpacity onPress={() => { onChangeText(''); onClear?.(); }}>
-          <MaterialCommunityIcons name="close-circle" size={18} color={Colors.textMuted} />
+          <MaterialCommunityIcons name="close-circle" size={18} color={COLORS.textMuted} />
         </TouchableOpacity>
       )}
     </View>
@@ -37,19 +45,18 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.inputBg,
-    borderRadius: 10,
+    backgroundColor: COLORS.inputBg,
+    borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 10,
+    borderWidth: 1,
+    borderColor: COLORS.border,
     gap: 8,
-  },
-  icon: {
-    flexShrink: 0,
   },
   input: {
     flex: 1,
     fontSize: 15,
-    color: Colors.text,
+    color: COLORS.textPrimary,
     padding: 0,
   },
 });

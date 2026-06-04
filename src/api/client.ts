@@ -1,19 +1,18 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
-
-const BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'https://api.karaadi.com';
+import { store } from '../store';
+import { clearCredentials } from '../store/slices/authSlice';
+import { disconnectSocket } from '../services/socketService';
+import { API_BASE_URL } from '../constants/endpoints';
 
 export const apiClient = axios.create({
-  baseURL: BASE_URL,
+  baseURL: API_BASE_URL,
   timeout: 15000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  withCredentials: false,
+  headers: { 'Content-Type': 'application/json' },
 });
 
 apiClient.interceptors.request.use(async (config) => {
-  const token = await SecureStore.getItemAsync('token');
+  const token = await SecureStore.getItemAsync('karaadi_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
     config.headers['x-auth-token'] = token;
@@ -25,24 +24,11 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response?.status === 401) {
-      await SecureStore.deleteItemAsync('token');
-      await SecureStore.deleteItemAsync('user');
+      await SecureStore.deleteItemAsync('karaadi_token');
+      await SecureStore.deleteItemAsync('karaadi_user');
+      disconnectSocket();
+      store.dispatch(clearCredentials());
     }
     return Promise.reject(error);
   },
 );
-
-export function normalizeList<T extends { _id?: string; id?: string }>(arr: T[]): T[] {
-  return arr.map((item) => ({
-    ...item,
-    id: item.id || item._id || '',
-    _id: item._id || item.id || '',
-  }));
-}
-
-export function extractList<T>(result: any): T[] {
-  const raw = Array.isArray(result)
-    ? result
-    : result?.data || result?.items || result?.listings || [];
-  return normalizeList<any>(raw);
-}

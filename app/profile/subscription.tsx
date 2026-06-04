@@ -3,8 +3,8 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { apiClient } from '../../src/api/client';
-import { SUBSCRIPTION_ENDPOINTS } from '../../src/api/urls';
-import LoadingSpinner from '../../src/components/shared/LoadingSpinner';
+import { SUBSCRIPTION_ENDPOINTS } from '../../src/constants/endpoints';
+import { LoadingSpinner } from '../../src/components/shared';
 import { Colors } from '../../src/constants/colors';
 import { useAuthStore } from '../../src/store/authStore';
 
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   currentPlanText: { fontSize: 14, color: Colors.text },
   planCard: {
     backgroundColor: Colors.white, borderRadius: 14, padding: 16,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 4, elevation: 2,
+    borderWidth: 1, borderColor: '#F3F4F6',
   },
   planHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
   planName: { fontSize: 18, fontWeight: '700', color: Colors.text },

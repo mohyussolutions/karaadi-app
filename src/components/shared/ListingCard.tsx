@@ -1,129 +1,129 @@
-import React from 'react';
-import {
-  View, Text, Image, TouchableOpacity, StyleSheet,
-} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Colors } from '../../constants/colors';
-import type { ListingBase } from '../../types';
+import { useRouter } from 'expo-router';
+import COLORS from '../../constants/colors';
+import { formatPrice, getImageUrl } from '../format';
+import { addFavorite, removeFavorite } from '../../api/favorites';
+import { useAppSelector } from '../../store';
+import { PLACEHOLDER_IMAGE } from '../../constants/endpoints';
+import type { ListingBase } from '../../utils/types/listing.types';
+
+const { width } = Dimensions.get('window');
+const CARD_IMG_H = Math.round((width / 2 - 20) * 0.72);
 
 interface Props {
   item: ListingBase;
-  onPress: () => void;
-  onFavorite?: () => void;
-  isFavorite?: boolean;
+  onPress?: () => void;
 }
 
-const PLACEHOLDER = 'https://placehold.co/320x200/9ca3af/ffffff?text=No+Image';
+const ListingCard = React.memo(function ListingCard({ item, onPress }: Props) {
+  const router = useRouter();
+  const user = useAppSelector((s) => s.auth.user);
+  const image = getImageUrl(item.images?.[0]) || PLACEHOLDER_IMAGE;
+  const [fav, setFav] = useState(false);
 
-export default function ListingCard({ item, onPress, onFavorite, isFavorite }: Props) {
-  const imageUri = item.images?.[0] || PLACEHOLDER;
+  function handlePress() {
+    if (onPress) { onPress(); return; }
+    const cat = (item.mainCategory || item.category || '').toLowerCase();
+    const itemId = item.id || item._id;
+    if (cat === 'marketplace') {
+      router.push({ pathname: '/listing/marketplace/[id]' as any, params: { id: itemId, category: cat } });
+    } else if (['cars', 'motorcycles', 'boats', 'farm-equipment', 'farmequipment'].includes(cat)) {
+      router.push({ pathname: '/listing/vehicle/[id]' as any, params: { id: itemId, category: cat } });
+    } else if (cat === 'real-estate' || cat === 'realestate') {
+      router.push({ pathname: '/listing/real-estate/[id]' as any, params: { id: itemId, category: cat } });
+    } else if (cat === 'jobs') {
+      router.push({ pathname: '/listing/job/[id]' as any, params: { id: itemId, category: cat } });
+    } else {
+      router.push({ pathname: '/listing/[id]', params: { id: itemId, category: cat } });
+    }
+  }
 
-  const badge = item.isPremium90
-    ? { label: 'PREMIUM', color: Colors.premium }
-    : item.isStandard60
-    ? { label: 'STANDARD', color: Colors.standard }
-    : item.isBasic30
-    ? { label: 'BASIC', color: Colors.basic }
-    : null;
+  async function toggleFav(e: any) {
+    e.stopPropagation();
+    if (!user) { router.push('/(auth)/login'); return; }
+    const next = !fav;
+    setFav(next);
+    if (next) {
+      await addFavorite(item.id || item._id, (item as any).mainCategory || '').catch(() => setFav(false));
+    } else {
+      await removeFavorite(item.id || item._id).catch(() => setFav(true));
+    }
+  }
 
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.85}>
-      <View style={styles.imageContainer}>
-        <Image source={{ uri: imageUri }} style={styles.image} resizeMode="cover" />
-        {badge && (
-          <View style={[styles.badge, { backgroundColor: badge.color }]}>
-            <Text style={styles.badgeText}>{badge.label}</Text>
+    <TouchableOpacity style={s.card} onPress={handlePress} activeOpacity={0.9}>
+      <View style={s.imgWrap}>
+        <Image source={{ uri: image }} style={[s.img, { height: CARD_IMG_H }]} resizeMode="cover" />
+
+        {item.maGaday && (
+          <View style={s.soldOverlay}>
+            <Text style={s.soldText}>SOLD</Text>
           </View>
         )}
-        {onFavorite && (
-          <TouchableOpacity style={styles.favoriteBtn} onPress={onFavorite}>
-            <MaterialCommunityIcons
-              name={isFavorite ? 'heart' : 'heart-outline'}
-              size={20}
-              color={isFavorite ? Colors.error : Colors.white}
-            />
-          </TouchableOpacity>
-        )}
+
+        <TouchableOpacity style={s.heartBtn} onPress={toggleFav} hitSlop={10}>
+          <MaterialCommunityIcons
+            name={fav ? 'heart' : 'heart-outline'}
+            size={16}
+            color={fav ? '#EF4444' : COLORS.white}
+          />
+        </TouchableOpacity>
       </View>
-      <View style={styles.info}>
-        <Text style={styles.title} numberOfLines={2}>{item.title}</Text>
-        <Text style={styles.price}>
-          {item.price > 0 ? `$${item.price.toLocaleString()}` : 'Price on request'}
+
+      <View style={s.body}>
+        <Text style={s.price} numberOfLines={1}>
+          {item.price > 0 ? formatPrice(item.price) : 'Price on request'}
         </Text>
-        <View style={styles.location}>
-          <MaterialCommunityIcons name="map-marker-outline" size={13} color={Colors.textMuted} />
-          <Text style={styles.locationText}>
-            {[item.city, item.region].filter(Boolean).join(', ') || 'Somalia'}
-          </Text>
-        </View>
+        <Text style={s.title} numberOfLines={2}>{item.title}</Text>
+        {(item.city || item.region) && (
+          <View style={s.locRow}>
+            <MaterialCommunityIcons name="map-marker-outline" size={10} color={COLORS.textMuted} />
+            <Text style={s.locText} numberOfLines={1}>
+              {[item.city, item.region].filter(Boolean).join(', ')}
+            </Text>
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );
-}
+});
 
-const styles = StyleSheet.create({
+export default ListingCard;
+
+const s = StyleSheet.create({
   card: {
-    backgroundColor: Colors.card,
-    borderRadius: 12,
+    flex: 1,
+    backgroundColor: COLORS.white,
+    borderRadius: 10,
     overflow: 'hidden',
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 4,
-    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
   },
-  imageContainer: {
-    position: 'relative',
-  },
-  image: {
-    width: '100%',
-    height: 180,
-  },
-  badge: {
-    position: 'absolute',
-    top: 8,
-    left: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
-  },
-  badgeText: {
-    color: Colors.white,
-    fontSize: 10,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-  favoriteBtn: {
-    position: 'absolute',
-    top: 8,
-    right: 8,
-    backgroundColor: Colors.overlay,
-    borderRadius: 20,
-    padding: 6,
-  },
-  info: {
-    padding: 12,
-  },
-  title: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: Colors.text,
-    marginBottom: 4,
-  },
-  price: {
-    fontSize: 17,
-    fontWeight: '700',
-    color: Colors.primary,
-    marginBottom: 6,
-  },
-  location: {
-    flexDirection: 'row',
+  imgWrap: { position: 'relative', backgroundColor: COLORS.gray100 },
+  img: { width: '100%' },
+  soldOverlay: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: 'rgba(0,0,0,0.50)',
     alignItems: 'center',
-    gap: 3,
+    justifyContent: 'center',
   },
-  locationText: {
-    fontSize: 12,
-    color: Colors.textMuted,
+  soldText: { color: '#fff', fontSize: 13, fontWeight: '900', letterSpacing: 1.5 },
+  heartBtn: {
+    position: 'absolute',
+    top: 7,
+    right: 7,
+    backgroundColor: 'rgba(0,0,0,0.30)',
+    borderRadius: 12,
+    width: 28,
+    height: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
+  body: { padding: 8, gap: 2 },
+  price: { fontSize: 14, fontWeight: '800', color: COLORS.primary },
+  title: { fontSize: 12, fontWeight: '600', color: '#111827', lineHeight: 17 },
+  locRow: { flexDirection: 'row', alignItems: 'center', gap: 2, marginTop: 2 },
+  locText: { fontSize: 10, color: COLORS.textMuted, flex: 1 },
 });

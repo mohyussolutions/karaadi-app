@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ListingCard from '../../src/components/shared/ListingCard';
-import LoadingSpinner from '../../src/components/shared/LoadingSpinner';
-import EmptyState from '../../src/components/shared/EmptyState';
+import { ListingCard, LoadingSpinner, EmptyState } from '../../src/components/shared';
 import { getFavorites, removeFavorite } from '../../src/api/favorites';
 import { Colors } from '../../src/constants/colors';
 import { useAuthStore } from '../../src/store/authStore';
-import type { Favorite } from '../../src/types';
+import type { Favorite } from '../../src/utils/types';
 
 export default function FavoritesScreen() {
   const router = useRouter();
@@ -46,8 +44,6 @@ export default function FavoritesScreen() {
           return (
             <ListingCard
               item={listing}
-              isFavorite
-              onFavorite={() => handleUnfavorite(item)}
               onPress={() =>
                 router.push({
                   pathname: '/listing/[id]',

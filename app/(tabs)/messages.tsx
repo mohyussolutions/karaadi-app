@@ -1,36 +1,56 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View, Text, FlatList, TouchableOpacity, StyleSheet, Image,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuthStore } from '../../src/store/authStore';
-import { getConversations } from '../../src/api/messages';
-import LoadingSpinner from '../../src/components/shared/LoadingSpinner';
-import EmptyState from '../../src/components/shared/EmptyState';
+import { getMyChats } from '../../src/api/messages';
+import { getSocket } from '../../src/services/socketService';
+import { LoadingSpinner, EmptyState } from '../../src/components/shared';
 import { Colors } from '../../src/constants/colors';
-import type { Conversation } from '../../src/types';
+import type { Chat } from '../../src/utils/types';
 
 const AVATAR = 'https://placehold.co/48x48/9ca3af/ffffff?text=?';
 
 export default function MessagesScreen() {
   const router = useRouter();
   const { user } = useAuthStore();
-  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [chats, setChats] = useState<Chat[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const loadChats = useCallback(async () => {
+    if (!user?.id) { setLoading(false); return; }
+    try {
+      const data = await getMyChats(user.id);
+      setChats(data);
+    } catch {
+    } finally {
+      setLoading(false);
+    }
+  }, [user?.id]);
+
+  useFocusEffect(useCallback(() => {
+    setLoading(true);
+    loadChats();
+  }, [loadChats]));
+
   useEffect(() => {
-    if (!user) { setLoading(false); return; }
-    getConversations()
-      .then(setConversations)
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, [user]);
+    const socket = getSocket();
+    if (!socket) return;
+    const handler = () => loadChats();
+    socket.on('newMessage', handler);
+    socket.on('unreadCountUpdate', handler);
+    return () => {
+      socket.off('newMessage', handler);
+      socket.off('unreadCountUpdate', handler);
+    };
+  }, [loadChats]);
 
   if (!user) {
     return (
-      <SafeAreaView style={styles.safe} edges={['top']}>
+      <SafeAreaView style={styles.safe} edges={[]}>
         <View style={styles.header}><Text style={styles.title}>Messages</Text></View>
         <EmptyState icon="lock-outline" title="Sign in required" message="Sign in to view your messages." />
         <TouchableOpacity style={styles.signInBtn} onPress={() => router.push('/(auth)/login')}>
@@ -43,22 +63,21 @@ export default function MessagesScreen() {
   if (loading) return <LoadingSpinner fullScreen />;
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
+    <SafeAreaView style={styles.safe} edges={[]}>
       <View style={styles.header}><Text style={styles.title}>Messages</Text></View>
       <FlatList
-        data={conversations}
-        keyExtractor={(item) => item._id}
+        data={chats}
+        keyExtractor={(item) => String(item.id)}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={conversations.length === 0 ? { flex: 1 } : undefined}
+        contentContainerStyle={chats.length === 0 ? { flex: 1 } : undefined}
         ListEmptyComponent={
           <EmptyState icon="message-off-outline" title="No conversations yet" message="When you contact a seller, your chat will appear here." />
         }
         renderItem={({ item }) => {
-          const other = item.otherUser;
-          const avatar = other?.profileImage || AVATAR;
-          const name = other?.username || 'Unknown';
-          const lastMsg = item.lastMessage?.content || '';
-          const unread = (item.unreadCount || 0) > 0;
+          const other = item.senderId === user.id ? item.receiver : item.sender;
+          const lastMsg = item.messages?.[0]?.content || '';
+          const unreadCount = item._count?.messages ?? 0;
+          const unread = unreadCount > 0;
           const time = item.updatedAt
             ? new Date(item.updatedAt).toLocaleDateString()
             : '';
@@ -69,21 +88,34 @@ export default function MessagesScreen() {
               onPress={() =>
                 router.push({
                   pathname: '/profile/chat',
-                  params: { userId: other?._id, username: name },
+                  params: {
+                    chatId: String(item.id),
+                    userId: other?.id,
+                    username: other?.username || 'Unknown',
+                  },
                 })
               }
             >
-              <Image source={{ uri: avatar }} style={styles.avatar} />
+              <Image
+                source={{ uri: other?.profileImage || AVATAR }}
+                style={styles.avatar}
+              />
               <View style={styles.convoInfo}>
                 <View style={styles.convoHeader}>
-                  <Text style={[styles.convoName, unread && styles.bold]}>{name}</Text>
+                  <Text style={[styles.convoName, unread && styles.bold]}>
+                    {other?.username || 'Unknown'}
+                  </Text>
                   <Text style={styles.convoTime}>{time}</Text>
                 </View>
                 <Text style={[styles.convoMsg, unread && styles.bold]} numberOfLines={1}>
                   {lastMsg || 'No messages yet'}
                 </Text>
               </View>
-              {unread && <View style={styles.badge}><Text style={styles.badgeText}>{item.unreadCount}</Text></View>}
+              {unread && (
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>{unreadCount}</Text>
+                </View>
+              )}
             </TouchableOpacity>
           );
         }}

@@ -1,108 +1,151 @@
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
-  ScrollView, KeyboardAvoidingView, Platform, Alert,
+  ScrollView, KeyboardAvoidingView, Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useAuth } from '../../src/hooks/useAuth';
+import { useTranslation } from 'react-i18next';
+import { useRegister, PASSWORD_RULES } from '../../src/hooks/useRegister';
 import { Colors } from '../../src/constants/colors';
 
 export default function RegisterScreen() {
   const router = useRouter();
-  const { register } = useAuth();
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirm, setConfirm] = useState('');
+  const { t } = useTranslation();
+  const {
+    username, setUsername,
+    email, setEmail,
+    phone, setPhone,
+    password, setPassword,
+    isLoading, errorMessage,
+    ruleResults, isPasswordValid, showRules,
+    handleSubmit,
+  } = useRegister();
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  async function handleRegister() {
+  async function onPress() {
     if (!username.trim() || !email.trim() || !password.trim()) {
-      Alert.alert('Error', 'Please fill in all required fields.');
+      Alert.alert(t('auth.common.error'), t('auth.register.fillAll'));
       return;
     }
-    if (password !== confirm) {
-      Alert.alert('Error', 'Passwords do not match.');
+    if (!isPasswordValid) {
+      Alert.alert(t('auth.common.error'), t('auth.register.passwordInvalid'));
       return;
     }
-    if (password.length < 6) {
-      Alert.alert('Error', 'Password must be at least 6 characters.');
-      return;
-    }
-    setLoading(true);
-    try {
-      await register({ username: username.trim(), email: email.trim().toLowerCase(), password, phone: phone.trim() || undefined });
-      router.push({ pathname: '/(auth)/confirm', params: { email: email.trim().toLowerCase() } });
-    } catch (err: any) {
-      const msg = err?.response?.data?.message || err?.message || 'Registration failed. Please try again.';
-      Alert.alert('Registration Failed', msg);
-    } finally {
-      setLoading(false);
-    }
+    await handleSubmit();
   }
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        <Text style={styles.title}>Create account</Text>
-        <Text style={styles.subtitle}>Join Karaadi marketplace</Text>
+    <KeyboardAvoidingView style={styles.root} behavior="padding">
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.card}>
+          <Text style={styles.title}>{t('auth.register.title')}</Text>
+          <Text style={styles.subtitle}>{t('auth.register.subtitle')}</Text>
 
-        <View style={styles.form}>
-          {[
-            { label: 'Username *', value: username, onChange: setUsername, placeholder: 'yourname', autoComplete: 'username' },
-            { label: 'Email *', value: email, onChange: setEmail, placeholder: 'you@example.com', keyboardType: 'email-address', autoComplete: 'email', autoCapitalize: 'none' },
-            { label: 'Phone (optional)', value: phone, onChange: setPhone, placeholder: '+252...', keyboardType: 'phone-pad' },
-          ].map(({ label, value, onChange, placeholder, ...rest }) => (
-            <View key={label} style={styles.inputGroup}>
-              <Text style={styles.label}>{label}</Text>
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>{t('auth.register.username')}</Text>
+            <TextInput
+              style={styles.input}
+              value={username}
+              onChangeText={setUsername}
+              placeholder={t('auth.register.usernamePlaceholder')}
+              placeholderTextColor={Colors.placeholder}
+              autoComplete="username"
+              autoCapitalize="none"
+            />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>{t('auth.register.email')}</Text>
+            <TextInput
+              style={styles.input}
+              value={email}
+              onChangeText={setEmail}
+              placeholder={t('auth.register.emailPlaceholder')}
+              placeholderTextColor={Colors.placeholder}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoComplete="email"
+            />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>{t('auth.register.phone')}</Text>
+            <TextInput
+              style={styles.input}
+              value={phone}
+              onChangeText={(v) => setPhone(v.replace(/[^0-9+\-()\s]/g, ''))}
+              placeholder={t('auth.register.phonePlaceholder')}
+              placeholderTextColor={Colors.placeholder}
+              keyboardType="phone-pad"
+              autoComplete="tel"
+            />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>{t('auth.register.password')}</Text>
+            <View style={styles.passwordWrapper}>
               <TextInput
-                style={styles.input}
-                value={value}
-                onChangeText={onChange}
-                placeholder={placeholder}
+                style={styles.passwordInput}
+                value={password}
+                onChangeText={setPassword}
+                placeholder={t('auth.register.createPasswordPlaceholder')}
                 placeholderTextColor={Colors.placeholder}
-                {...(rest as any)}
+                secureTextEntry={!showPassword}
               />
-            </View>
-          ))}
-
-          {[
-            { label: 'Password *', value: password, onChange: setPassword, placeholder: 'Min. 6 characters' },
-            { label: 'Confirm Password *', value: confirm, onChange: setConfirm, placeholder: 'Repeat password' },
-          ].map(({ label, value, onChange, placeholder }) => (
-            <View key={label} style={styles.inputGroup}>
-              <Text style={styles.label}>{label}</Text>
-              <View style={styles.passwordWrapper}>
-                <TextInput
-                  style={[styles.input, { flex: 1, marginBottom: 0, borderWidth: 0 }]}
-                  value={value}
-                  onChangeText={onChange}
-                  placeholder={placeholder}
-                  placeholderTextColor={Colors.placeholder}
-                  secureTextEntry={!showPassword}
+              <TouchableOpacity style={styles.eyeBtn} onPress={() => setShowPassword((v) => !v)}>
+                <MaterialCommunityIcons
+                  name={showPassword ? 'eye-off' : 'eye'}
+                  size={20}
+                  color={Colors.textMuted}
                 />
-                <TouchableOpacity style={styles.eyeBtn} onPress={() => setShowPassword((v) => !v)}>
-                  <MaterialCommunityIcons name={showPassword ? 'eye-off' : 'eye'} size={20} color={Colors.textMuted} />
-                </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
             </View>
-          ))}
+
+            {showRules && (
+              <View style={styles.rulesGrid}>
+                {ruleResults.map((r) => (
+                  <View key={r.id} style={styles.ruleRow}>
+                    <MaterialCommunityIcons
+                      name={r.passes ? 'check-circle' : 'close-circle'}
+                      size={14}
+                      color={r.passes ? Colors.success : Colors.error}
+                    />
+                    <Text style={[styles.ruleText, r.passes ? styles.rulePass : styles.ruleFail]}>
+                      {t(r.labelKey)}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
+          </View>
+
+          {errorMessage ? (
+            <View style={styles.errorBox}>
+              <Text style={styles.errorText}>
+                {errorMessage || t('auth.register.errorMessage')}
+              </Text>
+            </View>
+          ) : null}
 
           <TouchableOpacity
-            style={[styles.btn, loading && styles.disabledBtn]}
-            onPress={handleRegister}
-            disabled={loading}
+            style={[styles.btn, (!isPasswordValid || isLoading) && styles.btnDisabled]}
+            onPress={onPress}
+            disabled={!isPasswordValid || isLoading}
           >
-            <Text style={styles.btnText}>{loading ? 'Creating account...' : 'Create Account'}</Text>
+            <Text style={styles.btnText}>
+              {isLoading ? t('auth.register.registering') : t('auth.register.registerButton')}
+            </Text>
           </TouchableOpacity>
 
           <View style={styles.loginRow}>
-            <Text style={styles.loginText}>Already have an account? </Text>
+            <Text style={styles.loginText}>{t('auth.register.alreadyAccount')} </Text>
             <TouchableOpacity onPress={() => router.replace('/(auth)/login')}>
-              <Text style={styles.loginLink}>Sign in</Text>
+              <Text style={styles.loginLink}>{t('auth.register.signIn')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -112,29 +155,70 @@ export default function RegisterScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.white },
-  content: { flexGrow: 1, padding: 24 },
-  title: { fontSize: 26, fontWeight: '800', color: Colors.text, marginBottom: 4, marginTop: 8 },
-  subtitle: { fontSize: 15, color: Colors.textSecondary, marginBottom: 28 },
-  form: { gap: 4 },
+  root: { flex: 1, backgroundColor: Colors.surface },
+  scroll: { flexGrow: 1, justifyContent: 'center', padding: 20, paddingVertical: 40 },
+  card: {
+    backgroundColor: Colors.white,
+    borderRadius: 24,
+    padding: 28,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 16,
+    elevation: 6,
+  },
+  title: { fontSize: 26, fontWeight: '800', color: Colors.textPrimary, textAlign: 'center', marginBottom: 4 },
+  subtitle: { fontSize: 14, color: Colors.textMuted, textAlign: 'center', marginBottom: 28 },
   inputGroup: { marginBottom: 16 },
-  label: { fontSize: 14, fontWeight: '600', color: Colors.text, marginBottom: 6 },
+  label: { fontSize: 14, fontWeight: '600', color: Colors.textPrimary, marginBottom: 6 },
   input: {
-    backgroundColor: Colors.inputBg, borderRadius: 10, paddingHorizontal: 14,
-    paddingVertical: 13, fontSize: 15, color: Colors.text, borderWidth: 1, borderColor: Colors.border,
+    backgroundColor: Colors.inputBg,
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 13,
+    fontSize: 15,
+    color: Colors.textPrimary,
+    borderWidth: 1,
+    borderColor: Colors.border,
   },
   passwordWrapper: {
-    flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.inputBg,
-    borderRadius: 10, borderWidth: 1, borderColor: Colors.border, paddingRight: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.inputBg,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    paddingRight: 12,
   },
+  passwordInput: { flex: 1, paddingHorizontal: 16, paddingVertical: 13, fontSize: 15, color: Colors.textPrimary },
   eyeBtn: { padding: 4 },
-  btn: {
-    backgroundColor: Colors.primary, borderRadius: 12, paddingVertical: 15,
-    alignItems: 'center', marginTop: 8, marginBottom: 20,
+  rulesGrid: { marginTop: 10, flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  ruleRow: { flexDirection: 'row', alignItems: 'center', gap: 4, width: '47%' },
+  ruleText: { fontSize: 12 },
+  rulePass: { color: Colors.success },
+  ruleFail: { color: Colors.textMuted },
+  errorBox: {
+    backgroundColor: '#FEF2F2',
+    borderWidth: 1,
+    borderColor: '#FCA5A5',
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 12,
   },
-  disabledBtn: { opacity: 0.65 },
+  errorText: { color: '#DC2626', fontSize: 13, textAlign: 'center', fontWeight: '500' },
+  btn: {
+    backgroundColor: Colors.primary,
+    borderRadius: 14,
+    paddingVertical: 15,
+    alignItems: 'center',
+    marginTop: 4,
+    marginBottom: 16,
+  },
+  btnDisabled: { opacity: 0.5 },
   btnText: { color: Colors.white, fontSize: 16, fontWeight: '700' },
   loginRow: { flexDirection: 'row', justifyContent: 'center' },
-  loginText: { color: Colors.textSecondary, fontSize: 14 },
-  loginLink: { color: Colors.primary, fontSize: 14, fontWeight: '600' },
+  loginText: { fontSize: 14, color: Colors.textSecondary },
+  loginLink: { fontSize: 14, color: Colors.primary, fontWeight: '600' },
 });

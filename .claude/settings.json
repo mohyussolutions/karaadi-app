@@ -1,4 +1,10 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(yes)",
+      "Bash(/Users/mohamed/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager \"system-images;android-34;google_apis;arm64-v8a\")"
+    ]
+  },
   "enabledPlugins": {
     "expo@claude-plugins-official": true
   }

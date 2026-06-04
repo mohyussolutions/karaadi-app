@@ -1,6 +1,6 @@
 import { apiClient } from './client';
-import { AUTH_ENDPOINTS } from './urls';
-import type { User, AuthResponse } from '../types';
+import { AUTH_ENDPOINTS } from '../constants/endpoints';
+import type { User, AuthResponse } from '../utils/types/user.types';
 
 export async function login(email: string, password: string): Promise<AuthResponse> {
   const { data } = await apiClient.post(AUTH_ENDPOINTS.LOGIN, { email, password });
@@ -42,31 +42,26 @@ export async function resetPassword(payload: {
 }
 
 export async function logout(): Promise<void> {
-  await apiClient.post(AUTH_ENDPOINTS.LOGOUT);
+  await apiClient.post(AUTH_ENDPOINTS.LOGOUT).catch(() => {});
 }
 
-export async function verifySession(): Promise<User | null> {
+export async function getProfile(): Promise<User | null> {
   try {
-    const { data } = await apiClient.get(AUTH_ENDPOINTS.VERIFY_SESSION);
+    const { data } = await apiClient.get(AUTH_ENDPOINTS.PROFILE);
     return data;
   } catch {
     return null;
   }
 }
 
-export async function getProfile(): Promise<User> {
-  const { data } = await apiClient.get(AUTH_ENDPOINTS.PROFILE);
-  return data;
-}
-
 export async function updateUsername(username: string): Promise<User> {
   const { data } = await apiClient.put(AUTH_ENDPOINTS.UPDATE_USERNAME, { username });
-  return data;
+  return data.user ?? data;
 }
 
 export async function updatePhone(phone: string): Promise<User> {
   const { data } = await apiClient.put(AUTH_ENDPOINTS.UPDATE_PHONE, { phone });
-  return data;
+  return data.user ?? data;
 }
 
 export async function deleteAccount(): Promise<void> {

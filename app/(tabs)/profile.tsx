@@ -5,6 +5,7 @@ import {
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../src/hooks/useAuth';
 import { Colors } from '../../src/constants/colors';
 
@@ -12,30 +13,31 @@ const AVATAR = 'https://placehold.co/80x80/2563eb/ffffff?text=Me';
 
 interface MenuItem {
   icon: string;
-  label: string;
+  labelKey: string;
   route: string;
 }
 
 const MENU_ITEMS: MenuItem[] = [
-  { icon: 'view-list', label: 'My Ads', route: '/profile/my-ads' },
-  { icon: 'heart-outline', label: 'Favorites', route: '/profile/favorites' },
-  { icon: 'history', label: 'Saved Searches', route: '/profile/saved-searches' },
-  { icon: 'bell-outline', label: 'Notifications', route: '/profile/notifications' },
-  { icon: 'office-building-outline', label: 'My Business', route: '/profile/businesses' },
-  { icon: 'crown-outline', label: 'Subscription', route: '/profile/subscription' },
-  { icon: 'account-edit-outline', label: 'Edit Profile', route: '/profile/edit' },
-  { icon: 'cog-outline', label: 'Settings', route: '/profile/settings' },
+  { icon: 'view-list',            labelKey: 'mine.account.myAds',          route: '/profile/my-ads' },
+  { icon: 'heart-outline',        labelKey: 'mine.account.favorites',      route: '/profile/favorites' },
+  { icon: 'history',              labelKey: 'mine.account.savedSearches',  route: '/profile/saved-searches' },
+  { icon: 'bell-outline',         labelKey: 'nav.notifications',           route: '/profile/notifications' },
+  { icon: 'office-building-outline', labelKey: 'mine.account.forBusinesses', route: '/profile/businesses' },
+  { icon: 'crown-outline',        labelKey: 'mine.account.mySubscriptions',route: '/profile/subscription' },
+  { icon: 'account-edit-outline', labelKey: 'mine.profile.edit',           route: '/profile/edit' },
+  { icon: 'cog-outline',          labelKey: 'mine.nav.settings',           route: '/profile/settings' },
 ];
 
 function MenuRow({ item }: { item: MenuItem }) {
   const router = useRouter();
+  const { t } = useTranslation();
   return (
     <TouchableOpacity style={styles.menuRow} onPress={() => router.push(item.route as any)}>
       <View style={styles.menuLeft}>
         <View style={[styles.menuIconBg, { backgroundColor: Colors.primary + '18' }]}>
           <MaterialCommunityIcons name={item.icon as any} size={20} color={Colors.primary} />
         </View>
-        <Text style={styles.menuLabel}>{item.label}</Text>
+        <Text style={styles.menuLabel}>{t(item.labelKey)}</Text>
       </View>
       <MaterialCommunityIcons name="chevron-right" size={20} color={Colors.textMuted} />
     </TouchableOpacity>
@@ -58,7 +60,7 @@ export default function ProfileScreen() {
 
   if (!user) {
     return (
-      <SafeAreaView style={styles.safe} edges={['top']}>
+      <SafeAreaView style={styles.safe} edges={[]}>
         <View style={styles.header}><Text style={styles.headerTitle}>Profile</Text></View>
         <View style={styles.guestContainer}>
           <MaterialCommunityIcons name="account-circle-outline" size={80} color={Colors.textMuted} />
@@ -76,7 +78,7 @@ export default function ProfileScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
+    <SafeAreaView style={styles.safe} edges={[]}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.profileCard}>
           <Image source={{ uri: user.profileImage || AVATAR }} style={styles.avatar} />

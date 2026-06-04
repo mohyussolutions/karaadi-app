@@ -96,7 +96,7 @@ export default function SettingsScreen() {
           <TextInput
             style={styles.input}
             value={phone}
-            onChangeText={setPhone}
+            onChangeText={(v) => setPhone(v.replace(/[^0-9+\-()\s]/g, ''))}
             placeholder="+252..."
             placeholderTextColor={Colors.placeholder}
             keyboardType="phone-pad"
