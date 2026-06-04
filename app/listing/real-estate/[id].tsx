@@ -93,7 +93,6 @@ export default function RealEstateDetailScreen() {
     : item.isPremium90 ? { label: 'PREMIUM', color: Colors.premium }
     : null;
 
-  // Property specs matching website's details grid
   const specItems: { label: string; value: string }[] = [
     item.propertyType && { label: t('realEstateDetail.propertyTypeLabel'), value: item.propertyType },
     item.category && { label: t('realEstateDetail.categoryLabel'), value: item.category },
@@ -120,7 +119,7 @@ export default function RealEstateDetailScreen() {
 
         <View style={s.body}>
           <Text style={s.title}>{item.title}</Text>
-          <Text style={s.price}>{item.price > 0 ? formatPrice(item.price) : 'Price on request'}</Text>
+          <Text style={s.price}>{item.price > 0 ? formatPrice(item.price) : t('priceOnRequest')}</Text>
 
           <View style={s.metaRow}>
             <View style={s.locPill}>
@@ -130,12 +129,10 @@ export default function RealEstateDetailScreen() {
             {item.createdAt && <Text style={s.dateText}>{formatDate(item.createdAt)}</Text>}
           </View>
 
-          {/* Property details — matches website's property details section */}
           {specItems.length > 0 && (
             <SpecGrid title={t('realEstateDetail.propertyDetails')} items={specItems} />
           )}
 
-          {/* Amenities */}
           {amenities.length > 0 && (
             <View style={s.card}>
               <Text style={s.cardTitle}>{t('realEstateDetail.amenitiesLabel')}</Text>
@@ -150,7 +147,6 @@ export default function RealEstateDetailScreen() {
             </View>
           )}
 
-          {/* Features */}
           {item.features?.length > 0 && (
             <View style={s.card}>
               <Text style={s.cardTitle}>{t('realEstateDetail.featuresLabel')}</Text>
@@ -165,7 +161,6 @@ export default function RealEstateDetailScreen() {
             </View>
           )}
 
-          {/* Description */}
           {desc.length > 0 && (
             <View style={s.card}>
               <Text style={s.cardTitle}>{t('realEstateDetail.descriptionLabel')}</Text>
@@ -195,11 +190,19 @@ export default function RealEstateDetailScreen() {
 
       <View style={s.actions}>
         {item.user?.phone && (
-          <TouchableOpacity style={[s.callBtn, { flex: 1 }]} onPress={handleCall}>
+          <TouchableOpacity style={s.callBtn} onPress={handleCall}>
             <MaterialCommunityIcons name="phone" size={20} color={Colors.primary} />
             <Text style={s.callText}>{t('realEstateDetail.showPhone')}</Text>
           </TouchableOpacity>
         )}
+        <TouchableOpacity
+          style={[s.msgBtn, item.maGaday && s.msgBtnDisabled]}
+          onPress={handleContact}
+          disabled={Boolean(item.maGaday)}
+        >
+          <MaterialCommunityIcons name="message-outline" size={20} color="#fff" />
+          <Text style={s.msgBtnText}>{t('realEstateDetail.sendMessage')}</Text>
+        </TouchableOpacity>
       </View>
 
       <ZoomModal visible={zoomed} images={images} startIndex={activeImage} title={item.title} onClose={() => setZoomed(false)} />

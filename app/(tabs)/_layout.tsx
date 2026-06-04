@@ -7,7 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppSelector } from '../../src/store';
 import COLORS from '../../src/constants/colors';
 import { LoadingSpinner } from '../../src/components/shared';
-import { TAB_NAV_ITEMS } from './tabNavItems';
+import { TAB_NAV_ITEMS } from '../../src/navigation/links/tabNavItems';
 
 const VISIBLE = new Set(TAB_NAV_ITEMS.map((item) => item.name));
 

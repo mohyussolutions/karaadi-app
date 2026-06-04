@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, FlatList, StyleSheet, TouchableOpacity, Text, Dimensions, RefreshControl, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { ListingCard, LoadingSpinner, EmptyState } from '../../src/components/shared';
 import { getMyAds } from '../../src/api/search';
 import { MY_ADS_ENDPOINTS } from '../../src/constants/endpoints';
@@ -17,6 +18,7 @@ const CARD_W = (width - H_PAD * 2 - COL_GAP) / 2;
 
 export default function MyAdsScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const { user } = useAuthStore();
   const [ads, setAds] = useState<ListingBase[]>([]);
   const [loading, setLoading] = useState(true);
@@ -35,10 +37,10 @@ export default function MyAdsScreen() {
   function onRefresh() { setRefreshing(true); load(); }
 
   async function handleDelete(item: ListingBase) {
-    Alert.alert('Delete Ad', `Delete "${item.title}"?`, [
-      { text: 'Cancel', style: 'cancel' },
+    Alert.alert(t('mine.businesses.myAds.delete'), `${t('mine.businesses.myAds.delete')} "${item.title}"?`, [
+      { text: t('auth.common.ok'), style: 'cancel' },
       {
-        text: 'Delete', style: 'destructive',
+        text: t('mine.businesses.myAds.delete'), style: 'destructive',
         onPress: async () => {
           try {
             const type = item.mainCategory || item.category || 'marketplace';
@@ -55,7 +57,7 @@ export default function MyAdsScreen() {
   if (!user) {
     return (
       <View style={s.center}>
-        <EmptyState icon="lock-outline" title="Sign in required" message="Sign in to view your ads." />
+        <EmptyState icon="lock-outline" title={t('signInRequired')} message={t('signInToView')} />
         <TouchableOpacity style={s.btn} onPress={() => router.push('/(auth)/login')}>
           <Text style={s.btnText}>Sign In</Text>
         </TouchableOpacity>
@@ -78,21 +80,21 @@ export default function MyAdsScreen() {
         ListEmptyComponent={
           <EmptyState
             icon="clipboard-text-off-outline"
-            title="No ads yet"
-            message="Post your first ad to start selling."
+            title={t('noAdsYet')}
+            message={t('postFirstAd')}
           />
         }
         renderItem={({ item }) => (
           <View style={s.cardWrap}>
             <ListingCard item={item} />
             <TouchableOpacity style={s.deleteBtn} onPress={() => handleDelete(item)}>
-              <Text style={s.deleteText}>Delete</Text>
+              <Text style={s.deleteText}>{t('mine.businesses.myAds.delete')}</Text>
             </TouchableOpacity>
           </View>
         )}
       />
       <TouchableOpacity style={s.postBtn} onPress={() => router.push('/(tabs)/new-ad')}>
-        <Text style={s.postBtnText}>+ Post New Ad</Text>
+        <Text style={s.postBtnText}>+ {t('postNewAd')}</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

@@ -33,7 +33,17 @@ function AppNavigator() {
       <LanguageSync />
       <StatusBar style="auto" />
       <GlobalHeader />
-      <Stack screenOptions={{ headerShown: false, title: '' }} />
+      <Stack screenOptions={{ headerShown: false, title: '' }}>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="listing/vehicle/[id]" options={{ headerShown: false, presentation: 'modal', animation: 'slide_from_bottom' }} />
+        <Stack.Screen name="listing/marketplace/[id]" options={{ headerShown: false, presentation: 'modal', animation: 'slide_from_bottom' }} />
+        <Stack.Screen name="listing/real-estate/[id]" options={{ headerShown: false, presentation: 'modal', animation: 'slide_from_bottom' }} />
+        <Stack.Screen name="listing/job/[id]" options={{ headerShown: false, presentation: 'modal', animation: 'slide_from_bottom' }} />
+        <Stack.Screen name="listing/subscription/[id]" options={{ headerShown: false, presentation: 'modal', animation: 'slide_from_bottom' }} />
+        <Stack.Screen name="browse/[category]/index" options={{ headerShown: false }} />
+        <Stack.Screen name="browse/[category]/[subcategory]" options={{ headerShown: false }} />
+      </Stack>
       <Hage />
       {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
     </View>

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { apiClient } from '../../src/api/client';
 import { SUBSCRIPTION_ENDPOINTS } from '../../src/constants/endpoints';
 import { LoadingSpinner } from '../../src/components/shared';
@@ -18,6 +20,8 @@ interface Plan {
 }
 
 export default function SubscriptionScreen() {
+  const router = useRouter();
+  const { t } = useTranslation();
   const { user } = useAuthStore();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,7 +59,7 @@ export default function SubscriptionScreen() {
             <View style={styles.currentPlan}>
               <MaterialCommunityIcons name="crown" size={20} color={Colors.premium} />
               <Text style={styles.currentPlanText}>
-                Current plan: <Text style={{ fontWeight: '700' }}>{myPlan.planName || myPlan.type}</Text>
+                {t('plan.plan')}: <Text style={{ fontWeight: '700' }}>{myPlan.planName || myPlan.type}</Text>
               </Text>
             </View>
           ) : null
@@ -74,9 +78,9 @@ export default function SubscriptionScreen() {
             ))}
             <TouchableOpacity
               style={styles.subscribeBtn}
-              onPress={() => Alert.alert('Subscribe', `Upgrade to ${item.name}? This will redirect to payment.`)}
+              onPress={() => router.push('/(tabs)/new-ad')}
             >
-              <Text style={styles.subscribeBtnText}>Get {item.name}</Text>
+              <Text style={styles.subscribeBtnText}>{t('plan.clickToSelect')} — {item.name}</Text>
             </TouchableOpacity>
           </View>
         )}

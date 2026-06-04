@@ -67,16 +67,6 @@ export default function CategoryIndexScreen() {
 
   const header = (
     <View>
-      <TouchableOpacity
-        style={styles.postBtn}
-        onPress={() => router.push(user ? '/(tabs)/new-ad' : '/(auth)/login')}
-        activeOpacity={0.88}
-      >
-        <MaterialCommunityIcons name="plus" size={18} color={COLORS.white} />
-        <Text style={styles.postBtnText}>{t('wantSell.title')}</Text>
-        <MaterialCommunityIcons name="chevron-right" size={18} color={COLORS.white} />
-      </TouchableOpacity>
-
       <View style={styles.subGrid}>
         {rows.map((row, ri) => (
           <View key={ri} style={styles.subRow}>
@@ -113,6 +103,16 @@ export default function CategoryIndexScreen() {
           </View>
         ))}
       </View>
+
+      <TouchableOpacity
+        style={styles.postBtn}
+        onPress={() => router.push(user ? '/(tabs)/new-ad' : '/(auth)/login')}
+        activeOpacity={0.88}
+      >
+        <MaterialCommunityIcons name="plus" size={18} color={COLORS.white} />
+        <Text style={styles.postBtnText}>{t('wantSell.title')}</Text>
+        <MaterialCommunityIcons name="chevron-right" size={18} color={COLORS.white} />
+      </TouchableOpacity>
 
       {!loading && listings.length > 0 && (
         <View style={styles.countRow}>
@@ -208,7 +208,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: COLORS.primary,
     marginHorizontal: H_PAD,
-    marginTop: 12,
+    marginTop: 4,
+    marginBottom: 4,
     borderRadius: 10,
     paddingVertical: 12,
     paddingHorizontal: 16,

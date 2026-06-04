@@ -78,7 +78,6 @@ export default function JobDetailScreen() {
     );
   }
 
-  // Collect all images: company logo + listing images
   const rawImages: string[] = [];
   if (item.companyLogo) rawImages.push(item.companyLogo);
   if (item.images?.length) rawImages.push(...item.images);
@@ -125,7 +124,6 @@ export default function JobDetailScreen() {
             {item.createdAt && <Text style={s.dateText}>{formatDate(item.createdAt)}</Text>}
           </View>
 
-          {/* Employer card — matches website's employer section */}
           <View style={s.employerCard}>
             <Image source={{ uri: posterAvatar || avatarFallback }} style={s.employerAvatar} />
             <View style={s.employerInfo}>
@@ -134,12 +132,10 @@ export default function JobDetailScreen() {
             </View>
           </View>
 
-          {/* Job details grid — matches website's "Job Details" section */}
           {specItems.length > 0 && (
             <SpecGrid title="Job Details" items={specItems} />
           )}
 
-          {/* Description */}
           {desc.length > 0 && (
             <View style={s.card}>
               <Text style={s.cardTitle}>{t('jobsPage.jobDescription') || 'Description'}</Text>
@@ -156,7 +152,6 @@ export default function JobDetailScreen() {
             </View>
           )}
 
-          {/* Requirements */}
           {item.requirements && (
             <View style={s.card}>
               <Text style={s.cardTitle}>Requirements</Text>
@@ -168,7 +163,6 @@ export default function JobDetailScreen() {
         </View>
       </ScrollView>
 
-      {/* Apply bar — matches website's mobile sticky bottom bar */}
       <View style={s.actions}>
         <View style={s.salaryBlock}>
           <Text style={s.salaryLabel}>{salary}</Text>

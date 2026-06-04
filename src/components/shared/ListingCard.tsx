@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import COLORS from '../../constants/colors';
 import { formatPrice, getImageUrl } from '../format';
 import { addFavorite, removeFavorite } from '../../api/favorites';
@@ -19,6 +20,7 @@ interface Props {
 
 const ListingCard = React.memo(function ListingCard({ item, onPress }: Props) {
   const router = useRouter();
+  const { t } = useTranslation();
   const user = useAppSelector((s) => s.auth.user);
   const image = getImageUrl(item.images?.[0]) || PLACEHOLDER_IMAGE;
   const [fav, setFav] = useState(false);
@@ -36,7 +38,7 @@ const ListingCard = React.memo(function ListingCard({ item, onPress }: Props) {
     } else if (cat === 'jobs') {
       router.push({ pathname: '/listing/job/[id]' as any, params: { id: itemId, category: cat } });
     } else {
-      router.push({ pathname: '/listing/[id]', params: { id: itemId, category: cat } });
+      router.push({ pathname: '/listing/marketplace/[id]' as any, params: { id: itemId, category: cat } });
     }
   }
 
@@ -59,7 +61,7 @@ const ListingCard = React.memo(function ListingCard({ item, onPress }: Props) {
 
         {item.maGaday && (
           <View style={s.soldOverlay}>
-            <Text style={s.soldText}>SOLD</Text>
+            <Text style={s.soldText}>{t('realEstateDetail.waaLaGatay')}</Text>
           </View>
         )}
 
@@ -74,7 +76,7 @@ const ListingCard = React.memo(function ListingCard({ item, onPress }: Props) {
 
       <View style={s.body}>
         <Text style={s.price} numberOfLines={1}>
-          {item.price > 0 ? formatPrice(item.price) : 'Price on request'}
+          {item.price > 0 ? formatPrice(item.price) : t('priceOnRequest')}
         </Text>
         <Text style={s.title} numberOfLines={2}>{item.title}</Text>
         {(item.city || item.region) && (

@@ -46,6 +46,7 @@ function MenuRow({ item }: { item: MenuItem }) {
 
 export default function ProfileScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const { user, logout } = useAuth();
 
   function handleLogout() {
@@ -64,8 +65,8 @@ export default function ProfileScreen() {
         <View style={styles.header}><Text style={styles.headerTitle}>Profile</Text></View>
         <View style={styles.guestContainer}>
           <MaterialCommunityIcons name="account-circle-outline" size={80} color={Colors.textMuted} />
-          <Text style={styles.guestTitle}>Not signed in</Text>
-          <Text style={styles.guestSub}>Sign in to access your profile and listings.</Text>
+          <Text style={styles.guestTitle}>{t('mine.guest')}</Text>
+          <Text style={styles.guestSub}>{t('signInToView')}</Text>
           <TouchableOpacity style={styles.signInBtn} onPress={() => router.push('/(auth)/login')}>
             <Text style={styles.signInText}>Sign In</Text>
           </TouchableOpacity>

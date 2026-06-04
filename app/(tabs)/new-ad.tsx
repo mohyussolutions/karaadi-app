@@ -13,6 +13,7 @@ import { UPLOAD_ENDPOINTS, SUBSCRIPTION_ENDPOINTS } from '../../src/constants/en
 import { Colors } from '../../src/constants/colors';
 import { useAuthStore } from '../../src/store/authStore';
 import { MAIN_CATEGORIES } from '../../src/constants/categories';
+import RegionCityPicker from '../../src/components/RegionCityPicker';
 
 type ListingType = 'private' | 'public';
 type Step = 'type' | 'category' | 'form' | 'plan' | 'payment';
@@ -60,8 +61,6 @@ const FIELDS: Record<string, FieldDef[]> = {
     { key: 'condition', label: 'Condition', placeholder: '', options: ['New', 'Used – Like New', 'Used – Good', 'Used – Fair'], required: true },
     { key: 'price', label: 'Price ($)', placeholder: '0 = price on request', numeric: true },
     { key: 'description', label: 'Description', placeholder: 'Describe your item in detail...', multiline: true, required: true },
-    { key: 'region', label: 'Region', placeholder: 'e.g. Banaadir' },
-    { key: 'city', label: 'City', placeholder: 'e.g. Mogadishu' },
   ],
   Cars: [
     { key: 'title', label: 'Title', placeholder: 'e.g. Toyota Camry 2022 – Low Mileage', required: true },
@@ -75,8 +74,6 @@ const FIELDS: Record<string, FieldDef[]> = {
     { key: 'condition', label: 'Condition', placeholder: '', options: ['New', 'Used', 'Certified Pre-Owned'] },
     { key: 'price', label: 'Price ($)', placeholder: '0 = price on request', numeric: true, required: true },
     { key: 'description', label: 'Description', placeholder: 'Describe your car...', multiline: true, required: true },
-    { key: 'region', label: 'Region', placeholder: 'e.g. Banaadir' },
-    { key: 'city', label: 'City', placeholder: 'e.g. Mogadishu' },
     { key: 'tiktok', label: 'TikTok Link', placeholder: 'https://www.tiktok.com/@karaadi_' },
   ],
   RealEstate: [
@@ -88,8 +85,6 @@ const FIELDS: Record<string, FieldDef[]> = {
     { key: 'furnished', label: 'Furnished', placeholder: '', options: ['Yes', 'No'] },
     { key: 'price', label: 'Price ($)', placeholder: '0 = price on request', numeric: true, required: true },
     { key: 'description', label: 'Description', placeholder: 'Describe the property in detail...', multiline: true, required: true },
-    { key: 'region', label: 'Region', placeholder: 'e.g. Banaadir' },
-    { key: 'city', label: 'City', placeholder: 'e.g. Mogadishu' },
   ],
   Motorcycles: [
     { key: 'title', label: 'Title', placeholder: 'e.g. Honda CB500 2021', required: true },
@@ -100,8 +95,6 @@ const FIELDS: Record<string, FieldDef[]> = {
     { key: 'condition', label: 'Condition', placeholder: '', options: ['New', 'Used'] },
     { key: 'price', label: 'Price ($)', placeholder: '0 = price on request', numeric: true, required: true },
     { key: 'description', label: 'Description', placeholder: 'Describe your motorcycle...', multiline: true, required: true },
-    { key: 'region', label: 'Region', placeholder: 'e.g. Banaadir' },
-    { key: 'city', label: 'City', placeholder: 'e.g. Mogadishu' },
   ],
   Boats: [
     { key: 'title', label: 'Title', placeholder: 'e.g. Fishing Boat 2019', required: true },
@@ -111,8 +104,6 @@ const FIELDS: Record<string, FieldDef[]> = {
     { key: 'length', label: 'Length (ft)', placeholder: 'e.g. 22', numeric: true },
     { key: 'price', label: 'Price ($)', placeholder: '0 = price on request', numeric: true, required: true },
     { key: 'description', label: 'Description', placeholder: 'Describe the boat...', multiline: true, required: true },
-    { key: 'region', label: 'Region', placeholder: 'e.g. Banaadir' },
-    { key: 'city', label: 'City', placeholder: 'e.g. Mogadishu' },
   ],
   farmequipment: [
     { key: 'title', label: 'Title', placeholder: 'e.g. John Deere 5075E Tractor 2020', required: true },
@@ -123,8 +114,6 @@ const FIELDS: Record<string, FieldDef[]> = {
     { key: 'condition', label: 'Condition', placeholder: '', options: ['New', 'Used', 'Refurbished'] },
     { key: 'price', label: 'Price ($)', placeholder: '0 = price on request', numeric: true, required: true },
     { key: 'description', label: 'Description', placeholder: 'Describe the equipment condition and usage history...', multiline: true, required: true },
-    { key: 'region', label: 'Region', placeholder: 'e.g. Banaadir' },
-    { key: 'city', label: 'City', placeholder: 'e.g. Mogadishu' },
   ],
 };
 
@@ -455,6 +444,13 @@ export default function NewAdScreen() {
                 )}
               </View>
             ))}
+
+            <RegionCityPicker
+              selectedRegion={formData.region || ''}
+              selectedCity={formData.city || ''}
+              onRegionChange={(name) => setFormData((p) => ({ ...p, region: name }))}
+              onCityChange={(name) => setFormData((p) => ({ ...p, city: name }))}
+            />
 
             <TouchableOpacity
               style={[s.primaryBtn, creatingListing && s.btnDisabled]}

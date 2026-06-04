@@ -20,8 +20,11 @@ import { SpecGrid } from '../../../src/components/detail/DetailCard';
 const PLACEHOLDER = 'https://placehold.co/800x560/e5e7eb/9ca3af?text=No+Image';
 
 const ENDPOINTS: Record<string, string> = {
-  cars: '/api/cars', boats: '/api/boats',
-  motorcycles: '/api/motorcycles', 'farm-equipment': '/api/traktor',
+  cars: '/api/cars',
+  boats: '/api/boats',
+  motorcycles: '/api/motorcycles',
+  'farm-equipment': '/api/traktor',
+  farmequipment: '/api/traktor',
 };
 
 export default function VehicleDetailScreen() {
@@ -93,7 +96,6 @@ export default function VehicleDetailScreen() {
     : item.isStandard60 ? { label: 'STANDARD', color: Colors.standard }
     : null;
 
-  // Build technical specs matching website's "Technical Specifications" grid
   const specItems: { label: string; value: string }[] = [
     item.brand && { label: 'Make', value: item.brand },
     (item.model || item.vehicleModel || item.modelName || item.boatModel || item.traktortModel) && {
@@ -121,7 +123,7 @@ export default function VehicleDetailScreen() {
 
         <View style={s.body}>
           <Text style={s.title}>{item.title}</Text>
-          <Text style={s.price}>{item.price > 0 ? formatPrice(item.price) : 'Price on request'}</Text>
+          <Text style={s.price}>{item.price > 0 ? formatPrice(item.price) : t('priceOnRequest')}</Text>
 
           <View style={s.metaRow}>
             <View style={s.locPill}>
@@ -131,12 +133,10 @@ export default function VehicleDetailScreen() {
             {item.createdAt && <Text style={s.dateText}>{formatDate(item.createdAt)}</Text>}
           </View>
 
-          {/* Technical Specifications — matches website's "Technical Specifications" section */}
           {specItems.length > 0 && (
             <SpecGrid title="Technical Specifications" items={specItems} />
           )}
 
-          {/* Description */}
           {desc.length > 0 && (
             <View style={s.card}>
               <Text style={s.cardTitle}>Description</Text>
@@ -153,7 +153,6 @@ export default function VehicleDetailScreen() {
             </View>
           )}
 
-          {/* Seller card */}
           {item.user && (
             <SellerCard
               username={item.user.username}
@@ -170,11 +169,19 @@ export default function VehicleDetailScreen() {
 
       <View style={s.actions}>
         {item.user?.phone && (
-          <TouchableOpacity style={[s.callBtn, { flex: 1 }]} onPress={handleCall}>
+          <TouchableOpacity style={s.callBtn} onPress={handleCall}>
             <MaterialCommunityIcons name="phone" size={20} color={Colors.primary} />
             <Text style={s.callText}>{t('realEstateDetail.showPhone')}</Text>
           </TouchableOpacity>
         )}
+        <TouchableOpacity
+          style={[s.msgBtn, item.maGaday && s.msgBtnDisabled]}
+          onPress={handleContact}
+          disabled={Boolean(item.maGaday)}
+        >
+          <MaterialCommunityIcons name="message-outline" size={20} color="#fff" />
+          <Text style={s.msgBtnText}>{t('realEstateDetail.sendMessage')}</Text>
+        </TouchableOpacity>
       </View>
 
       <ZoomModal visible={zoomed} images={images} startIndex={activeImage} title={item.title} onClose={() => setZoomed(false)} />

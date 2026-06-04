@@ -82,7 +82,7 @@ export default function MarketplaceDetailScreen() {
   async function handleShare() {
     if (!item) return;
     try {
-      const priceStr = item.price > 0 ? formatPrice(item.price) : 'Price on request';
+      const priceStr = item.price > 0 ? formatPrice(item.price) : t('priceOnRequest');
       await Share.share({
         title: item.title,
         message: `${item.title}\n${priceStr}\n${[item.city, item.region].filter(Boolean).join(', ')}\n\nKaraadi Marketplace`,
@@ -146,7 +146,7 @@ export default function MarketplaceDetailScreen() {
             )}
           </View>
 
-          <Text style={s.price}>{item.price > 0 ? formatPrice(item.price) : 'Price on request'}</Text>
+          <Text style={s.price}>{item.price > 0 ? formatPrice(item.price) : t('priceOnRequest')}</Text>
 
           <View style={s.metaRow}>
             <View style={s.locPill}>
@@ -202,11 +202,19 @@ export default function MarketplaceDetailScreen() {
           <MaterialCommunityIcons name="share-variant-outline" size={20} color={Colors.primary} />
         </TouchableOpacity>
         {item.user?.phone && (
-          <TouchableOpacity style={[s.callBtn, { flex: 1 }]} onPress={handleCall}>
+          <TouchableOpacity style={s.callBtn} onPress={handleCall}>
             <MaterialCommunityIcons name="phone" size={20} color={Colors.primary} />
             <Text style={s.callText}>{t('realEstateDetail.showPhone')}</Text>
           </TouchableOpacity>
         )}
+        <TouchableOpacity
+          style={[s.msgBtn, item.maGaday && s.msgBtnDisabled]}
+          onPress={handleContact}
+          disabled={Boolean(item.maGaday)}
+        >
+          <MaterialCommunityIcons name="message-outline" size={20} color="#fff" />
+          <Text style={s.msgBtnText}>{t('realEstateDetail.sendMessage')}</Text>
+        </TouchableOpacity>
       </View>
 
       <ZoomModal

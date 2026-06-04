@@ -5,6 +5,7 @@ import {
 import { useRouter } from 'expo-router';
 import { useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../src/store/authStore';
 import { getMyChats } from '../../src/api/messages';
 import { getSocket } from '../../src/services/socketService';
@@ -16,6 +17,7 @@ const AVATAR = 'https://placehold.co/48x48/9ca3af/ffffff?text=?';
 
 export default function MessagesScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const { user } = useAuthStore();
   const [chats, setChats] = useState<Chat[]>([]);
   const [loading, setLoading] = useState(true);
@@ -52,7 +54,7 @@ export default function MessagesScreen() {
     return (
       <SafeAreaView style={styles.safe} edges={[]}>
         <View style={styles.header}><Text style={styles.title}>Messages</Text></View>
-        <EmptyState icon="lock-outline" title="Sign in required" message="Sign in to view your messages." />
+        <EmptyState icon="lock-outline" title={t('signInRequired')} message={t('signInToView')} />
         <TouchableOpacity style={styles.signInBtn} onPress={() => router.push('/(auth)/login')}>
           <Text style={styles.signInText}>Sign In</Text>
         </TouchableOpacity>

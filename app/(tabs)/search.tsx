@@ -6,6 +6,7 @@ import {
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { ListingCard, LoadingSpinner, EmptyState } from '../../src/components/shared';
 import { globalSearch } from '../../src/api/search';
 import { Colors } from '../../src/constants/colors';
@@ -45,6 +46,7 @@ const Field = memo(function Field({
 
 export default function SearchScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [name, setName] = useState('');
   const [region, setRegion] = useState('');
   const [city, setCity] = useState('');
@@ -134,7 +136,7 @@ export default function SearchScreen() {
         {loading ? (
           <LoadingSpinner fullScreen />
         ) : searched && results.length === 0 ? (
-          <EmptyState icon="magnify-close" title="No results found" message="Try different filters" />
+          <EmptyState icon="magnify-close" title={t('common.noResults')} message={t('common.noResults')} />
         ) : (
           <FlatList
             data={results}

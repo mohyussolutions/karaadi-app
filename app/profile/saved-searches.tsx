@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { apiClient } from '../../src/api/client';
 import { SEARCH_HISTORY_ENDPOINTS } from '../../src/constants/endpoints';
 import { EmptyState, LoadingSpinner } from '../../src/components/shared';
@@ -9,6 +10,7 @@ import { Colors } from '../../src/constants/colors';
 import { useAuthStore } from '../../src/store/authStore';
 
 export default function SavedSearchesScreen() {
+  const { t } = useTranslation();
   const { user } = useAuthStore();
   const [searches, setSearches] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -21,38 +23,50 @@ export default function SavedSearchesScreen() {
       .finally(() => setLoading(false));
   }, [user]);
 
-  async function deleteSearch(id: string) {
-    setSearches((prev) => prev.filter((s) => (s._id || s.id) !== id));
-    await apiClient.delete(SEARCH_HISTORY_ENDPOINTS.DELETE(id)).catch(() => {});
+  function deleteSearch(id: string) {
+    Alert.alert(t('auth.common.error'), `${t('common.back')}?`, [
+      { text: t('auth.common.ok'), style: 'cancel' },
+      {
+        text: t('businesses.myAds.delete'), style: 'destructive',
+        onPress: () => {
+          setSearches((prev) => prev.filter((s) => (s._id || s.id) !== id));
+          apiClient.delete(SEARCH_HISTORY_ENDPOINTS.DELETE(id)).catch(() => {});
+        },
+      },
+    ]);
   }
 
   if (loading) return <LoadingSpinner fullScreen />;
 
   return (
-    <SafeAreaView style={styles.safe} edges={['bottom']}>
+    <SafeAreaView style={s.safe} edges={['bottom']}>
       <FlatList
         data={searches}
         keyExtractor={(item) => item._id || item.id}
-        contentContainerStyle={[styles.list, searches.length === 0 && { flex: 1 }]}
+        contentContainerStyle={[s.list, searches.length === 0 && { flex: 1 }]}
         ListEmptyComponent={
-          <EmptyState icon="history" title="No saved searches" message="Your search history will appear here." />
+          <EmptyState
+            icon="history"
+            title={t('mine.searchHistory.noRecords')}
+            message={t('mine.searchHistory.recent')}
+          />
         }
         renderItem={({ item }) => (
-          <View style={styles.row}>
+          <View style={s.row}>
             <MaterialCommunityIcons name="history" size={18} color={Colors.textMuted} />
-            <Text style={styles.query} numberOfLines={1}>{item.query || item.search || item.text}</Text>
-            <TouchableOpacity onPress={() => deleteSearch(item._id || item.id)}>
+            <Text style={s.query} numberOfLines={1}>{item.query || item.search || item.text}</Text>
+            <TouchableOpacity onPress={() => deleteSearch(item._id || item.id)} hitSlop={8}>
               <MaterialCommunityIcons name="close" size={16} color={Colors.textMuted} />
             </TouchableOpacity>
           </View>
         )}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        ItemSeparatorComponent={() => <View style={s.separator} />}
       />
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+const s = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
   list: { flexGrow: 1 },
   row: {

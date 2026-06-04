@@ -71,7 +71,7 @@ export default function SubscriptionDetailScreen() {
     ? `${formatPrice(item.priceMin)} – ${formatPrice(item.priceMax)}`
     : item.priceMax ? `Up to ${formatPrice(item.priceMax)}`
     : item.priceMin ? `From ${formatPrice(item.priceMin)}`
-    : 'Price on request';
+    : t('priceOnRequest');
 
   const infoRows: { icon: string; label: string; value: string }[] = [
     item.category && { icon: 'tag-outline', label: 'Category', value: item.category },
