@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from '../../../store';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { toggleSound } from '../../../store/slices/notificationSettingsSlice';
 import { playNotificationSound } from '../../../services/soundService';
 import { useThemeColors, useThemedStyles, useThemeMode, type ThemeMode } from '../../../hooks/useTheme';

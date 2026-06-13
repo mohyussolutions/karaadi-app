@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
-import { useAppSelector } from '../../../store';
+import { useAppSelector } from '../../../store/store';
 import type { StepSummaryProps } from '../../../utils/types';
 import { OrderSummary } from '../StepPayment/OrderSummary';
 import { createStyles } from '../../../utils/styles/payment/stepSummary.styles';

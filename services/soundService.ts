@@ -1,5 +1,5 @@
 import { createAudioPlayer, type AudioPlayer } from 'expo-audio';
-import { store } from '../store';
+import { store } from '../store/store';
 
 let player: AudioPlayer | null = null;
 

@@ -1,10 +1,25 @@
 import * as SecureStore from "expo-secure-store";
 import { API_BASE_URL } from "../constants/config";
+import { store } from "../store/store";
+import { clearCredentials } from "../store/slices/authSlice";
+import { disconnectSocket } from "./sockets/socket.actions";
+import {
+  AUTH_TOKEN_KEY,
+  AUTH_USER_KEY,
+  AUTHORIZATION_HEADER,
+  AUTH_TOKEN_HEADER,
+  BEARER_PREFIX,
+  CONTENT_TYPE_HEADER,
+  JSON_CONTENT_TYPE,
+} from "./client.constants";
+import type {
+  ExtraHeaders,
+  Params,
+  ApiResponse,
+  RequestOptions,
+} from "../utils/types/client.types";
 
-type Params = Record<string, string | number | boolean | undefined | null>;
-type ExtraHeaders = Record<string, string>;
-
-export type ApiResponse<T = any> = { data: T };
+export type { ApiResponse, RequestOptions } from "../utils/types/client.types";
 
 function buildUrl(path: string, params?: Params): string {
   const base = `${API_BASE_URL}${path}`;
@@ -22,34 +37,63 @@ async function buildHeaders(
   extra?: ExtraHeaders,
   isFormData?: boolean,
 ): Promise<Record<string, string>> {
-  const token = await SecureStore.getItemAsync("karaadi_token");
+  const token = await SecureStore.getItemAsync(AUTH_TOKEN_KEY);
   const headers: Record<string, string> = isFormData
     ? {}
-    : { "Content-Type": "application/json" };
+    : { [CONTENT_TYPE_HEADER]: JSON_CONTENT_TYPE };
   if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-    headers["x-auth-token"] = token;
+    headers[AUTHORIZATION_HEADER] = `${BEARER_PREFIX}${token}`;
+    headers[AUTH_TOKEN_HEADER] = token;
   }
   return { ...headers, ...extra };
 }
 
+function serializeBody(body: unknown, isFormData: boolean) {
+  if (body === undefined) return undefined;
+  return isFormData ? (body as FormData) : JSON.stringify(body);
+}
+
+function apiError(message: string, status: number, data?: unknown) {
+  return Object.assign(new Error(message), { response: { status, data } });
+}
+
+async function readErrorBody(res: Response): Promise<unknown> {
+  try {
+    return await res.json();
+  } catch {
+    return await res.text().catch(() => "");
+  }
+}
+
+async function parseBody<T>(res: Response): Promise<T> {
+  const text = await res.text();
+  return text ? (JSON.parse(text) as T) : (null as T);
+}
+
 async function handle401() {
-  await SecureStore.deleteItemAsync("karaadi_token");
-  await SecureStore.deleteItemAsync("karaadi_user");
-  const { disconnectSocket } =
-    require("./sockets/socket.actions") as typeof import("./sockets/socket.actions");
+  await SecureStore.deleteItemAsync(AUTH_TOKEN_KEY);
+  await SecureStore.deleteItemAsync(AUTH_USER_KEY);
   disconnectSocket();
-  const { store } = require("../store") as typeof import("../store");
-  const { clearCredentials } =
-    require("../store/slices/authSlice") as typeof import("../store/slices/authSlice");
   store.dispatch(clearCredentials());
+}
+
+async function ensureOk(res: Response): Promise<void> {
+  if (res.status === 401) {
+    await handle401();
+    throw apiError("Unauthorized", 401);
+  }
+
+  if (!res.ok) {
+    const errData = await readErrorBody(res);
+    throw apiError(`HTTP ${res.status}`, res.status, errData);
+  }
 }
 
 async function request<T>(
   method: string,
   path: string,
   body?: unknown,
-  options?: { params?: Params; headers?: ExtraHeaders; signal?: AbortSignal },
+  options?: RequestOptions,
 ): Promise<ApiResponse<T>> {
   const isFormData = body instanceof FormData;
   const url = buildUrl(path, options?.params);
@@ -58,44 +102,14 @@ async function request<T>(
   const res = await fetch(url, {
     method,
     headers,
-    body:
-      body === undefined
-        ? undefined
-        : isFormData
-          ? (body as FormData)
-          : JSON.stringify(body),
+    body: serializeBody(body, isFormData),
     signal: options?.signal,
   });
 
-  if (res.status === 401) {
-    await handle401();
-    throw Object.assign(new Error("Unauthorized"), {
-      response: { status: 401 },
-    });
-  }
+  await ensureOk(res);
 
-  if (!res.ok) {
-    let errData: unknown;
-    try {
-      errData = await res.json();
-    } catch {
-      errData = await res.text().catch(() => "");
-    }
-    throw Object.assign(new Error(`HTTP ${res.status}`), {
-      response: { status: res.status, data: errData },
-    });
-  }
-
-  const text = await res.text();
-  const data = text ? (JSON.parse(text) as T) : (null as T);
-  return { data };
+  return { data: await parseBody<T>(res) };
 }
-
-export type RequestOptions = {
-  params?: Params;
-  headers?: ExtraHeaders;
-  signal?: AbortSignal;
-};
 
 export const apiClient = {
   get: <T = any>(path: string, options?: RequestOptions) =>

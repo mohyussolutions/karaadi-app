@@ -18,7 +18,7 @@ import { CheckoutBar } from '../../components/checklist';
 import type { StepItem, BusinessPlan, BusinessApplyFormState } from '../../utils/types';
 import { LoadingSpinner } from '../../components/loading';
 import { MAIN_CATEGORIES } from '../../navigation/main';
-import { useAppDispatch } from '../../store';
+import { useAppDispatch } from '../../store/store';
 import { setListingType, setStep, setCategoryKey, setBusinessId } from '../../store/slices/newAdSlice';
 import {
   fetchBusinessPlans, selectBusinessPlan, extendBusinessPlan,

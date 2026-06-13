@@ -1,5 +1,3 @@
-import type { CreatedItemSummary } from '../../store/slices/newAdSlice';
-
 export type ListingType = 'private' | 'public';
 
 export type Step = 'login' | 'type' | 'category' | 'form' | 'plan' | 'summary' | 'payment';
@@ -14,6 +12,40 @@ export interface Plan {
   price: number;
   features: string[];
   popular?: boolean;
+}
+
+export interface CreatedItemSummary {
+  title: string;
+  price: number;
+  images: string[];
+  categoryTag: string;
+  mainCategory: string;
+  region?: string;
+  city?: string;
+  make?: string;
+  model?: string;
+  year?: string;
+  mileage?: string;
+  type?: string;
+  color?: string;
+  description?: string;
+}
+
+export interface NewAdState {
+  step: Step;
+  listingType: ListingType | null;
+  categoryKey: string;
+  businessId: string | null;
+  plans: Plan[];
+  plansLoading: boolean;
+  selectedPlan: Plan | null;
+  createdId: string;
+  createdTitle: string;
+  createdItem: CreatedItemSummary | null;
+  submitStatus: 'idle' | 'submitting' | 'success' | 'error';
+  submitError: string | null;
+  feeId: string;
+  feeAmount: number;
 }
 
 export interface DropdownOption {

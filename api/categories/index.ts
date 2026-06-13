@@ -12,3 +12,4 @@ export * from './motorcycle.actions';
 export * from './boat.actions';
 export * from './farmEquipment.actions';
 export * from './job.actions';
+export * from './listing.actions';

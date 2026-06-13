@@ -30,8 +30,10 @@ export type {
   Subscription, SubscriptionPayload, Favorite, SearchResult, WantedFormState,
 } from './listing.types';
 export type { Chat, ChatMessage, ChatUser, Chatroom } from './chat.types';
+export type { HageMessage, ListingRef, HageChatResult } from './hage.types';
 export type {
-  ListingType, Step, PayMethod, Plan, BusinessPlan, BusinessApplyFormState,
+  ListingType, Step, PayMethod, Plan, CreatedItemSummary, NewAdState,
+  BusinessPlan, BusinessApplyFormState,
   DropdownOption, FieldDef,
   DropdownProps, FormFieldProps, ImagePickerRowProps,
   StepCategoryProps, StepPaymentProps, StepPlanProps, StepSummaryProps, StepTypeProps, StepFormProps,

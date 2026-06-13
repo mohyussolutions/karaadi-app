@@ -1,43 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { apiClient } from '../../api/client';
-import { CATEGORY_ENDPOINTS } from '../../features/new-ad/constants/config';
 import { fetchPlansFromAPI } from '../../api/categories/plan.actions';
-import type { ListingType, Step, Plan } from '../../utils/types/new-ad.types';
-
-export interface CreatedItemSummary {
-  title: string;
-  price: number;
-  images: string[];
-  categoryTag: string;
-  mainCategory: string;
-  region?: string;
-  city?: string;
-  make?: string;
-  model?: string;
-  year?: string;
-  mileage?: string;
-  type?: string;
-  color?: string;
-  description?: string;
-}
-
-export interface NewAdState {
-  step: Step;
-  listingType: ListingType | null;
-  categoryKey: string;
-  businessId: string | null;
-  plans: Plan[];
-  plansLoading: boolean;
-  selectedPlan: Plan | null;
-  createdId: string;
-  createdTitle: string;
-  createdItem: CreatedItemSummary | null;
-  submitStatus: 'idle' | 'submitting' | 'success' | 'error';
-  submitError: string | null;
-  feeId: string;
-  feeAmount: number;
-}
+import { createListing } from '../../api/categories/listing.actions';
+import type { ListingType, Step, Plan, CreatedItemSummary, NewAdState } from '../../utils/types/new-ad.types';
 
 const initialState: NewAdState = {
   step: 'type',
@@ -66,11 +31,9 @@ export const submitListing = createAsyncThunk(
   ) => {
     try {
       const businessId = (getState() as { newAd: NewAdState }).newAd.businessId;
-      const endpoint = CATEGORY_ENDPOINTS[categoryKey] || '/api/marketplace';
-      const { data } = await apiClient.post(endpoint, businessId ? { ...body, businessId } : body);
-      const images: string[] | undefined = Array.isArray(data?.images) && data.images.length ? data.images : undefined;
+      const { id, images } = await createListing(categoryKey, body, businessId);
       return {
-        id: data?._id || data?.id || data?.listing?._id || '',
+        id,
         title: String(body.title || ''),
         summary: summary ? { ...summary, images: images ?? summary.images } : null,
       };

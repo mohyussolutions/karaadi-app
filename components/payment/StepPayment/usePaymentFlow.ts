@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { apiClient } from '../../../api/client';
 import { PAYMENT_ENDPOINTS } from '../../../constants';
 import { CATEGORY_ENDPOINTS } from '../../../features/new-ad/constants/config';
-import { useAppSelector } from '../../../store';
+import { useAppSelector } from '../../../store/store';
 import type { PayMethod, Plan } from '../../../utils/types';
 import { MAX_POLL_ATTEMPTS, PAYMENT_METHODS, POLL_INTERVAL_MS } from '../payment.constants';
 import { getPhoneError, normalizePhone } from './phone.utils';

@@ -8,7 +8,7 @@ import { createStyles } from "../../utils/styles/tabs/newAd.styles";
 import { LoadingSpinner } from "../../components/loading";
 import { getImageUrl } from "../../utils/helpers";
 import { useAuthStore } from "../../store/authStore";
-import { useAppDispatch, useAppSelector } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store/store";
 import {
   setStep,
   setListingType,

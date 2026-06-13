@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from '../store';
+import { useAppDispatch, useAppSelector } from '../store/store';
 import { setLanguage } from '../store/slices/languageSlice';
 import type { Lang } from '../i18n/translations';
 import i18n from '../i18n/i18n';

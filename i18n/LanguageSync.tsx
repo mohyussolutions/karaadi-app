@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useAppSelector } from '../store';
+import { useAppSelector } from '../store/store';
 import i18n from './i18n';
 
 export default function LanguageSync() {

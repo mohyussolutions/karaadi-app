@@ -9,7 +9,7 @@ import { LoadingSpinner } from '../../components/loading';
 import { useThemedStyles } from '../../hooks/useTheme';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useChatsData } from '../../hooks/useChatsData';
-import { useAppSelector } from '../../store';
+import { useAppSelector } from '../../store/store';
 import { placeholderAvatar } from '../../constants';
 import { createStyles } from '../../utils/styles/tabs/messages.styles';
 import type { Chat } from '../../utils/types';

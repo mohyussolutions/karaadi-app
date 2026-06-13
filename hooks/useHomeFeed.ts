@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { useAppSelector, useAppDispatch } from '../store';
+import { useAppSelector, useAppDispatch } from '../store/store';
 import { fetchFeedGroup } from '../api/categories/feed.actions';
 import { apiClient } from '../api/client';
 import { FEED_ENDPOINTS } from '../constants';

@@ -9,7 +9,7 @@ import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useHomeFeed } from '../../hooks/useHomeFeed';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { useAppSelector } from '../../store';
+import { useAppSelector } from '../../store/store';
 import { createStyles, H_PAD, COL_GAP } from '../../utils/styles/tabs/home.styles';
 
 export default function HomeScreen() {

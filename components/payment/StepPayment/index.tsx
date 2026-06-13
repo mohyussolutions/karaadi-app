@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
-import { useAppSelector } from '../../../store';
+import { useAppSelector } from '../../../store/store';
 import type { StepPaymentProps } from '../../../utils/types';
 import { MAX_POLL_ATTEMPTS, type PaymentMethodOption } from '../payment.constants';
 import { PaymentMethodSelector } from './PaymentMethodSelector';

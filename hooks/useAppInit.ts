@@ -4,7 +4,7 @@ import { useAuth } from "./useAuth";
 import { loadFavorites, clearFavorites } from "../store/slices/favoritesSlice";
 import { clearChats } from "../store/slices/chatsSlice";
 import { setUnreadCount } from "../store/slices/notificationsSlice";
-import { useAppDispatch, useAppSelector } from "../store";
+import { useAppDispatch, useAppSelector } from "../store/store";
 import { registerForPushNotifications } from "../services/notificationService";
 import { checkAlertsForMatches } from "../api/categories/subscription.actions";
 import { getUnreadNotificationCount } from "../api/core/notifications.actions";

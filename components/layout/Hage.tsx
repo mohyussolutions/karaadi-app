@@ -7,7 +7,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useAppDispatch, useAppSelector } from '../../store';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 import {
   toggleHage, closeHage, addUserMessage, sendHageMessage, clearHage,
 } from '../../store/slices/hageSlice';
@@ -16,7 +16,7 @@ import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { getListingDetailRoute } from '../../utils/helpers/nav.routing';
 import { getImageUrl, formatPrice } from '../../utils/helpers';
 import { createStyles } from '../../utils/styles/layout/hage.styles';
-import type { ListingRef } from '../../api/sockets/hage.actions';
+import type { ListingRef } from '../../utils/types/hage.types';
 
 const { width: W, height: H } = Dimensions.get('window');
 const STATUSBAR_H = Platform.OS === 'android' ? (StatusBar.currentHeight ?? 24) : 0;

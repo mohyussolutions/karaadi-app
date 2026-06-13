@@ -4,8 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { planStyle } from '../../../features/new-ad/constants/config';
-import type { Plan, OrderSummaryProps } from '../../../utils/types';
-import type { CreatedItemSummary } from '../../../store/slices/newAdSlice';
+import type { Plan, OrderSummaryProps, CreatedItemSummary } from '../../../utils/types';
 import { createStyles } from '../../../utils/styles/payment/orderSummary.styles';
 
 type Attr = { label: string; value: string };

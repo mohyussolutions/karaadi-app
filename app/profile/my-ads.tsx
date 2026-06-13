@@ -8,7 +8,7 @@ import { LoadingSpinner } from '../../components/loading';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../utils/styles/profile/myAds.styles';
 import { useMyAds } from '../../hooks/useMyAds';
-import { useAppDispatch } from '../../store';
+import { useAppDispatch } from '../../store/store';
 import { prefillForPayment } from '../../store/slices/newAdSlice';
 import type { ListingBase } from '../../utils/types';
 

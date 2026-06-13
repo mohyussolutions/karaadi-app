@@ -1,5 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
-import { useAppDispatch, useAppSelector } from '../store';
+import { useAppDispatch, useAppSelector } from '../store/store';
 import { setCredentials, clearCredentials, setLoading } from '../store/slices/authSlice';
 import { login as apiLogin, logout as apiLogout, register as apiRegister, getProfile } from '../api/core/auth.actions';
 import { connectSocket, disconnectSocket } from '../api/sockets/socket.actions';

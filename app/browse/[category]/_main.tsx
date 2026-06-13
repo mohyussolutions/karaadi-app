@@ -19,7 +19,7 @@ import BottomTabBar from "../../../components/layout/BottomTabBar";
 import { useAppTranslation } from "../../../hooks/useAppTranslation";
 import { useResponsive } from "../../../hooks/useResponsive";
 import { useCategoryFeed } from "../../../hooks/useCategoryFeed";
-import { useAppSelector } from "../../../store";
+import { useAppSelector } from "../../../store/store";
 import type { SubCategory } from "../../../constants";
 import type { ListingBase } from "../../../utils/types/listing.types";
 import type { GridProps, SidebarProps } from "../../../utils/types";

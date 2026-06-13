@@ -7,7 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, usePathname } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
-import { useAppSelector, useAppDispatch } from '../../store';
+import { useAppSelector, useAppDispatch } from '../../store/store';
 import { setBrowseQuery, clearBrowseQuery } from '../../store/slices/browseSearchSlice';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import type { Lang } from '../../i18n/translations';

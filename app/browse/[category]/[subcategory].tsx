@@ -19,7 +19,7 @@ import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
 import { ListingCard, ListingCardSkeleton, EmptyState, AppIcon } from "../../../components/shared";
 import BottomTabBar from "../../../components/layout/BottomTabBar";
 import { clientGetAllRegions } from "../../../api/categories/geo.actions";
-import { useAppSelector } from "../../../store";
+import { useAppSelector } from "../../../store/store";
 import { useAppTranslation } from "../../../hooks/useAppTranslation";
 import { useResponsive } from "../../../hooks/useResponsive";
 import { useCategoryFeed } from "../../../hooks/useCategoryFeed";

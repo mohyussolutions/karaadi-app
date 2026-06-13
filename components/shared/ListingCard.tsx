@@ -8,7 +8,7 @@ import { PLACEHOLDER_IMAGE } from '../../constants';
 import { getListingDetailRoute } from '../../utils/helpers';
 import { cacheListing } from '../../services/listingCache';
 import { showToast } from '../../services/toastService';
-import { useAppSelector, useAppDispatch } from '../../store';
+import { useAppSelector, useAppDispatch } from '../../store/store';
 import { toggleFavorite } from '../../store/slices/favoritesSlice';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import type { ListingCardProps } from '../../utils/types';

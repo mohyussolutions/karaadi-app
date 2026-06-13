@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Stack, useRouter } from "expo-router";
-import { useAppSelector } from "../store";
+import { useAppSelector } from "../store/store";
 import { useThemeColors } from "../hooks/useTheme";
 
 export default function AuthNavigator() {

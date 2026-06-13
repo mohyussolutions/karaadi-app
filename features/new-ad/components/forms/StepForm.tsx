@@ -20,7 +20,7 @@ import { FormField } from "./FormField";
 import { ImagePickerRow } from "./ImagePickerRow";
 import { FIELDS, NUMERIC_KEYS, BOOLEAN_KEYS } from "../../constants/fields";
 import { useAuthStore } from "../../../../store/authStore";
-import { useAppDispatch, useAppSelector } from "../../../../store";
+import { useAppDispatch, useAppSelector } from "../../../../store/store";
 import { submitListing, setFeeInfo } from "../../../../store/slices/newAdSlice";
 import { getFeeForCategory } from "../../../../api/categories/fee.actions";
 import type { FieldDef, StepFormProps } from "../../../../utils/types";

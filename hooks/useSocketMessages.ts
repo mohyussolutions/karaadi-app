@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useAppDispatch, useAppSelector } from "../store";
+import { useAppDispatch, useAppSelector } from "../store/store";
 import { addNotification } from "../store/slices/notificationsSlice";
 import { getSocket } from "../api/sockets/socket.actions";
 import { scheduleLocalNotification } from "../services/notificationService";

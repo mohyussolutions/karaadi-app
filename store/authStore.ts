@@ -1,5 +1,5 @@
 import { useAuth } from '../hooks/useAuth';
-import { useAppSelector, useAppDispatch } from './index';
+import { useAppSelector, useAppDispatch } from './store';
 import { clearCredentials, setCredentials } from './slices/authSlice';
 import * as SecureStore from 'expo-secure-store';
 import { disconnectSocket, connectSocket } from '../api/sockets/socket.actions';

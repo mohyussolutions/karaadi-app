@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { useFocusEffect } from 'expo-router';
 import { useAuthStore } from '../store/authStore';
-import { useAppSelector, useAppDispatch } from '../store';
+import { useAppSelector, useAppDispatch } from '../store/store';
 import { setChats } from '../store/slices/chatsSlice';
 import { getMyChats } from '../api/core/message.actions';
 import { getSocket } from '../api/sockets/socket.actions';

@@ -8,7 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ExpoRoot } from 'expo-router/build/ExpoRoot';
 import { renderRootComponent } from 'expo-router/build/renderRootComponent';
 import { ctx } from 'expo-router/_ctx';
-import { store, persistor } from './store';
+import { store, persistor } from './store/store';
 import i18n from './i18n/i18n';
 import { LoadingSpinner } from './components/loading';
 

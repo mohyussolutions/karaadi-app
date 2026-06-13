@@ -96,6 +96,7 @@ export const COLORS = {
 
 export type ColorKey = keyof typeof COLORS;
 export type ColorPalette = { [K in keyof typeof COLORS]: string };
+export type ThemeMode = 'light' | 'dark';
 
 export const Colors = COLORS;
 

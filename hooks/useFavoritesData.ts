@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useFocusEffect, useRouter } from 'expo-router';
-import { useAppDispatch } from '../store';
+import { useAppDispatch } from '../store/store';
 import { loadFavorites, toggleFavorite } from '../store/slices/favoritesSlice';
 import { useAuthStore } from '../store/authStore';
 import { getFavorites } from '../api/categories/favorite.actions';

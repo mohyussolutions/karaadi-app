@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useAppSelector } from '../store';
+import { useAppSelector } from '../store/store';
 import { apiClient } from '../api/client';
 import { BUSINESSES_ENDPOINTS } from '../constants';
 
