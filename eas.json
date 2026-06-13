@@ -34,6 +34,12 @@
       "android": {
         "serviceAccountKeyPath": "./google-play-service-account.json",
         "track": "internal"
+      },
+      "ios": {
+        "ascApiKeyPath": "./AuthKey_XXXXXXXXXX.p8",
+        "ascApiKeyIssuerId": "REPLACE_WITH_ASC_API_KEY_ISSUER_ID",
+        "ascApiKeyId": "REPLACE_WITH_ASC_API_KEY_ID",
+        "appleTeamId": "REPLACE_WITH_APPLE_TEAM_ID"
       }
     }
   }
