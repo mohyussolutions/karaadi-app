@@ -1,5 +1,9 @@
 # Building Karaadi (EAS)
 
+## Status
+- Android: production builds working via `eas build --profile production --platform android` (remote credentials configured).
+- iOS: **Not started — no iOS builds exist on EAS at all.** Requires running `eas build --profile production --platform ios` interactively once (Apple ID login) to set up Distribution Certificate + Provisioning Profile before any iOS build/submit can run.
+
 ## Development (dev client)
 ```bash
 eas build --profile development --platform android --local
