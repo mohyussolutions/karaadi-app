@@ -1,74 +1,87 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { apiClient } from '../../src/api/client';
-import { SUBSCRIPTION_ENDPOINTS } from '../../src/constants/endpoints';
-import { LoadingSpinner } from '../../src/components/shared';
-import { Colors } from '../../src/constants/colors';
-import { useAuthStore } from '../../src/store/authStore';
+import { LoadingSpinner } from '../../components/loading';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { createStyles, createCurrentStyles } from '../../utils/styles/profile/profileSubscription.styles';
+import { useSubscriptionPlans } from '../../hooks/useSubscriptionPlans';
 
-interface Plan {
-  _id: string;
-  name: string;
-  price: number;
-  duration: number;
-  features: string[];
-  type: string;
+function formatDate(iso: string | undefined): string {
+  if (!iso) return '';
+  try {
+    return new Date(iso).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+  } catch {
+    return iso;
+  }
 }
 
 export default function SubscriptionScreen() {
   const router = useRouter();
   const { t } = useTranslation();
-  const { user } = useAuthStore();
-  const [plans, setPlans] = useState<Plan[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [myPlan, setMyPlan] = useState<any>(null);
-
-  useEffect(() => {
-    async function load() {
-      try {
-        const [plansRes, myRes] = await Promise.allSettled([
-          apiClient.get(SUBSCRIPTION_ENDPOINTS.PLANS),
-          user ? apiClient.get(SUBSCRIPTION_ENDPOINTS.MY_SUBSCRIPTION) : Promise.reject(),
-        ]);
-        if (plansRes.status === 'fulfilled') {
-          const data = plansRes.value.data;
-          setPlans(Array.isArray(data) ? data : data?.plans || []);
-        }
-        if (myRes.status === 'fulfilled') setMyPlan(myRes.value.data);
-      } catch {}
-      setLoading(false);
-    }
-    load();
-  }, [user]);
+  const { plans, loading, myPlan } = useSubscriptionPlans();
+  const Colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
+  const currentStyles = useThemedStyles(createCurrentStyles);
 
   if (loading) return <LoadingSpinner fullScreen />;
+
+  const planName = myPlan?.planName || myPlan?.name || myPlan?.type;
+  const expiresAt = myPlan?.expiresAt || myPlan?.expiredAt || myPlan?.endDate;
+  const isActive = myPlan?.isActive ?? (expiresAt ? new Date(expiresAt) > new Date() : !!myPlan);
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <FlatList
         data={plans}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item, index) => item._id || item.key || String(index)}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           myPlan ? (
-            <View style={styles.currentPlan}>
-              <MaterialCommunityIcons name="crown" size={20} color={Colors.premium} />
-              <Text style={styles.currentPlanText}>
-                {t('plan.plan')}: <Text style={{ fontWeight: '700' }}>{myPlan.planName || myPlan.type}</Text>
-              </Text>
+            <View style={[currentStyles.card, isActive ? currentStyles.cardActive : currentStyles.cardInactive]}>
+              <View style={currentStyles.row}>
+                <MaterialCommunityIcons
+                  name="crown"
+                  size={22}
+                  color={isActive ? Colors.premium : Colors.textMuted}
+                />
+                <View style={currentStyles.flexFull}>
+                  <Text style={currentStyles.label}>{t('mine.subscriptions.currentPlan')}</Text>
+                  <Text style={currentStyles.name}>{planName || t('mine.subscriptions.activePlan')}</Text>
+                </View>
+                <View style={[currentStyles.badge, isActive ? currentStyles.badgeActive : currentStyles.badgeInactive]}>
+                  <Text style={[currentStyles.badgeText, isActive ? currentStyles.badgeTextActive : currentStyles.badgeTextInactive]}>
+                    {isActive ? t('mine.subscriptions.status.active') : t('mine.subscriptions.status.expired')}
+                  </Text>
+                </View>
+              </View>
+              {!!expiresAt && (
+                <View style={currentStyles.expiryRow}>
+                  <MaterialCommunityIcons name="calendar-clock" size={13} color={Colors.textMuted} />
+                  <Text style={currentStyles.expiryText}>
+                    {t(isActive ? 'mine.subscriptions.expires' : 'mine.subscriptions.expired')} {formatDate(expiresAt)}
+                  </Text>
+                </View>
+              )}
             </View>
-          ) : null
+          ) : (
+            <View style={currentStyles.noplan}>
+              <MaterialCommunityIcons name="crown-outline" size={32} color={Colors.textMuted} />
+              <Text style={currentStyles.noplanText}>{t('mine.subscriptions.noActivePlan')}</Text>
+              <Text style={currentStyles.noplanSub}>{t('mine.subscriptions.choosePlanBelow')}</Text>
+            </View>
+          )
         }
         renderItem={({ item }) => (
           <View style={styles.planCard}>
             <View style={styles.planHeader}>
-              <Text style={styles.planName}>{item.name}</Text>
-              <Text style={styles.planPrice}>${item.price}<Text style={styles.planPer}>/{item.duration}d</Text></Text>
+              <Text style={styles.planName}>{item.label}</Text>
+              <Text style={styles.planPrice}>
+                ${item.price}<Text style={styles.planPer}>/{item.days}d</Text>
+              </Text>
             </View>
             {item.features?.map((f, i) => (
               <View key={i} style={styles.featureRow}>
@@ -80,7 +93,7 @@ export default function SubscriptionScreen() {
               style={styles.subscribeBtn}
               onPress={() => router.push('/(tabs)/new-ad')}
             >
-              <Text style={styles.subscribeBtnText}>{t('plan.clickToSelect')} — {item.name}</Text>
+              <Text style={styles.subscribeBtnText}>{t('plan.clickToSelect')} — {item.label}</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -88,28 +101,3 @@ export default function SubscriptionScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Colors.background },
-  content: { padding: 16, gap: 12 },
-  currentPlan: {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
-    backgroundColor: Colors.premium + '20', borderRadius: 10, padding: 12, marginBottom: 8,
-  },
-  currentPlanText: { fontSize: 14, color: Colors.text },
-  planCard: {
-    backgroundColor: Colors.white, borderRadius: 14, padding: 16,
-    borderWidth: 1, borderColor: '#F3F4F6',
-  },
-  planHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-  planName: { fontSize: 18, fontWeight: '700', color: Colors.text },
-  planPrice: { fontSize: 20, fontWeight: '800', color: Colors.primary },
-  planPer: { fontSize: 13, fontWeight: '400', color: Colors.textSecondary },
-  featureRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 6 },
-  featureText: { fontSize: 14, color: Colors.textSecondary },
-  subscribeBtn: {
-    backgroundColor: Colors.primary, borderRadius: 10, paddingVertical: 12,
-    alignItems: 'center', marginTop: 14,
-  },
-  subscribeBtnText: { color: Colors.white, fontWeight: '700', fontSize: 15 },
-});

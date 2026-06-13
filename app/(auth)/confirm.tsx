@@ -1,12 +1,14 @@
 import React from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, StyleSheet,
+  View, Text, TextInput, TouchableOpacity,
   KeyboardAvoidingView, Alert, ScrollView,
 } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { useConfirm } from '../../src/hooks/useConfirm';
-import { Colors } from '../../src/constants/colors';
+import { useConfirm } from '../../hooks/useConfirm';
+import { useResponsive } from '../../hooks/useResponsive';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { createStyles } from '../../utils/styles/auth/confirm.styles';
 
 export default function ConfirmScreen() {
   const { t } = useTranslation();
@@ -17,6 +19,9 @@ export default function ConfirmScreen() {
     error, resendError,
     handleConfirm, handleResendCode,
   } = useConfirm(email ?? '');
+  const { isTablet, isMobileLandscape } = useResponsive();
+  const Colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
 
   async function onConfirm() {
     if (!code.trim()) {
@@ -41,11 +46,11 @@ export default function ConfirmScreen() {
   return (
     <KeyboardAvoidingView style={styles.root} behavior="padding">
       <ScrollView
-        contentContainerStyle={styles.scroll}
+        contentContainerStyle={[styles.scroll, isMobileLandscape && styles.scrollLandscape]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.card}>
+        <View style={[styles.card, isTablet && styles.cardTablet]}>
           <Text style={styles.title}>{t('auth.confirm.title')}</Text>
           <Text style={styles.subtitle}>
             {t('auth.confirm.subtitle')}{'\n'}
@@ -103,52 +108,3 @@ export default function ConfirmScreen() {
     </KeyboardAvoidingView>
   );
 }
-
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: Colors.surface },
-  scroll: { flexGrow: 1, justifyContent: 'center', padding: 20, paddingVertical: 40 },
-  card: {
-    backgroundColor: Colors.white,
-    borderRadius: 24,
-    padding: 28,
-    borderWidth: 1,
-    borderColor: Colors.border,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 16,
-    elevation: 6,
-  },
-  title: { fontSize: 26, fontWeight: '800', color: Colors.textPrimary, textAlign: 'center', marginBottom: 8 },
-  subtitle: { fontSize: 14, color: Colors.textMuted, textAlign: 'center', marginBottom: 28, lineHeight: 22 },
-  emailHighlight: { color: Colors.primary, fontWeight: '600' },
-  inputGroup: { marginBottom: 16 },
-  label: { fontSize: 14, fontWeight: '600', color: Colors.textPrimary, marginBottom: 6 },
-  input: {
-    backgroundColor: Colors.inputBg, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 13,
-    fontSize: 15, color: Colors.textPrimary, borderWidth: 1, borderColor: Colors.border,
-  },
-  inputReadonly: { color: Colors.textMuted },
-  codeInput: {
-    backgroundColor: Colors.inputBg, borderRadius: 12, paddingVertical: 16,
-    fontSize: 28, fontWeight: '700', color: Colors.textPrimary,
-    borderWidth: 2, borderColor: Colors.primary, letterSpacing: 10,
-  },
-  errorBox: {
-    backgroundColor: '#FEF2F2',
-    borderWidth: 1,
-    borderColor: '#FCA5A5',
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 12,
-  },
-  errorText: { color: '#DC2626', fontSize: 13, textAlign: 'center', fontWeight: '500' },
-  btn: {
-    backgroundColor: Colors.primary, borderRadius: 14, paddingVertical: 15,
-    alignItems: 'center', marginTop: 4, marginBottom: 12,
-  },
-  btnDisabled: { opacity: 0.65 },
-  btnText: { color: Colors.white, fontSize: 16, fontWeight: '700' },
-  resendBtn: { alignItems: 'center', paddingVertical: 10 },
-  resendText: { color: Colors.primary, fontSize: 14, fontWeight: '500' },
-});

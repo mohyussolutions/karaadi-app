@@ -1,115 +1,114 @@
-import React, { useEffect, useState } from 'react';
-import { View, FlatList, StyleSheet, TouchableOpacity, Text, Dimensions, RefreshControl, Alert } from 'react-native';
+import React from 'react';
+import { View, FlatList, TouchableOpacity, Text, RefreshControl } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { ListingCard, LoadingSpinner, EmptyState } from '../../src/components/shared';
-import { getMyAds } from '../../src/api/search';
-import { MY_ADS_ENDPOINTS } from '../../src/constants/endpoints';
-import { apiClient } from '../../src/api/client';
-import { Colors } from '../../src/constants/colors';
-import { useAuthStore } from '../../src/store/authStore';
-import type { ListingBase } from '../../src/utils/types';
-
-const { width } = Dimensions.get('window');
-const H_PAD = 12;
-const COL_GAP = 8;
-const CARD_W = (width - H_PAD * 2 - COL_GAP) / 2;
+import { MyAdCard, EmptyState } from '../../components/shared';
+import { LoadingSpinner } from '../../components/loading';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { createStyles } from '../../utils/styles/profile/myAds.styles';
+import { useMyAds } from '../../hooks/useMyAds';
+import { useAppDispatch } from '../../store';
+import { prefillForPayment } from '../../store/slices/newAdSlice';
+import type { ListingBase } from '../../utils/types';
 
 export default function MyAdsScreen() {
   const router = useRouter();
   const { t } = useTranslation();
-  const { user } = useAuthStore();
-  const [ads, setAds] = useState<ListingBase[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+  const dispatch = useAppDispatch();
+  const { user, ads, loading, refreshing, error, deletingId, onRefresh, retry, handleDelete } = useMyAds();
+  const Colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
 
-  function load() {
-    if (!user) { setLoading(false); return; }
-    getMyAds()
-      .then(setAds)
-      .catch(() => {})
-      .finally(() => { setLoading(false); setRefreshing(false); });
-  }
-
-  useEffect(() => { load(); }, [user]);
-
-  function onRefresh() { setRefreshing(true); load(); }
-
-  async function handleDelete(item: ListingBase) {
-    Alert.alert(t('mine.businesses.myAds.delete'), `${t('mine.businesses.myAds.delete')} "${item.title}"?`, [
-      { text: t('auth.common.ok'), style: 'cancel' },
-      {
-        text: t('mine.businesses.myAds.delete'), style: 'destructive',
-        onPress: async () => {
-          try {
-            const type = item.mainCategory || item.category || 'marketplace';
-            await apiClient.delete(MY_ADS_ENDPOINTS.DELETE(item._id || item.id, type));
-            setAds((prev) => prev.filter((a) => (a._id || a.id) !== (item._id || item.id)));
-          } catch {
-            Alert.alert('Error', 'Failed to delete. Please try again.');
-          }
-        },
+  function handlePayNow(item: ListingBase) {
+    dispatch(prefillForPayment({
+      categoryKey: item.mainCategory,
+      createdId: item._id || item.id,
+      createdTitle: item.title,
+      createdItem: {
+        title: item.title,
+        price: item.price,
+        images: item.images,
+        categoryTag: item.category || item.mainCategory,
+        mainCategory: item.mainCategory,
+        region: item.region || undefined,
+        city: item.city || undefined,
+        description: item.description || undefined,
       },
-    ]);
+    }));
+    router.push('/(tabs)/new-ad');
   }
 
   if (!user) {
     return (
-      <View style={s.center}>
+      <View style={styles.center}>
         <EmptyState icon="lock-outline" title={t('signInRequired')} message={t('signInToView')} />
-        <TouchableOpacity style={s.btn} onPress={() => router.push('/(auth)/login')}>
-          <Text style={s.btnText}>Sign In</Text>
+        <TouchableOpacity style={styles.btn} onPress={() => router.push('/(auth)/login')}>
+          <Text style={styles.btnText}>{t('auth.login.loginButton')}</Text>
         </TouchableOpacity>
       </View>
     );
   }
 
-  if (loading) return <LoadingSpinner fullScreen />;
+  if (loading && !refreshing) return <LoadingSpinner fullScreen />;
+
+  if (error) {
+    return (
+      <View style={styles.center}>
+        <EmptyState
+          icon="wifi-off"
+          title={t('mine.myAds.loadError')}
+          message={t('mine.myAds.checkConnection')}
+        />
+        <TouchableOpacity style={styles.btn} onPress={retry}>
+          <Text style={styles.btnText}>{t('mine.myAds.retry')}</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
-    <SafeAreaView style={s.safe} edges={['bottom']}>
+    <SafeAreaView style={styles.safe} edges={['bottom']}>
       <FlatList
         data={ads}
         keyExtractor={(item) => item._id || item.id}
         numColumns={2}
-        columnWrapperStyle={s.row}
-        contentContainerStyle={[s.list, ads.length === 0 && { flex: 1 }]}
+        columnWrapperStyle={styles.row}
+        contentContainerStyle={[styles.list, ads.length === 0 && { flex: 1 }]}
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />
+        }
+        ListHeaderComponent={
+          ads.length > 0 ? (
+            <View style={styles.listHeader}>
+              <Text style={styles.countText}>
+                {t('mine.myAds.listingsCount', { count: ads.length })}
+              </Text>
+            </View>
+          ) : null
+        }
         ListEmptyComponent={
           <EmptyState
             icon="clipboard-text-off-outline"
-            title={t('noAdsYet')}
-            message={t('postFirstAd')}
+            title={t('mine.myAds.empty')}
+            message={t('mine.myAds.emptyHint')}
           />
         }
         renderItem={({ item }) => (
-          <View style={s.cardWrap}>
-            <ListingCard item={item} />
-            <TouchableOpacity style={s.deleteBtn} onPress={() => handleDelete(item)}>
-              <Text style={s.deleteText}>{t('mine.businesses.myAds.delete')}</Text>
-            </TouchableOpacity>
+          <View style={styles.cardWrap}>
+            <MyAdCard
+              item={item}
+              deleting={deletingId === (item._id || item.id)}
+              onDelete={handleDelete}
+              onPayNow={handlePayNow}
+            />
           </View>
         )}
       />
-      <TouchableOpacity style={s.postBtn} onPress={() => router.push('/(tabs)/new-ad')}>
-        <Text style={s.postBtnText}>+ {t('postNewAd')}</Text>
+      <TouchableOpacity style={styles.postBtn} onPress={() => router.push('/(tabs)/new-ad')}>
+        <Text style={styles.postBtnText}>+ {t('postNewAd')}</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
 }
-
-const s = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Colors.background },
-  center: { flex: 1, backgroundColor: Colors.background },
-  list: { padding: H_PAD, paddingBottom: 80 },
-  row: { gap: COL_GAP, marginBottom: COL_GAP },
-  cardWrap: { width: CARD_W },
-  deleteBtn: { marginTop: 4, alignItems: 'center', paddingVertical: 4 },
-  deleteText: { fontSize: 12, color: Colors.error, fontWeight: '600' },
-  btn: { margin: 24, backgroundColor: Colors.primary, borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
-  btnText: { color: Colors.white, fontWeight: '700', fontSize: 16 },
-  postBtn: { margin: 16, backgroundColor: Colors.primary, borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
-  postBtnText: { color: Colors.white, fontWeight: '700', fontSize: 16 },
-});

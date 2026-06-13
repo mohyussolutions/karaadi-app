@@ -1,0 +1,1 @@
+export { CheckoutBar } from './CheckoutBar';

@@ -1,108 +1,207 @@
 import React, { useEffect, useState, useRef } from 'react';
 import {
-  View, Text, FlatList, TextInput, TouchableOpacity, StyleSheet,
-  KeyboardAvoidingView, Platform,
+  View, Text, FlatList, TextInput, TouchableOpacity,
+  KeyboardAvoidingView, Platform, ActivityIndicator,
 } from 'react-native';
-import { useLocalSearchParams, useNavigation } from 'expo-router';
+import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { getChatMessages, sendMessage } from '../../src/api/messages';
-import {
-  joinChat, leaveChat, emitSendMessage, emitMarkAsRead, getSocket,
-} from '../../src/services/socketService';
-import { LoadingSpinner } from '../../src/components/shared';
-import { Colors } from '../../src/constants/colors';
-import { useAuthStore } from '../../src/store/authStore';
-import type { ChatMessage } from '../../src/utils/types';
+import { useTranslation } from 'react-i18next';
+import { getChatMessages, sendMessage, createOrFindChat } from '../../api/core/message.actions';
+import { joinChat, leaveChat, emitSendMessage, emitMarkAsRead, getSocket } from '../../api/sockets/socket.actions';
+import { setActiveChatId, cacheUserName } from '../../services/chatState';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useAuthStore } from '../../store/authStore';
+import type { ChatMessage } from '../../utils/types';
+import { createStyles } from '../../utils/styles/profile/chat.styles';
+
+const chatIdCache = new Map<string, number>();
+
+function getItemModel(category?: string): string {
+  const c = (category || '').toLowerCase();
+  if (c === 'cars' || c === 'car') return 'Car';
+  if (c === 'boats' || c === 'boat') return 'Boat';
+  if (c === 'motorcycles' || c === 'motorcycle') return 'Motorcycle';
+  if (c === 'farmequipment' || c === 'farm-equipment' || c === 'traktor') return 'Traktor';
+  if (c === 'realestate' || c === 'real-estate') return 'RealEstate';
+  if (c === 'jobs' || c === 'job') return 'Job';
+  if (c === 'subscription') return 'Subscription';
+  return 'Marketplace';
+}
 
 export default function ChatScreen() {
-  const { chatId, userId, username } = useLocalSearchParams<{
-    chatId: string;
-    userId: string;
-    username: string;
-  }>();
+  const { chatId: chatIdParam, userId, username, listingId, listingType } =
+    useLocalSearchParams<{ chatId?: string; userId?: string; username?: string; listingId?: string; listingType?: string }>();
   const navigation = useNavigation();
+  const router = useRouter();
+  const { t } = useTranslation();
   const { user } = useAuthStore();
+
+  const Colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
+
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [fetching, setFetching] = useState(true);
+  const [initError, setInitError] = useState(false);
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
+  const [chatIdNum, setChatIdNum] = useState(0);
+
   const listRef = useRef<FlatList>(null);
-  const chatIdNum = chatId ? parseInt(chatId, 10) : 0;
+  const chatIdRef = useRef(0);
+  const initial = (username?.[0] ?? '?').toUpperCase();
 
   useEffect(() => {
-    navigation.setOptions({ title: username || 'Chat' });
-    if (!chatIdNum || !user?.id) { setLoading(false); return; }
+    navigation.setOptions({ headerShown: false });
+    if (userId && username) cacheUserName(userId, username);
+    if (!user?.id) { setFetching(false); return; }
 
-    getChatMessages(chatIdNum, user.id)
-      .then(setMessages)
-      .catch(() => {})
-      .finally(() => setLoading(false));
+    async function init() {
+      let resolvedId = chatIdParam ? parseInt(chatIdParam, 10) : 0;
 
-    joinChat(chatIdNum);
-    emitMarkAsRead(chatIdNum);
+      if (!resolvedId && userId) {
+        const cacheKey = `${user!.id}:${userId}:${listingId || ''}`;
+        const cached = chatIdCache.get(cacheKey);
+        if (cached) {
+          resolvedId = cached;
+        } else {
+          try {
+            const { chat } = await createOrFindChat({
+              senderId: user!.id,
+              receiverId: userId,
+              itemId: listingId || '',
+              itemModel: getItemModel(listingType),
+            });
+            resolvedId = chat.id;
+            chatIdCache.set(cacheKey, resolvedId);
+          } catch {
+            setInitError(true);
+            setFetching(false);
+            return;
+          }
+        }
+      }
 
+      chatIdRef.current = resolvedId;
+      setChatIdNum(resolvedId);
+
+      if (resolvedId) {
+        setActiveChatId(resolvedId);
+        joinChat(resolvedId);
+        emitMarkAsRead(resolvedId);
+
+        getChatMessages(resolvedId, user!.id)
+          .then((msgs) => {
+            setMessages(msgs);
+            setTimeout(() => listRef.current?.scrollToEnd({ animated: false }), 60);
+          })
+          .catch(() => {})
+          .finally(() => setFetching(false));
+        return; 
+      }
+
+      setFetching(false);
+    }
+
+    init();
     return () => {
-      leaveChat(chatIdNum);
+      if (chatIdRef.current) leaveChat(chatIdRef.current);
+      setActiveChatId(null);
     };
-  }, [chatIdNum, user?.id]);
+  }, [user?.id]);
 
   useEffect(() => {
     const socket = getSocket();
-    if (!socket) return;
+    if (!socket || !chatIdNum) return;
 
     const onReceive = (msg: ChatMessage) => {
+      const msgChatId = (msg as any).chatId;
+      if (msgChatId && msgChatId !== chatIdNum) return;
       setMessages((prev) => {
+        const tempKey = (msg as any).tempId;
+        if (tempKey) {
+          const withoutTemp = prev.filter((m) => (m as any).tempId !== tempKey);
+          return [...withoutTemp, msg];
+        }
         if (prev.find((m) => m.id === msg.id)) return prev;
         return [...prev, msg];
       });
       emitMarkAsRead(chatIdNum);
-      setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 100);
+      setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 80);
     };
 
     socket.on('receiveMessage', onReceive);
-    return () => { socket.off('receiveMessage', onReceive); };
+    socket.on('newMessage', onReceive);
+    return () => {
+      socket.off('receiveMessage', onReceive);
+      socket.off('newMessage', onReceive);
+    };
   }, [chatIdNum]);
 
   async function handleSend() {
-    if (!text.trim() || !chatIdNum || !user?.id || !userId) return;
+    if (!text.trim() || !chatIdNum || !user?.id) return;
     const content = text.trim();
+    const tempId = `temp_${Date.now()}`;
     setText('');
-    setSending(true);
+    setSending(false);
 
-    const tempId = Date.now().toString();
+    const tempMsg: any = {
+      id: tempId,
+      tempId,
+      chatId: chatIdNum,
+      senderId: user.id,
+      content,
+      timestamp: new Date().toISOString(),
+      read: false,
+    };
+    setMessages((prev) => [...prev, tempMsg]);
+    setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 80);
+
     const socket = getSocket();
-
     if (socket?.connected) {
       emitSendMessage(chatIdNum, content, tempId);
-      setSending(false);
-      setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 100);
     } else {
       try {
-        const msg = await sendMessage({
-          chatId: chatIdNum,
-          senderId: user.id,
-          receiverId: userId,
-          content,
-        });
-        setMessages((prev) => [...prev, msg]);
-        setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 100);
+        const msg = await sendMessage({ chatId: chatIdNum, senderId: user.id, receiverId: userId || '', content });
+        setMessages((prev) => prev.map((m) => (m as any).tempId === tempId ? msg : m));
       } catch {
         setText(content);
-      } finally {
-        setSending(false);
+        setMessages((prev) => prev.filter((m) => (m as any).tempId !== tempId));
       }
     }
   }
 
-  if (loading) return <LoadingSpinner fullScreen />;
+  const header = (
+    <View style={styles.header}>
+      <TouchableOpacity onPress={() => router.back()} hitSlop={10} style={styles.backBtn}>
+        <MaterialCommunityIcons name="chevron-left" size={28} color={Colors.primary} />
+      </TouchableOpacity>
+      <View style={styles.avatar}>
+        <Text style={styles.avatarText}>{initial}</Text>
+      </View>
+      <Text style={styles.headerName} numberOfLines={1}>{username || t('chats.chatFallback')}</Text>
+    </View>
+  );
+
+  if (initError) {
+    return (
+      <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
+        {header}
+        <View style={styles.centerWrap}>
+          <MaterialCommunityIcons name="message-alert-outline" size={52} color={Colors.textMuted} />
+          <Text style={styles.errorText}>{t('chats.couldNotOpen')}</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
-    <SafeAreaView style={styles.safe} edges={['bottom']}>
+    <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
+      {header}
+
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior="padding"
-        keyboardVerticalOffset={90}
+        style={styles.flexFull}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <FlatList
           ref={listRef}
@@ -110,22 +209,40 @@ export default function ChatScreen() {
           keyExtractor={(item) => String(item.id)}
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
           onContentSizeChange={() => listRef.current?.scrollToEnd({ animated: false })}
+          ListHeaderComponent={
+            fetching ? (
+              <View style={styles.fetchingRow}>
+                <ActivityIndicator size="small" color={Colors.primary} />
+                <Text style={styles.fetchingText}>{t('chats.loadingMessages')}</Text>
+              </View>
+            ) : null
+          }
           ListEmptyComponent={
-            <View style={styles.emptyChat}>
-              <Text style={styles.emptyChatText}>Send a message to start the conversation</Text>
-            </View>
+            fetching ? null : (
+              <View style={styles.centerWrap}>
+                <MaterialCommunityIcons name="message-outline" size={52} color={Colors.border} />
+                <Text style={styles.emptyTitle}>{t('chats.noMessagesYet')}</Text>
+                <Text style={styles.emptySub}>{t('chats.startConversation')}</Text>
+              </View>
+            )
           }
           renderItem={({ item }) => {
             const isMe = item.senderId === user?.id;
+            const ts = item.timestamp || item.createdAt || '';
             return (
-              <View style={[styles.bubble, isMe ? styles.bubbleMe : styles.bubbleThem]}>
-                <Text style={[styles.bubbleText, isMe && styles.bubbleTextMe]}>
-                  {item.content}
-                </Text>
-                <Text style={[styles.bubbleTime, isMe && styles.bubbleTimeMe]}>
-                  {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </Text>
+              <View style={[styles.row, isMe ? styles.rowMe : styles.rowThem]}>
+                <View style={[styles.bubble, isMe ? styles.bubbleMe : styles.bubbleThem]}>
+                  <Text style={[styles.bubbleText, isMe ? styles.bubbleTextMe : styles.bubbleTextThem]}>
+                    {item.content}
+                  </Text>
+                  {!!ts && (
+                    <Text style={[styles.time, isMe ? styles.timeMe : styles.timeThem]}>
+                      {new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </Text>
+                  )}
+                </View>
               </View>
             );
           }}
@@ -136,56 +253,25 @@ export default function ChatScreen() {
             style={styles.input}
             value={text}
             onChangeText={setText}
-            placeholder="Type a message..."
-            placeholderTextColor={Colors.placeholder}
+            placeholder={t('chats.typeMessage')}
+            placeholderTextColor={Colors.slate500}
             multiline
             maxLength={500}
+            textAlignVertical="top"
+            underlineColorAndroid="transparent"
           />
           <TouchableOpacity
-            style={[styles.sendBtn, (!text.trim() || sending) && styles.sendBtnDisabled]}
+            style={[styles.sendBtn, (!text.trim() || sending) && styles.sendBtnOff]}
             onPress={handleSend}
             disabled={!text.trim() || sending}
           >
-            <MaterialCommunityIcons
-              name="send"
-              size={20}
-              color={text.trim() && !sending ? Colors.white : Colors.textMuted}
-            />
+            {sending
+              ? <ActivityIndicator size="small" color={Colors.white} />
+              : <MaterialCommunityIcons name="send" size={20} color={text.trim() ? Colors.white : Colors.slate500} />
+            }
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Colors.background },
-  list: { padding: 16, gap: 8, flexGrow: 1 },
-  emptyChat: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 60 },
-  emptyChatText: { fontSize: 14, color: Colors.textMuted, textAlign: 'center' },
-  bubble: {
-    maxWidth: '78%', paddingHorizontal: 13, paddingVertical: 9,
-    borderRadius: 16, marginBottom: 4,
-  },
-  bubbleMe: { alignSelf: 'flex-end', backgroundColor: Colors.primary, borderBottomRightRadius: 4 },
-  bubbleThem: { alignSelf: 'flex-start', backgroundColor: Colors.white, borderBottomLeftRadius: 4 },
-  bubbleText: { fontSize: 15, color: Colors.text, lineHeight: 20 },
-  bubbleTextMe: { color: Colors.white },
-  bubbleTime: { fontSize: 10, color: Colors.textMuted, marginTop: 3, textAlign: 'right' },
-  bubbleTimeMe: { color: Colors.white + 'aa' },
-  inputRow: {
-    flexDirection: 'row', alignItems: 'flex-end', gap: 8,
-    padding: 10, backgroundColor: Colors.white,
-    borderTopWidth: 1, borderTopColor: Colors.border,
-  },
-  input: {
-    flex: 1, backgroundColor: Colors.inputBg, borderRadius: 20,
-    paddingHorizontal: 14, paddingVertical: 10, fontSize: 15,
-    color: Colors.text, maxHeight: 100,
-  },
-  sendBtn: {
-    width: 42, height: 42, borderRadius: 21,
-    backgroundColor: Colors.primary, alignItems: 'center', justifyContent: 'center',
-  },
-  sendBtnDisabled: { backgroundColor: Colors.border },
-});

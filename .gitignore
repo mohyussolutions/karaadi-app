@@ -41,3 +41,15 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# local EAS build output
+/builds
+*.apk
+*.aab
+*.ipa
+
+# Google Play service account credentials
+google-play-service-account.json
+
+# Claude Code
+.claude/

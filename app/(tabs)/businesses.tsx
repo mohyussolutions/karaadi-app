@@ -1,1 +1,1 @@
-export { default } from '../profile/businesses';
+export { default } from '../profile/business-create';

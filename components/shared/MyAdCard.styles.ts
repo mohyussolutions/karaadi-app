@@ -1,0 +1,91 @@
+import { StyleSheet } from 'react-native';
+import type { ColorPalette } from '../../hooks/useTheme';
+import { RADII } from '../../utils/theme';
+
+export function createStyles(Colors: ColorPalette) {
+  return StyleSheet.create({
+    card: {
+      flex: 1,
+      backgroundColor: Colors.card,
+      borderRadius: RADII.xl,
+      overflow: 'hidden',
+      borderWidth: 1,
+      borderColor: Colors.gray100,
+      shadowColor: Colors.shadow,
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.06,
+      shadowRadius: 4,
+      elevation: 2,
+    },
+    imgWrap: {
+      position: 'relative',
+      width: '100%',
+      aspectRatio: 1.1,
+      backgroundColor: Colors.slate100,
+    },
+    img: { width: '100%', height: '100%' },
+    badgeRow: {
+      position: 'absolute', top: 8, left: 8, right: 8,
+      flexDirection: 'row', flexWrap: 'wrap', gap: 4,
+    },
+    badge: {
+      borderRadius: 999,
+      paddingHorizontal: 8,
+      paddingVertical: 3,
+    },
+    badgeText: {
+      color: Colors.white, fontSize: 9, fontWeight: '800',
+      letterSpacing: 0.4, textTransform: 'uppercase',
+    },
+    badgeSold: { backgroundColor: Colors.amber },
+    badgeActive: { backgroundColor: Colors.success },
+    badgeExpired: { backgroundColor: Colors.error },
+    badgePending: { backgroundColor: Colors.warning },
+    badgePlan: { backgroundColor: Colors.primary },
+    body: { padding: 10, gap: 6 },
+    title: { fontSize: 13, fontWeight: '700', color: Colors.slate900, lineHeight: 17 },
+    description: { fontSize: 11, color: Colors.textMuted, lineHeight: 14 },
+    infoRow: { flexDirection: 'row', gap: 6 },
+    infoBox: {
+      flex: 1, minWidth: 0,
+      backgroundColor: Colors.surface,
+      borderRadius: 8,
+      paddingHorizontal: 8,
+      paddingVertical: 6,
+    },
+    infoLabel: { fontSize: 9, color: Colors.textMuted, marginBottom: 2 },
+    infoValue: { fontSize: 11, fontWeight: '700', color: Colors.textSecondary },
+    infoValueMuted: { color: Colors.gray300 },
+    infoValueWarning: { color: Colors.warning },
+    infoValueDanger: { color: Colors.error },
+    priceRow: {
+      flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    },
+    price: { fontSize: 15, fontWeight: '800', color: Colors.textPrimary, flexShrink: 1 },
+    typeBadge: {
+      backgroundColor: Colors.surface,
+      borderRadius: 999,
+      paddingHorizontal: 8,
+      paddingVertical: 2,
+      borderWidth: 1,
+      borderColor: Colors.border,
+      maxWidth: '45%',
+    },
+    typeText: { fontSize: 10, color: Colors.textMuted, textTransform: 'capitalize' },
+    actions: {
+      flexDirection: 'row', gap: 6, marginTop: 4,
+      paddingTop: 8, borderTopWidth: 1, borderTopColor: Colors.gray100,
+    },
+    actionBtn: {
+      flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+      gap: 4, paddingVertical: 8, borderRadius: 10,
+    },
+    actionBtnPay: { backgroundColor: Colors.warning },
+    actionBtnRelist: { backgroundColor: Colors.primary },
+    actionBtnView: { backgroundColor: Colors.primaryGhost },
+    actionBtnDelete: { backgroundColor: Colors.errorGhost },
+    actionBtnText: { fontSize: 11, fontWeight: '700', color: Colors.white },
+    actionBtnTextView: { color: Colors.primary },
+    actionBtnTextDelete: { color: Colors.error },
+  });
+}

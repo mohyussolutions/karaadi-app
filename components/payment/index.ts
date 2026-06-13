@@ -1,0 +1,1 @@
+export { StepPayment } from './StepPayment';

@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, StyleSheet,
+  View, Text, TextInput, TouchableOpacity,
   ScrollView, KeyboardAvoidingView, Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useLogin } from '../../src/hooks/useLogin';
-import { Colors } from '../../src/constants/colors';
+import { useLogin } from '../../hooks/useLogin';
+import { useResponsive } from '../../hooks/useResponsive';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { createStyles } from '../../utils/styles/auth/login.styles';
 
 export default function LoginScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { email, setEmail, password, setPassword, isLoading, error, handleSubmit } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
+  const { isTablet, isMobileLandscape } = useResponsive();
+  const Colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
 
   async function onPress() {
     if (!email.trim() || !password.trim()) {
@@ -28,11 +33,11 @@ export default function LoginScreen() {
     <KeyboardAvoidingView style={styles.root} behavior="padding">
       <StatusBar style="dark" />
       <ScrollView
-        contentContainerStyle={styles.scroll}
+        contentContainerStyle={[styles.scroll, isMobileLandscape && styles.scrollLandscape]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.card}>
+        <View style={[styles.card, isTablet && styles.cardTablet]}>
           <Text style={styles.title}>{t('auth.login.title')}</Text>
           <Text style={styles.subtitle}>{t('auth.login.subtitle')}</Text>
 
@@ -104,68 +109,3 @@ export default function LoginScreen() {
     </KeyboardAvoidingView>
   );
 }
-
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: Colors.surface },
-  scroll: { flexGrow: 1, justifyContent: 'center', padding: 20, paddingVertical: 40 },
-  card: {
-    backgroundColor: Colors.white,
-    borderRadius: 24,
-    padding: 28,
-    borderWidth: 1,
-    borderColor: Colors.border,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 16,
-    elevation: 6,
-  },
-  title: { fontSize: 26, fontWeight: '800', color: Colors.textPrimary, textAlign: 'center', marginBottom: 4 },
-  subtitle: { fontSize: 14, color: Colors.textMuted, textAlign: 'center', marginBottom: 28 },
-  inputGroup: { marginBottom: 16 },
-  input: {
-    backgroundColor: Colors.inputBg,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 13,
-    fontSize: 15,
-    color: Colors.textPrimary,
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
-  passwordWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.inputBg,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: Colors.border,
-    paddingRight: 12,
-  },
-  passwordInput: { flex: 1, paddingHorizontal: 16, paddingVertical: 13, fontSize: 15, color: Colors.textPrimary },
-  eyeBtn: { padding: 4 },
-  forgotRow: { alignItems: 'flex-end', marginTop: 6 },
-  forgotLink: { fontSize: 13, color: Colors.primary, fontWeight: '500' },
-  btn: {
-    backgroundColor: Colors.primary,
-    borderRadius: 14,
-    paddingVertical: 15,
-    alignItems: 'center',
-    marginTop: 4,
-    marginBottom: 16,
-  },
-  btnDisabled: { opacity: 0.65 },
-  btnText: { color: Colors.white, fontSize: 16, fontWeight: '700' },
-  errorBox: {
-    backgroundColor: '#FEF2F2',
-    borderWidth: 1,
-    borderColor: '#FCA5A5',
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 12,
-  },
-  errorText: { color: '#DC2626', fontSize: 13, textAlign: 'center', fontWeight: '500' },
-  registerRow: { flexDirection: 'row', justifyContent: 'center' },
-  registerText: { fontSize: 14, color: Colors.textSecondary },
-  registerLink: { fontSize: 14, color: Colors.primary, fontWeight: '600' },
-});

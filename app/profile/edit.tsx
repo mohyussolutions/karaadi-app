@@ -1,24 +1,45 @@
 import React, { useState } from 'react';
 import {
-  View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Alert,
+  View, Text, Image, TouchableOpacity,
+  ScrollView, Alert, TextInput, ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { apiClient } from '../../src/api/client';
-import { AUTH_ENDPOINTS, UPLOAD_ENDPOINTS } from '../../src/constants/endpoints';
-import { useAuthStore } from '../../src/store/authStore';
-import { Colors } from '../../src/constants/colors';
+import { apiClient } from '../../api/client';
+import { AUTH_ENDPOINTS, placeholderAvatar } from '../../constants';
+import { updateUsername, updatePhone, deleteAccount } from '../../api/core/auth.actions';
+import { useAuthStore } from '../../store/authStore';
+import { getImageUrl } from '../../utils/helpers';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { createStyles } from '../../utils/styles/profile/edit.styles';
+import { useTranslation } from 'react-i18next';
 
-const AVATAR = 'https://placehold.co/100x100/2563eb/ffffff?text=Me';
+const AVATAR = placeholderAvatar(100, '2563eb', 'Me');
+const DELETE_CONFIRM_TEXT = 'delete account';
 
 export default function EditProfileScreen() {
-  const { user, setUser } = useAuthStore();
+  const { t } = useTranslation();
+  const router = useRouter();
+  const { user, setUser, clearAuth } = useAuthStore();
+  const Colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const [uploading, setUploading] = useState(false);
+
+  const [username, setUsername] = useState(user?.username || '');
+  const [phone, setPhone] = useState(user?.phone || '');
+  const [savingUsername, setSavingUsername] = useState(false);
+  const [savingPhone, setSavingPhone] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  const [deleting, setDeleting] = useState(false);
 
   async function handlePickPhoto() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') { Alert.alert('Permission needed', 'Grant photo access to update your profile picture.'); return; }
+    if (status !== 'granted') {
+      Alert.alert(t('mine.editProfile.permissionNeeded'), t('mine.editProfile.grantPhotoAccess'));
+      return;
+    }
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -30,78 +51,171 @@ export default function EditProfileScreen() {
     try {
       const uri = result.assets[0].uri;
       const form = new FormData();
-      form.append('image', { uri, name: 'profile.jpg', type: 'image/jpeg' } as any);
-      const { data } = await apiClient.put(AUTH_ENDPOINTS.UPDATE_PROFILE_IMAGE, form, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      const imageUrl = data?.profileImage || data?.url;
+      form.append('profileImage', { uri, name: 'profile.jpg', type: 'image/jpeg' } as any);
+      const { data } = await apiClient.put(AUTH_ENDPOINTS.UPDATE_PROFILE_IMAGE, form);
+      const imageUrl = data?.user?.profileImage;
       if (imageUrl && user) {
         await setUser({ ...user, profileImage: imageUrl }, user.token);
-        Alert.alert('Success', 'Profile photo updated.');
+        Alert.alert(t('success'), t('mine.editProfile.photoUpdated'));
       }
     } catch {
-      Alert.alert('Error', 'Failed to update profile photo.');
+      Alert.alert(t('error'), t('mine.editProfile.photoUpdateFailed'));
     } finally {
       setUploading(false);
     }
   }
 
+  async function handleSaveUsername() {
+    if (!username.trim()) { Alert.alert(t('error'), t('mine.editProfile.usernameEmpty')); return; }
+    setSavingUsername(true);
+    try {
+      const updated = await updateUsername(username.trim());
+      if (user) await setUser({ ...user, ...updated }, user.token);
+      Alert.alert(t('success'), t('mine.editProfile.usernameUpdated'));
+    } catch (err: any) {
+      Alert.alert(t('error'), err?.response?.data?.message || t('mine.editProfile.usernameUpdateFailed'));
+    } finally {
+      setSavingUsername(false);
+    }
+  }
+
+  async function handleSavePhone() {
+    if (!phone.trim()) { Alert.alert(t('error'), t('mine.editProfile.phoneEmpty')); return; }
+    setSavingPhone(true);
+    try {
+      const updated = await updatePhone(phone.trim());
+      if (user) await setUser({ ...user, ...updated }, user.token);
+      Alert.alert(t('success'), t('mine.editProfile.phoneUpdated'));
+    } catch (err: any) {
+      Alert.alert(t('error'), err?.response?.data?.message || t('mine.editProfile.phoneUpdateFailed'));
+    } finally {
+      setSavingPhone(false);
+    }
+  }
+
+  function handleDeleteAccount() {
+    Alert.alert(
+      t('mine.editProfile.deleteConfirmTitle'),
+      t('mine.editProfile.deleteConfirmMessage', { email: user?.email }),
+      [
+        { text: t('mine.editProfile.stay'), style: 'cancel' },
+        {
+          text: t('mine.editProfile.yesDeleteEverything'),
+          style: 'destructive',
+          onPress: async () => {
+            setDeleting(true);
+            try {
+              await deleteAccount();
+              await clearAuth();
+              router.replace('/(auth)/login');
+            } catch {
+              Alert.alert(t('error'), t('mine.settingsPage.couldNotDelete'));
+              setDeleting(false);
+            }
+          },
+        },
+      ],
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+
         <View style={styles.avatarSection}>
-          <Image source={{ uri: user?.profileImage || AVATAR }} style={styles.avatar} />
+          <Image
+            source={{ uri: getImageUrl(user?.profileImage) || AVATAR }}
+            style={styles.avatar}
+          />
           <TouchableOpacity style={styles.editPhotoBtn} onPress={handlePickPhoto} disabled={uploading}>
-            <MaterialCommunityIcons name="camera" size={18} color={Colors.white} />
+            {uploading
+              ? <ActivityIndicator size="small" color={Colors.white} />
+              : <MaterialCommunityIcons name="camera" size={18} color={Colors.white} />}
           </TouchableOpacity>
-          {uploading && <Text style={styles.uploading}>Uploading...</Text>}
+          <Text style={styles.avatarHint}>{t('mine.editProfile.tapToChangePhoto')}</Text>
         </View>
 
-        <View style={styles.infoCard}>
-          <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Username</Text>
-            <Text style={styles.infoValue}>{user?.username}</Text>
-          </View>
-          <View style={styles.divider} />
-          <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Email</Text>
-            <Text style={styles.infoValue}>{user?.email}</Text>
-          </View>
-          <View style={styles.divider} />
-          <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Phone</Text>
-            <Text style={styles.infoValue}>{user?.phone || 'Not set'}</Text>
-          </View>
+        <View style={styles.card}>
+          <Text style={styles.label}>{t('email')}</Text>
+          <Text style={styles.staticValue}>{user?.email}</Text>
         </View>
 
-        <Text style={styles.note}>
-          To change your username or phone, go to{' '}
-          <Text style={{ color: Colors.primary }}>Settings</Text>.
-        </Text>
+        <View style={styles.card}>
+          <Text style={styles.label}>{t('username')}</Text>
+          <TextInput
+            style={styles.input}
+            value={username}
+            onChangeText={setUsername}
+            placeholder={t('mine.editProfile.usernamePlaceholder')}
+            placeholderTextColor={Colors.placeholder}
+            autoCapitalize="none"
+          />
+          <TouchableOpacity
+            style={[styles.saveBtn, savingUsername && styles.disabled]}
+            onPress={handleSaveUsername}
+            disabled={savingUsername}
+          >
+            {savingUsername
+              ? <ActivityIndicator size="small" color={Colors.white} />
+              : <Text style={styles.saveBtnText}>{t('mine.editProfile.saveUsername')}</Text>}
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.label}>{t('mine.editProfile.phoneNumberLabel')}</Text>
+          <TextInput
+            style={styles.input}
+            value={phone}
+            onChangeText={(v) => setPhone(v.replace(/[^0-9+\-()\s]/g, ''))}
+            placeholder={t('phonePlaceholder')}
+            placeholderTextColor={Colors.placeholder}
+            keyboardType="phone-pad"
+          />
+          <TouchableOpacity
+            style={[styles.saveBtn, savingPhone && styles.disabled]}
+            onPress={handleSavePhone}
+            disabled={savingPhone}
+          >
+            {savingPhone
+              ? <ActivityIndicator size="small" color={Colors.white} />
+              : <Text style={styles.saveBtnText}>{t('mine.editProfile.savePhone')}</Text>}
+          </TouchableOpacity>
+        </View>
+
+        <View style={[styles.card, styles.dangerCard]}>
+          <View style={styles.dangerHeader}>
+            <MaterialCommunityIcons name="trash-can-outline" size={20} color={Colors.error} />
+            <Text style={styles.dangerTitle}>{t('mine.settingsPage.dangerZone')}</Text>
+          </View>
+          <Text style={styles.dangerWarning}>{t('mine.editProfile.deleteWarning')}</Text>
+          <TextInput
+            style={styles.input}
+            value={deleteConfirmText}
+            onChangeText={setDeleteConfirmText}
+            placeholder={t('mine.editProfile.deleteConfirmPlaceholder')}
+            placeholderTextColor={Colors.placeholder}
+            autoCapitalize="none"
+          />
+          <TouchableOpacity
+            style={[
+              styles.deleteBtn,
+              (deleteConfirmText.trim().toLowerCase() !== DELETE_CONFIRM_TEXT || deleting) && styles.disabled,
+            ]}
+            onPress={handleDeleteAccount}
+            disabled={deleteConfirmText.trim().toLowerCase() !== DELETE_CONFIRM_TEXT || deleting}
+          >
+            {deleting ? (
+              <ActivityIndicator size="small" color={Colors.error} />
+            ) : (
+              <>
+                <MaterialCommunityIcons name="trash-can-outline" size={18} color={Colors.error} />
+                <Text style={styles.deleteBtnText}>{t('mine.settingsPage.deleteAccount')}</Text>
+              </>
+            )}
+          </TouchableOpacity>
+        </View>
+
       </ScrollView>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Colors.background },
-  content: { padding: 24, alignItems: 'center' },
-  avatarSection: { alignItems: 'center', marginBottom: 24 },
-  avatar: { width: 100, height: 100, borderRadius: 50, backgroundColor: Colors.border, marginBottom: 4 },
-  editPhotoBtn: {
-    position: 'absolute', bottom: 8, right: -2,
-    backgroundColor: Colors.primary, borderRadius: 15, padding: 6,
-    borderWidth: 2, borderColor: Colors.white,
-  },
-  uploading: { fontSize: 12, color: Colors.textSecondary, marginTop: 6 },
-  infoCard: {
-    backgroundColor: Colors.white, borderRadius: 12, width: '100%',
-    padding: 4, marginBottom: 16,
-    borderWidth: 1, borderColor: '#F3F4F6',
-  },
-  infoRow: { flexDirection: 'row', justifyContent: 'space-between', padding: 14 },
-  infoLabel: { fontSize: 14, color: Colors.textSecondary },
-  infoValue: { fontSize: 14, fontWeight: '600', color: Colors.text },
-  divider: { height: 1, backgroundColor: Colors.border, marginHorizontal: 14 },
-  note: { fontSize: 13, color: Colors.textSecondary, textAlign: 'center', lineHeight: 20 },
-});

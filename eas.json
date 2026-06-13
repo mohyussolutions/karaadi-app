@@ -7,7 +7,7 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://api.karaadi.com"
+        "EXPO_PUBLIC_API_URL": "https://karaadi.onrender.com"
       }
     },
     "preview": {
@@ -16,17 +16,22 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://api.karaadi.com"
+        "EXPO_PUBLIC_API_URL": "https://karaadi.onrender.com"
       }
     },
     "production": {
       "autoIncrement": true,
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://api.karaadi.com"
+        "EXPO_PUBLIC_API_URL": "https://karaadi.onrender.com"
       }
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "./google-play-service-account.json",
+        "track": "internal"
+      }
+    }
   }
 }
