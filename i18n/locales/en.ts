@@ -1751,6 +1751,7 @@ export const postAd = {
     category: "Category",
     details: "Details",
     plan: "Plan",
+    summary: "Summary",
     payment: "Payment",
   },
   businessPostedTitle: "Listing posted",

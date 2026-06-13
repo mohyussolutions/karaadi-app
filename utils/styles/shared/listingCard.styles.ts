@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import type { ColorPalette } from '../../hooks/useTheme';
-import { RADII } from '../../utils/theme';
+import type { ColorPalette } from '../../../hooks/useTheme';
+import { RADII } from '../../theme';
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
@@ -42,7 +42,7 @@ export function createStyles(Colors: ColorPalette) {
     },
     body: { padding: 10, gap: 4 },
     title: { fontSize: 13, fontWeight: '700', color: Colors.slate900, lineHeight: 17 },
-    description: { fontSize: 11, color: Colors.textMuted, lineHeight: 14 },
+    description: { fontSize: 12, color: Colors.textMuted, lineHeight: 16 },
     footer: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -50,12 +50,9 @@ export function createStyles(Colors: ColorPalette) {
       marginTop: 4,
     },
     locRow: { flexDirection: 'row', alignItems: 'center', gap: 2, flexShrink: 1 },
-    locText: { fontSize: 11, color: Colors.textSecondary, fontWeight: '600' },
+    locText: { fontSize: 12, color: Colors.textSecondary, fontWeight: '600' },
     price: {
-      fontSize: 12, fontWeight: '800', color: Colors.white, letterSpacing: -0.2, flexShrink: 0,
-      backgroundColor: Colors.primary,
-      paddingHorizontal: 8, paddingVertical: 3,
-      borderRadius: RADII.pill,
+      fontSize: 13, fontWeight: '800', color: Colors.black, letterSpacing: -0.2, flexShrink: 0,
     },
   });
 }

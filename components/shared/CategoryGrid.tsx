@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import { MAIN_CATEGORIES, MainCategory } from "../../constants/categories";
 import { useAppTranslation } from "../../hooks/useAppTranslation";
 import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
-import { createStyles, COLS } from "./CategoryGrid.styles";
+import { createStyles, COLS } from "../../utils/styles/shared/categoryGrid.styles";
 import type { CategoryGridProps } from "../../utils/types";
 
 interface CategoryCellProps {

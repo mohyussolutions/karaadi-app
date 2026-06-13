@@ -22,7 +22,7 @@ import { StepType } from "../../features/new-ad/components/StepType";
 import { StepCategory } from "../../features/new-ad/components/StepCategory";
 import { StepForm } from "../../features/new-ad/components/forms";
 import { StepPlan } from "../../features/new-ad/components/StepPlan";
-import { StepPayment } from "../../components/payment";
+import { StepSummary, StepPayment } from "../../components/payment";
 
 import type { ListingType, Step, StepItem } from "../../utils/types/new-ad.types";
 import { MAIN_CATEGORIES } from "../../navigation/main";
@@ -34,7 +34,8 @@ const STEP_INDEX: Record<Step, number> = {
   category: 1,
   form: 2,
   plan: 3,
-  payment: 4,
+  summary: 4,
+  payment: 5,
 };
 
 const AVATAR = placeholderAvatar(80, '2563eb', 'Me');
@@ -82,9 +83,12 @@ export default function NewAdScreen() {
     { key: "category", label: t("postAd.steps.category") },
     { key: "form", label: t("postAd.steps.details") },
     { key: "plan", label: t("postAd.steps.plan") },
+    { key: "summary", label: t("postAd.steps.summary") },
     { key: "payment", label: t("postAd.steps.payment") },
   ];
-  const adSteps = businessId ? AD_STEPS.filter((st) => st.key !== "plan" && st.key !== "payment") : AD_STEPS;
+  const adSteps = businessId
+    ? AD_STEPS.filter((st) => st.key !== "plan" && st.key !== "summary" && st.key !== "payment")
+    : AD_STEPS;
 
   const s = useThemedStyles(createStyles);
 
@@ -146,8 +150,17 @@ export default function NewAdScreen() {
           loading={plansLoading}
           selected={selectedPlan}
           onSelect={(plan) => dispatch(setSelectedPlan(plan))}
-          onNext={() => dispatch(setStep("payment"))}
+          onNext={() => dispatch(setStep("summary"))}
           onBack={() => dispatch(setStep("form"))}
+        />
+      )}
+
+      {step === "summary" && selectedPlan && (
+        <StepSummary
+          plan={selectedPlan}
+          categoryName={categoryMeta?.name}
+          onNext={() => dispatch(setStep("payment"))}
+          onBack={() => dispatch(setStep("plan"))}
         />
       )}
 
@@ -157,8 +170,7 @@ export default function NewAdScreen() {
           listingId={createdId}
           listingTitle={createdTitle}
           categoryKey={categoryKey}
-          categoryName={categoryMeta?.name}
-          onBack={() => dispatch(setStep("plan"))}
+          onBack={() => dispatch(setStep("summary"))}
         />
       )}
     </View>

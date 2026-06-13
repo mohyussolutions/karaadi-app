@@ -7,7 +7,7 @@ export const IMG_H = Math.round(width * 0.88);
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
-    wrapper: { backgroundColor: '#111' },
+    wrapper: { backgroundColor: Colors.galleryBg },
     image: { width, height: IMG_H },
     arrow: {
       position: 'absolute',
@@ -57,12 +57,12 @@ export function createStyles(Colors: ColorPalette) {
     },
     dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: Colors.whiteAlpha35 },
     dotActive: { width: 18, backgroundColor: Colors.white, borderRadius: 3 },
-    thumbStrip: { paddingHorizontal: 10, paddingBottom: 10, paddingTop: 6, gap: 6, backgroundColor: '#111' },
+    thumbStrip: { paddingHorizontal: 10, paddingBottom: 10, paddingTop: 6, gap: 6, backgroundColor: Colors.galleryBg },
     thumb: {
       width: 60, height: 60, borderRadius: 8,
       borderWidth: 2, borderColor: 'transparent', opacity: 0.6,
     },
-    thumbActive: { borderColor: '#3B82F6', opacity: 1 },
+    thumbActive: { borderColor: Colors.info, opacity: 1 },
   });
 }
 

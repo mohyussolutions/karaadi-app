@@ -1,5 +1,5 @@
 import { Dimensions, StyleSheet } from 'react-native';
-import type { ColorPalette } from '../../hooks/useTheme';
+import type { ColorPalette } from '../../../hooks/useTheme';
 
 const { width } = Dimensions.get('window');
 const H_PAD = 12;

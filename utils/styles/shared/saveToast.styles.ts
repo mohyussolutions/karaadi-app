@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import type { ColorPalette } from '../../hooks/useTheme';
+import type { ColorPalette } from '../../../hooks/useTheme';
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
@@ -10,7 +10,7 @@ export function createStyles(Colors: ColorPalette) {
       flexDirection: 'row',
       alignItems: 'center',
       gap: 12,
-      backgroundColor: '#1E293B',
+      backgroundColor: Colors.toastBg,
       borderRadius: 24,
       paddingVertical: 10,
       paddingHorizontal: 12,
@@ -32,7 +32,7 @@ export function createStyles(Colors: ColorPalette) {
       flex: 1,
       fontSize: 14,
       fontWeight: '600',
-      color: '#F8FAFC',
+      color: Colors.toastText,
       letterSpacing: 0.1,
     },
     viewBtn: {

@@ -60,10 +60,6 @@ export function StepCategory({ selected, onSelect, onNext, onBack }: StepCategor
     [selected, onSelect],
   );
 
-  const header = (
-    <Text style={s.title}>{t('postAd.selectCategoryTitle')}</Text>
-  );
-
   const footer = (
     <View>
       {selected && (
@@ -72,21 +68,27 @@ export function StepCategory({ selected, onSelect, onNext, onBack }: StepCategor
           <MaterialCommunityIcons name="arrow-right" size={18} color={Colors.white} />
         </TouchableOpacity>
       )}
-      <TouchableOpacity style={s.back} onPress={onBack}>
-        <Text style={s.backText}>{'← ' + t('common.back')}</Text>
-      </TouchableOpacity>
     </View>
   );
 
   return (
-    <FlashList
-      data={MAIN_CATEGORIES}
-      keyExtractor={(item) => item.key}
-      numColumns={NUM_COLUMNS}
-      renderItem={renderItem}
-      ListHeaderComponent={header}
-      ListFooterComponent={footer}
-      contentContainerStyle={s.content}
-    />
+    <View style={s.root}>
+      <View style={s.topBar}>
+        <TouchableOpacity style={s.backBtn} onPress={onBack} hitSlop={8}>
+          <MaterialCommunityIcons name="arrow-left" size={20} color={Colors.textPrimary} />
+        </TouchableOpacity>
+        <Text style={s.topBarTitle}>{t('postAd.selectCategoryTitle')}</Text>
+        <View style={s.topBarSpacer} />
+      </View>
+      <FlashList
+        data={MAIN_CATEGORIES}
+        keyExtractor={(item) => item.key}
+        numColumns={NUM_COLUMNS}
+        renderItem={renderItem}
+        style={s.list}
+        ListFooterComponent={footer}
+        contentContainerStyle={s.content}
+      />
+    </View>
   );
 }

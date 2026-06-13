@@ -6,7 +6,7 @@ import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { SocialPostCard } from '../../social';
 import { getListingShareUrl } from '../../../constants';
 import type { SuccessScreenProps } from '../../../utils/types';
-import { createStyles } from './SuccessScreen.styles';
+import { createStyles } from '../../../utils/styles/payment/successScreen.styles';
 
 export function SuccessScreen({ plan, listingTitle, listingId, createdItem, onDone }: SuccessScreenProps) {
   const Colors = useThemeColors();

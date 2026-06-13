@@ -14,11 +14,11 @@ export type {
   SpecRow, DetailCardProps, ImageGalleryProps, RecommendedSectionProps,
   ZoomModalProps, DetailNotFoundProps, SellerCardProps, MessageBanner,
   DetailActionBarProps, SocialShareSheetProps, SocialAction, SocialPostCardProps,
-  NotificationBannerProps,
+  NotificationBannerProps, SwipeDownToCloseProps,
 } from './detail.types';
 export type {
   Region, City, RegionPickerItem, CityPickerItem, RegionCityPickerProps, PickerFieldsProps,
-  CityPickerModalProps, RegionPickerModalProps,
+  CityAccordionPanelProps, RegionAccordionPanelProps,
   TabItem, LoadingSpinnerProps, EmptyStateProps, ListingCardProps, MyAdCardProps,
   SplashScreenProps, ResponsiveLayoutProps, ResponsiveInfo, MenuItem, SettingsRow,
   PaymentStatusConfig, PaymentCategoryInfo,
@@ -34,7 +34,7 @@ export type {
   ListingType, Step, PayMethod, Plan, BusinessPlan, BusinessApplyFormState,
   DropdownOption, FieldDef,
   DropdownProps, FormFieldProps, ImagePickerRowProps,
-  StepCategoryProps, StepPaymentProps, StepPlanProps, StepTypeProps, StepFormProps,
+  StepCategoryProps, StepPaymentProps, StepPlanProps, StepSummaryProps, StepTypeProps, StepFormProps,
   SuccessScreenProps, PhoneInputProps, PaymentMethodSelectorProps,
   PollingOverlayProps, OrderSummaryProps, StepItem, CheckoutBarProps,
 } from './new-ad.types';

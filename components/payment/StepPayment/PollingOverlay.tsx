@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ActivityIndicator, Modal, Animated } from
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import type { PollingOverlayProps } from '../../../utils/types';
-import { createStyles } from './PollingOverlay.styles';
+import { createStyles } from '../../../utils/styles/payment/pollingOverlay.styles';
 
 export function PollingOverlay({ visible, attempt, maxAttempts, onCancel }: PollingOverlayProps) {
   const Colors = useThemeColors();

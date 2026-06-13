@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemedStyles } from '../../hooks/useTheme';
 import { SOCIAL_SHARE_URLS, SOCIAL_BRAND_COLORS } from '../../constants';
 import type { SocialShareSheetProps, SocialAction } from '../../utils/types';
-import { createStyles } from './SocialShareSheet.styles';
+import { createStyles } from '../../utils/styles/social/socialShareSheet.styles';
 
 const SOCIALS: SocialAction[] = [
   {

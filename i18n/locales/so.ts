@@ -374,6 +374,7 @@ export const postAd = {
     category: "Qaybta",
     details: "Faahfaahin",
     plan: "Qorshe",
+    summary: "Kooban",
     payment: "Lacag-bixin",
   },
   businessPostedTitle: "Xayeysiiska waa la daabacay",

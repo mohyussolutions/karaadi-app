@@ -1,5 +1,5 @@
 import { Dimensions, Platform, StatusBar, StyleSheet } from 'react-native';
-import type { ColorPalette } from '../../hooks/useTheme';
+import type { ColorPalette } from '../../../hooks/useTheme';
 
 const { width, height: H } = Dimensions.get('window');
 const STATUSBAR_H = Platform.OS === 'android' ? (StatusBar.currentHeight ?? 24) : 0;

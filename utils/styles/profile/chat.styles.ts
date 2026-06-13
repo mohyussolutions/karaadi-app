@@ -70,6 +70,6 @@ export function createStyles(Colors: ColorPalette) {
       backgroundColor: Colors.blue600, alignItems: 'center', justifyContent: 'center',
       alignSelf: 'flex-end',
     },
-    sendBtnOff: { backgroundColor: '#CBD5E1' },
+    sendBtnOff: { backgroundColor: Colors.slate300 },
   });
 }

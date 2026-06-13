@@ -45,6 +45,10 @@ export interface DetailNotFoundProps {
   onBack: () => void;
 }
 
+export interface SwipeDownToCloseProps {
+  children: ReactNode;
+}
+
 export interface SellerCardProps {
   username?: string | null;
   profileImage?: string | null;

@@ -7,9 +7,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { apiClient } from '../../api/client';
-import { AUTH_ENDPOINTS, placeholderAvatar } from '../../constants';
-import { updateUsername, updatePhone, deleteAccount } from '../../api/core/auth.actions';
+import { placeholderAvatar } from '../../constants';
+import { updateUsername, updatePhone, updateProfileImage, deleteAccount } from '../../api/core/auth.actions';
 import { useAuthStore } from '../../store/authStore';
 import { getImageUrl } from '../../utils/helpers';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
@@ -41,23 +40,21 @@ export default function EditProfileScreen() {
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: 'images' as const,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 0.8,
+      base64: true,
     });
-    if (result.canceled || !result.assets[0]) return;
+    if (result.canceled || !result.assets[0]?.base64) return;
     setUploading(true);
     try {
-      const uri = result.assets[0].uri;
-      const form = new FormData();
-      form.append('profileImage', { uri, name: 'profile.jpg', type: 'image/jpeg' } as any);
-      const { data } = await apiClient.put(AUTH_ENDPOINTS.UPDATE_PROFILE_IMAGE, form);
-      const imageUrl = data?.user?.profileImage;
-      if (imageUrl && user) {
-        await setUser({ ...user, profileImage: imageUrl }, user.token);
-        Alert.alert(t('success'), t('mine.editProfile.photoUpdated'));
-      }
+      const asset = result.assets[0];
+      const mime = asset.mimeType === 'image/png' || asset.mimeType === 'image/webp' ? asset.mimeType : 'image/jpeg';
+      const dataUri = `data:${mime};base64,${asset.base64}`;
+      const updated = await updateProfileImage(dataUri);
+      if (user) await setUser({ ...user, ...updated }, user.token);
+      Alert.alert(t('success'), t('mine.editProfile.photoUpdated'));
     } catch {
       Alert.alert(t('error'), t('mine.editProfile.photoUpdateFailed'));
     } finally {

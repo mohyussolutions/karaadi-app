@@ -7,7 +7,7 @@ import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { formatPrice, getImageUrl, getListingDetailRoute } from '../../utils/helpers';
 import { PLACEHOLDER_IMAGE } from '../../constants';
 import type { MyAdCardProps } from '../../utils/types';
-import { createStyles } from './MyAdCard.styles';
+import { createStyles } from '../../utils/styles/shared/myAdCard.styles';
 
 function getExpiryInfo(
   expiryDate: string | null | undefined,

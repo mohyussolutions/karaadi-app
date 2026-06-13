@@ -6,7 +6,7 @@ import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { planStyle } from '../../../features/new-ad/constants/config';
 import type { Plan, OrderSummaryProps } from '../../../utils/types';
 import type { CreatedItemSummary } from '../../../store/slices/newAdSlice';
-import { createStyles } from './OrderSummary.styles';
+import { createStyles } from '../../../utils/styles/payment/orderSummary.styles';
 
 type Attr = { label: string; value: string };
 

@@ -10,11 +10,15 @@ export function createStyles(Colors: ColorPalette) {
       flexDirection: 'row', alignItems: 'center', gap: 12,
       padding: 14, borderRadius: 14, borderWidth: 1.5, borderColor: Colors.border, backgroundColor: Colors.card,
     },
-    iconWrap: { width: 42, height: 42, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
+    cardActive: { borderColor: Colors.primary, backgroundColor: Colors.primaryGhost },
+    iconWrap: { width: 42, height: 42, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.gray100 },
+    iconWrapActive: { backgroundColor: Colors.blueTint },
     textCol: { flex: 1 },
     label: { fontSize: 15, fontWeight: '600', color: Colors.textSecondary },
+    labelActive: { color: Colors.primary, fontWeight: '700' },
     sub: { fontSize: 11, color: Colors.textMuted, marginTop: 1 },
     radio: { width: 20, height: 20, borderRadius: 10, borderWidth: 2, borderColor: Colors.gray300, alignItems: 'center', justifyContent: 'center' },
-    radioDot: { width: 10, height: 10, borderRadius: 5 },
+    radioActive: { borderColor: Colors.primary },
+    radioDot: { width: 10, height: 10, borderRadius: 5, backgroundColor: Colors.primary },
   });
 }

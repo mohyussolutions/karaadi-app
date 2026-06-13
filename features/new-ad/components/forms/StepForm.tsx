@@ -74,7 +74,9 @@ export function StepForm({
   const submitting = submitStatus === "submitting";
 
   const categoryMeta = MAIN_CATEGORIES.find((c) => c.key === categoryKey);
-  const fields = FIELDS[categoryKey] || [];
+  const fields = (FIELDS[categoryKey] || []).filter(
+    (f) => f.key !== "website" || listingType === "public",
+  );
 
   const selectedSubKey = formData.subcategory;
   const selectedSubMeta = categoryMeta?.subCategories.find(
@@ -201,190 +203,180 @@ export function StepForm({
   }
 
   return (
-    <KeyboardAvoidingView
-      style={s.flexFull}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-    >
-      <ScrollView
-        contentContainerStyle={s.scroll}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
+    <View style={s.root}>
+      <View style={s.topBar}>
+        <TouchableOpacity style={s.backBtn} onPress={onBack} hitSlop={8}>
+          <MaterialCommunityIcons name="arrow-left" size={20} color={Colors.textPrimary} />
+        </TouchableOpacity>
+        <Text style={s.topBarTitle}>
+          {t(`categories.${categoryKey}`, { defaultValue: categoryMeta?.name ?? categoryKey })}
+        </Text>
+        <View style={s.topBarSpacer} />
+      </View>
+      <KeyboardAvoidingView
+        style={s.flexFull}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        <View style={s.header}>
-          {categoryMeta && (
-            <View
-              style={[
-                s.catIcon,
-                { backgroundColor: categoryMeta.color + "20" },
-              ]}
-            >
-              <MaterialCommunityIcons
-                name={categoryMeta.icon as any}
-                size={18}
-                color={categoryMeta.color}
-              />
-            </View>
-          )}
-          <Text style={s.title}>{categoryMeta?.name ?? categoryKey}</Text>
-        </View>
-
-        <View style={s.fieldWrap}>
-          <Text style={s.fieldLabel}>{t("postAd.mainCategoryLabel")}</Text>
-          <View style={s.mainCatBadge}>
-            {categoryMeta && (
-              <MaterialCommunityIcons
-                name={categoryMeta.icon as any}
-                size={16}
-                color={Colors.primary}
-              />
-            )}
-            <Text style={s.mainCatText}>
-              {t(`categories.${categoryKey}`, { defaultValue: categoryMeta?.name ?? categoryKey })}
-            </Text>
-          </View>
-        </View>
-
-        <ImagePickerRow
-          images={images}
-          onChange={(imgs) => {
-            setImages(imgs);
-            if (errors._images)
-              setErrors((e) => {
-                const n = { ...e };
-                delete n._images;
-                return n;
-              });
-          }}
-          error={errors._images}
-        />
-
-        {fields.map((field) => {
-          if (field.type === "phone") {
-            return (
-              <View key={field.key} style={s.fieldWrap}>
-                <Text style={s.fieldLabel}>{field.label}</Text>
-                <TextInput
-                  style={[s.input, errors[field.key] ? s.inputError : null]}
-                  value={formData[field.key] || ""}
-                  onChangeText={(v) =>
-                    setField(field.key, v.replace(/[^0-9+\-()\s]/g, ""))
-                  }
-                  placeholder={field.placeholder}
-                  placeholderTextColor={Colors.placeholder}
-                  keyboardType="phone-pad"
+        <ScrollView
+          style={s.flexFull}
+          contentContainerStyle={s.scroll}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={s.fieldWrap}>
+            <Text style={s.fieldLabel}>{t("postAd.mainCategoryLabel")}</Text>
+            <View style={s.mainCatBadge}>
+              {categoryMeta && (
+                <MaterialCommunityIcons
+                  name={categoryMeta.icon as any}
+                  size={16}
+                  color={Colors.primary}
                 />
-                {!!errors[field.key] && (
-                  <Text style={s.errorText}>{errors[field.key]}</Text>
-                )}
-              </View>
-            );
-          }
-          return (
-            <React.Fragment key={field.key}>
-              <FormField
-                field={field}
-                value={formData[field.key] || ""}
-                onChange={(v) => setField(field.key, v)}
-                error={errors[field.key]}
-              />
-              {field.key === "subcategory" && nestedOptions.length > 0 && (
-                <View style={s.nestedWrap}>
-                  <Text style={s.nestedLabel}>{t("postAd.subCategoryLabel")}</Text>
-                  <View style={s.nestedSearchBox}>
-                    <MaterialCommunityIcons name="magnify" size={16} color={Colors.primary} />
-                    <TextInput
-                      style={s.nestedSearchInput}
-                      value={nestedSearch}
-                      onChangeText={setNestedSearch}
-                      placeholder={t("postAd.searchTypePlaceholder")}
-                      placeholderTextColor={Colors.placeholder}
-                      autoCorrect={false}
-                    />
-                    {nestedSearch.length > 0 && (
-                      <TouchableOpacity onPress={() => setNestedSearch("")} hitSlop={8}>
-                        <MaterialCommunityIcons name="close-circle" size={16} color={Colors.textMuted} />
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                  {filteredNestedOptions.length > 0 ? (
-                    <View style={s.chipsRow}>
-                      {filteredNestedOptions.map((n) => {
-                        const active = formData.nestedSubcategory === n.key;
-                        return (
-                          <Pressable
-                            key={n.key}
-                            onPress={() =>
-                              setField("nestedSubcategory", active ? "" : n.key)
-                            }
-                            style={[s.chip, active && s.chipActive]}
-                            hitSlop={4}
-                          >
-                            <MaterialCommunityIcons
-                              name={n.icon as any}
-                              size={13}
-                              color={active ? Colors.white : Colors.textSecondary}
-                            />
-                            <Text
-                              style={[s.chipText, active && s.chipTextActive]}
-                            >
-                              {t(n.labelKey)}
-                            </Text>
-                          </Pressable>
-                        );
-                      })}
-                    </View>
-                  ) : (
-                    <Text style={s.nestedEmptyText}>{t("postAd.noMatches")}</Text>
+              )}
+              <Text style={s.mainCatText}>
+                {t(`categories.${categoryKey}`, { defaultValue: categoryMeta?.name ?? categoryKey })}
+              </Text>
+            </View>
+          </View>
+
+          <ImagePickerRow
+            images={images}
+            onChange={(imgs) => {
+              setImages(imgs);
+              if (errors._images)
+                setErrors((e) => {
+                  const n = { ...e };
+                  delete n._images;
+                  return n;
+                });
+            }}
+            error={errors._images}
+          />
+
+          {fields.map((field) => {
+            if (field.type === "phone") {
+              return (
+                <View key={field.key} style={s.fieldWrap}>
+                  <Text style={s.fieldLabel}>{field.label}</Text>
+                  <TextInput
+                    style={[s.input, errors[field.key] ? s.inputError : null]}
+                    value={formData[field.key] || ""}
+                    onChangeText={(v) =>
+                      setField(field.key, v.replace(/[^0-9+\-()\s]/g, ""))
+                    }
+                    placeholder={field.placeholder}
+                    placeholderTextColor={Colors.placeholder}
+                    keyboardType="phone-pad"
+                  />
+                  {!!errors[field.key] && (
+                    <Text style={s.errorText}>{errors[field.key]}</Text>
                   )}
                 </View>
-              )}
-            </React.Fragment>
-          );
-        })}
+              );
+            }
+            return (
+              <React.Fragment key={field.key}>
+                <FormField
+                  field={field}
+                  value={formData[field.key] || ""}
+                  onChange={(v) => setField(field.key, v)}
+                  error={errors[field.key]}
+                />
+                {field.key === "subcategory" && nestedOptions.length > 0 && (
+                  <View style={s.nestedWrap}>
+                    <Text style={s.nestedLabel}>{t("postAd.subCategoryLabel")}</Text>
+                    <View style={s.nestedSearchBox}>
+                      <MaterialCommunityIcons name="magnify" size={16} color={Colors.primary} />
+                      <TextInput
+                        style={s.nestedSearchInput}
+                        value={nestedSearch}
+                        onChangeText={setNestedSearch}
+                        placeholder={t("postAd.searchTypePlaceholder")}
+                        placeholderTextColor={Colors.placeholder}
+                        autoCorrect={false}
+                      />
+                      {nestedSearch.length > 0 && (
+                        <TouchableOpacity onPress={() => setNestedSearch("")} hitSlop={8}>
+                          <MaterialCommunityIcons name="close-circle" size={16} color={Colors.textMuted} />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                    {filteredNestedOptions.length > 0 ? (
+                      <View style={s.chipsRow}>
+                        {filteredNestedOptions.map((n) => {
+                          const active = formData.nestedSubcategory === n.key;
+                          return (
+                            <Pressable
+                              key={n.key}
+                              onPress={() =>
+                                setField("nestedSubcategory", active ? "" : n.key)
+                              }
+                              style={[s.chip, active && s.chipActive]}
+                              hitSlop={4}
+                            >
+                              <MaterialCommunityIcons
+                                name={n.icon as any}
+                                size={13}
+                                color={active ? Colors.white : Colors.textSecondary}
+                              />
+                              <Text
+                                style={[s.chipText, active && s.chipTextActive]}
+                              >
+                                {t(n.labelKey)}
+                              </Text>
+                            </Pressable>
+                          );
+                        })}
+                      </View>
+                    ) : (
+                      <Text style={s.nestedEmptyText}>{t("postAd.noMatches")}</Text>
+                    )}
+                  </View>
+                )}
+              </React.Fragment>
+            );
+          })}
 
-        <RegionCityPicker
-          selectedRegion={formData.region || ""}
-          selectedCity={formData.city || ""}
-          onRegionChange={(name) => setField("region", name)}
-          onCityChange={(name) => setField("city", name)}
-        />
+          <RegionCityPicker
+            selectedRegion={formData.region || ""}
+            selectedCity={formData.city || ""}
+            onRegionChange={(name) => setField("region", name)}
+            onCityChange={(name) => setField("city", name)}
+          />
 
-        {!!submitError && submitStatus === "error" && (
-          <View style={s.errorBanner}>
-            <MaterialCommunityIcons
-              name="alert-circle-outline"
-              size={16}
-              color={Colors.error}
-            />
-            <Text style={s.errorBannerText}>{submitError}</Text>
-          </View>
-        )}
-
-        <TouchableOpacity
-          style={[s.btn, submitting && s.btnDisabled]}
-          onPress={handleSubmit}
-          disabled={submitting}
-        >
-          {submitting ? (
-            <ActivityIndicator size="small" color={Colors.white} />
-          ) : (
-            <>
-              <Text style={s.btnText}>{t("postAd.continueToPlan")}</Text>
+          {!!submitError && submitStatus === "error" && (
+            <View style={s.errorBanner}>
               <MaterialCommunityIcons
-                name="arrow-right"
-                size={18}
-                color={Colors.white}
+                name="alert-circle-outline"
+                size={16}
+                color={Colors.error}
               />
-            </>
+              <Text style={s.errorBannerText}>{submitError}</Text>
+            </View>
           )}
-        </TouchableOpacity>
 
-        <TouchableOpacity style={s.back} onPress={onBack}>
-          <Text style={s.backText}>{'← ' + t("common.back")}</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={[s.btn, submitting && s.btnDisabled]}
+            onPress={handleSubmit}
+            disabled={submitting}
+          >
+            {submitting ? (
+              <ActivityIndicator size="small" color={Colors.white} />
+            ) : (
+              <>
+                <Text style={s.btnText}>{t("postAd.continueToPlan")}</Text>
+                <MaterialCommunityIcons
+                  name="arrow-right"
+                  size={18}
+                  color={Colors.white}
+                />
+              </>
+            )}
+          </TouchableOpacity>
 
-        <View style={s.bottomSpacer} />
-      </ScrollView>
-    </KeyboardAvoidingView>
+          <View style={s.bottomSpacer} />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </View>
   );
 }

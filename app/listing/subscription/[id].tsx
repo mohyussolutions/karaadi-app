@@ -16,6 +16,7 @@ import RecommendedSection from '../../../components/detail/RecommendedSection';
 import { SocialShareSheet } from '../../../components/social';
 import DetailNotFound from '../../../components/detail/DetailNotFound';
 import DetailActionBar from '../../../components/detail/DetailActionBar';
+import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
 import { createStyles } from '../../../utils/styles/listing/subscription.styles';
 import { createTabletSplitNarrowStyles } from '../../../utils/styles/listing/tabletSplit.styles';
 import { useResponsive } from '../../../hooks/useResponsive';
@@ -37,8 +38,8 @@ export default function SubscriptionDetailScreen() {
   const styles = useThemedStyles(createStyles);
   const tabletSplitNarrow = useThemedStyles(createTabletSplitNarrowStyles);
 
-  if (loading) return <DetailSkeleton />;
-  if (!item) return <DetailNotFound icon="bell-outline" message="Subscription not found" onBack={() => router.back()} />;
+  if (loading) return <SwipeDownToClose><DetailSkeleton /></SwipeDownToClose>;
+  if (!item) return <SwipeDownToClose><DetailNotFound icon="bell-outline" message="Subscription not found" onBack={() => router.back()} /></SwipeDownToClose>;
 
   const priceLabel = item.priceMin && item.priceMax
     ? `${formatPrice(item.priceMin)} – ${formatPrice(item.priceMax)}`
@@ -110,40 +111,42 @@ export default function SubscriptionDetailScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
-      {isTabletLandscape ? (
-        <View style={tabletSplitNarrow.row}>
-          <ScrollView style={tabletSplitNarrow.leftCol} showsVerticalScrollIndicator={false}>
+    <SwipeDownToClose>
+      <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
+        {isTabletLandscape ? (
+          <View style={tabletSplitNarrow.row}>
+            <ScrollView style={tabletSplitNarrow.leftCol} showsVerticalScrollIndicator={false}>
+              {heroPanel}
+            </ScrollView>
+            <ScrollView style={tabletSplitNarrow.rightCol} showsVerticalScrollIndicator={false}>
+              {bodyContent}
+            </ScrollView>
+          </View>
+        ) : (
+          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
             {heroPanel}
-          </ScrollView>
-          <ScrollView style={tabletSplitNarrow.rightCol} showsVerticalScrollIndicator={false}>
             {bodyContent}
           </ScrollView>
-        </View>
-      ) : (
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
-          {heroPanel}
-          {bodyContent}
-        </ScrollView>
-      )}
+        )}
 
-      <DetailActionBar
-        extra={
-          <TouchableOpacity style={styles.iconBtn} onPress={handleShare}>
-            <MaterialCommunityIcons name="share-variant-outline" size={20} color={Colors.primary} />
-          </TouchableOpacity>
-        }
-        onCall={ownerPhone ? (showPhone ? handleCall : () => setShowPhone(true)) : undefined}
-        callLabel={showPhone ? ownerPhone! : t('realEstateDetail.showPhone')}
-        onMessage={handleMessage}
-        messageLabel={t('realEstateDetail.sendMessage')}
-      />
-      <SocialShareSheet
-        visible={shareVisible}
-        onClose={() => setShareVisible(false)}
-        title={item.title || item.category || 'Subscription'}
-        message={`${item.title || item.category}\n📍 ${[city, item.region].filter(Boolean).join(', ') || 'Somalia'}\n\nKaraadi`}
-      />
-    </SafeAreaView>
+        <DetailActionBar
+          extra={
+            <TouchableOpacity style={styles.iconBtn} onPress={handleShare}>
+              <MaterialCommunityIcons name="share-variant-outline" size={20} color={Colors.primary} />
+            </TouchableOpacity>
+          }
+          onCall={ownerPhone ? (showPhone ? handleCall : () => setShowPhone(true)) : undefined}
+          callLabel={showPhone ? ownerPhone! : t('realEstateDetail.showPhone')}
+          onMessage={handleMessage}
+          messageLabel={t('realEstateDetail.sendMessage')}
+        />
+        <SocialShareSheet
+          visible={shareVisible}
+          onClose={() => setShareVisible(false)}
+          title={item.title || item.category || 'Subscription'}
+          message={`${item.title || item.category}\n📍 ${[city, item.region].filter(Boolean).join(', ') || 'Somalia'}\n\nKaraadi`}
+        />
+      </SafeAreaView>
+    </SwipeDownToClose>
   );
 }

@@ -3,7 +3,7 @@ import type { EmptyStateProps } from '../../utils/types';
 import { View, Text } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from './EmptyState.styles';
+import { createStyles } from '../../utils/styles/shared/emptyState.styles';
 
 export default function EmptyState({ icon = 'inbox-outline', title, message }: EmptyStateProps) {
   const Colors = useThemeColors();

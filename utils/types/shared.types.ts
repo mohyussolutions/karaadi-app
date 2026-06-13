@@ -36,14 +36,14 @@ export interface PickerFieldsProps {
   selectedRegion: string;
   cityText: string;
   loadingRegions: boolean;
-  onOpenRegion: () => void;
-  onOpenCity: () => void;
+  regionExpanded: boolean;
+  cityExpanded: boolean;
+  onToggleRegion: () => void;
+  onToggleCity: () => void;
   onClearCity: () => void;
 }
 
-export interface CityPickerModalProps {
-  visible: boolean;
-  onClose: () => void;
+export interface CityAccordionPanelProps {
   search: string;
   onSearchChange: (v: string) => void;
   cities: CityPickerItem[];
@@ -52,18 +52,16 @@ export interface CityPickerModalProps {
   savingCity: boolean;
   onSelectCity: (name: string) => void;
   onAddCustomCity: (name: string) => void;
+  onClose: () => void;
 }
 
-export interface RegionPickerModalProps {
-  visible: boolean;
-  onClose: () => void;
+export interface RegionAccordionPanelProps {
   search: string;
   onSearchChange: (v: string) => void;
   regions: RegionPickerItem[];
   selectedRegion: string;
-  selectedCity: string;
   onSelectRegion: (r: RegionPickerItem) => void;
-  onSelectCity: (name: string) => void;
+  onClose: () => void;
 }
 
 export interface TabItem {

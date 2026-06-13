@@ -34,8 +34,8 @@ export const COLORS = {
 
   text: '#111827',
   textPrimary: '#111827',
-  textSecondary: '#4B5563',
-  textMuted: '#9CA3AF',
+  textSecondary: '#374151',
+  textMuted: '#6B7280',
   textDisabled: '#9CA3AF',
   textOnPrimary: '#FFFFFF',
 
@@ -65,6 +65,7 @@ export const COLORS = {
   slate50: '#F8FAFC',
   slate100: '#F1F5F9',
   slate200: '#E2E8F0',
+  slate300: '#CBD5E1',
   slate500: '#64748B',
   slate900: '#0F172A',
 
@@ -80,6 +81,10 @@ export const COLORS = {
   shadow55: 'rgba(0,0,0,0.55)',
   shadow80: 'rgba(0,0,0,0.8)',
   overlaySlate: 'rgba(15,23,42,0.60)',
+
+  toastBg: '#1E293B',
+  toastText: '#F8FAFC',
+  galleryBg: '#111111',
 
   whiteAlpha15: 'rgba(255,255,255,0.15)',
   whiteAlpha35: 'rgba(255,255,255,0.35)',
@@ -163,6 +168,7 @@ export const DARK_COLORS = {
   slate50: '#0F172A',
   slate100: '#1E293B',
   slate200: '#334155',
+  slate300: '#475569',
   slate500: '#94A3B8',
   slate900: '#F1F5F9',
 
@@ -178,6 +184,10 @@ export const DARK_COLORS = {
   shadow55: 'rgba(0,0,0,0.55)',
   shadow80: 'rgba(0,0,0,0.8)',
   overlaySlate: 'rgba(15,23,42,0.60)',
+
+  toastBg: '#1E293B',
+  toastText: '#F8FAFC',
+  galleryBg: '#111111',
 
   whiteAlpha15: 'rgba(255,255,255,0.15)',
   whiteAlpha35: 'rgba(255,255,255,0.35)',

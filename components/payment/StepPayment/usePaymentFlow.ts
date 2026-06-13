@@ -37,7 +37,7 @@ export function usePaymentFlow({ plan, listingId, categoryKey }: UsePaymentFlowP
   useEffect(() => {
     if (total !== 0) return;
     apiClient.patch(PAYMENT_ENDPOINTS.ACTIVATE(catPath, listingId), {
-      planId: plan._id, planAmount: plan.price, planType: plan.key,
+      isPaid: true, planId: plan._id, planAmount: plan.price, planType: plan.key,
     })
       .catch(() => {})
       .finally(() => { setAutoActivating(false); setPayStatus('success'); });
@@ -60,7 +60,7 @@ export function usePaymentFlow({ plan, listingId, categoryKey }: UsePaymentFlowP
           stopPolling();
           try {
             await apiClient.patch(PAYMENT_ENDPOINTS.ACTIVATE(catPath, listingId), {
-              planId: plan._id, planAmount: plan.price, planType: plan.key,
+              isPaid: true, planId: plan._id, planAmount: plan.price, planType: plan.key,
             });
           } catch {}
           setPayStatus('success');

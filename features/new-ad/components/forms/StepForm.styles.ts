@@ -3,23 +3,22 @@ import type { ColorPalette } from '../../../../hooks/useTheme';
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
+  root: { flex: 1, backgroundColor: Colors.background },
+  topBar: {
+    flexDirection: "row", alignItems: "center", justifyContent: "space-between",
+    paddingHorizontal: 12, paddingVertical: 10,
+    borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.border,
+    backgroundColor: Colors.card,
+  },
+  backBtn: {
+    width: 36, height: 36, borderRadius: 10,
+    backgroundColor: Colors.gray100, alignItems: "center", justifyContent: "center",
+  },
+  topBarTitle: { fontSize: 16, fontWeight: "700", color: Colors.textPrimary },
+  topBarSpacer: { width: 36 },
   scroll: { padding: 16, flexGrow: 1 },
   flexFull: { flex: 1 },
   bottomSpacer: { height: 40 },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    marginBottom: 16,
-  },
-  catIcon: {
-    width: 30,
-    height: 30,
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: { fontSize: 22, fontWeight: "800", color: Colors.textPrimary },
   fieldWrap: { marginBottom: 14 },
   fieldLabel: {
     fontSize: 13,
@@ -112,7 +111,5 @@ export function createStyles(Colors: ColorPalette) {
   },
   btnDisabled: { opacity: 0.65 },
   btnText: { color: Colors.white, fontSize: 16, fontWeight: "700" },
-  back: { alignItems: "center", paddingVertical: 10 },
-  backText: { fontSize: 13, color: Colors.textMuted },
   });
 }

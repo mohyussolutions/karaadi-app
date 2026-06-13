@@ -4,12 +4,21 @@ import type { ColorPalette } from "../../../hooks/useTheme";
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
-    content: { padding: SPACING.lg, flexGrow: 1 },
-    title: {
-      ...TYPOGRAPHY.display,
-      color: Colors.textPrimary,
-      marginBottom: SPACING.lg,
+    root: { flex: 1, backgroundColor: Colors.background },
+    topBar: {
+      flexDirection: "row", alignItems: "center", justifyContent: "space-between",
+      paddingHorizontal: 12, paddingVertical: 10,
+      borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.border,
+      backgroundColor: Colors.card,
     },
+    backBtn: {
+      width: 36, height: 36, borderRadius: 10,
+      backgroundColor: Colors.gray100, alignItems: "center", justifyContent: "center",
+    },
+    topBarTitle: { fontSize: 16, fontWeight: "700", color: Colors.textPrimary },
+    topBarSpacer: { width: 36 },
+    list: { flex: 1 },
+    content: { padding: SPACING.lg, flexGrow: 1 },
     cell: { flex: 1, padding: SPACING.xs },
     card: {
       alignItems: "center",
@@ -46,7 +55,5 @@ export function createStyles(Colors: ColorPalette) {
       marginBottom: SPACING.xs,
     },
     btnText: { color: Colors.white, fontSize: 16, fontWeight: "700" },
-    back: { alignItems: "center", paddingVertical: SPACING.md - 2 },
-    backText: { fontSize: 13, color: Colors.textMuted },
   });
 }

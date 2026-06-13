@@ -5,7 +5,7 @@ import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import type { PhoneInputProps } from '../../../utils/types';
 import { PAYMENT_METHODS } from '../payment.constants';
-import { createStyles } from './PhoneInput.styles';
+import { createStyles } from '../../../utils/styles/payment/phoneInput.styles';
 
 export function PhoneInput({ method, value, onChange, error }: PhoneInputProps) {
   const Colors = useThemeColors();
@@ -13,10 +13,10 @@ export function PhoneInput({ method, value, onChange, error }: PhoneInputProps) 
   const { t } = useAppTranslation();
   const m = PAYMENT_METHODS.find((p) => p.key === method)!;
   return (
-    <View style={[s.box, { borderColor: m.color + '40', backgroundColor: m.color + '05' }]}>
+    <View style={s.box}>
       <View style={s.header}>
-        <View style={[s.iconWrap, { backgroundColor: m.color + '15' }]}>
-          <MaterialCommunityIcons name="cellphone-wireless" size={20} color={m.color} />
+        <View style={s.iconWrap}>
+          <MaterialCommunityIcons name="cellphone-wireless" size={20} color={Colors.primary} />
         </View>
         <View>
           <Text style={s.title}>{t('postAd.phoneNumberForMethod', { method: m.label })}</Text>
@@ -38,9 +38,9 @@ export function PhoneInput({ method, value, onChange, error }: PhoneInputProps) 
           <Text style={s.errText}>{error}</Text>
         </View>
       )}
-      <View style={[s.note, { borderColor: m.color + '30', backgroundColor: m.color + '08' }]}>
-        <MaterialCommunityIcons name="information-outline" size={13} color={m.color} />
-        <Text style={[s.noteText, { color: m.color }]}>{t('postAd.paymentRequestNote', { method: m.label })}</Text>
+      <View style={s.note}>
+        <MaterialCommunityIcons name="information-outline" size={13} color={Colors.primary} />
+        <Text style={s.noteText}>{t('postAd.paymentRequestNote', { method: m.label })}</Text>
       </View>
     </View>
   );

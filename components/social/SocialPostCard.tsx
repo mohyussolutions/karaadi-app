@@ -5,7 +5,7 @@ import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { apiClient } from '../../api/client';
 import { SOCIAL_ENDPOINTS, SOCIAL_BRAND_COLORS } from '../../constants';
 import type { SocialPostCardProps } from '../../utils/types';
-import { createStyles } from './SocialPostCard.styles';
+import { createStyles } from '../../utils/styles/social/socialPostCard.styles';
 
 type SocialAvail = { facebook: boolean; tiktok: boolean };
 type PostState = 'idle' | 'loading' | 'done' | 'error';

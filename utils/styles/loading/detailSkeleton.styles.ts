@@ -1,6 +1,6 @@
 import { Dimensions, StyleSheet } from 'react-native';
-import { IMG_H } from '../../utils/styles/detail/ImageGallery.styles';
-import type { ColorPalette } from '../../hooks/useTheme';
+import { IMG_H } from '../detail/ImageGallery.styles';
+import type { ColorPalette } from '../../../hooks/useTheme';
 
 const { width } = Dimensions.get('window');
 

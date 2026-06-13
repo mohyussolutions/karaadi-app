@@ -11,7 +11,7 @@ import { useAppSelector, useAppDispatch } from '../../store';
 import { setBrowseQuery, clearBrowseQuery } from '../../store/slices/browseSearchSlice';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import type { Lang } from '../../i18n/translations';
-import { createStyles } from './GlobalHeader.styles';
+import { createStyles } from '../../utils/styles/layout/globalHeader.styles';
 
 const AUTH_RE = /\/(login|register|confirm|forgot-password|reset-password)/;
 const CHAT_RE = /^\/profile\/chat/;

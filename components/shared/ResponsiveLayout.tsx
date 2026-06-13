@@ -3,7 +3,7 @@ import type { ResponsiveLayoutProps } from '../../utils/types';
 import { View } from 'react-native';
 import { useThemedStyles } from '../../hooks/useTheme';
 import { useResponsive } from '../../hooks/useResponsive';
-import { createStyles } from './ResponsiveLayout.styles';
+import { createStyles } from '../../utils/styles/shared/responsiveLayout.styles';
 
 function ResponsiveLayout({ sidebar, main, sidebarStyle, mainStyle }: ResponsiveLayoutProps) {
   const { isTabletLandscape, sidebarWidth, mainWidth } = useResponsive();

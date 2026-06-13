@@ -64,6 +64,11 @@ export async function updatePhone(phone: string): Promise<User> {
   return data.user ?? data;
 }
 
+export async function updateProfileImage(profileImage: string): Promise<User> {
+  const { data } = await apiClient.put(AUTH_ENDPOINTS.UPDATE_PROFILE_IMAGE, { profileImage });
+  return data.user ?? data;
+}
+
 export async function updatePushToken(pushToken: string): Promise<void> {
   await apiClient.put(AUTH_ENDPOINTS.UPDATE_PUSH_TOKEN, { pushToken });
 }

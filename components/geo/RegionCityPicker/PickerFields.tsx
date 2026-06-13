@@ -3,11 +3,12 @@ import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from './styles';
+import { createStyles } from '../../../utils/styles/geo/regionCityPicker.styles';
 import type { PickerFieldsProps } from '../../../utils/types';
 
 export function PickerFields({
-  selectedRegion, cityText, loadingRegions, onOpenRegion, onOpenCity, onClearCity,
+  selectedRegion, cityText, loadingRegions, regionExpanded, cityExpanded,
+  onToggleRegion, onToggleCity, onClearCity,
 }: PickerFieldsProps) {
   const { t } = useTranslation();
   const Colors = useThemeColors();
@@ -18,8 +19,8 @@ export function PickerFields({
       <View style={s.fieldBlock}>
         <Text style={s.label}>{t('createRealEstate.regionLabel')}</Text>
         <TouchableOpacity
-          style={[s.picker, !selectedRegion && s.pickerEmpty]}
-          onPress={onOpenRegion}
+          style={[s.picker, !selectedRegion && s.pickerEmpty, regionExpanded && s.pickerActive]}
+          onPress={onToggleRegion}
           activeOpacity={0.8}
         >
           {loadingRegions ? (
@@ -28,29 +29,33 @@ export function PickerFields({
             <MaterialCommunityIcons
               name="map-marker-outline"
               size={16}
-              color={selectedRegion ? Colors.textPrimary : Colors.placeholder}
+              color={regionExpanded || selectedRegion ? Colors.primary : Colors.placeholder}
             />
           )}
-          <Text style={[s.pickerText, !selectedRegion && s.pickerPlaceholder]} numberOfLines={1}>
+          <Text style={[s.pickerText, !selectedRegion && s.pickerPlaceholder, regionExpanded && s.pickerTextActive]} numberOfLines={1}>
             {selectedRegion || t('createRealEstate.regionLabel')}
           </Text>
-          <MaterialCommunityIcons name="chevron-down" size={18} color={Colors.textMuted} />
+          <MaterialCommunityIcons
+            name={regionExpanded ? 'chevron-up' : 'chevron-down'}
+            size={18}
+            color={regionExpanded ? Colors.primary : Colors.textMuted}
+          />
         </TouchableOpacity>
       </View>
 
       <View style={s.fieldBlock}>
         <Text style={s.label}>{t('createRealEstate.cityLabel')}</Text>
         <TouchableOpacity
-          style={[s.picker, !selectedRegion && s.pickerDisabled]}
-          onPress={onOpenCity}
+          style={[s.picker, !selectedRegion && s.pickerDisabled, cityExpanded && s.pickerActive]}
+          onPress={onToggleCity}
           activeOpacity={0.8}
         >
           <MaterialCommunityIcons
             name="city-variant-outline"
             size={16}
-            color={cityText ? Colors.textPrimary : Colors.placeholder}
+            color={cityExpanded || cityText ? Colors.primary : Colors.placeholder}
           />
-          <Text style={[s.pickerText, !cityText && s.pickerPlaceholder]} numberOfLines={1}>
+          <Text style={[s.pickerText, !cityText && s.pickerPlaceholder, cityExpanded && s.pickerTextActive]} numberOfLines={1}>
             {cityText || (selectedRegion ? t('createRealEstate.cityLabel') : 'Select region first')}
           </Text>
           {cityText ? (
@@ -58,7 +63,11 @@ export function PickerFields({
               <MaterialCommunityIcons name="close-circle" size={16} color={Colors.textMuted} />
             </TouchableOpacity>
           ) : (
-            <MaterialCommunityIcons name="chevron-down" size={18} color={Colors.textMuted} />
+            <MaterialCommunityIcons
+              name={cityExpanded ? 'chevron-up' : 'chevron-down'}
+              size={18}
+              color={cityExpanded ? Colors.primary : Colors.textMuted}
+            />
           )}
         </TouchableOpacity>
       </View>

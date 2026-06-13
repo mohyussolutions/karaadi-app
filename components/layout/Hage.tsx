@@ -15,7 +15,7 @@ import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { getListingDetailRoute } from '../../utils/helpers/nav.routing';
 import { getImageUrl, formatPrice } from '../../utils/helpers';
-import { createStyles } from './Hage.styles';
+import { createStyles } from '../../utils/styles/layout/hage.styles';
 import type { ListingRef } from '../../api/sockets/hage.actions';
 
 const { width: W, height: H } = Dimensions.get('window');
@@ -168,7 +168,7 @@ export default function Hage() {
   return (
     <>
       <Animated.View
-        style={[styles.sheet, { transform: [{ translateY: sheetTranslateY }] }]}
+        style={[styles.sheet, { opacity: open ? 1 : 0, transform: [{ translateY: sheetTranslateY }] }]}
         pointerEvents={open ? 'auto' : 'none'}
       >
         <View style={styles.handleBar} {...sheetDragResponder.panHandlers}>

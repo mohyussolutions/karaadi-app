@@ -19,6 +19,7 @@ import RecommendedSection from '../../../components/detail/RecommendedSection';
 import { SocialShareSheet } from '../../../components/social';
 import DetailNotFound from '../../../components/detail/DetailNotFound';
 import DetailActionBar from '../../../components/detail/DetailActionBar';
+import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
 import { createStyles } from '../../../utils/styles/listing/itemDetail.styles';
 import { createTabletSplitStyles } from '../../../utils/styles/listing/tabletSplit.styles';
 import { useResponsive } from '../../../hooks/useResponsive';
@@ -41,8 +42,8 @@ export default function ItemDetailScreen() {
   const styles = useThemedStyles(createStyles);
   const tabletSplit = useThemedStyles(createTabletSplitStyles);
 
-  if (loading) return <DetailSkeleton />;
-  if (!item) return <DetailNotFound onBack={() => router.back()} />;
+  if (loading) return <SwipeDownToClose><DetailSkeleton /></SwipeDownToClose>;
+  if (!item) return <SwipeDownToClose><DetailNotFound onBack={() => router.back()} /></SwipeDownToClose>;
 
   const images = item.images?.length ? item.images.map(getImageUrl) : [DETAIL_PLACEHOLDER];
   const desc = item.description || '';
@@ -140,35 +141,37 @@ export default function ItemDetailScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
-      {isTabletLandscape ? (
-        <View style={tabletSplit.row}>
-          <ScrollView style={tabletSplit.leftCol} showsVerticalScrollIndicator={false}>
+    <SwipeDownToClose>
+      <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
+        {isTabletLandscape ? (
+          <View style={tabletSplit.row}>
+            <ScrollView style={tabletSplit.leftCol} showsVerticalScrollIndicator={false}>
+              {galleryContent}
+            </ScrollView>
+            <ScrollView style={tabletSplit.rightCol} showsVerticalScrollIndicator={false}>
+              {bodyContent}
+            </ScrollView>
+          </View>
+        ) : (
+          <ScrollView showsVerticalScrollIndicator={false}>
             {galleryContent}
-          </ScrollView>
-          <ScrollView style={tabletSplit.rightCol} showsVerticalScrollIndicator={false}>
             {bodyContent}
           </ScrollView>
-        </View>
-      ) : (
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {galleryContent}
-          {bodyContent}
-        </ScrollView>
-      )}
+        )}
 
-      <DetailActionBar
-        priceLabel={item.price > 0 ? formatPrice(item.price) : t('priceOnRequest')}
-        titleLabel={item.title}
-      />
+        <DetailActionBar
+          priceLabel={item.price > 0 ? formatPrice(item.price) : t('priceOnRequest')}
+          titleLabel={item.title}
+        />
 
-      <ZoomModal visible={zoomed} images={images} startIndex={activeImage} title={item.title} onClose={() => setZoomed(false)} />
-      <SocialShareSheet
-        visible={shareVisible}
-        onClose={() => setShareVisible(false)}
-        title={item.title}
-        message={`${item.title}\n${item.price > 0 ? formatPrice(item.price) : t('priceOnRequest')}\n📍 ${locationStr}\n\nKaraadi`}
-      />
-    </SafeAreaView>
+        <ZoomModal visible={zoomed} images={images} startIndex={activeImage} title={item.title} onClose={() => setZoomed(false)} />
+        <SocialShareSheet
+          visible={shareVisible}
+          onClose={() => setShareVisible(false)}
+          title={item.title}
+          message={`${item.title}\n${item.price > 0 ? formatPrice(item.price) : t('priceOnRequest')}\n📍 ${locationStr}\n\nKaraadi`}
+        />
+      </SafeAreaView>
+    </SwipeDownToClose>
   );
 }

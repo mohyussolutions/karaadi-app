@@ -12,10 +12,10 @@ export function useRegionCityPicker({
   const [loadingRegions, setLoadingRegions] = useState(true);
   const [selectedRegionObj, setSelectedRegionObj] = useState<RegionPickerItem | null>(null);
 
-  const [regionModalOpen, setRegionModalOpen] = useState(false);
+  const [regionExpanded, setRegionExpanded] = useState(false);
   const [regionSearch, setRegionSearch] = useState('');
 
-  const [cityModalOpen, setCityModalOpen] = useState(false);
+  const [cityExpanded, setCityExpanded] = useState(false);
   const [cityText, setCityText] = useState(selectedCity || '');
   const [modalSearch, setModalSearch] = useState('');
   const [savingCity, setSavingCity] = useState(false);
@@ -45,33 +45,41 @@ export function useRegionCityPicker({
 
   useEffect(() => { setCityText(selectedCity || ''); }, [selectedCity]);
 
-  function openRegionPicker() {
-    setRegionSearch('');
-    setRegionModalOpen(true);
+  function toggleRegionPanel() {
+    setCityExpanded(false);
+    setRegionExpanded((prev) => {
+      if (!prev) setRegionSearch('');
+      return !prev;
+    });
   }
 
   function handleSelectRegion(r: RegionPickerItem) {
     const sameRegion = selectedRegionObj?.id === r.id;
     setSelectedRegionObj(r);
     onRegionChange(r.name);
+    setRegionExpanded(false);
     if (!sameRegion) {
       onCityChange('');
       setCityText('');
+      setModalSearch('');
+      setCityExpanded(true);
     }
   }
 
-  function openCityModal() {
-    if (!selectedRegionObj) { openRegionPicker(); return; }
-    setModalSearch(cityText);
-    setCityModalOpen(true);
+  function toggleCityPanel() {
+    if (!selectedRegionObj) { toggleRegionPanel(); return; }
+    setRegionExpanded(false);
+    setCityExpanded((prev) => {
+      if (!prev) setModalSearch(cityText);
+      return !prev;
+    });
   }
 
   function handleSelectCity(name: string) {
     setCityText(name);
     onCityChange(name);
     setModalSearch('');
-    setCityModalOpen(false);
-    setRegionModalOpen(false);
+    setCityExpanded(false);
   }
 
   function clearCity() {
@@ -132,19 +140,19 @@ export function useRegionCityPicker({
     loadingRegions,
     cityText,
     savingCity,
-    regionModalOpen,
+    regionExpanded,
     regionSearch,
     setRegionSearch,
     filteredRegions,
-    cityModalOpen,
+    cityExpanded,
     modalSearch,
     setModalSearch,
     filteredCities,
     showUseTyped,
-    openRegionPicker,
-    closeRegionModal: () => setRegionModalOpen(false),
-    openCityModal,
-    closeCityModal: () => setCityModalOpen(false),
+    toggleRegionPanel,
+    collapseRegionPanel: () => setRegionExpanded(false),
+    toggleCityPanel,
+    collapseCityPanel: () => setCityExpanded(false),
     clearCity,
     handleSelectRegion,
     handleSelectCity,

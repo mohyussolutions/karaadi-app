@@ -12,7 +12,7 @@ import { useAppSelector, useAppDispatch } from '../../store';
 import { toggleFavorite } from '../../store/slices/favoritesSlice';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import type { ListingCardProps } from '../../utils/types';
-import { createStyles } from './ListingCard.styles';
+import { createStyles } from '../../utils/styles/shared/listingCard.styles';
 
 const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey }: ListingCardProps) {
   const router = useRouter();

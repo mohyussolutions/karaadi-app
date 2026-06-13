@@ -2,7 +2,7 @@ import type { CreatedItemSummary } from '../../store/slices/newAdSlice';
 
 export type ListingType = 'private' | 'public';
 
-export type Step = 'login' | 'type' | 'category' | 'form' | 'plan' | 'payment';
+export type Step = 'login' | 'type' | 'category' | 'form' | 'plan' | 'summary' | 'payment';
 
 export type PayMethod = 'evc' | 'zaad' | 'sahal';
 
@@ -65,9 +65,15 @@ export interface StepPaymentProps {
   listingId: string;
   listingTitle: string;
   categoryKey: string;
-  categoryName?: string;
   entityModel?: string;
   successRoute?: string;
+  onBack: () => void;
+}
+
+export interface StepSummaryProps {
+  plan: Plan;
+  categoryName?: string;
+  onNext: () => void;
   onBack: () => void;
 }
 

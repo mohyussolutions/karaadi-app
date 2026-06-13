@@ -19,6 +19,7 @@ import RecommendedSection from '../../../components/detail/RecommendedSection';
 import { SocialShareSheet } from '../../../components/social';
 import DetailNotFound from '../../../components/detail/DetailNotFound';
 import DetailActionBar from '../../../components/detail/DetailActionBar';
+import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
 import { createStyles } from '../../../utils/styles/listing/job.styles';
 import { createTabletSplitStyles } from '../../../utils/styles/listing/tabletSplit.styles';
 import { useResponsive } from '../../../hooks/useResponsive';
@@ -41,8 +42,8 @@ export default function JobDetailScreen() {
   const styles = useThemedStyles(createStyles);
   const tabletSplit = useThemedStyles(createTabletSplitStyles);
 
-  if (loading) return <DetailSkeleton />;
-  if (!item) return <DetailNotFound icon="briefcase-outline" message={t('jobsPage.backLabel') || 'Job not found'} onBack={() => router.back()} />;
+  if (loading) return <SwipeDownToClose><DetailSkeleton /></SwipeDownToClose>;
+  if (!item) return <SwipeDownToClose><DetailNotFound icon="briefcase-outline" message={t('jobsPage.backLabel') || 'Job not found'} onBack={() => router.back()} /></SwipeDownToClose>;
 
   const rawImages: string[] = [];
   if (item.companyLogo) rawImages.push(item.companyLogo);
@@ -124,38 +125,40 @@ export default function JobDetailScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.safe} edges={['bottom']}>
-      {isTabletLandscape ? (
-        <View style={tabletSplit.row}>
-          <ScrollView style={tabletSplit.leftCol} showsVerticalScrollIndicator={false}>
+    <SwipeDownToClose>
+      <SafeAreaView style={styles.safe} edges={['bottom']}>
+        {isTabletLandscape ? (
+          <View style={tabletSplit.row}>
+            <ScrollView style={tabletSplit.leftCol} showsVerticalScrollIndicator={false}>
+              {galleryContent}
+            </ScrollView>
+            <ScrollView style={tabletSplit.rightCol} showsVerticalScrollIndicator={false}>
+              {bodyContent}
+            </ScrollView>
+          </View>
+        ) : (
+          <ScrollView showsVerticalScrollIndicator={false}>
             {galleryContent}
-          </ScrollView>
-          <ScrollView style={tabletSplit.rightCol} showsVerticalScrollIndicator={false}>
             {bodyContent}
           </ScrollView>
-        </View>
-      ) : (
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {galleryContent}
-          {bodyContent}
-        </ScrollView>
-      )}
+        )}
 
-      <DetailActionBar
-        priceLabel={salary}
-        titleLabel={item.title}
-        onMessage={handleApply}
-        messageLabel={t('jobsPage.applyNow') || 'Apply'}
-        messageIcon="send-outline"
-      />
+        <DetailActionBar
+          priceLabel={salary}
+          titleLabel={item.title}
+          onMessage={handleApply}
+          messageLabel={t('jobsPage.applyNow') || 'Apply'}
+          messageIcon="send-outline"
+        />
 
-      <ZoomModal visible={zoomed} images={images} startIndex={activeImage} title={item.title} onClose={() => setZoomed(false)} />
-      <SocialShareSheet
-        visible={shareVisible}
-        onClose={() => setShareVisible(false)}
-        title={item.title}
-        message={`${item.title}\n${formatSalary(item.salaryMin, item.salaryMax)}\n📍 ${locationLabel}\n\nKaraadi`}
-      />
-    </SafeAreaView>
+        <ZoomModal visible={zoomed} images={images} startIndex={activeImage} title={item.title} onClose={() => setZoomed(false)} />
+        <SocialShareSheet
+          visible={shareVisible}
+          onClose={() => setShareVisible(false)}
+          title={item.title}
+          message={`${item.title}\n${formatSalary(item.salaryMin, item.salaryMax)}\n📍 ${locationLabel}\n\nKaraadi`}
+        />
+      </SafeAreaView>
+    </SwipeDownToClose>
   );
 }

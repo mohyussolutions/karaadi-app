@@ -19,6 +19,7 @@ import RecommendedSection from '../../../components/detail/RecommendedSection';
 import { SocialShareSheet } from '../../../components/social';
 import DetailNotFound from '../../../components/detail/DetailNotFound';
 import DetailActionBar from '../../../components/detail/DetailActionBar';
+import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
 import { createStyles } from '../../../utils/styles/listing/vehicle.styles';
 import { createTabletSplitStyles } from '../../../utils/styles/listing/tabletSplit.styles';
 import { useResponsive } from '../../../hooks/useResponsive';
@@ -40,8 +41,8 @@ export default function VehicleDetailScreen() {
   const styles = useThemedStyles(createStyles);
   const tabletSplit = useThemedStyles(createTabletSplitStyles);
 
-  if (loading) return <DetailSkeleton />;
-  if (!item) return <DetailNotFound onBack={() => router.back()} />;
+  if (loading) return <SwipeDownToClose><DetailSkeleton /></SwipeDownToClose>;
+  if (!item) return <SwipeDownToClose><DetailNotFound onBack={() => router.back()} /></SwipeDownToClose>;
 
   const images = item.images?.length ? item.images.map(getImageUrl) : [DETAIL_PLACEHOLDER];
   const desc = item.description || '';
@@ -147,37 +148,39 @@ export default function VehicleDetailScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.safe} edges={['bottom']}>
-      {isTabletLandscape ? (
-        <View style={tabletSplit.row}>
-          <ScrollView style={tabletSplit.leftCol} showsVerticalScrollIndicator={false}>
-            {galleryAndSpecs}
-          </ScrollView>
-          <ScrollView style={tabletSplit.rightCol} showsVerticalScrollIndicator={false}>
+    <SwipeDownToClose>
+      <SafeAreaView style={styles.safe} edges={['bottom']}>
+        {isTabletLandscape ? (
+          <View style={tabletSplit.row}>
+            <ScrollView style={tabletSplit.leftCol} showsVerticalScrollIndicator={false}>
+              {galleryAndSpecs}
+            </ScrollView>
+            <ScrollView style={tabletSplit.rightCol} showsVerticalScrollIndicator={false}>
+              {mainContent}
+            </ScrollView>
+          </View>
+        ) : (
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <ImageGallery
+              images={images} activeIndex={activeImage}
+              onActiveChange={setActiveImage} onImagePress={() => setZoomed(true)}
+              isFavorite={isFavorite} onFavorite={toggleFav} onShare={handleShare}
+              badge={badge} isSold={Boolean(item.maGaday)}
+            />
             {mainContent}
           </ScrollView>
-        </View>
-      ) : (
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <ImageGallery
-            images={images} activeIndex={activeImage}
-            onActiveChange={setActiveImage} onImagePress={() => setZoomed(true)}
-            isFavorite={isFavorite} onFavorite={toggleFav} onShare={handleShare}
-            badge={badge} isSold={Boolean(item.maGaday)}
-          />
-          {mainContent}
-        </ScrollView>
-      )}
+        )}
 
-      {actionBar}
+        {actionBar}
 
-      <ZoomModal visible={zoomed} images={images} startIndex={activeImage} title={item.title} onClose={() => setZoomed(false)} />
-      <SocialShareSheet
-        visible={shareVisible}
-        onClose={() => setShareVisible(false)}
-        title={item.title}
-        message={shareMsg}
-      />
-    </SafeAreaView>
+        <ZoomModal visible={zoomed} images={images} startIndex={activeImage} title={item.title} onClose={() => setZoomed(false)} />
+        <SocialShareSheet
+          visible={shareVisible}
+          onClose={() => setShareVisible(false)}
+          title={item.title}
+          message={shareMsg}
+        />
+      </SafeAreaView>
+    </SwipeDownToClose>
   );
 }

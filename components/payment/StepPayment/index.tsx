@@ -7,13 +7,12 @@ import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { useAppSelector } from '../../../store';
 import type { StepPaymentProps } from '../../../utils/types';
 import { MAX_POLL_ATTEMPTS, type PaymentMethodOption } from '../payment.constants';
-import { OrderSummary } from './OrderSummary';
 import { PaymentMethodSelector } from './PaymentMethodSelector';
 import { PhoneInput } from './PhoneInput';
 import { PollingOverlay } from './PollingOverlay';
 import { SuccessScreen } from './SuccessScreen';
 import { usePaymentFlow } from './usePaymentFlow';
-import { createStyles } from './StepPayment.styles';
+import { createStyles } from '../../../utils/styles/payment/stepPayment.styles';
 
 function ActivatingScreen() {
   const Colors = useThemeColors();
@@ -61,7 +60,7 @@ function PayFooter({ total, methodMeta, onPay }: { total: number; methodMeta: Pa
   const { t } = useAppTranslation();
   return (
     <View style={s.footer}>
-      <TouchableOpacity style={[s.payBtn, { backgroundColor: methodMeta.color }]} onPress={onPay} activeOpacity={0.88}>
+      <TouchableOpacity style={[s.payBtn, { backgroundColor: Colors.primary }]} onPress={onPay} activeOpacity={0.88}>
         <MaterialCommunityIcons name="lock" size={18} color={Colors.white} />
         <Text style={s.payBtnText}>{t('postAd.payVia', { total, method: methodMeta.label })}</Text>
       </TouchableOpacity>
@@ -74,7 +73,7 @@ function PayFooter({ total, methodMeta, onPay }: { total: number; methodMeta: Pa
 }
 
 export function StepPayment({
-  plan, listingId, listingTitle, categoryKey, categoryName,
+  plan, listingId, listingTitle, categoryKey,
   successRoute = '/profile/my-ads', onBack,
 }: StepPaymentProps) {
   const router = useRouter();
@@ -102,7 +101,6 @@ export function StepPayment({
         <TopBar onBack={onBack} />
 
         <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-          <OrderSummary plan={plan} item={createdItem} categoryName={categoryName} feeAmount={payment.feeAmount} />
           <PaymentMethodSelector selected={payment.method} onChange={payment.selectMethod} />
           <PhoneInput method={payment.method} value={payment.phone} onChange={payment.updatePhone} error={payment.phoneError} />
 

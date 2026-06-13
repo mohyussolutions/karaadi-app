@@ -16,40 +16,39 @@ export function createStyles(Colors: ColorPalette) {
     },
     pickerEmpty: { borderColor: Colors.border },
     pickerDisabled: { opacity: 0.55 },
+    pickerActive: { borderColor: Colors.primary, backgroundColor: Colors.primaryGhost },
     pickerText: { flex: 1, fontSize: 14, color: Colors.textPrimary, fontWeight: '500' },
+    pickerTextActive: { color: Colors.primary, fontWeight: '700' },
     pickerPlaceholder: { color: Colors.placeholder, fontWeight: '400' },
     loadingIcon: { marginRight: 6 },
 
-    backdrop: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(0,0,0,0.45)' },
-    sheet: {
-      position: 'absolute', bottom: 0, left: 0, right: 0,
+    panel: {
+      marginTop: 8,
       backgroundColor: Colors.card,
-      borderTopLeftRadius: 20, borderTopRightRadius: 20,
-      maxHeight: '75%',
-      shadowColor: Colors.black, shadowOffset: { width: 0, height: -4 },
-      shadowOpacity: 0.12, shadowRadius: 12, elevation: 20,
+      borderRadius: 12,
+      borderWidth: 1, borderColor: Colors.border,
+      overflow: 'hidden',
     },
-    sheetHandle: {
-      alignSelf: 'center', width: 40, height: 4,
-      borderRadius: 2, backgroundColor: Colors.gray200, marginTop: 10, marginBottom: 4,
+    panelHeader: {
+      flexDirection: 'row', alignItems: 'center', gap: 8,
+      paddingHorizontal: 10, paddingTop: 10,
     },
-    sheetHeader: {
-      flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-      paddingHorizontal: 16, paddingVertical: 12,
-      borderBottomWidth: 1, borderBottomColor: Colors.border,
+    panelCloseBtn: {
+      width: 36, height: 36, borderRadius: 10,
+      alignItems: 'center', justifyContent: 'center',
+      backgroundColor: Colors.gray100,
     },
-    sheetTitle: { fontSize: 17, fontWeight: '800', color: Colors.textPrimary },
+    panelList: { maxHeight: 260, marginTop: 4 },
 
     searchBox: {
-      flexDirection: 'row', alignItems: 'center', gap: 8,
-      marginHorizontal: 12, marginVertical: 10,
+      flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8,
       backgroundColor: Colors.inputBg, borderRadius: 10,
       borderWidth: 1, borderColor: Colors.border,
       paddingHorizontal: 12, paddingVertical: Platform.OS === 'ios' ? 10 : 8,
     },
     searchInput: { flex: 1, fontSize: 14, color: Colors.textPrimary, padding: 0 },
 
-    listContent: { paddingBottom: 8 },
+    listContent: { paddingBottom: 8, paddingHorizontal: 4 },
     option: {
       flexDirection: 'row', alignItems: 'center', gap: 12,
       paddingHorizontal: 16, paddingVertical: 13,
@@ -65,23 +64,13 @@ export function createStyles(Colors: ColorPalette) {
     countText: { fontSize: 11, fontWeight: '700', color: Colors.gray500 },
     countTextActive: { color: Colors.primary },
 
-    subList: {
-      marginLeft: 27, marginBottom: 4,
-      borderLeftWidth: 2, borderLeftColor: Colors.gray100,
-      paddingLeft: 12,
-    },
-    subOption: {
-      flexDirection: 'row', alignItems: 'center', gap: 12,
-      paddingVertical: 10,
-    },
-
     emptyRow: { alignItems: 'center', paddingVertical: 24 },
     emptyText: { fontSize: 14, color: Colors.textMuted, textAlign: 'center', paddingHorizontal: 16 },
 
     useTypedRow: {
       flexDirection: 'row', alignItems: 'center', gap: 10,
-      paddingHorizontal: 16, paddingVertical: 14,
-      borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.gray100,
+      paddingHorizontal: 12, paddingVertical: 12, marginHorizontal: 8, marginTop: 6,
+      borderRadius: 10,
       backgroundColor: Colors.primaryGhost,
     },
     useTypedIcon: {
