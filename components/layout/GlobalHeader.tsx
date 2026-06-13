@@ -50,6 +50,7 @@ export default function GlobalHeader() {
   }, [pathname, dispatch]);
 
   if (isChat) return null;
+  if (isDetail) return null;
 
   if (isAuth) {
     return (
