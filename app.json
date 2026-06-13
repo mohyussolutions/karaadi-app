@@ -37,7 +37,10 @@
         "android.permission.VIBRATE",
         "android.permission.USE_BIOMETRIC",
         "android.permission.USE_FINGERPRINT",
-        "android.permission.RECORD_AUDIO"
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
       ],
       "versionCode": 7
     },
@@ -93,6 +96,12 @@
       },
       "router": {}
     },
-    "owner": "karaadi"
+    "owner": "karaadi",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/8b1bceed-00e0-4430-ad28-bdd19d638fcd"
+    }
   }
 }
