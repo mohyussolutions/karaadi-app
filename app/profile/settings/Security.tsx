@@ -9,7 +9,7 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useSecuritySettings } from '../../../hooks/useSecuritySettings';
-import { createStyles } from '../../../utils/styles/settings/security.styles';
+import { createStyles } from '../../../util/styles/settings/security.styles';
 
 function fmtDate(iso: string) {
   try {

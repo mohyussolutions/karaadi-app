@@ -1,6 +1,6 @@
-import type { NestedSubCategory, SubCategory, MainCategory } from '../utils/types/category.types';
+import type { NestedSubCategory, SubCategory, MainCategory } from '../util/types/category.types';
 export type { NestedSubCategory, SubCategory, MainCategory };
-import { CAT_COLORS } from '../utils/colors/colors';
+import { CAT_COLORS } from '../util/colors/colors';
 export { CAT_COLORS };
 
 export const CAT_PATHS = {

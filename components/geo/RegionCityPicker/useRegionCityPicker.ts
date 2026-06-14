@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import type { RegionPickerItem, RegionCityPickerProps } from '../../../utils/types';
+import type { RegionPickerItem, RegionCityPickerProps } from '../../../util/types';
 import { clientGetAllRegions, clientAddCity } from '../../../api/categories/geo.actions';
 
 export function useRegionCityPicker({
@@ -13,11 +13,10 @@ export function useRegionCityPicker({
   const [selectedRegionObj, setSelectedRegionObj] = useState<RegionPickerItem | null>(null);
 
   const [regionExpanded, setRegionExpanded] = useState(false);
-  const [regionSearch, setRegionSearch] = useState('');
 
   const [cityExpanded, setCityExpanded] = useState(false);
   const [cityText, setCityText] = useState(selectedCity || '');
-  const [modalSearch, setModalSearch] = useState('');
+  const [citySearch, setCitySearch] = useState('');
   const [savingCity, setSavingCity] = useState(false);
 
   useEffect(() => {
@@ -47,10 +46,7 @@ export function useRegionCityPicker({
 
   function toggleRegionPanel() {
     setCityExpanded(false);
-    setRegionExpanded((prev) => {
-      if (!prev) setRegionSearch('');
-      return !prev;
-    });
+    setRegionExpanded((prev) => !prev);
   }
 
   function handleSelectRegion(r: RegionPickerItem) {
@@ -61,7 +57,7 @@ export function useRegionCityPicker({
     if (!sameRegion) {
       onCityChange('');
       setCityText('');
-      setModalSearch('');
+      setCitySearch('');
       setCityExpanded(true);
     }
   }
@@ -70,7 +66,7 @@ export function useRegionCityPicker({
     if (!selectedRegionObj) { toggleRegionPanel(); return; }
     setRegionExpanded(false);
     setCityExpanded((prev) => {
-      if (!prev) setModalSearch(cityText);
+      if (!prev) setCitySearch('');
       return !prev;
     });
   }
@@ -78,7 +74,7 @@ export function useRegionCityPicker({
   function handleSelectCity(name: string) {
     setCityText(name);
     onCityChange(name);
-    setModalSearch('');
+    setCitySearch('');
     setCityExpanded(false);
   }
 
@@ -120,35 +116,22 @@ export function useRegionCityPicker({
 
   const cities = selectedRegionObj?.cities ?? [];
 
-  const filteredRegions = useMemo(() => {
-    if (!regionSearch.trim()) return regions;
-    const q = regionSearch.toLowerCase();
-    return regions.filter((r) => r.name.toLowerCase().includes(q));
-  }, [regions, regionSearch]);
-
   const filteredCities = useMemo(() => {
-    if (!modalSearch.trim()) return cities;
-    const q = modalSearch.toLowerCase();
+    if (!citySearch.trim()) return cities;
+    const q = citySearch.toLowerCase();
     return cities.filter((c) => c.name.toLowerCase().includes(q));
-  }, [cities, modalSearch]);
-
-  const showUseTyped =
-    modalSearch.trim().length > 0 &&
-    !filteredCities.some((c) => c.name.toLowerCase() === modalSearch.trim().toLowerCase());
+  }, [cities, citySearch]);
 
   return {
     loadingRegions,
     cityText,
     savingCity,
     regionExpanded,
-    regionSearch,
-    setRegionSearch,
-    filteredRegions,
+    regions,
     cityExpanded,
-    modalSearch,
-    setModalSearch,
+    citySearch,
+    setCitySearch,
     filteredCities,
-    showUseTyped,
     toggleRegionPanel,
     collapseRegionPanel: () => setRegionExpanded(false),
     toggleCityPanel,

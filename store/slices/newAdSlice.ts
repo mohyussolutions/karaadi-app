@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { fetchPlansFromAPI } from '../../api/categories/plan.actions';
 import { createListing } from '../../api/categories/listing.actions';
-import type { ListingType, Step, Plan, CreatedItemSummary, NewAdState } from '../../utils/types/new-ad.types';
+import type { ListingType, Step, Plan, CreatedItemSummary, NewAdState } from '../../util/types/new-ad.types';
 
 const initialState: NewAdState = {
   step: 'type',

@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../utils/styles/profile/notifications.styles';
+import { createStyles } from '../../util/styles/profile/notifications.styles';
 import { useNotificationsData } from '../../hooks/useNotificationsData';
 import { useAuthStore } from '../../store/authStore';
 

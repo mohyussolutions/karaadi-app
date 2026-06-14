@@ -23,7 +23,7 @@ import { useAuthStore } from "../../../../store/authStore";
 import { useAppDispatch, useAppSelector } from "../../../../store/store";
 import { submitListing, setFeeInfo } from "../../../../store/slices/newAdSlice";
 import { getFeeForCategory } from "../../../../api/categories/fee.actions";
-import type { FieldDef, StepFormProps } from "../../../../utils/types";
+import type { FieldDef, StepFormProps } from "../../../../util/types";
 import { createStyles } from "./StepForm.styles";
 
 function validate(

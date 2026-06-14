@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import type { ZoomModalProps } from '../../utils/types';
+import type { ZoomModalProps } from '../../util/types';
 import {
   View, Image, FlatList, TouchableOpacity, Modal, StatusBar, Text, Platform,
 } from 'react-native';
@@ -7,7 +7,7 @@ import { Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../utils/styles/detail/ZoomModal.styles';
+import { createStyles } from '../../util/styles/detail/ZoomModal.styles';
 
 const { width, height } = Dimensions.get('window');
 

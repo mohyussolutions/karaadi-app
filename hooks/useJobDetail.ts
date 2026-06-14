@@ -8,8 +8,8 @@ import { apiClient } from '../api/client';
 import { JOBS_ENDPOINTS } from '../constants';
 import { getCachedListing } from '../services/listingCache';
 import { showToast } from '../services/toastService';
-import { formatPrice } from '../utils/helpers';
-import type { Job } from '../utils/types/listing.types';
+import { formatPrice } from '../util/helpers';
+import type { Job } from '../util/types/listing.types';
 
 export function formatSalary(min?: number, max?: number): string {
   if (!min && !max) return 'Negotiable';

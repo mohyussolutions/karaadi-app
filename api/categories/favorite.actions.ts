@@ -1,7 +1,7 @@
 import { apiClient } from '../client';
-import { extractList, getImageUrl } from '../../utils/helpers';
+import { extractList, getImageUrl } from '../../util/helpers';
 import { FAVORITES_ENDPOINTS } from '../../constants';
-import type { Favorite } from '../../utils/types';
+import type { Favorite } from '../../util/types';
 
 export async function getFavorites(): Promise<Favorite[]> {
   const { data } = await apiClient.get(`${FAVORITES_ENDPOINTS.LIST}?limit=200`);

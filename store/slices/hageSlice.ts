@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import { sendHageChat } from '../../api/sockets/hage.actions';
-import type { HageMessage } from '../../utils/types/hage.types';
+import type { HageMessage } from '../../util/types/hage.types';
 
 interface HageState {
   open: boolean;

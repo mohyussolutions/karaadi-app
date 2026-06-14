@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Animated } from 'react-native';
 import { useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../utils/styles/shared/listingCardSkeleton.styles';
+import { createStyles } from '../../util/styles/shared/listingCardSkeleton.styles';
 
 function ListingCardSkeleton() {
   const opacity = useRef(new Animated.Value(1)).current;

@@ -3,9 +3,9 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
-import type { PaymentMethodSelectorProps } from '../../../utils/types';
+import type { PaymentMethodSelectorProps } from '../../../util/types';
 import { PAYMENT_METHODS } from '../payment.constants';
-import { createStyles } from '../../../utils/styles/payment/paymentMethodSelector.styles';
+import { createStyles } from '../../../util/styles/payment/paymentMethodSelector.styles';
 
 export function PaymentMethodSelector({ selected, onChange }: PaymentMethodSelectorProps) {
   const Colors = useThemeColors();

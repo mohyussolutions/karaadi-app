@@ -3,9 +3,11 @@ import { View, Text, FlatList } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { EdgeInsets } from 'react-native-safe-area-context';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../utils/styles/layout/hage.styles';
-import type { HageMessage, ListingRef } from '../../../utils/types/hage.types';
+import { createStyles } from '../../../util/styles/layout/hage.styles';
+import type { ListingRoute } from '../../../util/helpers/nav.routing';
+import type { HageMessage, ListingRef } from '../../../util/types/hage.types';
 import { ListingChip } from './ListingChip';
+import { parseHageReply } from './parseHageLinks';
 
 interface HageMessageListProps {
   listRef: React.RefObject<FlatList<HageMessage> | null>;
@@ -15,10 +17,11 @@ interface HageMessageListProps {
   emptyText: string;
   thinkingText: string;
   onListingPress: (listing: ListingRef) => void;
+  onLinkPress: (route: ListingRoute) => void;
 }
 
 export function HageMessageList({
-  listRef, messages, loading, insets, emptyText, thinkingText, onListingPress,
+  listRef, messages, loading, insets, emptyText, thinkingText, onListingPress, onLinkPress,
 }: HageMessageListProps) {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
@@ -41,7 +44,17 @@ export function HageMessageList({
           <View>
             <View style={[styles.bubble, item.fromAI ? styles.bubbleAI : styles.bubbleUser]}>
               <Text style={[styles.bubbleText, !item.fromAI && styles.bubbleTextUser]}>
-                {item.content}
+                {item.fromAI
+                  ? parseHageReply(item.content).map((seg, i) => (
+                      seg.route ? (
+                        <Text key={i} style={styles.bubbleLink} onPress={() => onLinkPress(seg.route!)}>
+                          {seg.text}
+                        </Text>
+                      ) : (
+                        <Text key={i}>{seg.text}</Text>
+                      )
+                    ))
+                  : item.content}
               </Text>
             </View>
             {item.fromAI && item.listings && item.listings.length > 0 && (

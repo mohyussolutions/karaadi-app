@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getFavorites, addFavorite, removeFavorite } from '../../api/categories/favorite.actions';
-import type { Favorite } from '../../utils/types';
+import type { Favorite } from '../../util/types';
 
 interface FavoritesState {
   ids: string[];

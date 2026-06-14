@@ -9,9 +9,9 @@ import {
 } from '../../../store/slices/hageSlice';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { getListingDetailRoute } from '../../../utils/helpers/nav.routing';
-import { createStyles } from '../../../utils/styles/layout/hage.styles';
-import type { HageMessage, ListingRef } from '../../../utils/types/hage.types';
+import { getListingDetailRoute, type ListingRoute } from '../../../util/helpers/nav.routing';
+import { createStyles } from '../../../util/styles/layout/hage.styles';
+import type { HageMessage, ListingRef } from '../../../util/types/hage.types';
 import { SHEET_TOP, H } from './constants';
 import { useFabDrag } from './useFabDrag';
 import { useSheetDrag } from './useSheetDrag';
@@ -57,12 +57,15 @@ export default function Hage() {
     dispatch(sendHageMessage({ content: text, lang, history: messages }));
   }
 
-  function handleListingPress(item: ListingRef) {
-    const route = getListingDetailRoute(
-      { id: item.id || item._id, mainCategory: item.mainCategory, category: item.category },
-    );
+  function navigateToRoute(route: ListingRoute) {
     dispatch(closeHage());
     router.push(route as any);
+  }
+
+  function handleListingPress(item: ListingRef) {
+    navigateToRoute(getListingDetailRoute(
+      { id: item.id || item._id, mainCategory: item.mainCategory, category: item.category },
+    ));
   }
 
   const sheetTranslateY = Animated.add(slideY, dragY);
@@ -99,6 +102,7 @@ export default function Hage() {
           emptyText={t('hage.placeholder')}
           thinkingText={t('hage.thinking')}
           onListingPress={handleListingPress}
+          onLinkPress={navigateToRoute}
         />
 
         <HageInputBar

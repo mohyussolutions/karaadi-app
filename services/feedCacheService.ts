@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import type { ListingBase } from '../utils/types/listing.types';
+import type { ListingBase } from '../util/types/listing.types';
 
 const STORAGE_KEY = 'karaadi_feed_v1';
 const TTL = 300_000;

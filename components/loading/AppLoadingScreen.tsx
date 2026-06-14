@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Image, ActivityIndicator } from 'react-native';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../utils/styles/loading/appLoadingScreen.styles';
+import { createStyles } from '../../util/styles/loading/appLoadingScreen.styles';
 
 export default function AppLoadingScreen() {
   const Colors = useThemeColors();

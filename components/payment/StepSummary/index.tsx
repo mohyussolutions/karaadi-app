@@ -4,9 +4,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { useAppSelector } from '../../../store/store';
-import type { StepSummaryProps } from '../../../utils/types';
+import type { StepSummaryProps } from '../../../util/types';
 import { OrderSummary } from '../StepPayment/OrderSummary';
-import { createStyles } from '../../../utils/styles/payment/stepSummary.styles';
+import { createStyles } from '../../../util/styles/payment/stepSummary.styles';
 
 export function StepSummary({ plan, categoryName, onNext, onBack }: StepSummaryProps) {
   const Colors = useThemeColors();

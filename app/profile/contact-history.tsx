@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { EmptyState } from '../../components/shared';
 import { useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../utils/styles/profile/contactHistory.styles';
+import { createStyles } from '../../util/styles/profile/contactHistory.styles';
 
 export default function ContactHistoryScreen() {
   const { t } = useTranslation();

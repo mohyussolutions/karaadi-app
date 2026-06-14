@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
 import { JOBS_ENDPOINTS, DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE } from '../../../constants';
-import { getImageUrl, formatPrice, formatDate } from '../../../utils/helpers';
+import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
 import { useJobDetail, formatSalary } from '../../../hooks/useJobDetail';
 import ImageGallery from '../../../components/detail/ImageGallery';
 import ZoomModal from '../../../components/detail/ZoomModal';
@@ -20,8 +20,8 @@ import { SocialShareSheet } from '../../../components/social';
 import DetailNotFound from '../../../components/detail/DetailNotFound';
 import DetailActionBar from '../../../components/detail/DetailActionBar';
 import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
-import { createStyles } from '../../../utils/styles/listing/job.styles';
-import { createTabletSplitStyles } from '../../../utils/styles/listing/tabletSplit.styles';
+import { createStyles } from '../../../util/styles/listing/job.styles';
+import { createTabletSplitStyles } from '../../../util/styles/listing/tabletSplit.styles';
 import { useResponsive } from '../../../hooks/useResponsive';
 
 export default function JobDetailScreen() {

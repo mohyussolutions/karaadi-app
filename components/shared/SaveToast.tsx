@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import type { ToastPayload } from '../../services/toastService';
-import { createStyles } from '../../utils/styles/shared/saveToast.styles';
+import { createStyles } from '../../util/styles/shared/saveToast.styles';
 
 export default function SaveToast() {
   const [payload, setPayload] = useState<ToastPayload | null>(null);

@@ -1,13 +1,14 @@
 import React from 'react';
 import { Platform, View, Dimensions } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming,
 } from 'react-native-reanimated';
 import { useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../utils/styles/detail/swipeDownToClose.styles';
-import type { SwipeDownToCloseProps } from '../../utils/types';
+import { createStyles } from '../../util/styles/detail/swipeDownToClose.styles';
+import type { SwipeDownToCloseProps } from '../../util/types';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const DISMISS_DISTANCE = 120;
@@ -21,6 +22,7 @@ const DISMISS_VELOCITY = 800;
 export default function SwipeDownToClose({ children }: SwipeDownToCloseProps) {
   const router = useRouter();
   const s = useThemedStyles(createStyles);
+  const insets = useSafeAreaInsets();
   const translateY = useSharedValue(0);
   const startY = useSharedValue(0);
 
@@ -53,12 +55,12 @@ export default function SwipeDownToClose({ children }: SwipeDownToCloseProps) {
 
   return (
     <Animated.View style={[s.flex, animatedStyle]}>
+      {children}
       <GestureDetector gesture={pan}>
-        <View style={s.handleBar}>
+        <View style={[s.handleBar, { top: insets.top }]}>
           <View style={s.handle} />
         </View>
       </GestureDetector>
-      {children}
     </Animated.View>
   );
 }

@@ -3,7 +3,7 @@ import { View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } fro
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { EdgeInsets } from 'react-native-safe-area-context';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../utils/styles/layout/hage.styles';
+import { createStyles } from '../../../util/styles/layout/hage.styles';
 
 interface HageInputBarProps {
   value: string;

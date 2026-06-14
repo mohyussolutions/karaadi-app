@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
 import { MARKETPLACE_ENDPOINTS } from '../../../constants';
-import { getImageUrl, formatPrice, formatDate } from '../../../utils/helpers';
+import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
 import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, CONDITION_COLORS } from '../../../constants';
 import { useItemDetail } from '../../../hooks/useItemDetail';
 import ImageGallery from '../../../components/detail/ImageGallery';
@@ -20,8 +20,8 @@ import { SocialShareSheet } from '../../../components/social';
 import DetailNotFound from '../../../components/detail/DetailNotFound';
 import DetailActionBar from '../../../components/detail/DetailActionBar';
 import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
-import { createStyles } from '../../../utils/styles/listing/itemDetail.styles';
-import { createTabletSplitStyles } from '../../../utils/styles/listing/tabletSplit.styles';
+import { createStyles } from '../../../util/styles/listing/itemDetail.styles';
+import { createTabletSplitStyles } from '../../../util/styles/listing/tabletSplit.styles';
 import { useResponsive } from '../../../hooks/useResponsive';
 
 export default function ItemDetailScreen() {
@@ -162,6 +162,9 @@ export default function ItemDetailScreen() {
         <DetailActionBar
           priceLabel={item.price > 0 ? formatPrice(item.price) : t('priceOnRequest')}
           titleLabel={item.title}
+          onMessage={item.maGaday ? undefined : handleContact}
+          messageLabel={t('realEstateDetail.sendMessage')}
+          messageDisabled={Boolean(item.maGaday)}
         />
 
         <ZoomModal visible={zoomed} images={images} startIndex={activeImage} title={item.title} onClose={() => setZoomed(false)} />

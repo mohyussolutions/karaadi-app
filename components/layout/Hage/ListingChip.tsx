@@ -2,9 +2,9 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { getImageUrl, formatPrice } from '../../../utils/helpers';
-import { createStyles } from '../../../utils/styles/layout/hage.styles';
-import type { ListingRef } from '../../../utils/types/hage.types';
+import { getImageUrl, formatPrice } from '../../../util/helpers';
+import { createStyles } from '../../../util/styles/layout/hage.styles';
+import type { ListingRef } from '../../../util/types/hage.types';
 
 export function ListingChip({ item, onPress }: { item: ListingRef; onPress: () => void }) {
   const Colors = useThemeColors();

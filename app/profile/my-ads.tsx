@@ -6,11 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { MyAdCard, EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../utils/styles/profile/myAds.styles';
+import { createStyles } from '../../util/styles/profile/myAds.styles';
 import { useMyAds } from '../../hooks/useMyAds';
 import { useAppDispatch } from '../../store/store';
 import { prefillForPayment } from '../../store/slices/newAdSlice';
-import type { ListingBase } from '../../utils/types';
+import type { ListingBase } from '../../util/types';
 
 export default function MyAdsScreen() {
   const router = useRouter();

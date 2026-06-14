@@ -5,8 +5,8 @@ import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { SocialPostCard } from '../../social';
 import { getListingShareUrl } from '../../../constants';
-import type { SuccessScreenProps } from '../../../utils/types';
-import { createStyles } from '../../../utils/styles/payment/successScreen.styles';
+import type { SuccessScreenProps } from '../../../util/types';
+import { createStyles } from '../../../util/styles/payment/successScreen.styles';
 
 export function SuccessScreen({ plan, listingTitle, listingId, createdItem, onDone }: SuccessScreenProps) {
   const Colors = useThemeColors();

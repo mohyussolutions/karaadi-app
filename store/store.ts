@@ -13,6 +13,7 @@ import chatsReducer from './slices/chatsSlice';
 import newAdReducer from './slices/newAdSlice';
 import browseSearchReducer from './slices/browseSearchSlice';
 import notificationSettingsReducer from './slices/notificationSettingsSlice';
+import { storeRef } from './storeRef';
 
 const persistConfig = {
   key: 'karaadi-mobile-v1',
@@ -45,6 +46,8 @@ export const store = configureStore({
       },
     }),
 });
+
+storeRef.dispatch = store.dispatch;
 
 export const persistor = persistStore(store);
 

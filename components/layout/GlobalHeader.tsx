@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, Image, TouchableOpacity, Text, Modal, Pressable,
-  TextInput, StyleSheet,
+  TextInput, Switch, StyleSheet,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, usePathname } from 'expo-router';
@@ -9,9 +9,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { useAppSelector, useAppDispatch } from '../../store/store';
 import { setBrowseQuery, clearBrowseQuery } from '../../store/slices/browseSearchSlice';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useThemeColors, useThemedStyles, useThemeMode } from '../../hooks/useTheme';
 import type { Lang } from '../../i18n/translations';
-import { createStyles } from '../../utils/styles/layout/globalHeader.styles';
+import { createStyles } from '../../util/styles/layout/globalHeader.styles';
 
 const AUTH_RE = /\/(login|register|confirm|forgot-password|reset-password)/;
 const CHAT_RE = /^\/profile\/chat/;
@@ -28,6 +28,7 @@ export default function GlobalHeader() {
   const router = useRouter();
   const pathname = usePathname();
   const { t, lang, switchLanguage } = useAppTranslation();
+  const { mode, setMode } = useThemeMode();
   const dispatch = useAppDispatch();
   const unreadCount = useAppSelector((s) => s.notifications.unreadCount);
   const browseQuery = useAppSelector((s) => s.browseSearch.query);
@@ -59,10 +60,20 @@ export default function GlobalHeader() {
           <TouchableOpacity onPress={() => router.push('/(tabs)/home')} activeOpacity={0.8}>
             <Image source={require('../../assets/logo.jpg')} style={styles.logo} resizeMode="contain" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.langBtn} onPress={() => setShowLangMenu(true)}>
-            <Text style={styles.langText}>{lang.toUpperCase()}</Text>
-            <MaterialCommunityIcons name="chevron-down" size={12} color={Colors.white} />
-          </TouchableOpacity>
+          <View style={styles.rightGroup}>
+            <Switch
+              value={mode === 'dark'}
+              onValueChange={(v) => setMode(v ? 'dark' : 'light')}
+              trackColor={{ false: Colors.border, true: Colors.primary }}
+              thumbColor={Colors.white}
+              style={styles.themeSwitch}
+              accessibilityLabel="Toggle dark mode"
+            />
+            <TouchableOpacity style={styles.langBtn} onPress={() => setShowLangMenu(true)}>
+              <Text style={styles.langText}>{lang.toUpperCase()}</Text>
+              <MaterialCommunityIcons name="chevron-down" size={12} color={Colors.white} />
+            </TouchableOpacity>
+          </View>
         </View>
         <LangModal
           visible={showLangMenu}
@@ -103,14 +114,24 @@ export default function GlobalHeader() {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity
-          style={styles.langBtn}
-          onPress={() => setShowLangMenu(true)}
-          accessibilityLabel="Change language"
-        >
-          <Text style={styles.langText}>{lang.toUpperCase()}</Text>
-          <MaterialCommunityIcons name="chevron-down" size={12} color={Colors.white} />
-        </TouchableOpacity>
+        <View style={styles.rightGroup}>
+          <Switch
+            value={mode === 'dark'}
+            onValueChange={(v) => setMode(v ? 'dark' : 'light')}
+            trackColor={{ false: Colors.border, true: Colors.primary }}
+            thumbColor={Colors.white}
+            style={styles.themeSwitch}
+            accessibilityLabel="Toggle dark mode"
+          />
+          <TouchableOpacity
+            style={styles.langBtn}
+            onPress={() => setShowLangMenu(true)}
+            accessibilityLabel="Change language"
+          >
+            <Text style={styles.langText}>{lang.toUpperCase()}</Text>
+            <MaterialCommunityIcons name="chevron-down" size={12} color={Colors.white} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {showSearchBar && (

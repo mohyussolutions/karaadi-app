@@ -1,6 +1,6 @@
 import { apiClient } from '../client';
 import { AUTH_ENDPOINTS } from '../../constants';
-import type { User, AuthResponse } from '../../utils/types/user.types';
+import type { User, AuthResponse } from '../../util/types/user.types';
 
 export async function login(email: string, password: string): Promise<AuthResponse> {
   const { data } = await apiClient.post(AUTH_ENDPOINTS.LOGIN, { email, password });

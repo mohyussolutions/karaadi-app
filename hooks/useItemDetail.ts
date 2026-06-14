@@ -8,7 +8,7 @@ import { apiClient } from '../api/client';
 import { MARKETPLACE_ENDPOINTS } from '../constants';
 import { getCachedListing } from '../services/listingCache';
 import { showToast } from '../services/toastService';
-import type { MarketplaceItem } from '../utils/types/listing.types';
+import type { MarketplaceItem } from '../util/types/listing.types';
 
 export function useItemDetail(id: string) {
   const router = useRouter();

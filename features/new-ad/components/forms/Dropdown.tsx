@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { DropdownOption, DropdownProps } from '../../../../utils/types';
+import type { DropdownOption, DropdownProps } from '../../../../util/types';
 import {
   View, Text, TouchableOpacity, Modal, FlatList,
   TextInput,

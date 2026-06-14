@@ -5,7 +5,7 @@ import { apiClient } from '../api/client';
 import { FEED_ENDPOINTS } from '../constants';
 import { mergeListings, setMemCache, writeDiskCache } from '../services/feedCacheService';
 import { setFeed, mergeFeed, setRecommendations, isFeedFresh } from '../store/slices/feedSlice';
-import type { ListingBase } from '../utils/types/listing.types';
+import type { ListingBase } from '../util/types/listing.types';
 
 const INITIAL_VISIBLE = 20;
 const READ_MORE_STEP = 10;

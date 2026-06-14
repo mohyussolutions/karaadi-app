@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { planStyle, PLAN_CARD_COLORS } from '../constants/config';
-import type { Plan, StepPlanProps } from '../../../utils/types';
+import type { Plan, StepPlanProps } from '../../../util/types';
 import { createStyles, createPlanCardStyles } from './StepPlan.styles';
 
 function PlanCard({

@@ -15,8 +15,8 @@ import BottomTabBar from "../../components/layout/BottomTabBar";
 import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
 import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL, SOCIAL_LINK_BUILDERS, placeholderAvatar } from "../../constants";
 import { useBusinessDetail } from "../../hooks/useBusinessDetail";
-import { SOCIAL_ICONS, type SocialIcons } from "../../utils/icons/icons";
-import { createStyles } from "../../utils/styles/business/businessDetail.styles";
+import { SOCIAL_ICONS, type SocialIcons } from "../../util/icons/icons";
+import { createStyles } from "../../util/styles/business/businessDetail.styles";
 
 export default function BusinessDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

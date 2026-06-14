@@ -1,7 +1,7 @@
 import { apiClient } from '../client';
 import { PAYMENT_ENDPOINTS } from '../../constants';
 import { BASE_PLANS } from '../../features/new-ad/constants/config';
-import type { Plan } from '../../utils/types/new-ad.types';
+import type { Plan } from '../../util/types/new-ad.types';
 import { getSubPlans } from './fee.actions';
 
 export async function fetchPlansFromAPI(): Promise<Plan[]> {

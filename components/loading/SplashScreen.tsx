@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import type { SplashScreenProps } from '../../utils/types';
+import type { SplashScreenProps } from '../../util/types';
 import { Image, Animated, Dimensions } from 'react-native';
 import { useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../utils/styles/loading/splashScreen.styles';
+import { createStyles } from '../../util/styles/loading/splashScreen.styles';
 
 const { width } = Dimensions.get('window');
 const LOGO_W = Math.round(width * 0.6);

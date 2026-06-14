@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { Animated, PanResponder } from 'react-native';
 import type { EdgeInsets } from 'react-native-safe-area-context';
-import { FAB_SIZE } from '../../../utils/styles/layout/hage.styles';
+import { FAB_SIZE } from '../../../util/styles/layout/hage.styles';
 import { W, H, SHEET_TOP, FAB_INIT_X, FAB_INIT_Y } from './constants';
 
 export function useFabDrag(insets: EdgeInsets) {

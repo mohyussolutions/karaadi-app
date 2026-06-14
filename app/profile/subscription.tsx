@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner } from '../../components/loading';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles, createCurrentStyles } from '../../utils/styles/profile/profileSubscription.styles';
+import { createStyles, createCurrentStyles } from '../../util/styles/profile/profileSubscription.styles';
 import { useSubscriptionPlans } from '../../hooks/useSubscriptionPlans';
 
 function formatDate(iso: string | undefined): string {

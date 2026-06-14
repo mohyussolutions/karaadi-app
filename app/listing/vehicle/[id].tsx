@@ -8,7 +8,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
-import { getImageUrl, formatPrice, formatDate } from '../../../utils/helpers';
+import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
 import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, VEHICLE_ENDPOINTS } from '../../../constants';
 import { useVehicleDetail } from '../../../hooks/useVehicleDetail';
 import ImageGallery from '../../../components/detail/ImageGallery';
@@ -20,8 +20,8 @@ import { SocialShareSheet } from '../../../components/social';
 import DetailNotFound from '../../../components/detail/DetailNotFound';
 import DetailActionBar from '../../../components/detail/DetailActionBar';
 import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
-import { createStyles } from '../../../utils/styles/listing/vehicle.styles';
-import { createTabletSplitStyles } from '../../../utils/styles/listing/tabletSplit.styles';
+import { createStyles } from '../../../util/styles/listing/vehicle.styles';
+import { createTabletSplitStyles } from '../../../util/styles/listing/tabletSplit.styles';
 import { useResponsive } from '../../../hooks/useResponsive';
 
 export default function VehicleDetailScreen() {
@@ -144,6 +144,9 @@ export default function VehicleDetailScreen() {
     <DetailActionBar
       onCall={item.user?.phone ? handleCall : undefined}
       callLabel={t('realEstateDetail.showPhone')}
+      onMessage={item.maGaday ? undefined : handleContact}
+      messageLabel={t('realEstateDetail.sendMessage')}
+      messageDisabled={Boolean(item.maGaday)}
     />
   );
 

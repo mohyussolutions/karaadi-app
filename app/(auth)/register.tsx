@@ -4,12 +4,12 @@ import {
   ScrollView, KeyboardAvoidingView, Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useRegister, PASSWORD_RULES } from '../../hooks/useRegister';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../utils/styles/auth/register.styles';
+import { createStyles } from '../../util/styles/auth/register.styles';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -89,7 +89,7 @@ export default function RegisterScreen() {
                 secureTextEntry={!showPassword}
               />
               <TouchableOpacity style={styles.eyeBtn} onPress={() => setShowPassword((v) => !v)}>
-                <MaterialCommunityIcons
+                <Feather
                   name={showPassword ? 'eye-off' : 'eye'}
                   size={20}
                   color={Colors.textMuted}

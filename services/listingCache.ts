@@ -1,4 +1,4 @@
-import type { AnyListing } from '../utils/types/listing.types';
+import type { AnyListing } from '../util/types/listing.types';
 
 const cache: Record<string, AnyListing> = {};
 

@@ -1,5 +1,5 @@
 import { useWindowDimensions } from 'react-native';
-import type { ResponsiveInfo } from '../utils/types';
+import type { ResponsiveInfo } from '../util/types';
 
 const TABLET_BREAKPOINT = 768;
 const SIDEBAR_RATIO = 0.30;

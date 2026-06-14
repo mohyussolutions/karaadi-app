@@ -5,14 +5,14 @@ import { useRouter } from 'expo-router';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { useAppSelector } from '../../../store/store';
-import type { StepPaymentProps } from '../../../utils/types';
+import type { StepPaymentProps } from '../../../util/types';
 import { MAX_POLL_ATTEMPTS, type PaymentMethodOption } from '../payment.constants';
 import { PaymentMethodSelector } from './PaymentMethodSelector';
 import { PhoneInput } from './PhoneInput';
 import { PollingOverlay } from './PollingOverlay';
 import { SuccessScreen } from './SuccessScreen';
 import { usePaymentFlow } from './usePaymentFlow';
-import { createStyles } from '../../../utils/styles/payment/stepPayment.styles';
+import { createStyles } from '../../../util/styles/payment/stepPayment.styles';
 
 function ActivatingScreen() {
   const Colors = useThemeColors();

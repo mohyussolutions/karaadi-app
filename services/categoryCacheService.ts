@@ -1,4 +1,4 @@
-import type { ListingBase } from '../utils/types/listing.types';
+import type { ListingBase } from '../util/types/listing.types';
 
 const TTL = 5 * 60_000;
 

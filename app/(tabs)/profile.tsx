@@ -9,10 +9,10 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/useAuth';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useResponsive } from '../../hooks/useResponsive';
-import { getImageUrl } from '../../utils/helpers';
+import { getImageUrl } from '../../util/helpers';
 import { placeholderAvatar } from '../../constants';
-import type { MenuItem } from '../../utils/types';
-import { createStyles } from '../../utils/styles/tabs/profile.styles';
+import type { MenuItem } from '../../util/types';
+import { createStyles } from '../../util/styles/tabs/profile.styles';
 
 const AVATAR = placeholderAvatar(80, '2563eb', 'Me');
 
@@ -26,6 +26,7 @@ const MENU_ITEMS: MenuItem[] = [
   { icon: 'history',                 labelKey: 'mine.account.contactHistory', descKey: 'descriptions.contactHistoryDesc', route: '/profile/contact-history' },
   { icon: 'crown-outline',           labelKey: 'mine.account.mySubscriptions',descKey: 'descriptions.mySubscriptionsDesc',route: '/profile/subscription' },
   { icon: 'shield-star-outline',     labelKey: 'mine.account.badge',          descKey: 'descriptions.badgeDesc',          route: '/profile/badge' },
+  { icon: 'play-circle-outline',     labelKey: 'mine.account.tutorials',      descKey: 'descriptions.tutorialsDesc',      route: '/profile/tutorials' },
 ];
 
 function MenuCard({ item }: { item: MenuItem }) {

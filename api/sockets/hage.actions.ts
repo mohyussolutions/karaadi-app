@@ -1,13 +1,13 @@
 import { API_BASE_URL, HAGE_ENDPOINTS, SEARCH_ENDPOINTS } from '../../constants';
 import { apiClient } from '../client';
-import { extractList } from '../../utils/helpers';
+import { extractList } from '../../util/helpers';
 import type {
   HageMessage,
   ListingRef,
   HageChatResult,
   HageChatApiResponse,
   RawListingRef,
-} from '../../utils/types/hage.types';
+} from '../../util/types/hage.types';
 
 function toListingRef(listing: RawListingRef): ListingRef {
   return { ...listing, id: listing.id || listing._id || '' };

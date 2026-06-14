@@ -1,9 +1,9 @@
 import React, { memo } from 'react';
-import type { ResponsiveLayoutProps } from '../../utils/types';
+import type { ResponsiveLayoutProps } from '../../util/types';
 import { View } from 'react-native';
 import { useThemedStyles } from '../../hooks/useTheme';
 import { useResponsive } from '../../hooks/useResponsive';
-import { createStyles } from '../../utils/styles/shared/responsiveLayout.styles';
+import { createStyles } from '../../util/styles/shared/responsiveLayout.styles';
 
 function ResponsiveLayout({ sidebar, main, sidebarStyle, mainStyle }: ResponsiveLayoutProps) {
   const { isTabletLandscape, sidebarWidth, mainWidth } = useResponsive();

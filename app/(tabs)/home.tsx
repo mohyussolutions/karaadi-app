@@ -4,13 +4,13 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { CategoryGrid, ListingCard } from '../../components/shared';
+import { CategoryGrid, HowToUseVideo, ListingCard } from '../../components/shared';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useHomeFeed } from '../../hooks/useHomeFeed';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useAppSelector } from '../../store/store';
-import { createStyles, H_PAD, COL_GAP } from '../../utils/styles/tabs/home.styles';
+import { createStyles, H_PAD, COL_GAP } from '../../util/styles/tabs/home.styles';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -53,6 +53,11 @@ export default function HomeScreen() {
 
   const feedHeader = filteredListings ? null : (
     <View>
+      {!isTabletLandscape && (
+        <View style={styles.videoSection}>
+          <HowToUseVideo />
+        </View>
+      )}
       {!isTabletLandscape && (
         <View style={styles.section}>
           <CategoryGrid />
@@ -129,6 +134,9 @@ export default function HomeScreen() {
       <View style={[styles.safe, styles.outerRow]}>
         <View style={[styles.sidebar, { width: sidebarWidth }]}>
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.sidebarContent}>
+            <View style={styles.videoSection}>
+              <HowToUseVideo />
+            </View>
             <CategoryGrid />
             {postBtn}
           </ScrollView>

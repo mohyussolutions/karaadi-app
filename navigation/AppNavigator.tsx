@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { Appearance, View } from "react-native";
+import { Appearance, Platform, View } from "react-native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import * as NavigationBar from "expo-navigation-bar";
+import * as SystemUI from "expo-system-ui";
 import { useFonts } from "expo-font";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -39,6 +41,13 @@ export default function AppNavigator() {
   useEffect(() => {
     Appearance.setColorScheme(mode);
   }, [mode]);
+
+  useEffect(() => {
+    SystemUI.setBackgroundColorAsync(Colors.background);
+    if (Platform.OS === "android") {
+      NavigationBar.setStyle(resolved === "dark" ? "light" : "dark");
+    }
+  }, [resolved, Colors.background]);
 
   if (!fontsLoaded) return <LoadingSpinner fullScreen />;
 

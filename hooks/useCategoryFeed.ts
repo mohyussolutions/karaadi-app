@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { fetchByCategory } from '../api/categories/feed.actions';
 import { getCached, setCached, isFresh, cacheKey } from '../services/categoryCacheService';
 import { CATEGORY_FEED_LIMIT } from '../constants';
-import type { ListingBase } from '../utils/types/listing.types';
+import type { ListingBase } from '../util/types/listing.types';
 
 export function useCategoryFeed(categoryKey: string, subcategoryKey?: string) {
   const key = cacheKey(categoryKey, subcategoryKey);

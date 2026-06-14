@@ -4,9 +4,9 @@ import { useRouter } from "expo-router";
 import { useFocusEffect } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { useThemedStyles } from "../../hooks/useTheme";
-import { createStyles } from "../../utils/styles/tabs/newAd.styles";
+import { createStyles } from "../../util/styles/tabs/newAd.styles";
 import { LoadingSpinner } from "../../components/loading";
-import { getImageUrl } from "../../utils/helpers";
+import { getImageUrl } from "../../util/helpers";
 import { useAuthStore } from "../../store/authStore";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import {
@@ -24,7 +24,7 @@ import { StepForm } from "../../features/new-ad/components/forms";
 import { StepPlan } from "../../features/new-ad/components/StepPlan";
 import { StepSummary, StepPayment } from "../../components/payment";
 
-import type { ListingType, Step, StepItem } from "../../utils/types/new-ad.types";
+import type { ListingType, Step, StepItem } from "../../util/types/new-ad.types";
 import { MAIN_CATEGORIES } from "../../navigation/main";
 import { placeholderAvatar } from "../../constants";
 

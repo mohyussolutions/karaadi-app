@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from "react";
-import type { StepCategoryProps } from "../../../utils/types";
+import type { StepCategoryProps } from "../../../util/types";
 import type { MainCategory } from "../../../constants/categories";
 import { View, Text, TouchableOpacity } from "react-native";
 import { FlashList, type ListRenderItemInfo } from "@shopify/flash-list";
@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
 import { useAppTranslation } from "../../../hooks/useAppTranslation";
 import { MAIN_CATEGORIES } from "../../../constants/categories";
-import { createStyles } from "../../../utils/styles/new-ad/stepCategory.styles";
+import { createStyles } from "../../../util/styles/new-ad/stepCategory.styles";
 
 const NUM_COLUMNS = 3;
 
@@ -35,7 +35,7 @@ const CategoryCard = memo(function CategoryCard({ category, selected, onPress }:
         onPress={handlePress}
         activeOpacity={0.85}
       >
-        <View style={[s.icon, { backgroundColor: category.color + "20" }]}>
+        <View style={s.icon}>
           <MaterialCommunityIcons name={category.icon as any} size={26} color={category.color} />
         </View>
         <Text style={[s.label, selected && { color: category.color }]} numberOfLines={2}>

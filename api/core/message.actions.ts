@@ -1,6 +1,6 @@
 import { apiClient } from '../client';
 import { CHATS_ENDPOINTS, MESSAGES_ENDPOINTS } from '../../constants';
-import type { Chat, ChatMessage } from '../../utils/types';
+import type { Chat, ChatMessage } from '../../util/types';
 
 export async function getMyChats(userId: string): Promise<Chat[]> {
   const { data } = await apiClient.get(CHATS_ENDPOINTS.MY_CHATS(userId));

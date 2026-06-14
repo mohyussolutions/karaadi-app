@@ -14,10 +14,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner } from '../../components/loading';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { formatPrice, getImageUrl } from '../../utils/helpers';
+import { formatPrice, getImageUrl } from '../../util/helpers';
 import { useFavoritesData, CATEGORY_LABELS, CATEGORY_COLORS } from '../../hooks/useFavoritesData';
-import type { Favorite } from '../../utils/types';
-import { createStyles, createCardStyles } from '../../utils/styles/profile/favorites.styles';
+import type { Favorite } from '../../util/types';
+import { createStyles, createCardStyles } from '../../util/styles/profile/favorites.styles';
 export default function FavoritesScreen() {
   const { t } = useTranslation();
   const router = useRouter();

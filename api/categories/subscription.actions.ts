@@ -3,7 +3,7 @@ import { apiClient } from '../client';
 import { SUBSCRIPTION_ENDPOINTS } from '../../constants';
 import { searchCategory } from '../search';
 import { scheduleLocalNotification } from '../../services/notificationService';
-import type { Subscription, SubscriptionPayload } from '../../utils/types';
+import type { Subscription, SubscriptionPayload } from '../../util/types';
 
 const LAST_CHECKED_KEY = 'karaadi_alerts_last_checked_v1';
 const MIN_CHECK_INTERVAL_MS = 5 * 60 * 1000;

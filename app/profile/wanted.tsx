@@ -18,10 +18,10 @@ import {
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import {
   createStyles, createSheetInlineStyles, createImagePickerStyles,
-} from '../../utils/styles/profile/wanted.styles';
+} from '../../util/styles/profile/wanted.styles';
 import { MAIN_CATEGORIES, getCategoryByKey, SUB_I18N_GROUP } from '../../constants';
-import { formatPrice } from '../../utils/helpers';
-import type { Subscription, SubscriptionPayload, WantedFormState } from '../../utils/types';
+import { formatPrice } from '../../util/helpers';
+import type { Subscription, SubscriptionPayload, WantedFormState } from '../../util/types';
 
 const MAX_IMAGES = 3;
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ListingType, StepTypeProps } from '../../../utils/types';
+import type { ListingType, StepTypeProps } from '../../../util/types';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles, type ColorPalette } from '../../../hooks/useTheme';

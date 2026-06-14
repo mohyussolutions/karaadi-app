@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { ListingBase } from '../../utils/types/listing.types';
+import type { ListingBase } from '../../util/types/listing.types';
 
 const STALE_MS = 5 * 60 * 1000;
 

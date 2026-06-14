@@ -5,7 +5,7 @@ import { getSocket } from "../api/sockets/socket.actions";
 import { scheduleLocalNotification } from "../services/notificationService";
 import { playNotificationSound } from "../services/soundService";
 import { isViewingChat, getCachedUserName } from "../services/chatState";
-import type { MessageBanner } from "../utils/types";
+import type { MessageBanner } from "../util/types";
 
 export function useSocketMessages(showBanner: (data: MessageBanner) => void) {
   const dispatch = useAppDispatch();

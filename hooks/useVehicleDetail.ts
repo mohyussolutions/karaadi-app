@@ -8,7 +8,7 @@ import { apiClient } from '../api/client';
 import { VEHICLE_ENDPOINTS } from '../constants';
 import { getCachedListing } from '../services/listingCache';
 import { showToast } from '../services/toastService';
-import type { VehicleListing } from '../utils/types/listing.types';
+import type { VehicleListing } from '../util/types/listing.types';
 
 export function useVehicleDetail(id: string, category: string) {
   const router = useRouter();

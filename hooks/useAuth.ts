@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../store/store';
 import { setCredentials, clearCredentials, setLoading } from '../store/slices/authSlice';
 import { login as apiLogin, logout as apiLogout, register as apiRegister, getProfile } from '../api/core/auth.actions';
 import { connectSocket, disconnectSocket } from '../api/sockets/socket.actions';
-import type { User } from '../utils/types/user.types';
+import type { User } from '../util/types/user.types';
 
 export function useAuth() {
   const dispatch = useAppDispatch();

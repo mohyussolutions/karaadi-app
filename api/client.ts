@@ -1,6 +1,6 @@
 import * as SecureStore from "expo-secure-store";
 import { API_BASE_URL } from "../constants/config";
-import { store } from "../store/store";
+import { storeRef } from "../store/storeRef";
 import { clearCredentials } from "../store/slices/authSlice";
 import { disconnectSocket } from "./sockets/socket.actions";
 import {
@@ -15,11 +15,12 @@ import {
 import type {
   ExtraHeaders,
   Params,
+  ApiData,
   ApiResponse,
   RequestOptions,
-} from "../utils/types/client.types";
+} from "../util/types/client.types";
 
-export type { ApiResponse, RequestOptions } from "../utils/types/client.types";
+export type { ApiResponse, RequestOptions } from "../util/types/client.types";
 
 function buildUrl(path: string, params?: Params): string {
   const base = `${API_BASE_URL}${path}`;
@@ -48,9 +49,10 @@ async function buildHeaders(
   return { ...headers, ...extra };
 }
 
-function serializeBody(body: unknown, isFormData: boolean) {
+function serializeBody(body: unknown): BodyInit | undefined {
   if (body === undefined) return undefined;
-  return isFormData ? (body as FormData) : JSON.stringify(body);
+  if (body instanceof FormData) return body;
+  return JSON.stringify(body);
 }
 
 function apiError(message: string, status: number, data?: unknown) {
@@ -74,7 +76,7 @@ async function handle401() {
   await SecureStore.deleteItemAsync(AUTH_TOKEN_KEY);
   await SecureStore.deleteItemAsync(AUTH_USER_KEY);
   disconnectSocket();
-  store.dispatch(clearCredentials());
+  storeRef.dispatch?.(clearCredentials());
 }
 
 async function ensureOk(res: Response): Promise<void> {
@@ -102,7 +104,7 @@ async function request<T>(
   const res = await fetch(url, {
     method,
     headers,
-    body: serializeBody(body, isFormData),
+    body: serializeBody(body),
     signal: options?.signal,
   });
 
@@ -112,14 +114,14 @@ async function request<T>(
 }
 
 export const apiClient = {
-  get: <T = any>(path: string, options?: RequestOptions) =>
+  get: <T = ApiData>(path: string, options?: RequestOptions) =>
     request<T>("GET", path, undefined, options),
-  post: <T = any>(path: string, body?: unknown, options?: RequestOptions) =>
+  post: <T = ApiData>(path: string, body?: unknown, options?: RequestOptions) =>
     request<T>("POST", path, body, options),
-  put: <T = any>(path: string, body?: unknown, options?: RequestOptions) =>
+  put: <T = ApiData>(path: string, body?: unknown, options?: RequestOptions) =>
     request<T>("PUT", path, body, options),
-  patch: <T = any>(path: string, body?: unknown, options?: RequestOptions) =>
+  patch: <T = ApiData>(path: string, body?: unknown, options?: RequestOptions) =>
     request<T>("PATCH", path, body, options),
-  delete: <T = any>(path: string, options?: RequestOptions) =>
+  delete: <T = ApiData>(path: string, options?: RequestOptions) =>
     request<T>("DELETE", path, undefined, options),
 };

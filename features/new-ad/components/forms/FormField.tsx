@@ -1,5 +1,5 @@
 import React from 'react';
-import type { FormFieldProps } from '../../../../utils/types';
+import type { FormFieldProps } from '../../../../util/types';
 import { View, Text, TextInput } from 'react-native';
 import { useThemeColors, useThemedStyles } from '../../../../hooks/useTheme';
 import { Dropdown } from './Dropdown';

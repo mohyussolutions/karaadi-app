@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { normalizeItem, normalizeList, extractList } from '../utils/helpers';
+import { normalizeItem, normalizeList, extractList } from '../util/helpers';
 
 export function useNormalize() {
   const normalize = useCallback(

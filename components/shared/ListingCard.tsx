@@ -3,16 +3,16 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { formatPrice, getImageUrl, truncate } from '../../utils/helpers';
+import { formatPrice, getImageUrl, truncate } from '../../util/helpers';
 import { PLACEHOLDER_IMAGE } from '../../constants';
-import { getListingDetailRoute } from '../../utils/helpers';
+import { getListingDetailRoute } from '../../util/helpers';
 import { cacheListing } from '../../services/listingCache';
 import { showToast } from '../../services/toastService';
 import { useAppSelector, useAppDispatch } from '../../store/store';
 import { toggleFavorite } from '../../store/slices/favoritesSlice';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import type { ListingCardProps } from '../../utils/types';
-import { createStyles } from '../../utils/styles/shared/listingCard.styles';
+import type { ListingCardProps } from '../../util/types';
+import { createStyles } from '../../util/styles/shared/listingCard.styles';
 
 const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey }: ListingCardProps) {
   const router = useRouter();

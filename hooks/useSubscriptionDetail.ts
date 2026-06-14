@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { useAuthStore } from '../store/authStore';
 import { apiClient } from '../api/client';
 import { SUBSCRIPTION_ENDPOINTS } from '../constants';
-import type { Subscription } from '../utils/types/listing.types';
+import type { Subscription } from '../util/types/listing.types';
 
 export function useSubscriptionDetail(id: string) {
   const router = useRouter();

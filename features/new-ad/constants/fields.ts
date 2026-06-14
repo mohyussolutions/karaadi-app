@@ -1,4 +1,4 @@
-import type { FieldDef } from '../../../utils/types/new-ad.types';
+import type { FieldDef } from '../../../util/types/new-ad.types';
 
 export const FIELDS: Record<string, FieldDef[]> = {
   Marketplace: [

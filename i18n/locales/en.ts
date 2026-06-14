@@ -1357,6 +1357,8 @@ export const mine = {
     contactHistory: "Contact History",
     mySubscriptions: "My Subscriptions",
     myAlerts: "My Alerts",
+    tutorials: "Tutorials",
+    aboutKaraadi: "About",
   },
   profile: {
     noUser: "No user data found.",
@@ -1393,10 +1395,6 @@ export const mine = {
   settingsPage: {
     payments: "Payments",
     account: "Account",
-    appearance: "Appearance",
-    mode: "Mode",
-    light: "Light",
-    dark: "Dark",
     notifications: "Notifications",
     notificationSound: "Notification Sound",
     soundOn: "Sound plays when a message arrives",
@@ -1586,6 +1584,7 @@ export const mine = {
     contactPersonPlaceholder: "Full name",
     descriptionPlaceholder: "Tell customers about your business, products, and services…",
     emailPlaceholder: "business@example.com",
+    emailLocked: "Using your account email",
     phonePlaceholder: "+252 61 234 5678",
     websitePlaceholder: "https://www.yourbusiness.com",
     addressPlaceholder: "Street, city",
@@ -1677,6 +1676,7 @@ export const descriptions = {
   contactHistoryDesc: "Track your support requests and messages",
   mySubscriptionsDesc: "Manage your subscriptions and payment plans",
   badgeDesc: "View your badge and stats",
+  tutorialsDesc: "Watch short videos on how to use Karaadi",
 } as const;
 
 export const messages = {
@@ -2130,6 +2130,28 @@ export const citySelect = {
   addNew: "ADD NEW CITY",
   newPlaceholder: "New city name...",
   save: "Save",
+  noRegionsFound: "No regions found",
+  selectRegionFirst: "Select region first",
+  saving: "Saving city...",
+} as const;
+
+export const homeScreen = {
+  howToUseKaraadi: "How to use Karaadi",
+} as const;
+
+export const tutorials = {
+  title: "Tutorials",
+  subtitle: "Short videos to help you get the most out of Karaadi",
+  video1: "Getting Started with Karaadi",
+  video2: "How to Post an Ad",
+  video3: "Applying for a Business Account",
+  play: "Tap to play",
+} as const;
+
+export const aboutKaraadiPage = {
+  title: "About Karaadi",
+  subtitle: "Everything you need to know about the Karaadi marketplace",
+  open: "Tap to view",
 } as const;
 
 export const recommendations = {
@@ -2140,6 +2162,10 @@ export const recommendations = {
   viewDetails: "View Details →",
   error: "Something went wrong while loading recommendations",
   retry: "Try Again",
+} as const;
+
+export const recommended = {
+  title: "You may also like",
 } as const;
 
 export const realEstateDetail = {
@@ -2336,7 +2362,11 @@ const en = {
   wantSell,
   jobsPage,
   citySelect,
+  homeScreen,
+  tutorials,
+  aboutKaraadiPage,
   recommendations,
+  recommended,
   realEstateDetail,
   report,
   hage,

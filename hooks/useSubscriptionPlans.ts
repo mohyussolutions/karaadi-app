@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { apiClient } from '../api/client';
 import { SUBSCRIPTION_ENDPOINTS } from '../constants';
-import type { Plan } from '../utils/types';
+import type { Plan } from '../util/types';
 
 export function useSubscriptionPlans() {
   const { user } = useAuthStore();

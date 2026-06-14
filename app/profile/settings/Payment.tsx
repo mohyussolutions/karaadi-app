@@ -9,8 +9,8 @@ import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { useThemeColors, useThemedStyles, type ColorPalette } from '../../../hooks/useTheme';
 import { usePaymentHistory, type PaymentItem } from '../../../hooks/usePaymentHistory';
-import { createStyles } from '../../../utils/styles/settings/payment.styles';
-import type { PaymentStatusConfig, PaymentCategoryInfo } from '../../../utils/types';
+import { createStyles } from '../../../util/styles/settings/payment.styles';
+import type { PaymentStatusConfig, PaymentCategoryInfo } from '../../../util/types';
 
 function getStatusConfig(t: TFunction, Colors: ColorPalette): Record<string, PaymentStatusConfig> {
   return {

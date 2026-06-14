@@ -21,9 +21,9 @@ import { useResponsive } from "../../../hooks/useResponsive";
 import { useCategoryFeed } from "../../../hooks/useCategoryFeed";
 import { useAppSelector } from "../../../store/store";
 import type { SubCategory } from "../../../constants";
-import type { ListingBase } from "../../../utils/types/listing.types";
-import type { GridProps, SidebarProps } from "../../../utils/types";
-import { createStyles, H_PAD, GAP, GRID_GAP, GRID_COLS } from "../../../utils/styles/browse/main.styles";
+import type { ListingBase } from "../../../util/types/listing.types";
+import type { GridProps, SidebarProps } from "../../../util/types";
+import { createStyles, H_PAD, GAP, GRID_GAP, GRID_COLS } from "../../../util/styles/browse/main.styles";
 
 const SCREEN_W = Dimensions.get("window").width;
 const GRID_CELL_W = (SCREEN_W - H_PAD * 2 - GRID_GAP * (GRID_COLS - 1)) / GRID_COLS;

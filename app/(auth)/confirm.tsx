@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useConfirm } from '../../hooks/useConfirm';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../utils/styles/auth/confirm.styles';
+import { createStyles } from '../../util/styles/auth/confirm.styles';
 
 export default function ConfirmScreen() {
   const { t } = useTranslation();

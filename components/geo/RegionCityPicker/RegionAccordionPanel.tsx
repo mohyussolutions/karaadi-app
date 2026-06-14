@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import type { RegionAccordionPanelProps, RegionPickerItem } from '../../../utils/types';
-import { createStyles } from '../../../utils/styles/geo/regionCityPicker.styles';
+import type { RegionAccordionPanelProps, RegionPickerItem } from '../../../util/types';
+import { createStyles } from '../../../util/styles/geo/regionCityPicker.styles';
 
 function RegionRow({
   region, active, onSelectRegion,
@@ -12,50 +13,28 @@ function RegionRow({
   active: boolean;
   onSelectRegion: (r: RegionPickerItem) => void;
 }) {
-  const count = region.cities?.length ?? 0;
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   return (
-    <TouchableOpacity style={s.option} onPress={() => onSelectRegion(region)} activeOpacity={0.75}>
-      <MaterialCommunityIcons
-        name={active ? 'checkbox-marked' : 'checkbox-blank-outline'}
-        size={22}
-        color={active ? Colors.primary : Colors.gray300}
-      />
+    <TouchableOpacity style={[s.option, active && s.optionActive]} onPress={() => onSelectRegion(region)} activeOpacity={0.75}>
       <Text style={[s.optionText, active && s.optionTextActive]}>{region.name}</Text>
-      <View style={[s.countBadge, active && s.countBadgeActive]}>
-        <Text style={[s.countText, active && s.countTextActive]}>{count}</Text>
-      </View>
+      {active && (
+        <MaterialCommunityIcons name="check" size={18} color={Colors.primary} />
+      )}
     </TouchableOpacity>
   );
 }
 
 export function RegionAccordionPanel({
-  search, onSearchChange, regions, selectedRegion, onSelectRegion, onClose,
+  regions, selectedRegion, onSelectRegion, onClose,
 }: RegionAccordionPanelProps) {
+  const { t } = useTranslation();
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
 
   return (
     <View style={s.panel}>
-      <View style={s.panelHeader}>
-        <View style={s.searchBox}>
-          <MaterialCommunityIcons name="magnify" size={18} color={Colors.primary} />
-          <TextInput
-            style={s.searchInput}
-            value={search}
-            onChangeText={onSearchChange}
-            placeholder="Search regions…"
-            placeholderTextColor={Colors.placeholder}
-            autoCorrect={false}
-            autoCapitalize="words"
-          />
-          {search.length > 0 && (
-            <TouchableOpacity onPress={() => onSearchChange('')} hitSlop={8}>
-              <MaterialCommunityIcons name="close-circle" size={16} color={Colors.textMuted} />
-            </TouchableOpacity>
-          )}
-        </View>
+      <View style={s.panelHeaderEnd}>
         <TouchableOpacity style={s.panelCloseBtn} onPress={onClose} hitSlop={8}>
           <MaterialCommunityIcons name="chevron-up" size={20} color={Colors.textMuted} />
         </TouchableOpacity>
@@ -70,7 +49,7 @@ export function RegionAccordionPanel({
       >
         {regions.length === 0 ? (
           <View style={s.emptyRow}>
-            <Text style={s.emptyText}>No regions found</Text>
+            <Text style={s.emptyText}>{t('citySelect.noRegionsFound')}</Text>
           </View>
         ) : (
           regions.map((r) => (

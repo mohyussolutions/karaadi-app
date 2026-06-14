@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../utils/styles/profile/badge.styles';
+import { createStyles } from '../../util/styles/profile/badge.styles';
 
 const STATS = [
   { icon: 'eye-outline', labelKey: 'mine.account.badgeVisits' },

@@ -8,7 +8,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
-import { getImageUrl, formatPrice, formatDate } from '../../../utils/helpers';
+import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
 import { REAL_ESTATE_ENDPOINTS, DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, AMENITY_ICONS, AMENITY_KEYS } from '../../../constants';
 import { useRealEstateDetail } from '../../../hooks/useRealEstateDetail';
 import ImageGallery from '../../../components/detail/ImageGallery';
@@ -20,8 +20,8 @@ import { SocialShareSheet } from '../../../components/social';
 import DetailNotFound from '../../../components/detail/DetailNotFound';
 import DetailActionBar from '../../../components/detail/DetailActionBar';
 import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
-import { createStyles } from '../../../utils/styles/listing/realEstate.styles';
-import { createTabletSplitStyles } from '../../../utils/styles/listing/tabletSplit.styles';
+import { createStyles } from '../../../util/styles/listing/realEstate.styles';
+import { createTabletSplitStyles } from '../../../util/styles/listing/tabletSplit.styles';
 import { useResponsive } from '../../../hooks/useResponsive';
 
 export default function RealEstateDetailScreen() {
@@ -203,6 +203,9 @@ export default function RealEstateDetailScreen() {
         <DetailActionBar
           priceLabel={item.price > 0 ? formatPrice(item.price) : t('priceOnRequest')}
           titleLabel={item.title}
+          onMessage={item.maGaday ? undefined : handleContact}
+          messageLabel={t('realEstateDetail.sendMessage')}
+          messageDisabled={Boolean(item.maGaday)}
         />
 
         <ZoomModal visible={zoomed} images={images} startIndex={activeImage} title={item.title} onClose={() => setZoomed(false)} />

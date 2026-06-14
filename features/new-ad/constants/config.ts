@@ -1,4 +1,4 @@
-import type { ListingType, Step, Plan } from '../../../utils/types/new-ad.types';
+import type { ListingType, Step, Plan } from '../../../util/types/new-ad.types';
 export type { ListingType, Step, Plan };
 import type { ColorPalette } from '../../../hooks/useTheme';
 import { CAT_PATHS } from '../../../constants/categories';

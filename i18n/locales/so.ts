@@ -1472,6 +1472,8 @@ export const mine = {
     contactHistory: "Taariikhda Xiriirka",
     mySubscriptions: "Ku Biiritaankayga",
     myAlerts: "Digniimadayda",
+    tutorials: "Casharrada",
+    aboutKaraadi: "Ku Saabsan",
   },
   profile: {
     noUser: "Xog isticmaale lama helin.",
@@ -1508,10 +1510,6 @@ export const mine = {
   settingsPage: {
     payments: "Lacag-bixinnada",
     account: "Akoonka",
-    appearance: "Muuqaalka",
-    mode: "Habka",
-    light: "Iftiin",
-    dark: "Madow",
     notifications: "Ogeysiisyo",
     notificationSound: "Codka Ogeysiiska",
     soundOn: "Cod ayaa ka dhacaya markii fariin timaado",
@@ -1702,6 +1700,7 @@ export const mine = {
     contactPersonPlaceholder: "Magaca buuxa",
     descriptionPlaceholder: "U sheeg macaamiisha wax ku saabsan ganacsigaaga, alaabtaada, iyo adeegyadaada…",
     emailPlaceholder: "business@example.com",
+    emailLocked: "Waxaad isticmaalaysaa emailka akoonkaaga",
     phonePlaceholder: "+252 61 234 5678",
     websitePlaceholder: "https://www.yourbusiness.com",
     addressPlaceholder: "Waddo, magaalo",
@@ -1794,6 +1793,7 @@ export const descriptions = {
   contactHistoryDesc: "La soco codsiyadaaga taageero iyo fariimaha",
   mySubscriptionsDesc: "Maamul ku biiritaankaaga iyo qorshooyaha lacag bixinta",
   badgeDesc: "Eeg calaamaddaada iyo tirakoobyadaada",
+  tutorialsDesc: "Daawo muuqaallo gaagaaban oo ku saabsan sida loo isticmaalo Karaadi",
 } as const;
 
 export const messages = {
@@ -2146,6 +2146,28 @@ export const citySelect = {
   addNew: "KU DAR MAGAALO CUSUB",
   newPlaceholder: "Magaca magaalada cusub...",
   save: "Keydi",
+  noRegionsFound: "Gobol lama helin",
+  selectRegionFirst: "Marka hore dooro gobolka",
+  saving: "Magaalada waa la kaydinayaa...",
+} as const;
+
+export const homeScreen = {
+  howToUseKaraadi: "Sida loo isticmaalo Karaadi",
+} as const;
+
+export const tutorials = {
+  title: "Casharrada",
+  subtitle: "Muuqaallo gaagaaban oo kaa caawinaya inaad si fiican u isticmaasho Karaadi",
+  video1: "Bilowga Karaadi",
+  video2: "Sida Loo Dalbado Xayeysiis",
+  video3: "Codsiga Akoonka Ganacsiga",
+  play: "Taabo si aad u daawato",
+} as const;
+
+export const aboutKaraadiPage = {
+  title: "Ku Saabsan Karaadi",
+  subtitle: "Wax kasta oo aad u baahan tahay ku saabsan suuqa Karaadi",
+  open: "Taabo si aad u aragto",
 } as const;
 
 export const recommendations = {
@@ -2157,6 +2179,10 @@ export const recommendations = {
   viewDetails: "Faahfaahin Eeg →",
   error: "Wax qalad ayaa dhacay markii la raadinayay talooyinka",
   retry: "Isku Day Mar Kale",
+} as const;
+
+export const recommended = {
+  title: "Waxyaabaha kale ee aad jeclaan karto",
 } as const;
 
 export const realEstateDetail = {
@@ -2354,7 +2380,11 @@ const so = {
   paymentPage,
   subscription,
   citySelect,
+  homeScreen,
+  tutorials,
+  aboutKaraadiPage,
   recommendations,
+  recommended,
   realEstateDetail,
   report,
   hage,

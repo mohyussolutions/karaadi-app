@@ -6,7 +6,7 @@ import { getMyAds } from '../api/core';
 import { apiClient } from '../api/client';
 import { MY_ADS_ENDPOINTS } from '../constants';
 import { useAuthStore } from '../store/authStore';
-import type { ListingBase } from '../utils/types';
+import type { ListingBase } from '../util/types';
 
 export function useMyAds() {
   const { t } = useTranslation();

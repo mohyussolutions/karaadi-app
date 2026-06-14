@@ -4,10 +4,10 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { formatPrice, getImageUrl, getListingDetailRoute } from '../../utils/helpers';
+import { formatPrice, getImageUrl, getListingDetailRoute } from '../../util/helpers';
 import { PLACEHOLDER_IMAGE } from '../../constants';
-import type { MyAdCardProps } from '../../utils/types';
-import { createStyles } from '../../utils/styles/shared/myAdCard.styles';
+import type { MyAdCardProps } from '../../util/types';
+import { createStyles } from '../../util/styles/shared/myAdCard.styles';
 
 function getExpiryInfo(
   expiryDate: string | null | undefined,

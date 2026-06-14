@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
 import { useCallback } from 'react';
-import { getListingDetailRoute } from '../utils/helpers';
-import type { ListingBase } from '../utils/types/listing.types';
+import { getListingDetailRoute } from '../util/helpers';
+import type { ListingBase } from '../util/types/listing.types';
 
 export function useListingRoute() {
   const router = useRouter();

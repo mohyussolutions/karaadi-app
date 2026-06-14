@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { apiClient } from '../../api/client';
 import { REVIEWS_ENDPOINTS, placeholderAvatar } from '../../constants';
-import type { SellerCardProps } from '../../utils/types';
-import { createStyles } from '../../utils/styles/detail/SellerCard.styles';
+import type { SellerCardProps } from '../../util/types';
+import { createStyles } from '../../util/styles/detail/SellerCard.styles';
 
 function StarRating({ rating, count }: { rating: number; count: number }) {
   const Colors = useThemeColors();

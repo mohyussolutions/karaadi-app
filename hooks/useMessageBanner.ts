@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { Animated } from "react-native";
 import { useRouter } from "expo-router";
-import type { MessageBanner } from "../utils/types";
+import type { MessageBanner } from "../util/types";
 
 export function useMessageBanner() {
   const router = useRouter();

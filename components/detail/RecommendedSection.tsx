@@ -5,13 +5,13 @@ import {
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../../api/client';
-import { extractList } from '../../utils/helpers';
-import { getImageUrl, formatPrice } from '../../utils/helpers';
-import { getListingDetailRoute } from '../../utils/helpers';
+import { extractList } from '../../util/helpers';
+import { getImageUrl, formatPrice } from '../../util/helpers';
+import { getListingDetailRoute } from '../../util/helpers';
 import { PLACEHOLDER_IMAGE } from '../../constants';
 import { useThemedStyles } from '../../hooks/useTheme';
-import type { ListingBase, RecommendedSectionProps } from '../../utils/types';
-import { createStyles } from '../../utils/styles/detail/RecommendedSection.styles';
+import type { ListingBase, RecommendedSectionProps } from '../../util/types';
+import { createStyles } from '../../util/styles/detail/RecommendedSection.styles';
 
 function RecommendedSection({ endpoint, excludeId, title, categoryKey }: RecommendedSectionProps) {
   const { t } = useTranslation();
@@ -40,7 +40,7 @@ function RecommendedSection({ endpoint, excludeId, title, categoryKey }: Recomme
 
   return (
     <View style={styles.wrap}>
-      <Text style={styles.heading}>{title ?? t('recommended.title', 'You may also like')}</Text>
+      <Text style={styles.heading}>{title ?? t('recommended.title')}</Text>
       <FlatList
         data={items}
         horizontal
@@ -60,7 +60,7 @@ function RecommendedSection({ endpoint, excludeId, title, categoryKey }: Recomme
             <View style={styles.info}>
               <Text style={styles.cardTitle} numberOfLines={2}>{item.title}</Text>
               <Text style={styles.price}>
-                {item.price > 0 ? formatPrice(item.price) : 'On request'}
+                {item.price > 0 ? formatPrice(item.price) : t('priceOnRequest')}
               </Text>
               {item.city && (
                 <Text style={styles.loc} numberOfLines={1}>{item.city}</Text>

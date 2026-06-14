@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../utils/styles/settings/privacy.styles';
+import { createStyles } from '../../../util/styles/settings/privacy.styles';
 
 const SECTIONS = [
   {

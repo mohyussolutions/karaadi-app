@@ -6,7 +6,7 @@ import {
   formatDate,
   formatTimeAgo,
   truncate,
-} from '../utils/helpers';
+} from '../util/helpers';
 
 export function useFormat() {
   const { t } = useTranslation();

@@ -3,7 +3,7 @@ import { useAppSelector, useAppDispatch } from './store';
 import { clearCredentials, setCredentials } from './slices/authSlice';
 import * as SecureStore from 'expo-secure-store';
 import { disconnectSocket, connectSocket } from '../api/sockets/socket.actions';
-import type { User } from '../utils/types/user.types';
+import type { User } from '../util/types/user.types';
 
 export function useAuthStore() {
   const user = useAppSelector((s) => s.auth.user);

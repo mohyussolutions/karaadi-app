@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { Appearance, StyleSheet } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { setThemeMode } from '../store/slices/themeSlice';
-import { LIGHT_COLORS, DARK_COLORS, type ColorPalette, type ThemeMode } from '../utils/colors';
+import { LIGHT_COLORS, DARK_COLORS, type ColorPalette, type ThemeMode } from '../util/colors';
 
 export type { ThemeMode, ColorPalette };
 

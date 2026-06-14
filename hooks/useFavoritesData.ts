@@ -4,8 +4,8 @@ import { useAppDispatch } from '../store/store';
 import { loadFavorites, toggleFavorite } from '../store/slices/favoritesSlice';
 import { useAuthStore } from '../store/authStore';
 import { getFavorites } from '../api/categories/favorite.actions';
-import { getListingDetailRoute } from '../utils/helpers';
-import type { Favorite } from '../utils/types';
+import { getListingDetailRoute } from '../util/helpers';
+import type { Favorite } from '../util/types';
 
 export const CATEGORY_LABELS: Record<string, string> = {
   marketplace: 'Marketplace',

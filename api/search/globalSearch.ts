@@ -1,11 +1,11 @@
 import { apiClient } from '../client';
-import { extractList } from '../../utils/helpers';
+import { extractList } from '../../util/helpers';
 import {
   SEARCH_ENDPOINTS,
   CARS_ENDPOINTS, REAL_ESTATE_ENDPOINTS, MOTORCYCLES_ENDPOINTS,
   BOATS_ENDPOINTS, MARKETPLACE_ENDPOINTS, FARM_EQUIPMENT_ENDPOINTS, JOBS_ENDPOINTS,
 } from '../../constants';
-import type { SearchResult } from '../../utils/types';
+import type { SearchResult } from '../../util/types';
 
 export interface SearchParams {
   title?: string;

@@ -10,9 +10,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { placeholderAvatar } from '../../constants';
 import { updateUsername, updatePhone, updateProfileImage, deleteAccount } from '../../api/core/auth.actions';
 import { useAuthStore } from '../../store/authStore';
-import { getImageUrl } from '../../utils/helpers';
+import { getImageUrl } from '../../util/helpers';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../utils/styles/profile/edit.styles';
+import { createStyles } from '../../util/styles/profile/edit.styles';
 import { useTranslation } from 'react-i18next';
 
 const AVATAR = placeholderAvatar(100, '2563eb', 'Me');

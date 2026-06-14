@@ -12,8 +12,8 @@ import { joinChat, leaveChat, emitSendMessage, emitMarkAsRead, getSocket } from 
 import { setActiveChatId, cacheUserName } from '../../services/chatState';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useAuthStore } from '../../store/authStore';
-import type { ChatMessage } from '../../utils/types';
-import { createStyles } from '../../utils/styles/profile/chat.styles';
+import type { ChatMessage } from '../../util/types';
+import { createStyles } from '../../util/styles/profile/chat.styles';
 
 const chatIdCache = new Map<string, number>();
 

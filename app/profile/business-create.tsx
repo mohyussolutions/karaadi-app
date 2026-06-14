@@ -13,17 +13,18 @@ import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { apiClient } from '../../api/client';
 import { BUSINESSES_ENDPOINTS } from '../../constants';
-import { getImageUrl } from '../../utils/helpers';
+import { getImageUrl } from '../../util/helpers';
 import { CheckoutBar } from '../../components/checklist';
-import type { StepItem, BusinessPlan, BusinessApplyFormState } from '../../utils/types';
+import type { StepItem, BusinessPlan, BusinessApplyFormState } from '../../util/types';
 import { LoadingSpinner } from '../../components/loading';
 import { MAIN_CATEGORIES } from '../../navigation/main';
+import { useAuthStore } from '../../store/authStore';
 import { useAppDispatch } from '../../store/store';
 import { setListingType, setStep, setCategoryKey, setBusinessId } from '../../store/slices/newAdSlice';
 import {
   fetchBusinessPlans, selectBusinessPlan, extendBusinessPlan,
 } from '../../api/categories/businessPlan.actions';
-import { createStyles } from '../../utils/styles/profile/businessCreate.styles';
+import { createStyles } from '../../util/styles/profile/businessCreate.styles';
 
 const APPROVAL_POLL_INTERVAL_MS = 5000;
 
@@ -42,6 +43,7 @@ export default function BusinessCreateScreen() {
   const { t } = useAppTranslation();
   const { id: editId } = useLocalSearchParams<{ id?: string }>();
   const isEditing = !!editId;
+  const { user, loading: authLoading } = useAuthStore();
 
   const s = useThemedStyles(createStyles);
 
@@ -60,6 +62,13 @@ export default function BusinessCreateScreen() {
   ];
 
   useEffect(() => {
+    if (!authLoading && !user) {
+      router.replace('/(auth)/login');
+    }
+  }, [authLoading, user]);
+
+  useEffect(() => {
+    if (!user) return;
     if (isEditing && editId) {
       apiClient.get(BUSINESSES_ENDPOINTS.BY_ID(editId))
         .then(({ data }) => {
@@ -100,9 +109,9 @@ export default function BusinessCreateScreen() {
       })
       .catch(() => {})
       .finally(() => setLoadingBiz(false));
-  }, [editId]);
+  }, [editId, user]);
 
-  if (loadingBiz) return <LoadingSpinner fullScreen />;
+  if (!user || loadingBiz) return <LoadingSpinner fullScreen />;
 
   return (
     <SafeAreaView style={s.safe} edges={['bottom']}>
@@ -115,6 +124,7 @@ export default function BusinessCreateScreen() {
           initialLogo={initialLogo}
           isEditing={isEditing}
           editId={editId}
+          accountEmail={user.email}
           onSuccess={(biz) => {
             if (isEditing) { router.back(); return; }
             setBusinessRecord(biz);
@@ -165,6 +175,7 @@ function ApplyStep({
   initialLogo,
   isEditing,
   editId,
+  accountEmail,
   onSuccess,
   onCancel,
 }: {
@@ -172,13 +183,16 @@ function ApplyStep({
   initialLogo?: string;
   isEditing: boolean;
   editId?: string;
+  accountEmail: string;
   onSuccess: (business: any) => void;
   onCancel: () => void;
 }) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
-  const [form, setFormState] = useState<BusinessApplyFormState>(initialValues);
+  const [form, setFormState] = useState<BusinessApplyFormState>(() =>
+    isEditing ? initialValues : { ...initialValues, email: accountEmail },
+  );
   const [logo, setLogo] = useState<string | null>(initialLogo || null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -308,15 +322,26 @@ function ApplyStep({
         <View style={s.fieldRow}>
           <View style={s.fieldRowItem}>
             <Field label={t('mine.businesses.businessEmail')} required error={errors.email}>
-              <TextInput
-                style={[s.input, errors.email && s.inputError]}
-                value={form.email}
-                onChangeText={v => set('email', v)}
-                placeholder={t('mine.businesses.emailPlaceholder')}
-                placeholderTextColor={Colors.placeholder}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
+              {isEditing ? (
+                <TextInput
+                  style={[s.input, errors.email && s.inputError]}
+                  value={form.email}
+                  onChangeText={v => set('email', v)}
+                  placeholder={t('mine.businesses.emailPlaceholder')}
+                  placeholderTextColor={Colors.placeholder}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                />
+              ) : (
+                <>
+                  <TextInput
+                    style={[s.input, s.inputLocked]}
+                    value={form.email}
+                    editable={false}
+                  />
+                  <Text style={s.fieldHint}>{t('mine.businesses.emailLocked')}</Text>
+                </>
+              )}
             </Field>
           </View>
           <View style={s.fieldRowItem}>

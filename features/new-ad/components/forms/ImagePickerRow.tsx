@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ImagePickerRowProps } from '../../../../utils/types';
+import type { ImagePickerRowProps } from '../../../../util/types';
 import { View, Image, TouchableOpacity, Text, ScrollView, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';

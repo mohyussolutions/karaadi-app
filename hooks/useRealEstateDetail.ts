@@ -8,7 +8,7 @@ import { apiClient } from '../api/client';
 import { REAL_ESTATE_ENDPOINTS } from '../constants';
 import { getCachedListing } from '../services/listingCache';
 import { showToast } from '../services/toastService';
-import type { RealEstate } from '../utils/types/listing.types';
+import type { RealEstate } from '../util/types/listing.types';
 
 export function useRealEstateDetail(id: string) {
   const router = useRouter();

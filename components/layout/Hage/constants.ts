@@ -1,5 +1,5 @@
 import { Dimensions, Platform, StatusBar } from 'react-native';
-import { FAB_SIZE } from '../../../utils/styles/layout/hage.styles';
+import { FAB_SIZE } from '../../../util/styles/layout/hage.styles';
 
 export const { width: W, height: H } = Dimensions.get('window');
 export const STATUSBAR_H = Platform.OS === 'android' ? (StatusBar.currentHeight ?? 24) : 0;

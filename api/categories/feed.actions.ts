@@ -1,11 +1,11 @@
 import { apiClient } from '../client';
-import { extractList, normalizeItem } from '../../utils/helpers';
+import { extractList, normalizeItem } from '../../util/helpers';
 import {
   CARS_ENDPOINTS, REAL_ESTATE_ENDPOINTS, MOTORCYCLES_ENDPOINTS,
   BOATS_ENDPOINTS, MARKETPLACE_ENDPOINTS, FARM_EQUIPMENT_ENDPOINTS,
   JOBS_ENDPOINTS, FEED_ENDPOINTS,
 } from '../../constants';
-import type { Car, RealEstate, Motorcycle, Boat, MarketplaceItem, FarmEquipment, ListingBase } from '../../utils/types/listing.types';
+import type { Car, RealEstate, Motorcycle, Boat, MarketplaceItem, FarmEquipment, ListingBase } from '../../util/types/listing.types';
 
 export async function fetchCars(params?: Record<string, any>, signal?: AbortSignal): Promise<Car[]> {
   const { data } = await apiClient.get(CARS_ENDPOINTS.LIST, { params, signal });

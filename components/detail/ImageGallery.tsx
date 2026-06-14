@@ -1,5 +1,5 @@
 import React, { useRef, useCallback, useState } from 'react';
-import type { ImageGalleryProps } from '../../utils/types';
+import type { ImageGalleryProps } from '../../util/types';
 import {
   View, Image, ScrollView, Pressable, Text, Platform, Modal, TouchableOpacity,
   NativeSyntheticEvent, NativeScrollEvent,
@@ -8,7 +8,7 @@ import { Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles, createSheetStyles } from '../../utils/styles/detail/ImageGallery.styles';
+import { createStyles, createSheetStyles } from '../../util/styles/detail/ImageGallery.styles';
 
 const { width } = Dimensions.get('window');
 export const IMG_H = Math.round(width * 0.88);
@@ -153,7 +153,9 @@ export default function ImageGallery({
           <View style={sheetStyles.sheet} onStartShouldSetResponder={() => true}>
             <View style={sheetStyles.handle} />
             <View style={sheetStyles.iconRow}>
-              <MaterialCommunityIcons name="heart-outline" size={38} color={Colors.primary} />
+              <View style={sheetStyles.iconBadge}>
+                <MaterialCommunityIcons name="heart-outline" size={24} color={Colors.primary} />
+              </View>
             </View>
             <Text style={sheetStyles.title}>Save this item?</Text>
             <Text style={sheetStyles.sub}>Add to your favorites for quick access later.</Text>

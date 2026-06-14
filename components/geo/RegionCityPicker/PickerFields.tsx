@@ -3,8 +3,8 @@ import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../utils/styles/geo/regionCityPicker.styles';
-import type { PickerFieldsProps } from '../../../utils/types';
+import { createStyles } from '../../../util/styles/geo/regionCityPicker.styles';
+import type { PickerFieldsProps } from '../../../util/types';
 
 export function PickerFields({
   selectedRegion, cityText, loadingRegions, regionExpanded, cityExpanded,
@@ -56,7 +56,7 @@ export function PickerFields({
             color={cityExpanded || cityText ? Colors.primary : Colors.placeholder}
           />
           <Text style={[s.pickerText, !cityText && s.pickerPlaceholder, cityExpanded && s.pickerTextActive]} numberOfLines={1}>
-            {cityText || (selectedRegion ? t('createRealEstate.cityLabel') : 'Select region first')}
+            {cityText || (selectedRegion ? t('createRealEstate.cityLabel') : t('citySelect.selectRegionFirst'))}
           </Text>
           {cityText ? (
             <TouchableOpacity onPress={(e) => { e.stopPropagation(); onClearCity(); }} hitSlop={8}>

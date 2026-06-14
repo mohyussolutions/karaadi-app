@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import type { CheckoutBarProps } from '../../utils/types';
-import { createStyles } from '../../utils/styles/checklist/checkoutBar.styles';
+import type { CheckoutBarProps } from '../../util/types';
+import { createStyles } from '../../util/styles/checklist/checkoutBar.styles';
 
 export function CheckoutBar({ steps, currentIndex }: CheckoutBarProps) {
   const Colors = useThemeColors();

@@ -1,7 +1,7 @@
 import { apiClient } from '../client';
 import { MY_ADS_ENDPOINTS } from '../../constants';
-import { extractList } from '../../utils/helpers';
-import type { ListingBase } from '../../utils/types/listing.types';
+import { extractList } from '../../util/helpers';
+import type { ListingBase } from '../../util/types/listing.types';
 
 export async function getMyAds(signal?: AbortSignal): Promise<ListingBase[]> {
   const { data } = await apiClient.get(MY_ADS_ENDPOINTS.LIST, { signal });

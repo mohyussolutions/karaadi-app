@@ -3,7 +3,7 @@ import { View, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IMG_H } from '../detail/ImageGallery';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../utils/styles/loading/detailSkeleton.styles';
+import { createStyles } from '../../util/styles/loading/detailSkeleton.styles';
 
 const { width } = Dimensions.get('window');
 
