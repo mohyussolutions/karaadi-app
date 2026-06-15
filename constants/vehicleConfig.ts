@@ -1,16 +1,5 @@
 import { CAT_PATHS } from './categories';
-
-export interface FieldDef {
-  key: string;
-  label: string;
-  format?: (v: any) => string;
-}
-
-export interface VehicleTypeConfig {
-  label: string;
-  endpoint: string;
-  fields: FieldDef[];
-}
+import type { VehicleSpecField, VehicleTypeConfig } from '../util/types';
 
 export const VEHICLE_CONFIG: Record<string, VehicleTypeConfig> = {
   cars: {
@@ -105,7 +94,7 @@ export function getVehicleConfig(category: string): VehicleTypeConfig {
   return VEHICLE_CONFIG[category?.toLowerCase()] ?? VEHICLE_CONFIG.cars;
 }
 
-export function buildSpecItems(item: any, fields: FieldDef[]): { label: string; value: string }[] {
+export function buildSpecItems(item: any, fields: VehicleSpecField[]): { label: string; value: string }[] {
   const seen = new Set<string>();
   const result: { label: string; value: string }[] = [];
 

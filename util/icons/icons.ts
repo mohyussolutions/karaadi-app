@@ -174,3 +174,18 @@ const ICON_MAP: Partial<Record<MCIcon, string>> = {
 export function getNativeIcon(name: string): string {
   return ICON_MAP[name as MCIcon] ?? name;
 }
+
+export const AMENITY_ICONS: Record<string, string> = {
+  swimmingPool: 'pool',
+  gym: 'dumbbell',
+  security: 'shield-check-outline',
+  elevator: 'elevator',
+  generator: 'lightning-bolt',
+  waterSupply: 'water',
+  airConditioning: 'snowflake',
+  garden: 'flower-outline',
+  balcony: 'home-outline',
+  parking: 'parking',
+};
+
+export const AMENITY_KEYS = Object.keys(AMENITY_ICONS);

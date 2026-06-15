@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { ImageSourcePropType } from 'react-native';
 import type { ListingBase } from './listing.types';
 
 export interface Region {
@@ -66,6 +67,8 @@ export interface TabItem {
   labelKey: string;
   icon: string;
   iconOutline: string;
+  iconFamily?: 'Ionicons' | 'Octicons';
+  image?: ImageSourcePropType;
 }
 
 export interface LoadingSpinnerProps {
@@ -115,6 +118,8 @@ export interface ResponsiveInfo {
   mainWidth: number;
   numColumns: number;
   cardWidth: (containerWidth?: number, cols?: number, hPad?: number, gap?: number) => number;
+  iconCols: number;
+  gridCellWidth: (cols?: number, hPad?: number, gap?: number) => number;
 }
 
 export interface MenuItem {
@@ -131,6 +136,11 @@ export interface SettingsRow {
   color?: string;
 }
 
+export interface BizStepDef {
+  key: string;
+  labelKey: string;
+}
+
 export interface PaymentStatusConfig {
   label: string;
   color: string;
@@ -142,4 +152,9 @@ export interface PaymentCategoryInfo {
   label: string;
   icon: string;
   color: string;
+}
+
+export interface Language {
+  code: 'en' | 'so';
+  label: string;
 }

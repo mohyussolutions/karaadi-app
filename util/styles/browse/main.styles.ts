@@ -4,7 +4,6 @@ import type { ColorPalette } from "../../../hooks/useTheme";
 export const H_PAD = 12;
 export const GAP = 8;
 export const GRID_GAP = 6;
-export const GRID_COLS = 3;
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({

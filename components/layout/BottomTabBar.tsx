@@ -1,14 +1,13 @@
 import { Text, View, Pressable } from "react-native";
-import { BlurView } from "expo-blur";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, Octicons } from "@expo/vector-icons";
 import { useRouter, usePathname } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAppTranslation } from "../../hooks/useAppTranslation";
 import { useAuthStore } from "../../store/authStore";
-import { useThemeColors, useThemedStyles, useThemeMode } from "../../hooks/useTheme";
+import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
 import { SPACING } from "../../util/theme";
 import { createLayoutStyles } from "../../util/styles/tabs/layout.styles";
-import { TAB_ITEMS, LOGIN_TAB_ITEM } from "../../constants/tabItems";
+import { TAB_ITEMS, LOGIN_TAB_ITEM } from "../../(links)/tabItems";
 import { TabButtonBackground } from "../../navigation/TabButtonBackground";
 
 function getActiveTab(pathname: string): string {
@@ -27,7 +26,6 @@ export default function BottomTabBar() {
   const pathname = usePathname();
   const active = getActiveTab(pathname);
   const Colors = useThemeColors();
-  const { resolved } = useThemeMode();
   const styles = useThemedStyles(createLayoutStyles);
 
   const items = isAuthenticated
@@ -37,11 +35,7 @@ export default function BottomTabBar() {
   return (
     <View style={[styles.wrapper, { paddingBottom: Math.max(insets.bottom, SPACING.sm) }]}>
       <View style={styles.barClip}>
-        <BlurView
-          intensity={80}
-          tint={resolved === "dark" ? "dark" : "light"}
-          style={styles.bar}
-        >
+        <View style={styles.bar}>
           {items.map((item) => {
             const focused = item.name === active;
 
@@ -70,9 +64,11 @@ export default function BottomTabBar() {
                       ? Colors.primary
                       : Colors.textMuted;
 
+                  const IconComponent = item.iconFamily === "Octicons" ? Octicons : Ionicons;
+
                   return (
                     <TabButtonBackground image={item.image} focused={focused} pressed={pressed}>
-                      <Ionicons
+                      <IconComponent
                         name={(focused ? item.icon : item.iconOutline) as any}
                         size={22}
                         color={iconColor}
@@ -86,7 +82,7 @@ export default function BottomTabBar() {
               </Pressable>
             );
           })}
-        </BlurView>
+        </View>
       </View>
     </View>
   );

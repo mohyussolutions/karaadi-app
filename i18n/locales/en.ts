@@ -1811,6 +1811,18 @@ export const postAd = {
   checklistVisibleToBuyers: "Now visible to buyers",
   viewListing: "View My Listing",
   viewMyAds: "View My Ads",
+  socialShareTitle: "Share your listing on",
+  socialSharingTo: "Sharing to",
+  socialPostNow: "Yes, Post Now",
+  socialSkip: "Skip",
+  socialPosting: "Posting…",
+  socialDone: "Done!",
+  socialFbLoading: "Posting to Karaadi's Facebook page…",
+  socialFbDone: "Posted to Karaadi's Facebook page!",
+  socialFbError: "Could not post — try again",
+  socialTtLoading: "Posting to Karaadi's TikTok page…",
+  socialTtDone: "Posted to Karaadi's TikTok page!",
+  socialTtError: "Could not post — check credentials",
 } as const;
 
 export const paymentPage = {

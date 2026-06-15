@@ -1,12 +1,4 @@
-import type { ImageSourcePropType } from "react-native";
-
-export interface TabItem {
-  name: string;
-  labelKey: string;
-  icon: string;
-  iconOutline: string;
-  image?: ImageSourcePropType;
-}
+import type { TabItem } from "../util/types";
 
 export const TAB_ITEMS: TabItem[] = [
   {
@@ -44,6 +36,7 @@ export const TAB_ITEMS: TabItem[] = [
 export const LOGIN_TAB_ITEM: TabItem = {
   name: "login",
   labelKey: "nav.login",
-  icon: "log-in",
-  iconOutline: "log-in-outline",
+  icon: "person",
+  iconOutline: "person",
+  iconFamily: "Octicons",
 };

@@ -58,7 +58,7 @@ export default function SellerCard({
       <View style={s.row}>
         <Image source={{ uri: profileImage || fallback }} style={s.avatar} />
         <View style={s.info}>
-          <Text style={s.name}>{username || 'Seller'}</Text>
+          <Text style={s.name}>{username || t('chats.seller')}</Text>
           {subtitle && <Text style={s.sub}>{subtitle}</Text>}
           {rating !== null && <StarRating rating={rating} count={reviewCount} />}
         </View>

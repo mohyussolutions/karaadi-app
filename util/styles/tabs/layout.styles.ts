@@ -17,7 +17,7 @@ export const createLayoutStyles = (Colors: ColorPalette) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    backgroundColor: Colors.tabBarOverlay,
+    backgroundColor: Colors.tabBarSolid,
     paddingHorizontal: SPACING.xs,
     paddingVertical: SPACING.xs,
   },

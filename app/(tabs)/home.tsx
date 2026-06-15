@@ -4,7 +4,8 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { CategoryGrid, HowToUseVideo, ListingCard } from '../../components/shared';
+import { CategoryGrid, HowToUseVideo } from '../../components/shared';
+import ListingCard from '../../components/cards/ListingCard';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useHomeFeed } from '../../hooks/useHomeFeed';

@@ -11,15 +11,7 @@ import { toggleSound } from '../../../store/slices/notificationSettingsSlice';
 import { playNotificationSound } from '../../../services/soundService';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { createStyles } from '../../../util/styles/settings/settings.styles';
-import type { SettingsRow } from '../../../util/types';
-
-const ROWS: SettingsRow[] = [
-  { icon: 'shield-lock-outline', labelKey: 'mine.settings.security', route: '/profile/settings/Security' },
-  { icon: 'eye-off-outline',     labelKey: 'mine.settings.privacy',  route: '/profile/settings/Privacy' },
-  { icon: 'credit-card-outline', labelKey: 'mine.settingsPage.payments', route: '/profile/settings/Payment' },
-  { icon: 'crown-outline',       labelKey: 'mine.settings.subscription', route: '/profile/wanted' },
-  { icon: 'information-outline', labelKey: 'mine.account.aboutKaraadi', route: '/profile/about-karaadi' },
-];
+import { SETTINGS_ROWS } from '../../../(links)/settingsRows';
 
 export default function SettingsIndex() {
   const router = useRouter();
@@ -41,7 +33,7 @@ export default function SettingsIndex() {
       <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
         <Text style={s.sectionTitle}>{t('mine.settingsPage.account')}</Text>
         <View style={s.section}>
-          {ROWS.map((row) => (
+          {SETTINGS_ROWS.map((row) => (
             <TouchableOpacity
               key={row.route}
               style={s.row}

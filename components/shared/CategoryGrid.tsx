@@ -5,16 +5,18 @@ import { useRouter } from "expo-router";
 import { MAIN_CATEGORIES, MainCategory } from "../../constants/categories";
 import { useAppTranslation } from "../../hooks/useAppTranslation";
 import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
-import { createStyles, COLS } from "../../util/styles/shared/categoryGrid.styles";
+import { useResponsive } from "../../hooks/useResponsive";
+import { createStyles, H_PAD, GAP } from "../../util/styles/shared/categoryGrid.styles";
 import type { CategoryGridProps } from "../../util/types";
 
 interface CategoryCellProps {
   category: MainCategory;
   label: string;
+  width: number;
   onPress: (category: MainCategory) => void;
 }
 
-const CategoryCell = memo(function CategoryCell({ category, label, onPress }: CategoryCellProps) {
+const CategoryCell = memo(function CategoryCell({ category, label, width, onPress }: CategoryCellProps) {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const handlePress = useCallback(() => onPress(category), [onPress, category]);
@@ -23,7 +25,7 @@ const CategoryCell = memo(function CategoryCell({ category, label, onPress }: Ca
     <Pressable
       hitSlop={4}
       onPress={handlePress}
-      style={({ pressed }) => [styles.cell, pressed && styles.cellPressed]}
+      style={({ pressed }) => [styles.cell, { width }, pressed && styles.cellPressed]}
     >
       {({ pressed }) => (
         <>
@@ -43,6 +45,8 @@ function CategoryGrid({ onPress }: CategoryGridProps) {
   const router = useRouter();
   const { t } = useAppTranslation();
   const styles = useThemedStyles(createStyles);
+  const { iconCols, gridCellWidth } = useResponsive();
+  const cellWidth = gridCellWidth(iconCols, H_PAD, GAP);
 
   const handlePress = useCallback(
     (cat: MainCategory) => {
@@ -59,8 +63,8 @@ function CategoryGrid({ onPress }: CategoryGridProps) {
   );
 
   const rows: MainCategory[][] = [];
-  for (let i = 0; i < MAIN_CATEGORIES.length; i += COLS) {
-    rows.push(MAIN_CATEGORIES.slice(i, i + COLS));
+  for (let i = 0; i < MAIN_CATEGORIES.length; i += iconCols) {
+    rows.push(MAIN_CATEGORIES.slice(i, i + iconCols));
   }
 
   return (
@@ -72,6 +76,7 @@ function CategoryGrid({ onPress }: CategoryGridProps) {
               key={cat.key}
               category={cat}
               label={t(`categories.${cat.key}`) || cat.name}
+              width={cellWidth}
               onPress={handlePress}
             />
           ))}

@@ -434,6 +434,18 @@ export const postAd = {
   checklistVisibleToBuyers: "Hadda waxay u muuqataa iibsadayaasha",
   viewListing: "Eeg Xayeysiiskayga",
   viewMyAds: "Eeg Xayeysiisyadayda",
+  socialShareTitle: "Ku faafi xayeysiiskaaga",
+  socialSharingTo: "Waxaa lagu faafinayaa",
+  socialPostNow: "Haa, Hadda Dir",
+  socialSkip: "Ka bood",
+  socialPosting: "Waa la dirayaa…",
+  socialDone: "Waa la dhammeeyay!",
+  socialFbLoading: "Waxaa lagu dirayaa bogga Facebook ee Karaadi…",
+  socialFbDone: "Waxaa lagu diray bogga Facebook ee Karaadi!",
+  socialFbError: "Lama dirin — isku day mar kale",
+  socialTtLoading: "Waxaa lagu dirayaa bogga TikTok ee Karaadi…",
+  socialTtDone: "Waxaa lagu diray bogga TikTok ee Karaadi!",
+  socialTtError: "Lama dirin — hubi xogta aqoonsiga",
 } as const;
 
 export const about = {

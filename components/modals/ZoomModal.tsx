@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { ZoomModalProps } from '../../util/types';
 import {
-  View, Image, FlatList, TouchableOpacity, Modal, StatusBar, Text, Platform,
+  View, Image, FlatList, TouchableOpacity, Modal, StatusBar, Text,
 } from 'react-native';
 import { Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { getModalHeaderPaddingTop } from '../common/common-for-ios-andriod';
 import { createStyles } from '../../util/styles/detail/ZoomModal.styles';
 
 const { width, height } = Dimensions.get('window');
@@ -37,7 +38,7 @@ export default function ZoomModal({ visible, images, startIndex, title, onClose 
   return (
     <Modal visible={visible} transparent={false} animationType="fade" statusBarTranslucent onRequestClose={onClose}>
       <StatusBar barStyle="light-content" backgroundColor={Colors.black} />
-      <View style={[styles.root, { paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight ?? 24) : insets.top }]}>
+      <View style={[styles.root, { paddingTop: getModalHeaderPaddingTop(insets.top) }]}>
 
         <View style={styles.header}>
           <Text style={styles.headerTitle} numberOfLines={1}>{title}</Text>

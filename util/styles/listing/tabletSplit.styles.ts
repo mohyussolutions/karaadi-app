@@ -16,3 +16,10 @@ export function createTabletSplitNarrowStyles(Colors: ColorPalette) {
     rightCol: { flex: 0.60 },
   });
 }
+
+export function createTabletPortraitStyles(_Colors: ColorPalette) {
+  return StyleSheet.create({
+    scrollContent: { alignItems: 'center' },
+    inner: { width: '100%', maxWidth: 760 },
+  });
+}

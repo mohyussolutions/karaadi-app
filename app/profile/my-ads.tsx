@@ -3,7 +3,8 @@ import { View, FlatList, TouchableOpacity, Text, RefreshControl } from 'react-na
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { MyAdCard, EmptyState } from '../../components/shared';
+import { EmptyState } from '../../components/shared';
+import MyAdCard from '../../components/cards/MyAdCard';
 import { LoadingSpinner } from '../../components/loading';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/profile/myAds.styles';

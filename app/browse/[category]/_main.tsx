@@ -7,14 +7,15 @@ import {
   FlatList,
   RefreshControl,
   ScrollView,
-  Dimensions,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
 import { getCategoryByKey, SUB_I18N_GROUP } from "../../../constants/categories";
-import { ListingCard, ListingCardSkeleton, EmptyState, AppIcon } from "../../../components/shared";
+import { EmptyState, AppIcon } from "../../../components/shared";
+import ListingCard from "../../../components/cards/ListingCard";
+import ListingCardSkeleton from "../../../components/cards/ListingCardSkeleton";
 import BottomTabBar from "../../../components/layout/BottomTabBar";
 import { useAppTranslation } from "../../../hooks/useAppTranslation";
 import { useResponsive } from "../../../hooks/useResponsive";
@@ -23,18 +24,18 @@ import { useAppSelector } from "../../../store/store";
 import type { SubCategory } from "../../../constants";
 import type { ListingBase } from "../../../util/types/listing.types";
 import type { GridProps, SidebarProps } from "../../../util/types";
-import { createStyles, H_PAD, GAP, GRID_GAP, GRID_COLS } from "../../../util/styles/browse/main.styles";
+import { createStyles, H_PAD, GAP, GRID_GAP } from "../../../util/styles/browse/main.styles";
 
-const SCREEN_W = Dimensions.get("window").width;
-const GRID_CELL_W = (SCREEN_W - H_PAD * 2 - GRID_GAP * (GRID_COLS - 1)) / GRID_COLS;
 const SKELETON_COUNT = 6;
 
 function SubcategoryGrid({ subs, group, onPress }: GridProps) {
   const { t } = useAppTranslation();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { iconCols, gridCellWidth } = useResponsive();
+  const cellW = gridCellWidth(iconCols, H_PAD, GRID_GAP);
   const rows: SubCategory[][] = [];
-  for (let i = 0; i < subs.length; i += GRID_COLS) rows.push(subs.slice(i, i + GRID_COLS));
+  for (let i = 0; i < subs.length; i += iconCols) rows.push(subs.slice(i, i + iconCols));
 
   return (
     <View style={styles.gridWrap}>
@@ -47,7 +48,7 @@ function SubcategoryGrid({ subs, group, onPress }: GridProps) {
                 key={sub.key}
                 hitSlop={4}
                 onPress={() => onPress(sub)}
-                style={[styles.gridCell, { width: GRID_CELL_W }]}
+                style={[styles.gridCell, { width: cellW }]}
               >
                 {({ pressed }) => (
                   <>

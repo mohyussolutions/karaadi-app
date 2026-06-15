@@ -4,7 +4,7 @@
     "slug": "karaadi",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.jpg",
     "userInterfaceStyle": "automatic",
     "scheme": "karaadi",
     "ios": {
@@ -42,7 +42,7 @@
         "android.permission.FOREGROUND_SERVICE",
         "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
       ],
-      "versionCode": 9
+      "versionCode": 12
     },
     "plugins": [
       "expo-router",

@@ -13,10 +13,13 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { LoadingSpinner } from "../../components/loading";
 import BottomTabBar from "../../components/layout/BottomTabBar";
 import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
-import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL, SOCIAL_LINK_BUILDERS, placeholderAvatar } from "../../constants";
+import { SOCIAL_LINK_BUILDERS, placeholderAvatar } from "../../constants";
+import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL } from "../../util/types";
 import { useBusinessDetail } from "../../hooks/useBusinessDetail";
 import { SOCIAL_ICONS, type SocialIcons } from "../../util/icons/icons";
 import { createStyles } from "../../util/styles/business/businessDetail.styles";
+import { createTabletPortraitStyles } from "../../util/styles/listing/tabletSplit.styles";
+import { useResponsive } from "../../hooks/useResponsive";
 
 export default function BusinessDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -24,6 +27,8 @@ export default function BusinessDetailScreen() {
   const { business, loading } = useBusinessDetail(id);
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
+  const tabletPortrait = useThemedStyles(createTabletPortraitStyles);
+  const { isTablet } = useResponsive();
 
   function openLink(type: string, value: string) {
     const map: Record<string, string> = {
@@ -69,7 +74,11 @@ export default function BusinessDetailScreen() {
   return (
     <View style={s.safe}>
       <SafeAreaView style={s.flexFull} edges={[]}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={isTablet ? tabletPortrait.scrollContent : undefined}
+      >
+      <View style={isTablet ? tabletPortrait.inner : undefined}>
         <View style={s.hero}>
           <Image
             source={{
@@ -182,6 +191,7 @@ export default function BusinessDetailScreen() {
         )}
 
         <View style={s.bottomSpacer} />
+      </View>
       </ScrollView>
       </SafeAreaView>
       <BottomTabBar />

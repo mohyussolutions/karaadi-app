@@ -1,15 +1,16 @@
 import React from "react";
 import {
   View, Text, TextInput, Pressable, TouchableOpacity,
-  FlatList, Modal, KeyboardAvoidingView, Platform,
+  FlatList, Modal, KeyboardAvoidingView,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
-import { useAppTranslation } from "../../../hooks/useAppTranslation";
-import { useLocationFilterRows } from "../../../hooks/useLocationFilterRows";
-import type { LocationFilterModalProps, FilterRow } from "../../../util/types";
-import { createStyles } from "../../../util/styles/browse/subcategory.styles";
+import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
+import { useAppTranslation } from "../../hooks/useAppTranslation";
+import { useLocationFilterRows } from "../../hooks/useLocationFilterRows";
+import type { LocationFilterModalProps, FilterRow } from "../../util/types";
+import { KEYBOARD_AVOIDING_BEHAVIOR } from "../common/common-for-ios-andriod";
+import { createStyles } from "../../util/styles/browse/subcategory.styles";
 
 function FilterRowItem({
   item, active, onPress,
@@ -73,7 +74,7 @@ export function LocationFilterModal({
   return (
     <Modal visible={visible} animationType="slide" transparent statusBarTranslucent onRequestClose={onClose}>
       <Pressable style={styles.filterBackdrop} onPress={onClose} />
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={styles.filterSheet}>
+      <KeyboardAvoidingView behavior={KEYBOARD_AVOIDING_BEHAVIOR} style={styles.filterSheet}>
         <View style={styles.filterSheetHandle} />
         <View style={styles.filterSheetHeader}>
           <Text style={styles.filterSheetTitle}>{t("filters.location.mobileFilter")}</Text>

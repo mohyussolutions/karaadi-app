@@ -134,6 +134,7 @@ export const SUBSCRIPTION_ENDPOINTS = {
 };
 
 export const PAYMENT_ENDPOINTS = {
+  ME:               '/api/payments/me',
   MOBILE_INITIATE:  '/api/payments/mobile/initiate',
   MOBILE_STATUS:    (ref: string) => `/api/payments/mobile/status/${ref}`,
   WAAFI_INITIATE:   '/api/payments/waafi/initiate',
@@ -172,4 +173,25 @@ export const HAGE_ENDPOINTS = {
 export const SOCIAL_ENDPOINTS = {
   STATUS: '/api/social/status',
   POST:   '/api/social/post',
+};
+
+export const REPORT_ENDPOINTS = {
+  CREATE: '/api/reports',
+};
+
+export const SECURITY_ENDPOINTS = {
+  SESSIONS: '/api/users/sessions',
+  SESSION_LOGOUT: (id: string) => `/api/users/sessions/${id}/logout`,
+  SESSIONS_LOGOUT_ALL: '/api/users/sessions/logout-all',
+  LOGIN_HISTORY: '/api/users/login-history',
+  LOGIN_HISTORY_DELETE: (id: number) => `/api/users/login-history/${id}`,
+};
+
+export const GEO_ENDPOINTS = {
+  REGIONS: '/api/locations/regions',
+  CITIES: '/api/locations/cities',
+};
+
+export const FEE_ENDPOINTS = {
+  BASE: '/api/Fee',
 };

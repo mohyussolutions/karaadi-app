@@ -1,7 +1,4 @@
-export interface Language {
-  code: 'en' | 'so';
-  label: string;
-}
+import type { Language } from '../util/types';
 
 export const LANGUAGES: Language[] = [
   { code: 'so', label: 'SOMALI' },

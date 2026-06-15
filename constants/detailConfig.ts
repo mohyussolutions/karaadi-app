@@ -28,21 +28,6 @@ export function getConditionColor(condition?: string): string | null {
   return CONDITION_COLORS[condition.toLowerCase()] ?? null;
 }
 
-export const AMENITY_ICONS: Record<string, string> = {
-  swimmingPool: 'pool',
-  gym: 'dumbbell',
-  security: 'shield-check-outline',
-  elevator: 'elevator',
-  generator: 'lightning-bolt',
-  waterSupply: 'water',
-  airConditioning: 'snowflake',
-  garden: 'flower-outline',
-  balcony: 'home-outline',
-  parking: 'parking',
-};
-
-export const AMENITY_KEYS = Object.keys(AMENITY_ICONS);
-
 export const ITEM_MODEL_MAP: Record<string, string> = {
   cars: 'Car',
   boats: 'Boat',

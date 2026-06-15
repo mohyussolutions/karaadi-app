@@ -1,5 +1,4 @@
 export * from './animations';
-export * from './businessTypes';
 export * from './categories';
 export * from './config';
 export * from './detailConfig';

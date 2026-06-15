@@ -110,6 +110,10 @@ export default function AppNavigator() {
           }}
         />
         <Stack.Screen
+          name="listing/report/[id]"
+          options={{ headerShown: false, presentation: "card" }}
+        />
+        <Stack.Screen
           name="browse/[category]/index"
           options={{ headerShown: false }}
         />

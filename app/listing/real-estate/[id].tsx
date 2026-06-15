@@ -9,26 +9,27 @@ import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
 import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
-import { REAL_ESTATE_ENDPOINTS, DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, AMENITY_ICONS, AMENITY_KEYS } from '../../../constants';
+import { REAL_ESTATE_ENDPOINTS, DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE } from '../../../constants';
+import { AMENITY_ICONS, AMENITY_KEYS } from '../../../util/icons/icons';
 import { useRealEstateDetail } from '../../../hooks/useRealEstateDetail';
 import ImageGallery from '../../../components/detail/ImageGallery';
-import ZoomModal from '../../../components/detail/ZoomModal';
-import SellerCard from '../../../components/detail/SellerCard';
-import { SpecGrid } from '../../../components/detail/DetailCard';
+import ZoomModal from '../../../components/modals/ZoomModal';
+import SellerCard from '../../../components/cards/SellerCard';
+import ReportLink from '../../../components/detail/ReportLink';
+import { SpecGrid } from '../../../components/cards/DetailCard';
 import RecommendedSection from '../../../components/detail/RecommendedSection';
 import { SocialShareSheet } from '../../../components/social';
 import DetailNotFound from '../../../components/detail/DetailNotFound';
-import DetailActionBar from '../../../components/detail/DetailActionBar';
 import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
 import { createStyles } from '../../../util/styles/listing/realEstate.styles';
-import { createTabletSplitStyles } from '../../../util/styles/listing/tabletSplit.styles';
+import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplit.styles';
 import { useResponsive } from '../../../hooks/useResponsive';
 
 export default function RealEstateDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { t } = useTranslation();
-  const { isTabletLandscape } = useResponsive();
+  const { isTablet, isTabletLandscape } = useResponsive();
   const {
     item, loading, isFavorite,
     activeImage, setActiveImage,
@@ -41,6 +42,7 @@ export default function RealEstateDetailScreen() {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const tabletSplit = useThemedStyles(createTabletSplitStyles);
+  const tabletPortrait = useThemedStyles(createTabletPortraitStyles);
 
   if (loading) return <SwipeDownToClose><DetailSkeleton /></SwipeDownToClose>;
   if (!item) return <SwipeDownToClose><DetailNotFound onBack={() => router.back()} /></SwipeDownToClose>;
@@ -140,21 +142,21 @@ export default function RealEstateDetailScreen() {
         </View>
       )}
 
-      {item.user && (
-        <SellerCard
-          username={item.user.username} profileImage={item.user.profileImage}
-          userId={item?.userId || item?.user?._id || item?.user?.id || null}
-          phone={item.user.phone} subtitle={t('realEstateDetail.activeSeller')}
-          onMessage={item.maGaday ? undefined : handleContact}
-          disabled={Boolean(item.maGaday)}
-        />
-      )}
+      <SellerCard
+        username={item.user?.username} profileImage={item.user?.profileImage}
+        userId={item?.userId || item?.user?._id || item?.user?.id || null}
+        phone={item.user?.phone} subtitle={t('realEstateDetail.activeSeller')}
+        onMessage={item.maGaday ? undefined : handleContact}
+        disabled={Boolean(item.maGaday)}
+      />
 
       {item.maGaday && (
         <View style={styles.soldBanner}>
           <Text style={styles.soldBannerText}>{t('realEstateDetail.waaLaGatay')}</Text>
         </View>
       )}
+
+      <ReportLink itemId={id} itemType="REAL_ESTATE" />
 
       {desc.length > 0 && (
         <View style={styles.card}>
@@ -189,24 +191,21 @@ export default function RealEstateDetailScreen() {
             </ScrollView>
           </View>
         ) : (
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <ImageGallery
-              images={images} activeIndex={activeImage}
-              onActiveChange={setActiveImage} onImagePress={() => setZoomed(true)}
-              isFavorite={isFavorite} onFavorite={toggleFav} onShare={handleShare}
-              badge={badge} isSold={Boolean(item.maGaday)}
-            />
-            {rightContent}
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={isTablet ? tabletPortrait.scrollContent : undefined}
+          >
+            <View style={isTablet ? tabletPortrait.inner : undefined}>
+              <ImageGallery
+                images={images} activeIndex={activeImage}
+                onActiveChange={setActiveImage} onImagePress={() => setZoomed(true)}
+                isFavorite={isFavorite} onFavorite={toggleFav} onShare={handleShare}
+                badge={badge} isSold={Boolean(item.maGaday)}
+              />
+              {rightContent}
+            </View>
           </ScrollView>
         )}
-
-        <DetailActionBar
-          priceLabel={item.price > 0 ? formatPrice(item.price) : t('priceOnRequest')}
-          titleLabel={item.title}
-          onMessage={item.maGaday ? undefined : handleContact}
-          messageLabel={t('realEstateDetail.sendMessage')}
-          messageDisabled={Boolean(item.maGaday)}
-        />
 
         <ZoomModal visible={zoomed} images={images} startIndex={activeImage} title={item.title} onClose={() => setZoomed(false)} />
         <SocialShareSheet

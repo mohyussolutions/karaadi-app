@@ -10,6 +10,8 @@ export type {
 
 export type IconName = ComponentProps<typeof MaterialCommunityIconsType>['name'];
 
+export { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL } from './businessTypes';
+
 export type { User, AuthResponse } from './user.types';
 export type {
   SpecRow, DetailCardProps, ImageGalleryProps, RecommendedSectionProps,
@@ -22,13 +24,14 @@ export type {
   CityAccordionPanelProps, RegionAccordionPanelProps,
   TabItem, LoadingSpinnerProps, EmptyStateProps, ListingCardProps, MyAdCardProps,
   SplashScreenProps, ResponsiveLayoutProps, ResponsiveInfo, MenuItem, SettingsRow,
-  PaymentStatusConfig, PaymentCategoryInfo,
+  PaymentStatusConfig, PaymentCategoryInfo, Language, BizStepDef,
 } from './shared.types';
 export type {
   ListingBase, Car, RealEstate, Motorcycle, Boat,
   MarketplaceItem, FarmEquipment, Job, WantedItem,
   AnyListing, PaginatedResponse, VehicleListing,
   Subscription, SubscriptionPayload, Favorite, SearchResult, WantedFormState,
+  VehicleSpecField, VehicleTypeConfig,
 } from './listing.types';
 export type { Chat, ChatMessage, ChatUser, Chatroom } from './chat.types';
 export type { HageMessage, ListingRef, HageChatResult } from './hage.types';

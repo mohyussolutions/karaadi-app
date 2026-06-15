@@ -1,6 +1,7 @@
 {
   "cli": {
-    "version": ">= 12.0.0"
+    "version": ">= 12.0.0",
+    "appVersionSource": "remote"
   },
   "build": {
     "development": {
@@ -36,10 +37,10 @@
         "track": "internal"
       },
       "ios": {
-        "ascApiKeyPath": "./AuthKey_XXXXXXXXXX.p8",
-        "ascApiKeyIssuerId": "REPLACE_WITH_ASC_API_KEY_ISSUER_ID",
-        "ascApiKeyId": "REPLACE_WITH_ASC_API_KEY_ID",
-        "appleTeamId": "REPLACE_WITH_APPLE_TEAM_ID"
+        "ascApiKeyPath": "./AuthKey_YYTS8T47BQ.p8",
+        "ascApiKeyIssuerId": "c60673ac-14fe-4ffb-ada0-b2ced34faf6f",
+        "ascApiKeyId": "YYTS8T47BQ",
+        "appleTeamId": "PPPF27LDWQ"
       }
     }
   }

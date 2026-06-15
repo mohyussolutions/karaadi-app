@@ -12,23 +12,33 @@ import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
 import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, VEHICLE_ENDPOINTS } from '../../../constants';
 import { useVehicleDetail } from '../../../hooks/useVehicleDetail';
 import ImageGallery from '../../../components/detail/ImageGallery';
-import ZoomModal from '../../../components/detail/ZoomModal';
-import SellerCard from '../../../components/detail/SellerCard';
-import { SpecGrid } from '../../../components/detail/DetailCard';
+import ZoomModal from '../../../components/modals/ZoomModal';
+import SellerCard from '../../../components/cards/SellerCard';
+import ReportLink from '../../../components/detail/ReportLink';
+import { SpecGrid } from '../../../components/cards/DetailCard';
 import RecommendedSection from '../../../components/detail/RecommendedSection';
 import { SocialShareSheet } from '../../../components/social';
 import DetailNotFound from '../../../components/detail/DetailNotFound';
 import DetailActionBar from '../../../components/detail/DetailActionBar';
 import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
 import { createStyles } from '../../../util/styles/listing/vehicle.styles';
-import { createTabletSplitStyles } from '../../../util/styles/listing/tabletSplit.styles';
+import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplit.styles';
 import { useResponsive } from '../../../hooks/useResponsive';
+
+const VEHICLE_REPORT_TYPES: Record<string, string> = {
+  cars: 'CAR',
+  boats: 'BOAT',
+  motorcycles: 'MOTORCYCLE',
+  'farm-equipment': 'TRAKTOR',
+  farmequipment: 'TRAKTOR',
+  traktor: 'TRAKTOR',
+};
 
 export default function VehicleDetailScreen() {
   const { id, category } = useLocalSearchParams<{ id: string; category: string }>();
   const router = useRouter();
   const { t } = useTranslation();
-  const { isTabletLandscape } = useResponsive();
+  const { isTablet, isTabletLandscape } = useResponsive();
   const {
     item, loading, isFavorite,
     activeImage, setActiveImage,
@@ -40,6 +50,7 @@ export default function VehicleDetailScreen() {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const tabletSplit = useThemedStyles(createTabletSplitStyles);
+  const tabletPortrait = useThemedStyles(createTabletPortraitStyles);
 
   if (loading) return <SwipeDownToClose><DetailSkeleton /></SwipeDownToClose>;
   if (!item) return <SwipeDownToClose><DetailNotFound onBack={() => router.back()} /></SwipeDownToClose>;
@@ -119,17 +130,17 @@ export default function VehicleDetailScreen() {
         </View>
       )}
 
-      {item.user && (
-        <SellerCard
-          username={item.user.username}
-          userId={item?.userId || item?.user?._id || item?.user?.id || null}
-          profileImage={item.user.profileImage}
-          phone={item.user.phone}
-          subtitle={t('realEstateDetail.activeSeller')}
-          onCall={handleCall}
-          onMessage={item.maGaday ? undefined : handleContact}
-        />
-      )}
+      <SellerCard
+        username={item.user?.username}
+        userId={item?.userId || item?.user?._id || item?.user?.id || null}
+        profileImage={item.user?.profileImage}
+        phone={item.user?.phone}
+        subtitle={t('realEstateDetail.activeSeller')}
+        onCall={handleCall}
+        onMessage={item.maGaday ? undefined : handleContact}
+      />
+
+      <ReportLink itemId={id} itemType={VEHICLE_REPORT_TYPES[category?.toLowerCase()] || 'CAR'} />
 
       <RecommendedSection
         endpoint={VEHICLE_ENDPOINTS[category] || `/api/${category}`}
@@ -144,9 +155,6 @@ export default function VehicleDetailScreen() {
     <DetailActionBar
       onCall={item.user?.phone ? handleCall : undefined}
       callLabel={t('realEstateDetail.showPhone')}
-      onMessage={item.maGaday ? undefined : handleContact}
-      messageLabel={t('realEstateDetail.sendMessage')}
-      messageDisabled={Boolean(item.maGaday)}
     />
   );
 
@@ -163,14 +171,19 @@ export default function VehicleDetailScreen() {
             </ScrollView>
           </View>
         ) : (
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <ImageGallery
-              images={images} activeIndex={activeImage}
-              onActiveChange={setActiveImage} onImagePress={() => setZoomed(true)}
-              isFavorite={isFavorite} onFavorite={toggleFav} onShare={handleShare}
-              badge={badge} isSold={Boolean(item.maGaday)}
-            />
-            {mainContent}
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={isTablet ? tabletPortrait.scrollContent : undefined}
+          >
+            <View style={isTablet ? tabletPortrait.inner : undefined}>
+              <ImageGallery
+                images={images} activeIndex={activeImage}
+                onActiveChange={setActiveImage} onImagePress={() => setZoomed(true)}
+                isFavorite={isFavorite} onFavorite={toggleFav} onShare={handleShare}
+                badge={badge} isSold={Boolean(item.maGaday)}
+              />
+              {mainContent}
+            </View>
           </ScrollView>
         )}
 

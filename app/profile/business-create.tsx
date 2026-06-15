@@ -15,6 +15,7 @@ import { apiClient } from '../../api/client';
 import { BUSINESSES_ENDPOINTS } from '../../constants';
 import { getImageUrl } from '../../util/helpers';
 import { CheckoutBar } from '../../components/checklist';
+import { BIZ_STEPS } from '../../(links)/checkbusiness';
 import type { StepItem, BusinessPlan, BusinessApplyFormState } from '../../util/types';
 import { LoadingSpinner } from '../../components/loading';
 import { MAIN_CATEGORIES } from '../../navigation/main';
@@ -54,12 +55,7 @@ export default function BusinessCreateScreen() {
   const [initialLogo, setInitialLogo] = useState<string | undefined>(undefined);
   const [loadingBiz, setLoadingBiz] = useState(true);
 
-  const BIZ_STEPS: StepItem[] = [
-    { key: 'apply', label: t('mine.businesses.stepApply') },
-    { key: 'approval', label: t('mine.businesses.stepApproval') },
-    { key: 'plan', label: t('mine.businesses.stepPlan') },
-    { key: 'post', label: t('mine.businesses.stepPost') },
-  ];
+  const bizSteps: StepItem[] = BIZ_STEPS.map((step) => ({ key: step.key, label: t(step.labelKey) }));
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -115,7 +111,7 @@ export default function BusinessCreateScreen() {
 
   return (
     <SafeAreaView style={s.safe} edges={['bottom']}>
-      <CheckoutBar steps={BIZ_STEPS} currentIndex={bizStep} />
+      <CheckoutBar steps={bizSteps} currentIndex={bizStep} />
 
       {bizStep === 0 && (
         <ApplyStep

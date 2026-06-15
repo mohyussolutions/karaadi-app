@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../store/authStore';
 import { apiClient } from '../api/client';
+import { SECURITY_ENDPOINTS } from '../constants';
 
 export interface Session {
   id: string;
@@ -34,8 +35,8 @@ export function useSecuritySettings() {
     setLoading(true);
     try {
       const [sessRes, histRes] = await Promise.allSettled([
-        apiClient.post('/api/users/sessions'),
-        apiClient.get('/api/users/login-history'),
+        apiClient.post(SECURITY_ENDPOINTS.SESSIONS),
+        apiClient.get(SECURITY_ENDPOINTS.LOGIN_HISTORY),
       ]);
       setSessions(sessRes.status === 'fulfilled' ? (sessRes.value.data || []) : []);
       setHistory(histRes.status === 'fulfilled' ? (histRes.value.data || []) : []);
@@ -51,7 +52,7 @@ export function useSecuritySettings() {
 
   async function removeSession(id: string) {
     try {
-      await apiClient.post(`/api/users/sessions/${id}/logout`);
+      await apiClient.post(SECURITY_ENDPOINTS.SESSION_LOGOUT(id));
       setSessions((prev) => prev.filter((s) => s.id !== id));
     } catch {}
   }
@@ -64,7 +65,7 @@ export function useSecuritySettings() {
         onPress: async () => {
           setLoggingOut(true);
           try {
-            await apiClient.post('/api/users/sessions/logout-all');
+            await apiClient.post(SECURITY_ENDPOINTS.SESSIONS_LOGOUT_ALL);
             await clearAuth();
             router.replace('/(auth)/login');
           } catch {
@@ -77,12 +78,12 @@ export function useSecuritySettings() {
 
   function deleteHistoryEntry(id: number) {
     setHistory((prev) => prev.filter((h) => h.id !== id));
-    apiClient.delete(`/api/users/login-history/${id}`).catch(() => {});
+    apiClient.delete(SECURITY_ENDPOINTS.LOGIN_HISTORY_DELETE(id)).catch(() => {});
   }
 
   function clearAllHistory() {
     setHistory([]);
-    apiClient.delete('/api/users/login-history').catch(() => {});
+    apiClient.delete(SECURITY_ENDPOINTS.LOGIN_HISTORY).catch(() => {});
   }
 
   return { user, clearAuth, sessions, history, loading, loggingOut, removeSession, confirmLogoutAll, deleteHistoryEntry, clearAllHistory };

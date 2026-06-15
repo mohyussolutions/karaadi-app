@@ -184,6 +184,18 @@ export interface VehicleListing extends ListingBase {
   length?: number;
 }
 
+export interface VehicleSpecField {
+  key: string;
+  label: string;
+  format?: (v: any) => string;
+}
+
+export interface VehicleTypeConfig {
+  label: string;
+  endpoint: string;
+  fields: VehicleSpecField[];
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
   total: number;

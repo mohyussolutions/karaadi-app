@@ -5,7 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { VideoSource } from 'expo-video';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { VideoPopupModal } from '../../components/shared';
+import VideoPopupModal from '../../components/modals/VideoPopupModal';
 import { createStyles } from '../../util/styles/profile/tutorials.styles';
 
 const VIDEO_SOURCE: VideoSource = require('../../assets/videos/karaadi-trim.mp4');

@@ -11,21 +11,22 @@ import { DetailSkeleton } from '../../../components/loading';
 import { SUBSCRIPTION_ENDPOINTS } from '../../../constants';
 import { formatPrice, formatDate } from '../../../util/helpers';
 import { useSubscriptionDetail } from '../../../hooks/useSubscriptionDetail';
-import SellerCard from '../../../components/detail/SellerCard';
+import SellerCard from '../../../components/cards/SellerCard';
+import ReportLink from '../../../components/detail/ReportLink';
 import RecommendedSection from '../../../components/detail/RecommendedSection';
 import { SocialShareSheet } from '../../../components/social';
 import DetailNotFound from '../../../components/detail/DetailNotFound';
 import DetailActionBar from '../../../components/detail/DetailActionBar';
 import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
 import { createStyles } from '../../../util/styles/listing/subscription.styles';
-import { createTabletSplitNarrowStyles } from '../../../util/styles/listing/tabletSplit.styles';
+import { createTabletSplitNarrowStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplit.styles';
 import { useResponsive } from '../../../hooks/useResponsive';
 
 export default function SubscriptionDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { t } = useTranslation();
-  const { isTabletLandscape } = useResponsive();
+  const { isTablet, isTabletLandscape } = useResponsive();
   const {
     item, loading,
     showPhone, setShowPhone,
@@ -37,6 +38,7 @@ export default function SubscriptionDetailScreen() {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const tabletSplitNarrow = useThemedStyles(createTabletSplitNarrowStyles);
+  const tabletPortrait = useThemedStyles(createTabletPortraitStyles);
 
   if (loading) return <SwipeDownToClose><DetailSkeleton /></SwipeDownToClose>;
   if (!item) return <SwipeDownToClose><DetailNotFound icon="bell-outline" message="Subscription not found" onBack={() => router.back()} /></SwipeDownToClose>;
@@ -105,6 +107,8 @@ export default function SubscriptionDetailScreen() {
         onMessage={handleMessage}
         messageBtnLabel={t('realEstateDetail.sendMessage')}
       />
+      <ReportLink itemId={id} itemType="SUBSCRIPTION" />
+
       <RecommendedSection endpoint={SUBSCRIPTION_ENDPOINTS.PLANS} excludeId={id} />
       <View style={styles.bottomSpacer} />
     </View>
@@ -123,9 +127,14 @@ export default function SubscriptionDetailScreen() {
             </ScrollView>
           </View>
         ) : (
-          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
-            {heroPanel}
-            {bodyContent}
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={isTablet ? [styles.scroll, tabletPortrait.scrollContent] : styles.scroll}
+          >
+            <View style={isTablet ? tabletPortrait.inner : undefined}>
+              {heroPanel}
+              {bodyContent}
+            </View>
           </ScrollView>
         )}
 

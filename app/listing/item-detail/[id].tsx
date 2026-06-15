@@ -13,22 +13,22 @@ import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
 import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, CONDITION_COLORS } from '../../../constants';
 import { useItemDetail } from '../../../hooks/useItemDetail';
 import ImageGallery from '../../../components/detail/ImageGallery';
-import ZoomModal from '../../../components/detail/ZoomModal';
-import SellerCard from '../../../components/detail/SellerCard';
+import ZoomModal from '../../../components/modals/ZoomModal';
+import SellerCard from '../../../components/cards/SellerCard';
+import ReportLink from '../../../components/detail/ReportLink';
 import RecommendedSection from '../../../components/detail/RecommendedSection';
 import { SocialShareSheet } from '../../../components/social';
 import DetailNotFound from '../../../components/detail/DetailNotFound';
-import DetailActionBar from '../../../components/detail/DetailActionBar';
 import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
 import { createStyles } from '../../../util/styles/listing/itemDetail.styles';
-import { createTabletSplitStyles } from '../../../util/styles/listing/tabletSplit.styles';
+import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplit.styles';
 import { useResponsive } from '../../../hooks/useResponsive';
 
 export default function ItemDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { t } = useTranslation();
-  const { isTabletLandscape } = useResponsive();
+  const { isTablet, isTabletLandscape } = useResponsive();
   const {
     item, loading, isFavorite,
     activeImage, setActiveImage,
@@ -41,6 +41,7 @@ export default function ItemDetailScreen() {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const tabletSplit = useThemedStyles(createTabletSplitStyles);
+  const tabletPortrait = useThemedStyles(createTabletPortraitStyles);
 
   if (loading) return <SwipeDownToClose><DetailSkeleton /></SwipeDownToClose>;
   if (!item) return <SwipeDownToClose><DetailNotFound onBack={() => router.back()} /></SwipeDownToClose>;
@@ -100,22 +101,21 @@ export default function ItemDetailScreen() {
           ))}
         </View>
       )}
-      {item.user && (
-        <SellerCard
-          username={item.user.username}
-          userId={item?.userId || item?.user?._id || item?.user?.id || null}
-          profileImage={item.user.profileImage}
-          phone={item.user.phone}
-          subtitle={t('realEstateDetail.activeSeller')}
-          onMessage={item.maGaday ? undefined : handleContact}
-          disabled={Boolean(item.maGaday)}
-        />
-      )}
+      <SellerCard
+        username={item.user?.username}
+        userId={item?.userId || item?.user?._id || item?.user?.id || null}
+        profileImage={item.user?.profileImage}
+        phone={item.user?.phone}
+        subtitle={t('realEstateDetail.activeSeller')}
+        onMessage={item.maGaday ? undefined : handleContact}
+        disabled={Boolean(item.maGaday)}
+      />
       {item.maGaday && (
         <View style={styles.soldBanner}>
           <Text style={styles.soldBannerText}>{t('realEstateDetail.waaLaGatay')}</Text>
         </View>
       )}
+      <ReportLink itemId={id} itemType="MARKETPLACE" />
       {desc.length > 0 && (
         <View style={styles.card}>
           <Text style={styles.cardTitle}>{t('realEstateDetail.descriptionLabel')}</Text>
@@ -153,19 +153,16 @@ export default function ItemDetailScreen() {
             </ScrollView>
           </View>
         ) : (
-          <ScrollView showsVerticalScrollIndicator={false}>
-            {galleryContent}
-            {bodyContent}
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={isTablet ? tabletPortrait.scrollContent : undefined}
+          >
+            <View style={isTablet ? tabletPortrait.inner : undefined}>
+              {galleryContent}
+              {bodyContent}
+            </View>
           </ScrollView>
         )}
-
-        <DetailActionBar
-          priceLabel={item.price > 0 ? formatPrice(item.price) : t('priceOnRequest')}
-          titleLabel={item.title}
-          onMessage={item.maGaday ? undefined : handleContact}
-          messageLabel={t('realEstateDetail.sendMessage')}
-          messageDisabled={Boolean(item.maGaday)}
-        />
 
         <ZoomModal visible={zoomed} images={images} startIndex={activeImage} title={item.title} onClose={() => setZoomed(false)} />
         <SocialShareSheet

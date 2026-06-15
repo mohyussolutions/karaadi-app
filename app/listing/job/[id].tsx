@@ -12,23 +12,24 @@ import { JOBS_ENDPOINTS, DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE } from '../../
 import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
 import { useJobDetail, formatSalary } from '../../../hooks/useJobDetail';
 import ImageGallery from '../../../components/detail/ImageGallery';
-import ZoomModal from '../../../components/detail/ZoomModal';
-import { SpecGrid } from '../../../components/detail/DetailCard';
-import SellerCard from '../../../components/detail/SellerCard';
+import ZoomModal from '../../../components/modals/ZoomModal';
+import { SpecGrid } from '../../../components/cards/DetailCard';
+import SellerCard from '../../../components/cards/SellerCard';
+import ReportLink from '../../../components/detail/ReportLink';
 import RecommendedSection from '../../../components/detail/RecommendedSection';
 import { SocialShareSheet } from '../../../components/social';
 import DetailNotFound from '../../../components/detail/DetailNotFound';
 import DetailActionBar from '../../../components/detail/DetailActionBar';
 import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
 import { createStyles } from '../../../util/styles/listing/job.styles';
-import { createTabletSplitStyles } from '../../../util/styles/listing/tabletSplit.styles';
+import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplit.styles';
 import { useResponsive } from '../../../hooks/useResponsive';
 
 export default function JobDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { t } = useTranslation();
-  const { isTabletLandscape } = useResponsive();
+  const { isTablet, isTabletLandscape } = useResponsive();
   const {
     item, loading, isFavorite,
     activeImage, setActiveImage,
@@ -41,6 +42,7 @@ export default function JobDetailScreen() {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const tabletSplit = useThemedStyles(createTabletSplitStyles);
+  const tabletPortrait = useThemedStyles(createTabletPortraitStyles);
 
   if (loading) return <SwipeDownToClose><DetailSkeleton /></SwipeDownToClose>;
   if (!item) return <SwipeDownToClose><DetailNotFound icon="briefcase-outline" message={t('jobsPage.backLabel') || 'Job not found'} onBack={() => router.back()} /></SwipeDownToClose>;
@@ -119,6 +121,8 @@ export default function JobDetailScreen() {
           <Text style={styles.description}>{item.requirements}</Text>
         </View>
       )}
+      <ReportLink itemId={id} itemType="MARKETPLACE" />
+
       <RecommendedSection endpoint={JOBS_ENDPOINTS.LIST} excludeId={id} />
       <View style={styles.bottomSpacer} />
     </View>
@@ -137,9 +141,14 @@ export default function JobDetailScreen() {
             </ScrollView>
           </View>
         ) : (
-          <ScrollView showsVerticalScrollIndicator={false}>
-            {galleryContent}
-            {bodyContent}
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={isTablet ? tabletPortrait.scrollContent : undefined}
+          >
+            <View style={isTablet ? tabletPortrait.inner : undefined}>
+              {galleryContent}
+              {bodyContent}
+            </View>
           </ScrollView>
         )}
 

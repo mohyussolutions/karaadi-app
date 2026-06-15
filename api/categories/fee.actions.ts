@@ -1,10 +1,8 @@
 import { apiClient } from '../client';
-import { PAYMENT_ENDPOINTS } from '../../constants';
+import { PAYMENT_ENDPOINTS, FEE_ENDPOINTS } from '../../constants';
 
-const FEE = '/api/Fee';
-
-const feeUrl = (sub: string) => `${FEE}/${sub}`;
-const feeById = (sub: string, id: string) => `${FEE}/${sub}/${id}`;
+const feeUrl = (sub: string) => `${FEE_ENDPOINTS.BASE}/${sub}`;
+const feeById = (sub: string, id: string) => `${FEE_ENDPOINTS.BASE}/${sub}/${id}`;
 
 const CATEGORY_FEE_KEY: Record<string, string> = {
   Cars: 'cars',
