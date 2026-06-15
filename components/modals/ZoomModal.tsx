@@ -7,7 +7,9 @@ import { Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useResponsive } from '../../hooks/useResponsive';
 import { getModalHeaderPaddingTop } from '../common/common-for-ios-andriod';
+import { tabletModalStyles, TABLET_MODAL_ICON_SIZES } from '../common/ipad';
 import { createStyles } from '../../util/styles/detail/ZoomModal.styles';
 
 const { width, height } = Dimensions.get('window');
@@ -18,6 +20,7 @@ export default function ZoomModal({ visible, images, startIndex, title, onClose 
   const [current, setCurrent] = useState(startIndex);
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { isTablet } = useResponsive();
 
   useEffect(() => {
     if (visible) {
@@ -41,13 +44,13 @@ export default function ZoomModal({ visible, images, startIndex, title, onClose 
       <View style={[styles.root, { paddingTop: getModalHeaderPaddingTop(insets.top) }]}>
 
         <View style={styles.header}>
-          <Text style={styles.headerTitle} numberOfLines={1}>{title}</Text>
+          <Text style={[styles.headerTitle, isTablet && tabletModalStyles.zoomHeaderTitle]} numberOfLines={1}>{title}</Text>
           <View style={styles.headerRight}>
             {images.length > 1 && (
-              <Text style={styles.counter}>{current + 1} / {images.length}</Text>
+              <Text style={[styles.counter, isTablet && tabletModalStyles.zoomCounter]}>{current + 1} / {images.length}</Text>
             )}
-            <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
-              <MaterialCommunityIcons name="close" size={20} color={Colors.white} />
+            <TouchableOpacity style={[styles.closeBtn, isTablet && tabletModalStyles.zoomCloseBtn]} onPress={onClose}>
+              <MaterialCommunityIcons name="close" size={isTablet ? TABLET_MODAL_ICON_SIZES.zoomClose : 20} color={Colors.white} />
             </TouchableOpacity>
           </View>
         </View>
@@ -84,7 +87,7 @@ export default function ZoomModal({ visible, images, startIndex, title, onClose 
                 <TouchableOpacity onPress={() => goTo(index)}>
                   <Image
                     source={{ uri: img }}
-                    style={[styles.thumb, index === current && styles.thumbActive]}
+                    style={[styles.thumb, isTablet && tabletModalStyles.zoomThumb, index === current && styles.thumbActive]}
                     resizeMode="cover"
                   />
                 </TouchableOpacity>

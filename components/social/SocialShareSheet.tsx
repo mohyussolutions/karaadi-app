@@ -5,6 +5,8 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemedStyles } from '../../hooks/useTheme';
+import { useResponsive } from '../../hooks/useResponsive';
+import { tabletModalStyles, TABLET_MODAL_ICON_SIZES } from '../common/ipad';
 import { SOCIAL_SHARE_URLS, SOCIAL_BRAND_COLORS } from '../../constants';
 import type { SocialShareSheetProps, SocialAction } from '../../util/types';
 import { createStyles } from '../../util/styles/social/socialShareSheet.styles';
@@ -43,6 +45,7 @@ const SOCIALS: SocialAction[] = [
 
 function SocialShareSheet({ visible, onClose, title, message }: SocialShareSheetProps) {
   const styles = useThemedStyles(createStyles);
+  const { isTablet } = useResponsive();
 
   async function handleSocial(action: SocialAction) {
     try {
@@ -60,10 +63,10 @@ function SocialShareSheet({ visible, onClose, title, message }: SocialShareSheet
       onRequestClose={onClose}
     >
       <Pressable style={styles.backdrop} onPress={onClose} />
-      <View style={styles.sheet}>
+      <View style={[styles.sheet, isTablet && tabletModalStyles.shareSheet]}>
         <View style={styles.handle} />
-        <Text style={styles.heading} numberOfLines={1}>{title}</Text>
-        <Text style={styles.sub}>Share via</Text>
+        <Text style={[styles.heading, isTablet && tabletModalStyles.shareHeading]} numberOfLines={1}>{title}</Text>
+        <Text style={[styles.sub, isTablet && tabletModalStyles.shareSub]}>Share via</Text>
 
         <View style={styles.row}>
           {SOCIALS.map((s) => (
@@ -73,10 +76,10 @@ function SocialShareSheet({ visible, onClose, title, message }: SocialShareSheet
               onPress={() => handleSocial(s)}
               activeOpacity={0.75}
             >
-              <View style={[styles.iconWrap, { backgroundColor: s.bg }]}>
-                <MaterialCommunityIcons name={s.icon as never} size={26} color={s.color} />
+              <View style={[styles.iconWrap, { backgroundColor: s.bg }, isTablet && tabletModalStyles.shareIconWrap]}>
+                <MaterialCommunityIcons name={s.icon as never} size={isTablet ? TABLET_MODAL_ICON_SIZES.shareIcon : 26} color={s.color} />
               </View>
-              <Text style={styles.label}>{s.label}</Text>
+              <Text style={[styles.label, isTablet && tabletModalStyles.shareLabel]}>{s.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
