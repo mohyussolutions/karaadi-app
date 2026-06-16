@@ -30,7 +30,7 @@ echo "✅ GitHub up to date"
 echo ""
 echo "▶ Step 3/4 — iOS: build + submit to App Store"
 echo "   (Apple reviews in 1-3 days, then releases to users)"
-if npx eas build --profile production --platform ios --auto-submit --non-interactive; then
+if eas build --profile production --platform ios --auto-submit --non-interactive; then
   echo "✅ iOS submitted to App Store Connect"
 else
   echo "⚠️  iOS build/submit failed — check logs above"
@@ -40,13 +40,13 @@ fi
 echo ""
 echo "▶ Step 4/4 — Android: local build"
 
-if npx eas build --profile production --platform android --local --non-interactive; then
+if eas build --profile production --platform android --local --non-interactive; then
   AAB=$(ls -t build-*.aab 2>/dev/null | head -1)
   if [ -z "$AAB" ]; then
     echo "⚠️  Could not find .aab file — check project root"
   elif [ -f "./google-play-service-account.json" ]; then
     echo "   Submitting to Google Play..."
-    npx eas submit --profile production --platform android --path "$AAB" --non-interactive
+    eas submit --profile production --platform android --path "$AAB" --non-interactive
     echo "✅ Android submitted to Google Play (Internal Testing)"
     echo "   Go to Play Console → promote to Production when ready"
   else
