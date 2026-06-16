@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "@types/react": "~19.2.2",
+    "eas-cli": "^20.2.0",
     "typescript": "~6.0.3"
   },
   "overrides": {
@@ -56,11 +57,11 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "deploy": "bash scripts/deploy.sh",
-    "deploy:ios": "eas build --profile production --platform ios --auto-submit --non-interactive",
-    "deploy:android": "eas build --profile production --platform android --local && eas submit --profile production --platform android --path $(ls -t build-*.aab | head -1)",
+    "deploy:ios": "npx eas build --profile production --platform ios --auto-submit --non-interactive",
+    "deploy:android": "npx eas build --profile production --platform android --local --non-interactive",
     "build": "npm run build:ios",
-    "build:ios": "eas build --profile production --platform ios --non-interactive",
-    "build:android": "eas build --profile production --platform android --local"
+    "build:ios": "npx eas build --profile production --platform ios --non-interactive",
+    "build:android": "npx eas build --profile production --platform android --local --non-interactive"
   },
   "private": true
 }
