@@ -57,10 +57,10 @@
     "ios": "expo run:ios",
     "deploy": "eas build --profile production --platform all --auto-submit --non-interactive",
     "deploy:ios": "eas build --profile production --platform ios --auto-submit --non-interactive",
-    "deploy:android": "eas build --profile production --platform android --auto-submit --non-interactive",
+    "deploy:android": "eas build --profile production --platform android --local && eas submit --profile production --platform android --path $(ls -t build-*.aab | head -1)",
     "build": "eas build --profile production --platform all --non-interactive",
     "build:ios": "eas build --profile production --platform ios --non-interactive",
-    "build:android": "eas build --profile production --platform android --non-interactive"
+    "build:android": "eas build --profile production --platform android --local"
   },
   "private": true
 }
