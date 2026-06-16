@@ -4,7 +4,7 @@
     "slug": "karaadi",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo.jpg",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "scheme": "karaadi",
     "ios": {
@@ -61,7 +61,7 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/logo.jpg",
+          "icon": "./assets/icon.png",
           "color": "#2563EB",
           "sounds": []
         }
