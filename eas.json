@@ -24,7 +24,6 @@
     },
     "production": {
       "autoIncrement": true,
-      "submit": "production",
       "env": {
         "EXPO_PUBLIC_API_URL": "https://karaadi.onrender.com"
       },
