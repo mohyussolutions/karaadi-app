@@ -55,7 +55,7 @@
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "deploy": "npm run deploy:ios",
+    "deploy": "bash scripts/deploy.sh",
     "deploy:ios": "eas build --profile production --platform ios --auto-submit --non-interactive",
     "deploy:android": "eas build --profile production --platform android --local && eas submit --profile production --platform android --path $(ls -t build-*.aab | head -1)",
     "build": "npm run build:ios",
