@@ -8,7 +8,8 @@ import { useFonts } from "expo-font";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import GlobalHeader from "../components/layout/GlobalHeader";
-import Hage from "../components/layout/Hage";
+import BottomTabBar from "../components/layout/BottomTabBar";
+import Hage from "../features/ai-assistant";
 import NotificationBanner from "../components/layout/NotificationBanner";
 import { LoadingSpinner, SplashScreen } from "../components/loading";
 import { SaveToast } from "../components/shared";
@@ -19,6 +20,7 @@ import { useMessageBanner } from "../hooks/useMessageBanner";
 import { useSocketMessages } from "../hooks/useSocketMessages";
 import { useNotificationTap } from "../hooks/useNotificationTap";
 import { useThemeColors, useThemeMode } from "../hooks/useTheme";
+import { usePathname } from "expo-router";
 
 export default function AppNavigator() {
   const [fontsLoaded] = useFonts({ ...MaterialCommunityIcons.font });
@@ -37,6 +39,8 @@ export default function AppNavigator() {
 
   const { mode, resolved } = useThemeMode();
   const Colors = useThemeColors();
+  const pathname = usePathname();
+  const showTabBar = !pathname.startsWith("/(auth)");
 
   useEffect(() => {
     Appearance.setColorScheme(mode);
@@ -126,6 +130,7 @@ export default function AppNavigator() {
           options={{ headerShown: false, presentation: "card" }}
         />
       </Stack>
+      {showTabBar && <BottomTabBar />}
       <Hage />
       <SaveToast />
       {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}

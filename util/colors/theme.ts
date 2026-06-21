@@ -89,6 +89,7 @@ export const COLORS = {
   whiteAlpha15: 'rgba(255,255,255,0.15)',
   whiteAlpha35: 'rgba(255,255,255,0.35)',
   tabBarSolid: 'rgba(255,255,255,0.94)',
+  tabBarGlass: 'rgba(255,255,255,0.72)',
 
   favorite: '#FF3B5C',
   favoriteTint: 'rgba(255,59,92,0.18)',
@@ -193,6 +194,7 @@ export const DARK_COLORS = {
   whiteAlpha15: 'rgba(255,255,255,0.15)',
   whiteAlpha35: 'rgba(255,255,255,0.35)',
   tabBarSolid: 'rgba(30,41,59,0.94)',
+  tabBarGlass: 'rgba(20,28,48,0.72)',
 
   favorite: '#FF3B5C',
   favoriteTint: 'rgba(255,59,92,0.18)',

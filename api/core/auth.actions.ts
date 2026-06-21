@@ -64,8 +64,8 @@ export async function updatePhone(phone: string): Promise<User> {
   return data.user ?? data;
 }
 
-export async function updateProfileImage(profileImage: string): Promise<User> {
-  const { data } = await apiClient.put(AUTH_ENDPOINTS.UPDATE_PROFILE_IMAGE, { profileImage });
+export async function updateProfileImage(formData: FormData): Promise<User> {
+  const { data } = await apiClient.put(AUTH_ENDPOINTS.UPDATE_PROFILE_IMAGE, formData);
   return data.user ?? data;
 }
 

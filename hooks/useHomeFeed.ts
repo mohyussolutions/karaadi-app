@@ -3,7 +3,7 @@ import { useAppSelector, useAppDispatch } from '../store/store';
 import { fetchFeedGroup } from '../api/categories/feed.actions';
 import { apiClient } from '../api/client';
 import { FEED_ENDPOINTS } from '../constants';
-import { mergeListings, setMemCache, writeDiskCache } from '../services/feedCacheService';
+import { mergeListings, setMemCache, writeDiskCache, readDiskCache } from '../services/feedCacheService';
 import { setFeed, mergeFeed, setRecommendations, isFeedFresh } from '../store/slices/feedSlice';
 import type { ListingBase } from '../util/types/listing.types';
 
@@ -55,6 +55,12 @@ export function useHomeFeed() {
     const ctrl = new AbortController();
     async function init() {
       if (isFeedFresh(fetchedAtRef.current)) return;
+
+      const disk = await readDiskCache();
+      if (disk && disk.length > 0 && !ctrl.signal.aborted) {
+        dispatch(setFeed(sortByTierRandom(disk)));
+        setMemCache(disk);
+      }
 
       const fast = await fetchFeedGroup('fast', ctrl.signal);
       if (ctrl.signal.aborted) return;

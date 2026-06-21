@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { COLORS, RADII } from "../../theme";
+import { COLORS, RADII } from "../../colors/theme";
 
 export const styles = StyleSheet.create({
   fill: {
@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: RADII.lg,
+    borderRadius: RADII.pill,
     overflow: "hidden",
   },
   image: { borderRadius: RADII.lg },
@@ -24,5 +24,5 @@ export const styles = StyleSheet.create({
   scrimActive: { backgroundColor: COLORS.primary, opacity: 0.55 },
   placeholderIdle: { backgroundColor: COLORS.transparent },
   placeholderPressed: { backgroundColor: COLORS.whiteAlpha15 },
-  placeholderActive: { backgroundColor: COLORS.transparent },
+  placeholderActive: { backgroundColor: COLORS.primary },
 });

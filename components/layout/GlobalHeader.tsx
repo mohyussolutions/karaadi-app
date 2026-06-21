@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View, Image, TouchableOpacity, Text, Modal, Pressable,
-  TextInput, Switch, StyleSheet,
+  TextInput, Switch,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, usePathname } from 'expo-router';
@@ -37,6 +37,7 @@ export default function GlobalHeader() {
   const user = useAppSelector((s) => s.auth.user);
 
   const [showLangMenu, setShowLangMenu] = useState(false);
+  const [searchFocused, setSearchFocused] = useState(false);
 
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
@@ -138,8 +139,8 @@ export default function GlobalHeader() {
       </View>
 
       {showSearchBar && (
-        <View style={[styles.searchBar, isTablet && tabletHeaderStyles.searchBar]}>
-          <MaterialCommunityIcons name="magnify" size={isTablet ? TABLET_HEADER_ICON_SIZES.search : 16} color={Colors.textMuted} />
+        <View style={[styles.searchBar, isTablet && tabletHeaderStyles.searchBar, searchFocused && { borderColor: Colors.primary }]}>
+          <MaterialCommunityIcons name="magnify" size={isTablet ? TABLET_HEADER_ICON_SIZES.search : 16} color={searchFocused ? Colors.primary : Colors.textMuted} />
           <TextInput
             style={[styles.searchInput, isTablet && tabletHeaderStyles.searchInput]}
             value={browseQuery}
@@ -149,6 +150,8 @@ export default function GlobalHeader() {
             autoCorrect={false}
             returnKeyType="search"
             clearButtonMode="never"
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
           />
           {browseQuery.length > 0 && (
             <TouchableOpacity onPress={() => dispatch(clearBrowseQuery())} hitSlop={8}>

@@ -1,4 +1,4 @@
-import type { BizStepDef } from "../util/types";
+import type { BizStepDef } from "../../util/types";
 
 export const BIZ_STEPS: BizStepDef[] = [
   { key: 'apply', labelKey: 'mine.businesses.stepApply' },

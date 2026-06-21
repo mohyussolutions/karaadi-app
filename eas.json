@@ -37,10 +37,11 @@
         "track": "internal"
       },
       "ios": {
-        "ascApiKeyPath": "./AuthKey_YYTS8T47BQ.p8",
+        "ascApiKeyPath": "./AuthKey_T4K9ZTB9VV.p8",
         "ascApiKeyIssuerId": "c60673ac-14fe-4ffb-ada0-b2ced34faf6f",
-        "ascApiKeyId": "YYTS8T47BQ",
-        "appleTeamId": "PPPF27LDWQ"
+        "ascApiKeyId": "T4K9ZTB9VV",
+        "appleTeamId": "PPPF27LDWQ",
+        "ascAppId": "6780579199"
       }
     }
   }

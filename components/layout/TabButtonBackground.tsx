@@ -1,6 +1,6 @@
 import React from "react";
 import { ImageBackground, View, type ImageSourcePropType } from "react-native";
-import { styles } from "../util/styles/tabs/tabButtonBackground.styles";
+import { styles } from "../../util/styles/tabs/tabButtonBackground.styles";
 
 interface TabButtonBackgroundProps {
   image?: ImageSourcePropType;

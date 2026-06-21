@@ -7,7 +7,7 @@ import { createStyles } from '../../../util/styles/layout/hage.styles';
 import type { ListingRoute } from '../../../util/helpers/nav.routing';
 import type { HageMessage, ListingRef } from '../../../util/types/hage.types';
 import { ListingChip } from './ListingChip';
-import { parseHageReply } from './parseHageLinks';
+import { parseHageReply } from '../utils/parseHageLinks';
 
 interface HageMessageListProps {
   listRef: React.RefObject<FlatList<HageMessage> | null>;
@@ -71,7 +71,6 @@ export function HageMessageList({
           </View>
         )}
       />
-
       {loading && (
         <View style={styles.thinkingRow}>
           <View style={styles.thinkingDots}>

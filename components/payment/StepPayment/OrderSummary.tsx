@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
@@ -6,20 +6,6 @@ import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { planStyle } from '../../../features/new-ad/constants/config';
 import type { Plan, OrderSummaryProps, CreatedItemSummary } from '../../../util/types';
 import { createStyles } from '../../../util/styles/payment/orderSummary.styles';
-
-type Attr = { label: string; value: string };
-
-function buildAttrs(item: CreatedItemSummary | null, t: (key: string) => string): Attr[] {
-  return [
-    item?.make    && { label: t('postAd.attrMake'),    value: item.make! },
-    item?.model   && { label: t('postAd.attrModel'),   value: item.model! },
-    item?.year    && { label: t('postAd.attrYear'),    value: item.year! },
-    item?.mileage && { label: t('postAd.attrMileage'), value: `${item.mileage} km` },
-    item?.type    && { label: t('postAd.attrType'),    value: item.type! },
-    item?.color   && { label: t('postAd.attrColor'),   value: item.color! },
-    item?.price && item.price > 0 && { label: t('postAd.attrPrice'), value: `$${item.price.toLocaleString()}` },
-  ].filter(Boolean) as Attr[];
-}
 
 function ImageCarousel({ images, index, onChangeIndex }: {
   images: string[]; index: number; onChangeIndex: (i: number) => void;
@@ -76,14 +62,14 @@ function TitleSection({ item, categoryName }: { item: CreatedItemSummary | null;
   );
 }
 
-function AttributesGrid({ attrs }: { attrs: Attr[] }) {
+function AllFieldsGrid({ attrs }: { attrs: Array<{ label: string; value: string }> }) {
   const s = useThemedStyles(createStyles);
   return (
     <View style={s.attrsGrid}>
       {attrs.map((a) => (
         <View key={a.label} style={s.attrCell}>
           <Text style={s.attrLabel}>{a.label.toUpperCase()}</Text>
-          <Text style={s.attrValue} numberOfLines={1}>{a.value}</Text>
+          <Text style={s.attrValue} numberOfLines={2}>{a.value}</Text>
         </View>
       ))}
     </View>
@@ -146,14 +132,15 @@ function TotalDue({ total }: { total: number }) {
 }
 
 export function OrderSummary({ plan, item, categoryName, feeAmount }: OrderSummaryProps) {
-  const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
-  const { t } = useAppTranslation();
   const [imgIdx, setImgIdx] = useState(0);
-  const ps = planStyle(plan, Colors);
+  const ps = planStyle(plan, useThemeColors());
   const total = feeAmount + plan.price;
   const images = item?.images || [];
-  const attrs = buildAttrs(item, t);
+
+  const displayAttrs = item?.allAttrs && item.allAttrs.length > 0
+    ? item.allAttrs.filter((a) => a.value && String(a.value).trim())
+    : [];
 
   return (
     <View style={s.wrap}>
@@ -161,7 +148,7 @@ export function OrderSummary({ plan, item, categoryName, feeAmount }: OrderSumma
 
       <View style={s.card}>
         <TitleSection item={item} categoryName={categoryName} />
-        {attrs.length > 0 && <AttributesGrid attrs={attrs} />}
+        {displayAttrs.length > 0 && <AllFieldsGrid attrs={displayAttrs} />}
         {!!item?.description && <DescriptionBox text={item.description} />}
         <View style={s.divider} />
         <PriceBreakdown plan={plan} ps={ps} feeAmount={feeAmount} />

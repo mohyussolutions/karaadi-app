@@ -1,7 +1,8 @@
-import React from 'react';
+import { memo, useCallback, useState } from 'react';
 import {
-  View, Text, ScrollView, TouchableOpacity, Image, Alert,
+  View, Text, ScrollView, TouchableOpacity, Image,
 } from 'react-native';
+import { ConfirmModal } from '../../components/modals/ConfirmModal';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -11,27 +12,26 @@ import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useResponsive } from '../../hooks/useResponsive';
 import { getImageUrl } from '../../util/helpers';
 import { placeholderAvatar } from '../../constants';
-import { PROFILE_MENU_ITEMS } from '../../(links)/profileMenuItems';
+import { PROFILE_MENU_ITEMS } from '../../config/navigation/profileMenuItems';
 import type { MenuItem } from '../../util/types';
 import { createStyles } from '../../util/styles/tabs/profile.styles';
 
 const AVATAR = placeholderAvatar(80, '2563eb', 'Me');
 
-function MenuCard({ item }: { item: MenuItem }) {
-  const router = useRouter();
+const MenuCard = memo(function MenuCard({ item, onPress }: { item: MenuItem; onPress: () => void }) {
   const { t } = useTranslation();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   return (
-    <TouchableOpacity style={styles.card} onPress={() => router.push(item.route as any)} activeOpacity={0.85}>
+    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.75}>
       <View style={styles.cardIconBg}>
         <MaterialCommunityIcons name={item.icon as any} size={20} color={Colors.primary} />
       </View>
       <Text style={styles.cardLabel}>{t(item.labelKey)}</Text>
-      {!!item.descKey && <Text style={styles.cardDesc} numberOfLines={2}>{t(item.descKey)}</Text>}
+      <MaterialCommunityIcons name="chevron-right" size={20} color={Colors.text} style={styles.cardChevron} />
     </TouchableOpacity>
   );
-}
+});
 
 export default function ProfileScreen() {
   const router = useRouter();
@@ -40,16 +40,13 @@ export default function ProfileScreen() {
   const { isTablet } = useResponsive();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-  function handleLogout() {
-    Alert.alert(t('mine.profile.signOut'), t('mine.profile.signOutConfirm'), [
-      { text: t('mine.businesses.cancel'), style: 'cancel' },
-      {
-        text: t('mine.profile.signOut'), style: 'destructive',
-        onPress: async () => { await logout(); router.replace('/(auth)/login'); },
-      },
-    ]);
-  }
+  const handleLogout = useCallback(() => setShowLogoutModal(true), []);
+  const confirmLogout = useCallback(async () => {
+    await logout();
+    router.replace('/(auth)/login');
+  }, [logout, router]);
 
   if (!user) {
     return (
@@ -72,7 +69,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={[]}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
         <View style={isTablet && styles.tabletInner}>
         <View style={styles.profileCard}>
           <Image source={{ uri: getImageUrl(user.profileImage) || AVATAR }} style={styles.avatar} />
@@ -82,7 +79,9 @@ export default function ProfileScreen() {
         </View>
 
         <View style={styles.menuGrid}>
-          {PROFILE_MENU_ITEMS.map((item) => <MenuCard key={item.route} item={item} />)}
+          {PROFILE_MENU_ITEMS.map((item) => (
+            <MenuCard key={item.route} item={item} onPress={() => router.push(item.route as any)} />
+          ))}
         </View>
 
         <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
@@ -93,6 +92,16 @@ export default function ProfileScreen() {
         <View style={styles.bottomSpacer} />
         </View>
       </ScrollView>
+      <ConfirmModal
+        visible={showLogoutModal}
+        title={t('mine.profile.signOut')}
+        message={t('mine.profile.signOutConfirm')}
+        onDismiss={() => setShowLogoutModal(false)}
+        actions={[
+          { label: t('mine.businesses.cancel'), onPress: () => {} },
+          { label: t('mine.profile.signOut'), onPress: confirmLogout, destructive: true },
+        ]}
+      />
     </SafeAreaView>
   );
 }

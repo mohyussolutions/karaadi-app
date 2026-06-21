@@ -45,7 +45,7 @@ export const tabletModalStyles = StyleSheet.create({
   videoPlayer: { width: '100%', maxWidth: 720, alignSelf: 'center' },
   videoCloseBtn: { width: 44, height: 44, borderRadius: 22 },
 
-  filterSheet: { maxWidth: 480, marginHorizontal: 'auto', bottom: '8%', height: '78%', borderRadius: 24 },
+  filterSheet: { maxWidth: 480, marginHorizontal: 'auto', bottom: '8%', height: '78%', borderRadius: 24, borderTopLeftRadius: 24, borderTopRightRadius: 24 },
   filterSheetTitle: { fontSize: 19 },
   filterSearchBox: { paddingVertical: 14 },
   filterSearchInput: { fontSize: 17 },
@@ -55,7 +55,7 @@ export const tabletModalStyles = StyleSheet.create({
   filterApplyText: { fontSize: 16 },
   filterClearText: { fontSize: 16 },
 
-  shareSheet: { alignSelf: 'center', width: '100%', maxWidth: 480, borderRadius: 24, paddingHorizontal: 32 },
+  shareSheet: { alignSelf: 'center', width: '100%', maxWidth: 480, borderRadius: 24, borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingHorizontal: 32 },
   shareIconWrap: { width: 72, height: 72, borderRadius: 20 },
   shareLabel: { fontSize: 13 },
   shareHeading: { fontSize: 18 },

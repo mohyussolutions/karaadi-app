@@ -11,14 +11,13 @@ import * as ImagePicker from 'expo-image-picker';
 import { z } from 'zod';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
-import { apiClient } from '../../api/client';
-import { BUSINESSES_ENDPOINTS } from '../../constants';
+import { getBusinessById, getMyBusinesses, createBusiness, updateBusiness } from '../../api/core/business.actions';
 import { getImageUrl } from '../../util/helpers';
 import { CheckoutBar } from '../../components/checklist';
-import { BIZ_STEPS } from '../../(links)/checkbusiness';
+import { BIZ_STEPS } from '../../config/navigation/checkbusiness';
 import type { StepItem, BusinessPlan, BusinessApplyFormState } from '../../util/types';
 import { LoadingSpinner } from '../../components/loading';
-import { MAIN_CATEGORIES } from '../../navigation/main';
+import { MAIN_CATEGORIES } from '../../config/navigation/categories';
 import { useAuthStore } from '../../store/authStore';
 import { useAppDispatch } from '../../store/store';
 import { setListingType, setStep, setCategoryKey, setBusinessId } from '../../store/slices/newAdSlice';
@@ -66,8 +65,8 @@ export default function BusinessCreateScreen() {
   useEffect(() => {
     if (!user) return;
     if (isEditing && editId) {
-      apiClient.get(BUSINESSES_ENDPOINTS.BY_ID(editId))
-        .then(({ data }) => {
+      getBusinessById(editId)
+        .then((data) => {
           setBusinessRecord(data);
           setInitialValues({
             name: data.name || '',
@@ -90,9 +89,8 @@ export default function BusinessCreateScreen() {
       return;
     }
 
-    apiClient.get(BUSINESSES_ENDPOINTS.MY)
-      .then(({ data }) => {
-        const list = Array.isArray(data) ? data : data?.businesses || [];
+    getMyBusinesses()
+      .then((list) => {
         const existing = list[0];
         if (existing) {
           setBusinessRecord(existing);
@@ -261,10 +259,10 @@ function ApplyStep({
       };
 
       if (isEditing && editId) {
-        await apiClient.patch(BUSINESSES_ENDPOINTS.UPDATE(editId), payload);
+        await updateBusiness(editId, payload);
         onSuccess({ _id: editId, ...payload });
       } else {
-        const { data } = await apiClient.post(BUSINESSES_ENDPOINTS.CREATE, payload);
+        const data = await createBusiness(payload);
         onSuccess(data?.business || data);
       }
     } catch (err: any) {
@@ -483,8 +481,7 @@ function ApprovalStep({
   const poll = useCallback(async () => {
     setChecking(true);
     try {
-      const { data } = await apiClient.get(BUSINESSES_ENDPOINTS.MY);
-      const list = Array.isArray(data) ? data : data?.businesses || [];
+      const list = await getMyBusinesses();
       const updated = list.find((b: any) => (b._id || b.id) === id) || list[0];
       if (updated) {
         setBiz(updated);

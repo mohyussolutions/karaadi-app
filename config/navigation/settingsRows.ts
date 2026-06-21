@@ -1,4 +1,4 @@
-import type { SettingsRow } from "../util/types";
+import type { SettingsRow } from "../../util/types";
 
 export const SETTINGS_ROWS: SettingsRow[] = [
   {

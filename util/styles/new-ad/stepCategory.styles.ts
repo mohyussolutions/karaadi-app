@@ -1,19 +1,27 @@
 import { StyleSheet } from "react-native";
-import { SPACING, RADII, TYPOGRAPHY } from "../../theme";
+import { SPACING, RADII, TYPOGRAPHY } from "../../colors/theme";
 import type { ColorPalette } from "../../../hooks/useTheme";
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
     root: { flex: 1, backgroundColor: Colors.background },
     topBar: {
-      flexDirection: "row", alignItems: "center", justifyContent: "space-between",
-      paddingHorizontal: 12, paddingVertical: 10,
-      borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.border,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+      borderBottomWidth: StyleSheet.hairlineWidth,
+      borderBottomColor: Colors.border,
       backgroundColor: Colors.card,
     },
     backBtn: {
-      width: 36, height: 36, borderRadius: 10,
-      backgroundColor: Colors.gray100, alignItems: "center", justifyContent: "center",
+      width: 36,
+      height: 36,
+      borderRadius: 10,
+      backgroundColor: Colors.gray100,
+      alignItems: "center",
+      justifyContent: "center",
     },
     topBarTitle: { fontSize: 16, fontWeight: "700", color: Colors.textPrimary },
     topBarSpacer: { width: 36 },

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { LogBox } from "react-native";
 import { useRouter } from "expo-router";
+import { getListingDetailRoute } from "../util/helpers/nav.routing";
 
 LogBox.ignoreLogs([
   "expo-notifications: Android Push notifications",
@@ -17,9 +18,12 @@ export function useNotificationTap() {
 
   useEffect(() => {
     if (!Notifications?.addNotificationResponseReceivedListener) return;
+
     const sub = Notifications.addNotificationResponseReceivedListener(
       (response: any) => {
-        const data = response.notification.request.content.data as any;
+        const data = response.notification.request.content.data as Record<string, any>;
+        const type = data?.type as string | undefined;
+
         if (data?.chatId) {
           router.push({
             pathname: "/profile/chat",
@@ -29,11 +33,34 @@ export function useNotificationTap() {
               username: data.username || "Chat",
             },
           });
-        } else {
-          router.push("/(tabs)/messages");
+          return;
         }
+
+        if (type === "alert_match" || type === "new_listing" || type === "saved_search") {
+          if (data?.listingId && data?.category) {
+            router.push(
+              getListingDetailRoute({ id: data.listingId, category: data.category }) as any,
+            );
+          } else {
+            router.push("/profile/saved-searches");
+          }
+          return;
+        }
+
+        if (type === "subscription" || type === "subscription_expiry") {
+          router.push("/profile/subscription");
+          return;
+        }
+
+        if (type === "message") {
+          router.push("/(tabs)/messages");
+          return;
+        }
+
+        router.push("/profile/notifications");
       },
     );
+
     return () => sub.remove();
   }, []);
 }

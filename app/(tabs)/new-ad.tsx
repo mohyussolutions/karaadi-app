@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import { View, Text, Image, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { useFocusEffect } from "expo-router";
@@ -25,7 +25,7 @@ import { StepPlan } from "../../features/new-ad/components/StepPlan";
 import { StepSummary, StepPayment } from "../../components/payment";
 
 import type { ListingType, Step, StepItem } from "../../util/types/new-ad.types";
-import { MAIN_CATEGORIES } from "../../navigation/main";
+import { MAIN_CATEGORIES } from "../../config/navigation/categories";
 import { placeholderAvatar } from "../../constants";
 
 const STEP_INDEX: Record<Step, number> = {
@@ -91,15 +91,18 @@ export default function NewAdScreen() {
     : AD_STEPS;
 
   const s = useThemedStyles(createStyles);
+  const isCheckoutStep = step === "summary" || step === "payment";
 
   if (!user) return <LoadingSpinner fullScreen />;
 
   return (
     <View style={s.safe}>
-      <View style={s.header}>
-        <Image source={{ uri: getImageUrl(user.profileImage) || AVATAR }} style={s.avatar} />
-        <Text style={s.headerTitle}>{t("nav.newAd")}</Text>
-      </View>
+      {!isCheckoutStep && (
+        <View style={s.header}>
+          <Image source={{ uri: getImageUrl(user.profileImage) || AVATAR }} style={s.avatar} />
+          <Text style={s.headerTitle}>{t("nav.newAd")}</Text>
+        </View>
+      )}
       <CheckoutBar steps={adSteps} currentIndex={STEP_INDEX[step]} />
 
       {step === "type" && (

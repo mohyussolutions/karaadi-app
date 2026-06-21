@@ -1,4 +1,4 @@
-import type { TabItem } from "../util/types";
+import type { TabItem } from "../../util/types";
 
 export const TAB_ITEMS: TabItem[] = [
   {
@@ -36,7 +36,6 @@ export const TAB_ITEMS: TabItem[] = [
 export const LOGIN_TAB_ITEM: TabItem = {
   name: "login",
   labelKey: "nav.login",
-  icon: "person",
-  iconOutline: "person",
-  iconFamily: "Octicons",
+  icon: "person-circle",
+  iconOutline: "person-circle-outline",
 };

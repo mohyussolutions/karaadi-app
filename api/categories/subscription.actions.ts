@@ -70,18 +70,23 @@ export async function checkAlertsForMatches(): Promise<void> {
 
       if (fresh.length) {
         totalMatches += fresh.length;
-        if (fresh[0].title) matchTitles.push(fresh[0].title);
+        const first = fresh[0] as any;
+        if (first.title) matchTitles.push(first.title);
+
+        if (fresh.length === 1) {
+          await scheduleLocalNotification(
+            'New match for your alert!',
+            `"${first.title}" just posted — tap to view`,
+            { type: 'alert_match', listingId: first._id || first.id, category: sub.category },
+          );
+        }
       }
     }
 
-    if (totalMatches > 0) {
-      const preview =
-        matchTitles.length === 1
-          ? `"${matchTitles[0]}"`
-          : `${totalMatches} new listings`;
+    if (totalMatches > 1) {
       await scheduleLocalNotification(
         'New matches for your alerts!',
-        `${preview} just posted — tap to see`,
+        `${totalMatches} new listings match your alerts — tap to see`,
         { type: 'alert_match' },
       );
     }

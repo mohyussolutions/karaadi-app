@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
   KeyboardAvoidingView, Platform,
@@ -9,8 +9,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAuthStore } from '../../../store/authStore';
-import { apiClient } from '../../../api/client';
-import { REPORT_ENDPOINTS } from '../../../constants';
+import { createReport } from '../../../api/core/report.actions';
 import { createStyles } from '../../../util/styles/listing/report.styles';
 
 const REASON_OPTIONS = [
@@ -55,7 +54,7 @@ export default function ReportScreen() {
     setSubmitting(true);
     setError('');
     try {
-      await apiClient.post(REPORT_ENDPOINTS.CREATE, {
+      await createReport({
         userId: user.id,
         itemId: id,
         itemType: itemType || 'MARKETPLACE',

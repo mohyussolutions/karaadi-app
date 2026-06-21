@@ -18,7 +18,7 @@ import RegionCityPicker from "../../../../components/geo/RegionCityPicker";
 import { MAIN_CATEGORIES } from "../../../../constants";
 import { FormField } from "./FormField";
 import { ImagePickerRow } from "./ImagePickerRow";
-import { FIELDS, NUMERIC_KEYS, BOOLEAN_KEYS } from "../../constants/fields";
+import { getFields, NUMERIC_KEYS, BOOLEAN_KEYS } from "../../constants/fields";
 import { useAuthStore } from "../../../../store/authStore";
 import { useAppDispatch, useAppSelector } from "../../../../store/store";
 import { submitListing, setFeeInfo } from "../../../../store/slices/newAdSlice";
@@ -74,8 +74,9 @@ export function StepForm({
   const submitting = submitStatus === "submitting";
 
   const categoryMeta = MAIN_CATEGORIES.find((c) => c.key === categoryKey);
-  const fields = (FIELDS[categoryKey] || []).filter(
-    (f) => f.key !== "website" || listingType === "public",
+  const allFields: Record<string, FieldDef[]> = getFields(t as (key: string, opts?: Record<string, unknown>) => string);
+  const fields: FieldDef[] = (allFields[categoryKey] || []).filter(
+    (f: FieldDef) => f.key !== "website" || listingType === "public",
   );
 
   const selectedSubKey = formData.subcategory;
@@ -171,6 +172,33 @@ export function StepForm({
 
       if (categoryKey === "Jobs" && subVal) body.type = subVal;
 
+      const SKIP_KEYS = new Set([
+        'userId', 'images', 'mainCategory', 'category', 'categoryTag',
+        'isPaid', 'feeId', 'feeAmount', 'listingType', 'contactPhone',
+        'nestedSubcategory',
+      ]);
+
+      const allAttrs = fields
+        .filter((f) => {
+          const v = formData[f.key];
+          return v && v.trim() && !SKIP_KEYS.has(f.key);
+        })
+        .map((f) => {
+          const rawVal = formData[f.key] || '';
+          let displayVal = rawVal;
+          if (f.type === 'dropdown' && f.options) {
+            const matched = f.options.find((o) =>
+              typeof o === 'string' ? o === rawVal : o.value === rawVal,
+            );
+            if (matched && typeof matched !== 'string') displayVal = matched.label;
+            else if (typeof matched === 'string') displayVal = matched;
+          }
+          return { label: f.label, value: displayVal };
+        });
+
+      if (formData.region) allAttrs.push({ label: t('common.region'), value: formData.region });
+      if (formData.city) allAttrs.push({ label: t('common.city'), value: formData.city });
+
       const summary = {
         title: String(body.title || ""),
         price: Number(body.price || 0),
@@ -189,6 +217,7 @@ export function StepForm({
         type: body.type ? String(body.type) : undefined,
         color: body.color ? String(body.color) : undefined,
         description: body.description ? String(body.description) : undefined,
+        allAttrs,
       };
       await dispatch(submitListing({ categoryKey, body, summary })).unwrap();
       onSuccess();

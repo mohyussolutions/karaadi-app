@@ -13,6 +13,7 @@
     "expo": "~56.0.12",
     "expo-asset": "~56.0.17",
     "expo-audio": "~56.0.12",
+    "expo-blur": "~56.0.3",
     "expo-constants": "~56.0.18",
     "expo-dev-client": "~56.0.20",
     "expo-font": "~56.0.7",
@@ -52,15 +53,16 @@
     "react-dom": "19.2.3"
   },
   "scripts": {
-    "start": "expo start",
+    "start": "expo start --ios",
     "android": "expo run:android",
-    "ios": "expo run:ios",
+    "ios": "expo run:ios --device \"iPhone 15\"",
+    "ipad": "xcrun simctl shutdown all 2>/dev/null; xcrun simctl boot D26B9490-2B8D-4E66-988F-1A73D1BEF39A 2>/dev/null; xcrun simctl bootstatus D26B9490-2B8D-4E66-988F-1A73D1BEF39A -b >/dev/null 2>&1; expo start --ios",
     "deploy": "eas build --profile production --platform ios --auto-submit --non-interactive",
     "deploy:ios": "eas build --profile production --platform ios --auto-submit --non-interactive",
-    "deploy:android": "eas build --profile production --platform android --local --non-interactive",
+    "deploy:android": "eas build --profile production --platform android --auto-submit --non-interactive",
     "build": "npm run build:ios",
     "build:ios": "eas build --profile production --platform ios --non-interactive",
-    "build:android": "eas build --profile production --platform android --local --non-interactive"
+    "build:android": "eas build --profile production --platform android --non-interactive"
   },
   "private": true
 }

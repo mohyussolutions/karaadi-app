@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   View, Text, Image, TouchableOpacity,
   ScrollView, Alert, TextInput, ActivityIndicator,
@@ -44,15 +44,16 @@ export default function EditProfileScreen() {
       allowsEditing: true,
       aspect: [1, 1],
       quality: 0.8,
-      base64: true,
     });
-    if (result.canceled || !result.assets[0]?.base64) return;
+    if (result.canceled || !result.assets[0]) return;
     setUploading(true);
     try {
       const asset = result.assets[0];
-      const mime = asset.mimeType === 'image/png' || asset.mimeType === 'image/webp' ? asset.mimeType : 'image/jpeg';
-      const dataUri = `data:${mime};base64,${asset.base64}`;
-      const updated = await updateProfileImage(dataUri);
+      const mime = asset.mimeType === 'image/png' ? 'image/png' : 'image/jpeg';
+      const ext = mime === 'image/png' ? 'png' : 'jpg';
+      const formData = new FormData();
+      formData.append('image', { uri: asset.uri, type: mime, name: `profile.${ext}` } as any);
+      const updated = await updateProfileImage(formData);
       if (user) await setUser({ ...user, ...updated }, user.token);
       Alert.alert(t('success'), t('mine.editProfile.photoUpdated'));
     } catch {

@@ -2,7 +2,7 @@
   "expo": {
     "name": "Karaadi",
     "slug": "karaadi",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -45,6 +45,7 @@
       "versionCode": 12
     },
     "plugins": [
+      "./plugins/withAbiFilters",
       "expo-router",
       "expo-status-bar",
       [

@@ -2,7 +2,7 @@ export type ListingType = 'private' | 'public';
 
 export type Step = 'login' | 'type' | 'category' | 'form' | 'plan' | 'summary' | 'payment';
 
-export type PayMethod = 'evc' | 'zaad' | 'sahal';
+export type PayMethod = 'evc' | 'zaad' | 'sahal' | 'waaafi';
 
 export interface Plan {
   _id: string;
@@ -29,6 +29,7 @@ export interface CreatedItemSummary {
   type?: string;
   color?: string;
   description?: string;
+  allAttrs?: Array<{ label: string; value: string }>;
 }
 
 export interface NewAdState {

@@ -11,7 +11,7 @@ import { toggleSound } from '../../../store/slices/notificationSettingsSlice';
 import { playNotificationSound } from '../../../services/soundService';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { createStyles } from '../../../util/styles/settings/settings.styles';
-import { SETTINGS_ROWS } from '../../../(links)/settingsRows';
+import { SETTINGS_ROWS } from '../../../config/navigation/settingsRows';
 
 export default function SettingsIndex() {
   const router = useRouter();

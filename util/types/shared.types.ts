@@ -1,31 +1,22 @@
-import type { ReactNode } from 'react';
-import type { ImageSourcePropType } from 'react-native';
+export * from './interfaces/common';
+
+// listing-card props kept here due to dependency on ListingBase
 import type { ListingBase } from './listing.types';
 
-export interface Region {
-  _id: string;
-  name: string;
-  nameEn?: string;
-  nameSo?: string;
+export interface ListingCardProps {
+  item: ListingBase;
+  onPress?: () => void;
+  categoryKey?: string;
 }
 
-export interface City {
-  _id: string;
-  name: string;
-  region?: string;
+export interface MyAdCardProps {
+  item: ListingBase;
+  deleting?: boolean;
+  onDelete: (item: ListingBase) => void;
+  onPayNow: (item: ListingBase) => void;
 }
 
-export interface RegionPickerItem {
-  id: string;
-  name: string;
-  cities?: CityPickerItem[];
-}
-
-export interface CityPickerItem {
-  id: string;
-  name: string;
-}
-
+// geo picker props
 export interface RegionCityPickerProps {
   selectedRegion: string;
   selectedCity: string;
@@ -47,7 +38,7 @@ export interface PickerFieldsProps {
 export interface CityAccordionPanelProps {
   search: string;
   onSearchChange: (v: string) => void;
-  cities: CityPickerItem[];
+  cities: import('./interfaces/common').CityPickerItem[];
   selectedCity: string;
   savingCity: boolean;
   onSelectCity: (name: string) => void;
@@ -56,105 +47,8 @@ export interface CityAccordionPanelProps {
 }
 
 export interface RegionAccordionPanelProps {
-  regions: RegionPickerItem[];
+  regions: import('./interfaces/common').RegionPickerItem[];
   selectedRegion: string;
-  onSelectRegion: (r: RegionPickerItem) => void;
+  onSelectRegion: (r: import('./interfaces/common').RegionPickerItem) => void;
   onClose: () => void;
-}
-
-export interface TabItem {
-  name: string;
-  labelKey: string;
-  icon: string;
-  iconOutline: string;
-  iconFamily?: 'Ionicons' | 'Octicons';
-  image?: ImageSourcePropType;
-}
-
-export interface LoadingSpinnerProps {
-  fullScreen?: boolean;
-  size?: 'small' | 'large';
-  color?: string;
-}
-
-export interface EmptyStateProps {
-  icon?: string;
-  title: string;
-  message?: string;
-}
-
-export interface ListingCardProps {
-  item: ListingBase;
-  onPress?: () => void;
-  categoryKey?: string;
-}
-
-export interface MyAdCardProps {
-  item: ListingBase;
-  deleting?: boolean;
-  onDelete: (item: ListingBase) => void;
-  onPayNow: (item: ListingBase) => void;
-}
-
-export interface SplashScreenProps {
-  onFinish: () => void;
-}
-
-export interface ResponsiveLayoutProps {
-  sidebar: ReactNode;
-  main: ReactNode;
-  sidebarStyle?: object;
-  mainStyle?: object;
-}
-
-export interface ResponsiveInfo {
-  width: number;
-  height: number;
-  isLandscape: boolean;
-  isTablet: boolean;
-  isMobileLandscape: boolean;
-  isTabletLandscape: boolean;
-  sidebarWidth: number;
-  mainWidth: number;
-  numColumns: number;
-  cardWidth: (containerWidth?: number, cols?: number, hPad?: number, gap?: number) => number;
-  iconCols: number;
-  gridCellWidth: (cols?: number, hPad?: number, gap?: number) => number;
-}
-
-export interface MenuItem {
-  icon: string;
-  labelKey: string;
-  route: string;
-  descKey?: string;
-}
-
-export interface SettingsRow {
-  icon: string;
-  labelKey: string;
-  route: string;
-  color?: string;
-}
-
-export interface BizStepDef {
-  key: string;
-  labelKey: string;
-}
-
-export interface PaymentStatusConfig {
-  label: string;
-  color: string;
-  bg: string;
-  icon: string;
-}
-
-export interface PaymentCategoryInfo {
-  label: string;
-  icon: string;
-  color: string;
-}
-
-export interface Language {
-  code: 'en' | 'so';
-  label: string;
 }
