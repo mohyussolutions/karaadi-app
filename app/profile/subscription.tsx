@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Alert, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -11,10 +11,14 @@ import { createSubscriptionListStyles } from '../../util/styles/profile/profileS
 import { fetchMySubscriptions, deleteSubscription } from '../../api/categories/subscription.actions';
 import type { Subscription } from '../../util/types/listing.types';
 
+const COLUMN_GAP = 10;
+const H_PAD = 14;
+const CARD_WIDTH = (Dimensions.get('window').width - H_PAD * 2 - COLUMN_GAP) / 2;
+
 function formatDate(iso: string | undefined): string {
   if (!iso) return '';
   try {
-    return new Date(iso).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
   } catch {
     return iso;
   }
@@ -41,7 +45,7 @@ export default function SubscriptionScreen() {
   function handleDelete(item: Subscription) {
     Alert.alert(
       t('mine.subscriptions.deleteTitle', 'Delete subscription'),
-      t('mine.subscriptions.deleteConfirm', 'Are you sure you want to delete this subscription?'),
+      t('mine.subscriptions.deleteConfirm', 'Remove this subscription alert?'),
       [
         { text: t('common.cancel', 'Cancel'), style: 'cancel' },
         {
@@ -63,6 +67,8 @@ export default function SubscriptionScreen() {
       <FlatList
         data={subs}
         keyExtractor={(item) => item.id || item._id || ''}
+        numColumns={2}
+        columnWrapperStyle={styles.row}
         contentContainerStyle={[styles.content, subs.length === 0 && { flex: 1 }]}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
@@ -82,64 +88,55 @@ export default function SubscriptionScreen() {
 
           return (
             <TouchableOpacity
-              style={styles.card}
-              activeOpacity={0.85}
+              style={[styles.card, { width: CARD_WIDTH }]}
+              activeOpacity={0.82}
               onPress={() => router.push({ pathname: '/listing/subscription/[id]', params: { id: item.id || item._id || '' } })}
             >
-              <View style={styles.cardHeader}>
-                <View style={styles.cardTitleRow}>
-                  <MaterialCommunityIcons name="bell-outline" size={18} color={Colors.primary} />
-                  <Text style={styles.cardTitle} numberOfLines={1}>{item.title}</Text>
+              {/* top: icon + delete */}
+              <View style={styles.cardTop}>
+                <View style={styles.iconCircle}>
+                  <MaterialCommunityIcons name="bell-outline" size={26} color={Colors.primary} />
                 </View>
+                <TouchableOpacity
+                  style={styles.deleteBtn}
+                  onPress={() => handleDelete(item)}
+                  hitSlop={10}
+                >
+                  <MaterialCommunityIcons name="delete-outline" size={22} color={Colors.error} />
+                </TouchableOpacity>
+              </View>
+
+              {/* title */}
+              <Text style={styles.cardTitle} numberOfLines={2}>{item.title}</Text>
+
+              {/* category + region */}
+              <View style={styles.metaRow}>
+                <MaterialCommunityIcons name="tag-outline" size={14} color={Colors.textMuted} />
+                <Text style={styles.metaText} numberOfLines={1}>{item.category}</Text>
+              </View>
+              {!!item.region && (
+                <View style={styles.metaRow}>
+                  <MaterialCommunityIcons name="map-marker-outline" size={14} color={Colors.textMuted} />
+                  <Text style={styles.metaText} numberOfLines={1}>{item.region}</Text>
+                </View>
+              )}
+              {!!priceRange && (
+                <View style={styles.metaRow}>
+                  <MaterialCommunityIcons name="currency-usd" size={14} color={Colors.textMuted} />
+                  <Text style={styles.metaText}>{priceRange}</Text>
+                </View>
+              )}
+
+              {/* footer: status badge + date */}
+              <View style={styles.cardFooter}>
                 <View style={[styles.badge, isActive ? styles.badgeActive : styles.badgeInactive]}>
                   <Text style={[styles.badgeText, isActive ? styles.badgeTextActive : styles.badgeTextInactive]}>
                     {isActive ? t('mine.subscriptions.status.active', 'Active') : t('mine.subscriptions.status.expired', 'Expired')}
                   </Text>
                 </View>
-              </View>
-
-              <View style={styles.metaGrid}>
-                <View style={styles.metaItem}>
-                  <MaterialCommunityIcons name="tag-outline" size={13} color={Colors.textMuted} />
-                  <Text style={styles.metaText} numberOfLines={1}>{item.category}</Text>
-                </View>
-                {!!item.region && (
-                  <View style={styles.metaItem}>
-                    <MaterialCommunityIcons name="map-marker-outline" size={13} color={Colors.textMuted} />
-                    <Text style={styles.metaText} numberOfLines={1}>{item.region}</Text>
-                  </View>
-                )}
-                {!!priceRange && (
-                  <View style={styles.metaItem}>
-                    <MaterialCommunityIcons name="currency-usd" size={13} color={Colors.textMuted} />
-                    <Text style={styles.metaText}>{priceRange}</Text>
-                  </View>
-                )}
-                {!!item.notificationCount && (
-                  <View style={styles.metaItem}>
-                    <MaterialCommunityIcons name="bell-ring-outline" size={13} color={Colors.primary} />
-                    <Text style={[styles.metaText, { color: Colors.primary }]}>{item.notificationCount} matches</Text>
-                  </View>
-                )}
-              </View>
-
-              {Array.isArray(item.cities) && item.cities.length > 0 && (
-                <Text style={styles.cities} numberOfLines={1}>
-                  {item.cities.join(' · ')}
-                </Text>
-              )}
-
-              <View style={styles.cardFooter}>
                 {!!item.createdAt && (
                   <Text style={styles.dateText}>{formatDate(item.createdAt)}</Text>
                 )}
-                <TouchableOpacity
-                  style={styles.deleteBtn}
-                  onPress={() => handleDelete(item)}
-                  hitSlop={8}
-                >
-                  <MaterialCommunityIcons name="delete-outline" size={18} color={Colors.error} />
-                </TouchableOpacity>
               </View>
             </TouchableOpacity>
           );

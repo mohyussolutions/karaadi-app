@@ -483,6 +483,10 @@ export const auth = {
     success: "Success",
     ok: "OK",
     cancel: "Cancel",
+    delete: "Delete",
+    save: "Save",
+    back: "Back",
+    confirm: "Confirm",
   },
 } as const;
 
@@ -1511,6 +1515,10 @@ export const mine = {
     activePlan: "Active Plan",
     noActivePlan: "No active subscription",
     choosePlanBelow: "Choose a plan below to boost your listings",
+    noSubscriptions: "No alerts yet",
+    noSubscriptionsSub: "Your saved search alerts will appear here",
+    deleteTitle: "Delete alert",
+    deleteConfirm: "Are you sure you want to remove this search alert?",
   },
   businesses: {
     noAccountInfo: "No account information found.",

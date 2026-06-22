@@ -626,6 +626,10 @@ export const auth = {
     success: "Guul",
     ok: "Waaye",
     cancel: "Jooji",
+    delete: "Tirtir",
+    save: "Keydi",
+    back: "Dib",
+    confirm: "Xaqiiji",
   },
 } as const;
 
@@ -1641,6 +1645,10 @@ export const mine = {
     activePlan: "Qorshe Firfircoon",
     noActivePlan: "Ku biiritaan firfircoon ma jiro",
     choosePlanBelow: "Dooro qorshe hoose si aad xayeysiisyadaada u kor u qaaddo",
+    noSubscriptions: "Weli ma jiro digniin",
+    noSubscriptionsSub: "Feejignaanshayaashaada la raadinayo waa la muujin doonaa halkan",
+    deleteTitle: "Tirtir digniinaadda",
+    deleteConfirm: "Ma hubtaa inaad tirtirto feejignaanshahan la raadinayo?",
   },
   businesses: {
     noAccountInfo: "Xog akoon lama helin.",

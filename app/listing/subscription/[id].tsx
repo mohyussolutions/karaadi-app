@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  View, Text, ScrollView, TouchableOpacity,
-} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -41,7 +39,13 @@ export default function SubscriptionDetailScreen() {
   const tabletPortrait = useThemedStyles(createTabletPortraitStyles);
 
   if (loading) return <SwipeDownToClose><DetailSkeleton /></SwipeDownToClose>;
-  if (!item) return <SwipeDownToClose><DetailNotFound icon="bell-outline" message="Subscription not found" onBack={() => router.back()} /></SwipeDownToClose>;
+  if (!item) return (
+    <SwipeDownToClose>
+      <DetailNotFound icon="bell-outline" message="Subscription not found" onBack={() => router.back()} />
+    </SwipeDownToClose>
+  );
+
+  const isActive = item.isActive ?? (item.status === 'active');
 
   const priceLabel = item.priceMin && item.priceMax
     ? `${formatPrice(item.priceMin)} – ${formatPrice(item.priceMax)}`
@@ -49,26 +53,34 @@ export default function SubscriptionDetailScreen() {
     : item.priceMin ? `From ${formatPrice(item.priceMin)}`
     : t('priceOnRequest');
 
-  const city = item.cities?.[0];
-
   const infoRows: { icon: string; label: string; value: string }[] = [
-    item.category && { icon: 'tag-outline', label: 'Category', value: item.category },
-    item.subCategory && { icon: 'tag-multiple-outline', label: 'Sub-category', value: item.subCategory },
-    item.region && { icon: 'map-marker-outline', label: 'Region', value: [city, item.region].filter(Boolean).join(', ') },
-    item.expiryDate && { icon: 'calendar-end', label: 'Expires', value: formatDate(item.expiryDate) },
-    item.createdAt && { icon: 'calendar-plus', label: 'Posted', value: formatDate(item.createdAt) },
+    item.category      && { icon: 'tag-outline',          label: t('subscriptionDetail.category', 'Category'),    value: item.category },
+    item.subCategory   && { icon: 'tag-multiple-outline', label: t('subscriptionDetail.subCategory', 'Sub-category'), value: item.subCategory },
+    item.condition     && { icon: 'check-circle-outline', label: t('subscriptionDetail.condition', 'Condition'),   value: item.condition },
+    item.brand         && { icon: 'shield-star-outline',  label: t('subscriptionDetail.brand', 'Brand'),           value: item.brand },
+    item.expiryDate    && { icon: 'calendar-end',         label: t('subscriptionDetail.expires', 'Expires'),       value: formatDate(item.expiryDate) },
+    item.createdAt     && { icon: 'calendar-plus',        label: t('subscriptionDetail.posted', 'Posted'),         value: formatDate(item.createdAt) },
+    item.notificationCount != null && item.notificationCount > 0
+      && { icon: 'bell-ring-outline', label: t('subscriptionDetail.matches', 'Matches'), value: String(item.notificationCount) },
   ].filter(Boolean) as { icon: string; label: string; value: string }[];
 
   const heroPanel = (
     <View style={styles.hero}>
       <View style={styles.heroIcon}>
-        <MaterialCommunityIcons name="bell-ring-outline" size={48} color={Colors.primary} />
+        <MaterialCommunityIcons name="bell-ring-outline" size={56} color={Colors.primary} />
       </View>
-      {item.category && (
-        <View style={styles.categoryBadge}>
-          <Text style={styles.categoryBadgeText}>{item.category}</Text>
+      <View style={styles.statusRow}>
+        {item.category && (
+          <View style={styles.categoryBadge}>
+            <Text style={styles.categoryBadgeText}>{item.category}</Text>
+          </View>
+        )}
+        <View style={[styles.statusBadge, isActive ? styles.statusBadgeActive : styles.statusBadgeInactive]}>
+          <Text style={[styles.statusBadgeText, isActive ? styles.statusBadgeTextActive : styles.statusBadgeTextInactive]}>
+            {isActive ? t('mine.subscriptions.status.active', 'Active') : t('mine.subscriptions.status.expired', 'Expired')}
+          </Text>
         </View>
-      )}
+      </View>
     </View>
   );
 
@@ -76,40 +88,63 @@ export default function SubscriptionDetailScreen() {
     <View style={styles.body}>
       <Text style={styles.title}>{item.title || item.category || 'Subscription'}</Text>
       <Text style={styles.price}>{priceLabel}</Text>
-      {(city || item.region) && (
+
+      {/* location pills */}
+      {(item.cities?.length || item.region) && (
         <View style={styles.locRow}>
-          <MaterialCommunityIcons name="map-marker-outline" size={14} color={Colors.primary} />
-          <Text style={styles.locText}>{[city, item.region].filter(Boolean).join(', ')}</Text>
+          <View style={styles.pillsWrap}>
+            {item.region && (
+              <View style={styles.locPill}>
+                <MaterialCommunityIcons name="map-marker-outline" size={13} color={Colors.primary} />
+                <Text style={styles.locText}>{item.region}</Text>
+              </View>
+            )}
+            {item.cities?.filter(c => c !== item.region).map(city => (
+              <View key={city} style={styles.pill}>
+                <MaterialCommunityIcons name="city-variant-outline" size={13} color={Colors.primary} />
+                <Text style={styles.pillText}>{city}</Text>
+              </View>
+            ))}
+          </View>
         </View>
       )}
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Subscription Details</Text>
-        {infoRows.map(({ icon, label, value }, i) => (
-          <View key={label} style={[styles.infoRow, i === infoRows.length - 1 && styles.infoRowLast]}>
-            <View style={styles.infoLeft}>
-              <MaterialCommunityIcons name={icon as never} size={16} color={Colors.primary} />
-              <Text style={styles.infoLabel}>{label}</Text>
-            </View>
-            <Text style={styles.infoValue}>{value}</Text>
-          </View>
-        ))}
-      </View>
-      {item.description && (
+
+      {/* info card */}
+      {infoRows.length > 0 && (
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Description</Text>
+          <Text style={styles.cardTitle}>{t('subscriptionDetail.detailsTitle', 'Subscription Details')}</Text>
+          {infoRows.map(({ icon, label, value }, i) => (
+            <View key={label} style={[styles.infoRow, i === infoRows.length - 1 && styles.infoRowLast]}>
+              <View style={styles.infoLeft}>
+                <MaterialCommunityIcons name={icon as never} size={17} color={Colors.primary} />
+                <Text style={styles.infoLabel}>{label}</Text>
+              </View>
+              <Text style={styles.infoValue}>{value}</Text>
+            </View>
+          ))}
+        </View>
+      )}
+
+      {/* description */}
+      {!!item.description && (
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>{t('subscriptionDetail.description', 'Description')}</Text>
           <Text style={styles.description}>{item.description}</Text>
         </View>
       )}
+
       <SellerCard
-        username={ownerName} profileImage={ownerAvatar}
+        username={ownerName}
+        profileImage={ownerAvatar}
         userId={item?.userId || item?.user?._id || item?.user?.id || null}
-        phone={ownerPhone} subtitle={t('realEstateDetail.activeSeller')}
+        phone={ownerPhone}
+        subtitle={t('realEstateDetail.activeSeller')}
         onMessage={handleMessage}
         messageBtnLabel={t('realEstateDetail.sendMessage')}
       />
-      <ReportLink itemId={id} itemType="SUBSCRIPTION" />
 
-      <RecommendedSection endpoint={SUBSCRIPTION_ENDPOINTS.PLANS} excludeId={id} />
+      <ReportLink itemId={id} itemType="SUBSCRIPTION" />
+      <RecommendedSection endpoint={SUBSCRIPTION_ENDPOINTS.MY} excludeId={id} />
       <View style={styles.bottomSpacer} />
     </View>
   );
@@ -149,11 +184,12 @@ export default function SubscriptionDetailScreen() {
           onMessage={handleMessage}
           messageLabel={t('realEstateDetail.sendMessage')}
         />
+
         <SocialShareSheet
           visible={shareVisible}
           onClose={() => setShareVisible(false)}
           title={item.title || item.category || 'Subscription'}
-          message={`${item.title || item.category}\n📍 ${[city, item.region].filter(Boolean).join(', ') || 'Somalia'}\n\nKaraadi`}
+          message={`${item.title || item.category}\n📍 ${[...(item.cities ?? []), item.region].filter(Boolean).join(', ') || 'Somalia'}\n\nKaraadi`}
         />
       </SafeAreaView>
     </SwipeDownToClose>

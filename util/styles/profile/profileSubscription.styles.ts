@@ -4,69 +4,62 @@ import type { ColorPalette } from '../../../hooks/useTheme';
 export function createSubscriptionListStyles(Colors: ColorPalette) {
   return StyleSheet.create({
     safe: { flex: 1, backgroundColor: Colors.background },
-    content: { padding: 16, gap: 12 },
+    content: { padding: 12, paddingBottom: 36 },
+    row: { gap: 12, marginBottom: 12 },
 
     card: {
       backgroundColor: Colors.card,
-      borderRadius: 14,
-      padding: 14,
+      borderRadius: 20,
+      padding: 18,
       borderWidth: 1,
       borderColor: Colors.border,
-      gap: 10,
+      gap: 12,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.09,
+      shadowRadius: 8,
+      elevation: 4,
     },
-    cardHeader: {
+
+    cardTop: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      gap: 8,
+      marginBottom: 2,
     },
-    cardTitleRow: {
-      flexDirection: 'row',
+    iconCircle: {
+      width: 48,
+      height: 48,
+      borderRadius: 24,
+      backgroundColor: Colors.primary + '14',
       alignItems: 'center',
-      gap: 7,
-      flex: 1,
+      justifyContent: 'center',
     },
+    deleteBtn: {
+      width: 36,
+      height: 36,
+      borderRadius: 18,
+      backgroundColor: Colors.error + '12',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
     cardTitle: {
-      fontSize: 15,
+      fontSize: 16,
       fontWeight: '700',
       color: Colors.text,
-      flex: 1,
+      lineHeight: 23,
     },
 
-    badge: {
-      paddingHorizontal: 8,
-      paddingVertical: 3,
-      borderRadius: 7,
-    },
-    badgeActive: { backgroundColor: Colors.success + '18' },
-    badgeInactive: { backgroundColor: Colors.border },
-    badgeText: {
-      fontSize: 10,
-      fontWeight: '800',
-      letterSpacing: 0.5,
-    },
-    badgeTextActive: { color: Colors.success },
-    badgeTextInactive: { color: Colors.textMuted },
-
-    metaGrid: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      gap: 8,
-    },
-    metaItem: {
+    metaRow: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 4,
+      gap: 5,
     },
     metaText: {
-      fontSize: 12,
-      color: Colors.textSecondary,
-    },
-
-    cities: {
-      fontSize: 12,
+      fontSize: 13,
       color: Colors.textMuted,
-      marginTop: -2,
+      flex: 1,
     },
 
     cardFooter: {
@@ -75,15 +68,27 @@ export function createSubscriptionListStyles(Colors: ColorPalette) {
       justifyContent: 'space-between',
       borderTopWidth: 1,
       borderTopColor: Colors.border,
-      paddingTop: 8,
+      paddingTop: 12,
       marginTop: 2,
+      gap: 4,
     },
-    dateText: {
+    badge: {
+      paddingHorizontal: 9,
+      paddingVertical: 4,
+      borderRadius: 8,
+    },
+    badgeActive: { backgroundColor: Colors.success + '18' },
+    badgeInactive: { backgroundColor: Colors.border },
+    badgeText: {
       fontSize: 11,
-      color: Colors.textMuted,
+      fontWeight: '800',
+      letterSpacing: 0.4,
     },
-    deleteBtn: {
-      padding: 2,
+    badgeTextActive: { color: Colors.success },
+    badgeTextInactive: { color: Colors.textMuted },
+    dateText: {
+      fontSize: 12,
+      color: Colors.textMuted,
     },
   });
 }
