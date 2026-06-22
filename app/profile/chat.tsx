@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   View, Text, FlatList, TextInput, TouchableOpacity,
   KeyboardAvoidingView, Platform, ActivityIndicator,
@@ -8,6 +8,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { getChatMessages, sendMessage, createOrFindChat } from '../../api/core/message.actions';
+import { blockUser } from '../../api/core/block.actions';
+import { ConfirmModal } from '../../components/modals/ConfirmModal';
 import { joinChat, leaveChat, emitSendMessage, emitMarkAsRead, getSocket } from '../../api/sockets/socket.actions';
 import { setActiveChatId, cacheUserName } from '../../services/chatState';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
@@ -46,6 +48,7 @@ export default function ChatScreen() {
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
   const [chatIdNum, setChatIdNum] = useState(0);
+  const [showBlockModal, setShowBlockModal] = useState(false);
 
   const listRef = useRef<FlatList>(null);
   const chatIdRef = useRef(0);
@@ -171,6 +174,12 @@ export default function ChatScreen() {
     }
   }
 
+  async function handleConfirmBlock() {
+    if (!userId) return;
+    try { await blockUser(userId); } catch {}
+    router.back();
+  }
+
   const header = (
     <View style={styles.header}>
       <TouchableOpacity onPress={() => router.back()} hitSlop={10} style={styles.backBtn}>
@@ -179,7 +188,12 @@ export default function ChatScreen() {
       <View style={styles.avatar}>
         <Text style={styles.avatarText}>{initial}</Text>
       </View>
-      <Text style={styles.headerName} numberOfLines={1}>{username || t('chats.chatFallback')}</Text>
+      <Text style={[styles.headerName, { flex: 1 }]} numberOfLines={1}>{username || t('chats.chatFallback')}</Text>
+      {!!userId && (
+        <TouchableOpacity onPress={() => setShowBlockModal(true)} hitSlop={10} style={{ paddingHorizontal: 8 }}>
+          <MaterialCommunityIcons name="block-helper" size={20} color={Colors.textMuted} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 
@@ -272,6 +286,16 @@ export default function ChatScreen() {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
+      <ConfirmModal
+        visible={showBlockModal}
+        title={t('chats.blockUser')}
+        message={t('chats.blockUserConfirm')}
+        onDismiss={() => setShowBlockModal(false)}
+        actions={[
+          { label: t('chats.cancel'), onPress: () => {} },
+          { label: t('chats.block'), onPress: handleConfirmBlock, destructive: true },
+        ]}
+      />
     </SafeAreaView>
   );
 }

@@ -179,6 +179,12 @@ export const REPORT_ENDPOINTS = {
   CREATE: '/api/reports',
 };
 
+export const BLOCK_ENDPOINTS = {
+  BLOCK:   (userId: string) => `/api/users/${userId}/block`,
+  UNBLOCK: (userId: string) => `/api/users/${userId}/unblock`,
+  LIST:    '/api/users/blocked',
+};
+
 export const SECURITY_ENDPOINTS = {
   SESSIONS: '/api/users/sessions',
   SESSION_LOGOUT: (id: string) => `/api/users/sessions/${id}/logout`,

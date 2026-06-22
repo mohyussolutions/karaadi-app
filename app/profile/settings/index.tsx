@@ -1,6 +1,5 @@
-import React from 'react';
 import {
-  View, Text, TouchableOpacity, ScrollView, Switch,
+  View, Text, TouchableOpacity, ScrollView, Switch, Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -72,6 +71,32 @@ export default function SettingsIndex() {
               thumbColor={Colors.white}
             />
           </View>
+        </View>
+
+        <Text style={[s.sectionTitle, s.sectionTitleSpaced]}>{t('mine.settingsPage.legal')}</Text>
+        <View style={s.section}>
+          <TouchableOpacity
+            style={s.row}
+            onPress={() => Linking.openURL('https://karaadi.ee/privacy')}
+            activeOpacity={0.75}
+          >
+            <View style={s.iconWrap}>
+              <MaterialCommunityIcons name="shield-account-outline" size={20} color={Colors.primary} />
+            </View>
+            <Text style={s.rowLabel}>{t('mine.settingsPage.privacyPolicy')}</Text>
+            <MaterialCommunityIcons name="open-in-new" size={18} color={Colors.textMuted} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={s.row}
+            onPress={() => Linking.openURL('https://karaadi.ee/terms')}
+            activeOpacity={0.75}
+          >
+            <View style={s.iconWrap}>
+              <MaterialCommunityIcons name="file-document-outline" size={20} color={Colors.primary} />
+            </View>
+            <Text style={s.rowLabel}>{t('mine.settingsPage.termsOfService')}</Text>
+            <MaterialCommunityIcons name="open-in-new" size={18} color={Colors.textMuted} />
+          </TouchableOpacity>
         </View>
 
         <View style={s.bottomSpacer} />

@@ -411,6 +411,9 @@ export const postAd = {
   completePayment: "Dhammaystir Lacag-bixinta",
   payVia: "Bixi ${{total}} adigoo isticmaalaya {{method}}",
   securedCheckout: "Waa la ilaaliyay · SSL encrypted · Bixin Ammaan ah",
+  iosPaymentTitle: "Bixinta ku dhamee websaydkeenna",
+  iosPaymentBody: "Si aad u taageerto xayeysiiskaaga, fadlan booqo karaadi.ee browser-kaaga oo soo gal si aad u dhammayso bixinta.",
+  iosPaymentBtn: "Fur karaadi.ee",
   paymentMethod: "Habka Lacag-bixinta",
   phoneNumberForMethod: "Lambarka Telefoonka {{method}}",
   enterPhoneForMethod: "Geli lambarka ku xiran akoonkaaga {{method}}",
@@ -1531,6 +1534,9 @@ export const mine = {
     deleteAccountConfirm: "Tallaabadan way joogto tahay. Dhammaan xogtaada way lumi doontaa.",
     deleting: "Waa la tirtirayaa…",
     couldNotDelete: "Akoonka lama tirtiri karo. Fadlan isku day mar kale.",
+    legal: "Sharciga",
+    privacyPolicy: "Qaanuunka Xogta Gaarka ah",
+    termsOfService: "Shuruudaha Adeegga",
   },
   security: {
     activeSessions: "Fadhiyada Firfircoon",
@@ -1839,6 +1845,10 @@ export const chats = {
   couldNotOpen: "Wadahadalka lama furi karo. Fadlan isku day mar kale.",
   loadingMessages: "Fariimaha waa la soo rarayaa…",
   typeMessage: "Qor fariin…",
+  blockUser: "Xidid Isticmaalaha",
+  blockUserConfirm: "Ma hubtaa inaad xididdo isticmaalahan? Waxba kama heli doontid.",
+  block: "Xidid",
+  cancel: "Jooji",
 } as const;
 
 export const supportModule = {

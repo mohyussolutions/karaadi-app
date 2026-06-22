@@ -1404,6 +1404,9 @@ export const mine = {
     deleteAccountConfirm: "This action is permanent. All your data will be lost.",
     deleting: "Deleting…",
     couldNotDelete: "Could not delete account. Please try again.",
+    legal: "Legal",
+    privacyPolicy: "Privacy Policy",
+    termsOfService: "Terms of Service",
   },
   security: {
     activeSessions: "Active Sessions",
@@ -1710,6 +1713,10 @@ export const chats = {
   couldNotOpen: "Could not open chat. Please try again.",
   loadingMessages: "Loading messages…",
   typeMessage: "Type a message…",
+  blockUser: "Block User",
+  blockUserConfirm: "Are you sure you want to block this user? You will no longer receive messages from them.",
+  block: "Block",
+  cancel: "Cancel",
 } as const;
 
 export const checkout = {
@@ -1788,6 +1795,9 @@ export const postAd = {
   completePayment: "Complete Payment",
   payVia: "Pay ${{total}} via {{method}}",
   securedCheckout: "Secured · SSL encrypted · Safe checkout",
+  iosPaymentTitle: "Complete payment on our website",
+  iosPaymentBody: "To promote your listing, please visit karaadi.ee on your browser and sign in to complete the payment.",
+  iosPaymentBtn: "Open karaadi.ee",
   paymentMethod: "Payment Method",
   phoneNumberForMethod: "{{method}} Phone Number",
   enterPhoneForMethod: "Enter the number linked to your {{method}} account",

@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { Platform } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator, Linking } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
@@ -72,6 +72,30 @@ function PayFooter({ total, methodMeta, onPay }: { total: number; methodMeta: Pa
   );
 }
 
+function IOSPaymentScreen() {
+  const Colors = useThemeColors();
+  const s = useThemedStyles(createStyles);
+  const { t } = useAppTranslation();
+  return (
+    <View style={[s.root, { justifyContent: 'center', alignItems: 'center', padding: 32 }]}>
+      <MaterialCommunityIcons name="web" size={56} color={Colors.primary} />
+      <Text style={[s.activatingText, { marginTop: 16, textAlign: 'center', fontSize: 18, fontWeight: '700' }]}>
+        {t('postAd.iosPaymentTitle')}
+      </Text>
+      <Text style={{ color: Colors.textSecondary, textAlign: 'center', marginTop: 8, lineHeight: 22 }}>
+        {t('postAd.iosPaymentBody')}
+      </Text>
+      <TouchableOpacity
+        style={{ marginTop: 24, backgroundColor: Colors.primary, borderRadius: 12, paddingVertical: 14, paddingHorizontal: 32 }}
+        onPress={() => Linking.openURL('https://karaadi.ee')}
+        activeOpacity={0.85}
+      >
+        <Text style={{ color: Colors.white, fontWeight: '700', fontSize: 16 }}>{t('postAd.iosPaymentBtn')}</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
 export function StepPayment({
   plan, listingId, listingTitle, categoryKey,
   successRoute = '/profile/my-ads', onBack,
@@ -82,6 +106,10 @@ export function StepPayment({
   const payment = usePaymentFlow({ plan, listingId, categoryKey });
 
   if (payment.autoActivating) return <ActivatingScreen />;
+
+  if (Platform.OS === 'ios' && payment.total > 0) {
+    return <IOSPaymentScreen />;
+  }
 
   if (payment.payStatus === 'success') {
     return (
