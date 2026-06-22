@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -16,6 +15,17 @@ function formatDate(iso: string | undefined): string {
   } catch {
     return iso;
   }
+}
+
+function normalizePlan(item: any) {
+  return {
+    _id:      item._id || item.id || '',
+    key:      item.key || item.type || '',
+    label:    item.label || item.name || item.planName || item.title || '',
+    price:    item.price ?? item.pricePerDay ?? item.amount ?? 0,
+    days:     item.days ?? item.duration ?? item.durationDays ?? 0,
+    features: Array.isArray(item.features) ? item.features : [],
+  };
 }
 
 export default function SubscriptionScreen() {
@@ -36,7 +46,7 @@ export default function SubscriptionScreen() {
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <FlatList
         data={plans}
-        keyExtractor={(item, index) => item._id || item.key || String(index)}
+        keyExtractor={(item, index) => (item as any)._id || (item as any).key || String(index)}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
@@ -75,28 +85,34 @@ export default function SubscriptionScreen() {
             </View>
           )
         }
-        renderItem={({ item }) => (
-          <View style={styles.planCard}>
-            <View style={styles.planHeader}>
-              <Text style={styles.planName}>{item.label}</Text>
-              <Text style={styles.planPrice}>
-                ${item.price}<Text style={styles.planPer}>/{item.days}d</Text>
-              </Text>
-            </View>
-            {item.features?.map((f, i) => (
-              <View key={i} style={styles.featureRow}>
-                <MaterialCommunityIcons name="check-circle" size={16} color={Colors.success} />
-                <Text style={styles.featureText}>{f}</Text>
+        renderItem={({ item: raw }) => {
+          const item = normalizePlan(raw);
+          return (
+            <View style={styles.planCard}>
+              <View style={styles.planHeader}>
+                <Text style={styles.planName}>{item.label || t('mine.subscriptions.activePlan')}</Text>
+                <Text style={styles.planPrice}>
+                  {item.price === 0 ? t('postAd.free') : `$${item.price}`}
+                  {item.price > 0 && item.days > 0 && (
+                    <Text style={styles.planPer}>/{item.days}d</Text>
+                  )}
+                </Text>
               </View>
-            ))}
-            <TouchableOpacity
-              style={styles.subscribeBtn}
-              onPress={() => router.push('/(tabs)/new-ad')}
-            >
-              <Text style={styles.subscribeBtnText}>{t('plan.clickToSelect')} — {item.label}</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+              {item.features.map((f: string, i: number) => (
+                <View key={i} style={styles.featureRow}>
+                  <MaterialCommunityIcons name="check-circle" size={16} color={Colors.success} />
+                  <Text style={styles.featureText}>{f}</Text>
+                </View>
+              ))}
+              <TouchableOpacity
+                style={styles.subscribeBtn}
+                onPress={() => router.push('/(tabs)/new-ad')}
+              >
+                <Text style={styles.subscribeBtnText}>{t('plan.clickToSelect')} — {item.label}</Text>
+              </TouchableOpacity>
+            </View>
+          );
+        }}
       />
     </SafeAreaView>
   );

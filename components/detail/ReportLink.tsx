@@ -1,4 +1,3 @@
-import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -13,12 +12,17 @@ export default function ReportLink({ itemId, itemType }: { itemId: string; itemT
 
   function handlePress() {
     if (!user) { router.push('/(auth)/login'); return; }
-    router.push({ pathname: '/listing/report/[id]', params: { id: itemId, itemType } });
+    router.push({ pathname: '/listing/report/[id]', params: { id: String(itemId), itemType: String(itemType) } });
   }
 
   return (
-    <TouchableOpacity onPress={handlePress} hitSlop={8} style={{ alignSelf: 'flex-start', marginTop: 8, marginBottom: 8 }}>
-      <Text style={{ color: Colors.error, fontSize: 11, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 1 }}>
+    <TouchableOpacity
+      onPress={handlePress}
+      hitSlop={{ top: 14, bottom: 14, left: 14, right: 14 }}
+      style={{ alignSelf: 'flex-start', marginTop: 8, marginBottom: 8, paddingVertical: 8, paddingHorizontal: 4 }}
+      activeOpacity={0.5}
+    >
+      <Text style={{ color: Colors.error, fontSize: 13, fontWeight: '700', textDecorationLine: 'underline' }}>
         {t('realEstateDetail.reportItem')}
       </Text>
     </TouchableOpacity>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Appearance, Platform, View } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as NavigationBar from "expo-navigation-bar";
@@ -9,6 +10,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import GlobalHeader from "../components/layout/GlobalHeader";
 import BottomTabBar from "../components/layout/BottomTabBar";
+import { EulaModal } from "../components/modals/EulaModal";
 import Hage from "../features/ai-assistant";
 import NotificationBanner from "../components/layout/NotificationBanner";
 import { LoadingSpinner, SplashScreen } from "../components/loading";
@@ -25,8 +27,15 @@ import { usePathname } from "expo-router";
 export default function AppNavigator() {
   const [fontsLoaded] = useFonts({ ...MaterialCommunityIcons.font });
   const [showSplash, setShowSplash] = useState(true);
+  const [showEula, setShowEula] = useState(false);
 
   useAppInit();
+
+  useEffect(() => {
+    AsyncStorage.getItem('karaadi_eula_accepted_v1').then((val) => {
+      if (!val) setShowEula(true);
+    });
+  }, []);
   const {
     messageBanner,
     bannerY,
@@ -134,6 +143,14 @@ export default function AppNavigator() {
       <Hage />
       <SaveToast />
       {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
+
+      <EulaModal
+        visible={showEula}
+        onAccept={() => {
+          AsyncStorage.setItem('karaadi_eula_accepted_v1', '1');
+          setShowEula(false);
+        }}
+      />
 
       {messageBanner && (
         <NotificationBanner
