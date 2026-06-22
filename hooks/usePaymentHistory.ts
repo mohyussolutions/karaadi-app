@@ -1,8 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'expo-router';
 import { useAuthStore } from '../store/authStore';
-import { apiClient } from '../api/client';
-import { PAYMENT_ENDPOINTS } from '../constants';
+import { getPaymentHistory } from '../api/core/payment.actions';
 
 export interface PaymentItem {
   id: string;
@@ -31,8 +30,8 @@ export function usePaymentHistory() {
 
   const load = useCallback(async () => {
     try {
-      const { data } = await apiClient.get(PAYMENT_ENDPOINTS.ME);
-      setPayments(Array.isArray(data) ? data : data?.payments ?? data?.data ?? []);
+      const items = await getPaymentHistory();
+      setPayments(items);
     } catch {
       setPayments([]);
     } finally {

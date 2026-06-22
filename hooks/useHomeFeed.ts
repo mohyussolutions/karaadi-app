@@ -1,8 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '../store/store';
-import { fetchFeedGroup } from '../api/categories/feed.actions';
-import { apiClient } from '../api/client';
-import { FEED_ENDPOINTS } from '../constants';
+import { fetchFeedGroup, getHomeFeedRecommendations } from '../api/categories/feed.actions';
 import { mergeListings, setMemCache, writeDiskCache, readDiskCache } from '../services/feedCacheService';
 import { setFeed, mergeFeed, setRecommendations, isFeedFresh } from '../store/slices/feedSlice';
 import type { ListingBase } from '../util/types/listing.types';
@@ -29,9 +27,7 @@ export function sortByTierRandom(listings: ListingBase[]): ListingBase[] {
 
 async function fetchRecommendations(signal?: AbortSignal): Promise<ListingBase[]> {
   try {
-    const { data } = await apiClient.get(FEED_ENDPOINTS.RECOMMENDATIONS, { signal });
-    const list = Array.isArray(data) ? data : data?.listings ?? data?.data ?? [];
-    return list.map((item: Record<string, unknown>) => ({ ...item, id: item.id || item._id }));
+    return await getHomeFeedRecommendations(signal);
   } catch {
     return [];
   }

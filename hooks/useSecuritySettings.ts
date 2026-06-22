@@ -3,8 +3,10 @@ import { Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../store/authStore';
-import { apiClient } from '../api/client';
-import { SECURITY_ENDPOINTS } from '../constants';
+import {
+  getSessions, getLoginHistory, logoutSession,
+  logoutAllSessions, deleteLoginHistoryEntry, clearLoginHistory,
+} from '../api/core/security.actions';
 
 export interface Session {
   id: string;
@@ -34,12 +36,12 @@ export function useSecuritySettings() {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const [sessRes, histRes] = await Promise.allSettled([
-        apiClient.post(SECURITY_ENDPOINTS.SESSIONS),
-        apiClient.get(SECURITY_ENDPOINTS.LOGIN_HISTORY),
+      const [sessData, histData] = await Promise.allSettled([
+        getSessions(),
+        getLoginHistory(),
       ]);
-      setSessions(sessRes.status === 'fulfilled' ? (sessRes.value.data || []) : []);
-      setHistory(histRes.status === 'fulfilled' ? (histRes.value.data || []) : []);
+      setSessions(sessData.status === 'fulfilled' ? sessData.value : []);
+      setHistory(histData.status === 'fulfilled' ? histData.value : []);
     } finally {
       setLoading(false);
     }
@@ -52,7 +54,7 @@ export function useSecuritySettings() {
 
   async function removeSession(id: string) {
     try {
-      await apiClient.post(SECURITY_ENDPOINTS.SESSION_LOGOUT(id));
+      await logoutSession(id);
       setSessions((prev) => prev.filter((s) => s.id !== id));
     } catch {}
   }
@@ -65,7 +67,7 @@ export function useSecuritySettings() {
         onPress: async () => {
           setLoggingOut(true);
           try {
-            await apiClient.post(SECURITY_ENDPOINTS.SESSIONS_LOGOUT_ALL);
+            await logoutAllSessions();
             await clearAuth();
             router.replace('/(auth)/login');
           } catch {
@@ -78,12 +80,12 @@ export function useSecuritySettings() {
 
   function deleteHistoryEntry(id: number) {
     setHistory((prev) => prev.filter((h) => h.id !== id));
-    apiClient.delete(SECURITY_ENDPOINTS.LOGIN_HISTORY_DELETE(id)).catch(() => {});
+    deleteLoginHistoryEntry(id).catch(() => {});
   }
 
   function clearAllHistory() {
     setHistory([]);
-    apiClient.delete(SECURITY_ENDPOINTS.LOGIN_HISTORY).catch(() => {});
+    clearLoginHistory().catch(() => {});
   }
 
   return { user, clearAuth, sessions, history, loading, loggingOut, removeSession, confirmLogoutAll, deleteHistoryEntry, clearAllHistory };

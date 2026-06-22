@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { apiClient } from '../../../api/client';
-import { PAYMENT_ENDPOINTS } from '../../../constants';
+import { initiatePayment, getPaymentStatus, activateListing } from '../../../api/core/payment.actions';
 import { CATEGORY_ENDPOINTS } from '../../../features/new-ad/constants/config';
 import { useAppSelector } from '../../../store/store';
 import type { PayMethod, Plan } from '../../../util/types';
@@ -36,9 +35,7 @@ export function usePaymentFlow({ plan, listingId, categoryKey }: UsePaymentFlowP
   const [autoActivating, setAutoActivating] = useState(total === 0);
   useEffect(() => {
     if (total !== 0) return;
-    apiClient.patch(PAYMENT_ENDPOINTS.ACTIVATE(catPath, listingId), {
-      isPaid: true, planId: plan._id, planAmount: plan.price, planType: plan.key,
-    })
+    activateListing(catPath, listingId, { isPaid: true, planId: plan._id, planAmount: plan.price, planType: plan.key })
       .catch(() => {})
       .finally(() => { setAutoActivating(false); setPayStatus('success'); });
   }, []);
@@ -54,14 +51,11 @@ export function usePaymentFlow({ plan, listingId, categoryKey }: UsePaymentFlowP
       attempts++;
       setPollAttempt(attempts);
       try {
-        const { data } = await apiClient.get(PAYMENT_ENDPOINTS.MOBILE_STATUS(paymentRef));
-        const status: string = data?.status || '';
+        const status = await getPaymentStatus(paymentRef);
         if (status === 'success') {
           stopPolling();
           try {
-            await apiClient.patch(PAYMENT_ENDPOINTS.ACTIVATE(catPath, listingId), {
-              isPaid: true, planId: plan._id, planAmount: plan.price, planType: plan.key,
-            });
+            await activateListing(catPath, listingId, { isPaid: true, planId: plan._id, planAmount: plan.price, planType: plan.key });
           } catch {}
           setPayStatus('success');
           return;
@@ -89,13 +83,12 @@ export function usePaymentFlow({ plan, listingId, categoryKey }: UsePaymentFlowP
     setPayStatus('polling');
     setErrorMsg('');
     try {
-      const { data } = await apiClient.post(PAYMENT_ENDPOINTS.MOBILE_INITIATE, {
+      const paymentRef = await initiatePayment({
         provider: method, phone: normalizePhone(phone),
         amount: total, planAmount: plan.price,
         adId: listingId, planId: plan._id, planType: plan.key,
         feeId, categoryType: catPath,
       });
-      const paymentRef: string = data?.paymentRef || '';
       if (!paymentRef) {
         setPayStatus('failed');
         setErrorMsg('Payment initiation failed — no reference returned. Please try again.');

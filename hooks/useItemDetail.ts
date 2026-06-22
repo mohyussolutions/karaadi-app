@@ -4,8 +4,8 @@ import { useRouter } from 'expo-router';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { toggleFavorite } from '../store/slices/favoritesSlice';
 import { useAuthStore } from '../store/authStore';
-import { apiClient } from '../api/client';
-import { MARKETPLACE_ENDPOINTS } from '../constants';
+import { getMarketplaceItemById } from '../api/categories/marketplace.actions';
+
 import { getCachedListing } from '../services/listingCache';
 import { showToast } from '../services/toastService';
 import type { MarketplaceItem } from '../util/types/listing.types';
@@ -27,7 +27,7 @@ export function useItemDetail(id: string) {
     const ctrl = new AbortController();
     async function load() {
       try {
-        const { data } = await apiClient.get(MARKETPLACE_ENDPOINTS.BY_ID(id), { signal: ctrl.signal });
+        const data = await getMarketplaceItemById(id);
         setItem({ ...data, id: data.id || data._id, _id: data._id || data.id });
       } catch {}
       setLoading(false);

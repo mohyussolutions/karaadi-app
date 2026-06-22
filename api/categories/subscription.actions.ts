@@ -94,3 +94,8 @@ export async function checkAlertsForMatches(): Promise<void> {
     await AsyncStorage.setItem(LAST_CHECKED_KEY, new Date().toISOString());
   } catch {}
 }
+
+export async function getSubscriptionById(id: string, signal?: AbortSignal): Promise<any> {
+  const { data } = await apiClient.get(SUBSCRIPTION_ENDPOINTS.BY_ID(id), { signal });
+  return data;
+}

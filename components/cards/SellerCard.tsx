@@ -3,8 +3,8 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { apiClient } from '../../api/client';
-import { REVIEWS_ENDPOINTS, placeholderAvatar } from '../../constants';
+import { getReviewsByUser } from '../../api/core/reviews.actions';
+import { placeholderAvatar } from '../../constants';
 import type { SellerCardProps } from '../../util/types';
 import { createStyles } from '../../util/styles/detail/SellerCard.styles';
 
@@ -42,11 +42,10 @@ export default function SellerCard({
 
   useEffect(() => {
     if (!userId) return;
-    apiClient.get(REVIEWS_ENDPOINTS.BY_USER(userId))
-      .then(({ data }) => {
-        const list: any[] = Array.isArray(data) ? data : data?.reviews ?? [];
+    getReviewsByUser(userId)
+      .then((list) => {
         if (list.length === 0) return;
-        const avg = list.reduce((sum, r) => sum + (r.rating || 0), 0) / list.length;
+        const avg = list.reduce((sum: number, r: any) => sum + (r.rating || 0), 0) / list.length;
         setRating(avg);
         setReviewCount(list.length);
       })

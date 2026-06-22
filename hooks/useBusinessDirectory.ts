@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAppSelector } from '../store/store';
-import { apiClient } from '../api/client';
-import { BUSINESSES_ENDPOINTS } from '../constants';
+import { getBusinessList } from '../api/core/business.actions';
+
 
 export function useBusinessDirectory() {
   const user = useAppSelector((s) => s.auth.user);
@@ -11,8 +11,8 @@ export function useBusinessDirectory() {
 
   const load = useCallback(async () => {
     try {
-      const { data } = await apiClient.get(BUSINESSES_ENDPOINTS.LIST);
-      setBusinesses(Array.isArray(data) ? data : data?.businesses || []);
+      const data = await getBusinessList();
+      setBusinesses(Array.isArray(data) ? data : []);
     } catch {
       setBusinesses([]);
     } finally {

@@ -10,3 +10,8 @@ export async function createListing(categoryKey: string, body: Record<string, an
     images,
   };
 }
+
+export async function getVehicleDetailById(id: string, endpoint: string, signal?: AbortSignal): Promise<any> {
+  const { data } = await apiClient.get(`${endpoint}/${id}`, { signal });
+  return data;
+}

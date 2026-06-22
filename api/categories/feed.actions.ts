@@ -106,3 +106,13 @@ export async function fetchFeedGroup(group: 'fast' | 'slow', signal?: AbortSigna
 export async function fetchFeed(signal?: AbortSignal): Promise<ListingBase[]> {
   return fetchFeedGroup('fast', signal);
 }
+
+export async function getRecommendedByEndpoint(endpoint: string, signal?: AbortSignal): Promise<any[]> {
+  const { data } = await apiClient.get(endpoint, { params: { limit: 10 }, signal });
+  return Array.isArray(data) ? data : data?.listings || data?.items || [];
+}
+
+export async function getHomeFeedRecommendations(signal?: AbortSignal): Promise<any[]> {
+  const { data } = await apiClient.get(FEED_ENDPOINTS.RECOMMENDATIONS, { signal });
+  return Array.isArray(data) ? data : data?.listings || [];
+}

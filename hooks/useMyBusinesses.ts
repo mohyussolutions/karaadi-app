@@ -2,8 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../store/authStore';
-import { apiClient } from '../api/client';
-import { BUSINESSES_ENDPOINTS } from '../constants';
+import { getMyBusinesses, deleteBusiness } from '../api/core/business.actions';
 
 export function useMyBusinesses() {
   const { t } = useTranslation();
@@ -15,8 +14,8 @@ export function useMyBusinesses() {
   const load = useCallback(async (signal?: AbortSignal) => {
     if (!user) { setLoading(false); return; }
     try {
-      const { data } = await apiClient.get(BUSINESSES_ENDPOINTS.MY, { signal });
-      setBusinesses(Array.isArray(data) ? data : data?.businesses || []);
+      const list = await getMyBusinesses();
+      setBusinesses(Array.isArray(list) ? list : []);
     } catch {
       setBusinesses([]);
     } finally {
@@ -44,7 +43,7 @@ export function useMyBusinesses() {
           style: 'destructive',
           onPress: async () => {
             try {
-              await apiClient.delete(BUSINESSES_ENDPOINTS.DELETE(item._id || item.id));
+              await deleteBusiness(item._id || item.id);
               setBusinesses((prev) => prev.filter((b) => (b._id || b.id) !== (item._id || item.id)));
             } catch {
               Alert.alert('Error', 'Failed to delete. Please try again.');

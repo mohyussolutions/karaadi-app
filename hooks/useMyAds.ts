@@ -2,9 +2,7 @@ import { useState, useCallback } from 'react';
 import { Alert } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { getMyAds } from '../api/core';
-import { apiClient } from '../api/client';
-import { MY_ADS_ENDPOINTS } from '../constants';
+import { getMyAds, deleteMyAd } from '../api/core';
 import { useAuthStore } from '../store/authStore';
 import type { ListingBase } from '../util/types';
 
@@ -60,7 +58,7 @@ export function useMyAds() {
           onPress: async () => {
             setDeletingId(id);
             try {
-              await apiClient.delete(MY_ADS_ENDPOINTS.DELETE(id));
+              await deleteMyAd(id);
               setAds((prev) => prev.filter((a) => (a._id || a.id) !== id));
             } catch {
               Alert.alert(t('auth.common.error'), t('mine.myAds.deleteFailed'));

@@ -4,8 +4,8 @@ import { useRouter } from 'expo-router';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { toggleFavorite } from '../store/slices/favoritesSlice';
 import { useAuthStore } from '../store/authStore';
-import { apiClient } from '../api/client';
-import { VEHICLE_ENDPOINTS } from '../constants';
+import { getVehicleDetailById } from '../api/categories/listing.actions';
+import { VEHICLE_ENDPOINTS } from '../constants/detailConfig';
 import { getCachedListing } from '../services/listingCache';
 import { showToast } from '../services/toastService';
 import type { VehicleListing } from '../util/types/listing.types';
@@ -28,7 +28,7 @@ export function useVehicleDetail(id: string, category: string) {
     async function load() {
       try {
         const ep = VEHICLE_ENDPOINTS[category] || `/api/${category}`;
-        const { data } = await apiClient.get(`${ep}/${id}`, { signal: ctrl.signal });
+        const data = await getVehicleDetailById(id, ep, ctrl.signal);
         setItem({ ...data, id: data.id || data._id });
       } catch {}
       setLoading(false);

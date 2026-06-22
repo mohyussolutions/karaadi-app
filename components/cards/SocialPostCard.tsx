@@ -3,8 +3,8 @@ import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
-import { apiClient } from '../../api/client';
-import { SOCIAL_ENDPOINTS, SOCIAL_BRAND_COLORS } from '../../constants';
+import { getSocialStatus, postSocialUpdate } from '../../api/core/social.actions';
+import { SOCIAL_BRAND_COLORS } from '../../constants';
 import { SOCIAL_ICONS } from '../../util/icons/icons';
 import type { SocialPostCardProps } from '../../util/types';
 import { createStyles } from '../../util/styles/social/socialPostCard.styles';
@@ -62,7 +62,7 @@ export default function SocialPostCard({ title, description, price, images, list
   const [ttState, setTtState] = useState<PostState>('idle');
 
   useEffect(() => {
-    apiClient.get(SOCIAL_ENDPOINTS.STATUS)
+    getSocialStatus()
       .then(({ data }) => {
         setAvail(data);
         setFbOn(!!data.facebook);
@@ -91,7 +91,7 @@ export default function SocialPostCard({ title, description, price, images, list
     if (fbOn) setFbState('loading');
     if (ttOn) setTtState('loading');
     try {
-      const { data } = await apiClient.post(SOCIAL_ENDPOINTS.POST, payload);
+      const data = await postSocialUpdate(payload);
       const results = data?.results ?? {};
       if (fbOn) setFbState(results.facebook?.success ? 'done' : 'error');
       if (ttOn) setTtState(results.tiktok?.success ? 'done' : 'error');

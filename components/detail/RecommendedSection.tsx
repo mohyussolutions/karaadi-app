@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { apiClient } from '../../api/client';
+import { getRecommendedByEndpoint } from '../../api/categories/feed.actions';
 import { extractList } from '../../util/helpers';
 import { getImageUrl, formatPrice } from '../../util/helpers';
 import { getListingDetailRoute } from '../../util/helpers';
@@ -21,12 +21,12 @@ function RecommendedSection({ endpoint, excludeId, title, categoryKey }: Recomme
 
   useEffect(() => {
     let cancelled = false;
-    apiClient.get(endpoint, { params: { limit: 10 } }).then(({ data }) => {
+    getRecommendedByEndpoint(endpoint).then((list) => {
       if (cancelled) return;
-      const list = extractList<ListingBase>(data)
-        .filter((i) => i._id !== excludeId && i.id !== excludeId)
-        .slice(0, 8);
-      setItems(list);
+      const filtered = list
+        .filter((i: any) => i._id !== excludeId && i.id !== excludeId)
+        .slice(0, 8) as ListingBase[];
+      setItems(filtered);
     }).catch(() => {});
     return () => { cancelled = true; };
   }, [endpoint, excludeId]);

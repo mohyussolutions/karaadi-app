@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { Linking } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuthStore } from '../store/authStore';
-import { apiClient } from '../api/client';
-import { SUBSCRIPTION_ENDPOINTS } from '../constants';
+import { getSubscriptionById } from '../api/categories/subscription.actions';
+
 import type { Subscription } from '../util/types/listing.types';
 
 export function useSubscriptionDetail(id: string) {
@@ -19,7 +19,7 @@ export function useSubscriptionDetail(id: string) {
     const ctrl = new AbortController();
     async function load() {
       try {
-        const { data } = await apiClient.get(SUBSCRIPTION_ENDPOINTS.BY_ID(id), { signal: ctrl.signal });
+        const data = await getSubscriptionById(id, ctrl.signal);
         const sub = data?.subscription ?? data?.data ?? data;
         setItem({ ...sub, id: sub.id || sub._id });
       } catch {}

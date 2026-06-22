@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../store/authStore';
-import { apiClient } from '../api/client';
-import { SEARCH_HISTORY_ENDPOINTS } from '../constants';
+import { getSearchHistory, deleteSearchHistory } from '../api/search/searchHistory';
+
 
 export function useSavedSearches() {
   const { t } = useTranslation();
@@ -14,8 +14,8 @@ export function useSavedSearches() {
   useEffect(() => {
     if (!user) { setLoading(false); return; }
     const ctrl = new AbortController();
-    apiClient.get(SEARCH_HISTORY_ENDPOINTS.LIST, { signal: ctrl.signal })
-      .then(({ data }) => setSearches(Array.isArray(data) ? data : data?.searches || []))
+    getSearchHistory(ctrl.signal)
+      .then((data) => setSearches(data))
       .catch(() => {})
       .finally(() => setLoading(false));
     return () => ctrl.abort();
@@ -28,7 +28,7 @@ export function useSavedSearches() {
         text: t('businesses.myAds.delete'), style: 'destructive',
         onPress: () => {
           setSearches((prev) => prev.filter((s) => (s._id || s.id) !== id));
-          apiClient.delete(SEARCH_HISTORY_ENDPOINTS.DELETE(id)).catch(() => {});
+          deleteSearchHistory(id);
         },
       },
     ]);

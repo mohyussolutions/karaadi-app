@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
-import { apiClient } from '../api/client';
-import { BUSINESSES_ENDPOINTS } from '../constants';
+import { getBusinessById } from '../api/core/business.actions';
+
 
 export function useBusinessDetail(id: string) {
   const [business, setBusiness] = useState<any>(null);
@@ -8,7 +8,7 @@ export function useBusinessDetail(id: string) {
 
   const load = useCallback(async () => {
     try {
-      const { data } = await apiClient.get(BUSINESSES_ENDPOINTS.BY_ID(id));
+      const data = await getBusinessById(id);
       setBusiness(data);
     } catch {}
     setLoading(false);

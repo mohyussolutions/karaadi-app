@@ -5,3 +5,7 @@ export * from './notifications.actions';
 export * from './report.actions';
 export * from './business.actions';
 export * from './block.actions';
+export * from './payment.actions';
+export * from './social.actions';
+export * from './reviews.actions';
+export * from './security.actions';

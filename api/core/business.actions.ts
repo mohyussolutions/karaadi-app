@@ -19,3 +19,12 @@ export async function createBusiness(payload: Record<string, any>): Promise<any>
 export async function updateBusiness(id: string, payload: Record<string, any>): Promise<void> {
   await apiClient.patch(BUSINESSES_ENDPOINTS.UPDATE(id), payload);
 }
+
+export async function getBusinessList(): Promise<any[]> {
+  const { data } = await apiClient.get(BUSINESSES_ENDPOINTS.LIST);
+  return Array.isArray(data) ? data : data?.businesses || [];
+}
+
+export async function deleteBusiness(id: string): Promise<void> {
+  await apiClient.delete(BUSINESSES_ENDPOINTS.DELETE(id));
+}
