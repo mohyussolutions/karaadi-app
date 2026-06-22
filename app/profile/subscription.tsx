@@ -1,12 +1,15 @@
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { useEffect, useState, useCallback } from 'react';
+import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner } from '../../components/loading';
+import { EmptyState } from '../../components/shared';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles, createCurrentStyles } from '../../util/styles/profile/profileSubscription.styles';
-import { useSubscriptionPlans } from '../../hooks/useSubscriptionPlans';
+import { createSubscriptionListStyles } from '../../util/styles/profile/profileSubscription.styles';
+import { fetchMySubscriptions, deleteSubscription } from '../../api/categories/subscription.actions';
+import type { Subscription } from '../../util/types/listing.types';
 
 function formatDate(iso: string | undefined): string {
   if (!iso) return '';
@@ -17,100 +20,128 @@ function formatDate(iso: string | undefined): string {
   }
 }
 
-function normalizePlan(item: any) {
-  return {
-    _id:      item._id || item.id || '',
-    key:      item.key || item.type || '',
-    label:    item.label || item.name || item.planName || item.title || '',
-    price:    item.price ?? item.pricePerDay ?? item.amount ?? 0,
-    days:     item.days ?? item.duration ?? item.durationDays ?? 0,
-    features: Array.isArray(item.features) ? item.features : [],
-  };
-}
-
 export default function SubscriptionScreen() {
   const router = useRouter();
   const { t } = useTranslation();
-  const { plans, loading, myPlan } = useSubscriptionPlans();
   const Colors = useThemeColors();
-  const styles = useThemedStyles(createStyles);
-  const currentStyles = useThemedStyles(createCurrentStyles);
+  const styles = useThemedStyles(createSubscriptionListStyles);
+
+  const [subs, setSubs] = useState<Subscription[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    const data = await fetchMySubscriptions();
+    setSubs(data);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  function handleDelete(item: Subscription) {
+    Alert.alert(
+      t('mine.subscriptions.deleteTitle', 'Delete subscription'),
+      t('mine.subscriptions.deleteConfirm', 'Are you sure you want to delete this subscription?'),
+      [
+        { text: t('common.cancel', 'Cancel'), style: 'cancel' },
+        {
+          text: t('common.delete', 'Delete'),
+          style: 'destructive',
+          onPress: async () => {
+            await deleteSubscription(item.id || item._id || '');
+            setSubs(prev => prev.filter(s => (s.id || s._id) !== (item.id || item._id)));
+          },
+        },
+      ],
+    );
+  }
 
   if (loading) return <LoadingSpinner fullScreen />;
-
-  const planName = myPlan?.planName || myPlan?.name || myPlan?.type;
-  const expiresAt = myPlan?.expiresAt || myPlan?.expiredAt || myPlan?.endDate;
-  const isActive = myPlan?.isActive ?? (expiresAt ? new Date(expiresAt) > new Date() : !!myPlan);
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <FlatList
-        data={plans}
-        keyExtractor={(item, index) => (item as any)._id || (item as any).key || String(index)}
-        contentContainerStyle={styles.content}
+        data={subs}
+        keyExtractor={(item) => item.id || item._id || ''}
+        contentContainerStyle={[styles.content, subs.length === 0 && { flex: 1 }]}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={
-          myPlan ? (
-            <View style={[currentStyles.card, isActive ? currentStyles.cardActive : currentStyles.cardInactive]}>
-              <View style={currentStyles.row}>
-                <MaterialCommunityIcons
-                  name="crown"
-                  size={22}
-                  color={isActive ? Colors.premium : Colors.textMuted}
-                />
-                <View style={currentStyles.flexFull}>
-                  <Text style={currentStyles.label}>{t('mine.subscriptions.currentPlan')}</Text>
-                  <Text style={currentStyles.name}>{planName || t('mine.subscriptions.activePlan')}</Text>
-                </View>
-                <View style={[currentStyles.badge, isActive ? currentStyles.badgeActive : currentStyles.badgeInactive]}>
-                  <Text style={[currentStyles.badgeText, isActive ? currentStyles.badgeTextActive : currentStyles.badgeTextInactive]}>
-                    {isActive ? t('mine.subscriptions.status.active') : t('mine.subscriptions.status.expired')}
-                  </Text>
-                </View>
-              </View>
-              {!!expiresAt && (
-                <View style={currentStyles.expiryRow}>
-                  <MaterialCommunityIcons name="calendar-clock" size={13} color={Colors.textMuted} />
-                  <Text style={currentStyles.expiryText}>
-                    {t(isActive ? 'mine.subscriptions.expires' : 'mine.subscriptions.expired')} {formatDate(expiresAt)}
-                  </Text>
-                </View>
-              )}
-            </View>
-          ) : (
-            <View style={currentStyles.noplan}>
-              <MaterialCommunityIcons name="crown-outline" size={32} color={Colors.textMuted} />
-              <Text style={currentStyles.noplanText}>{t('mine.subscriptions.noActivePlan')}</Text>
-              <Text style={currentStyles.noplanSub}>{t('mine.subscriptions.choosePlanBelow')}</Text>
-            </View>
-          )
+        ListEmptyComponent={
+          <EmptyState
+            icon="bell-outline"
+            title={t('mine.subscriptions.noSubscriptions', 'No subscriptions yet')}
+            message={t('mine.subscriptions.noSubscriptionsSub', 'Your saved search alerts will appear here')}
+          />
         }
-        renderItem={({ item: raw }) => {
-          const item = normalizePlan(raw);
+        renderItem={({ item }) => {
+          const isActive = item.isActive ?? (item.status === 'active');
+          const priceRange = item.priceMin && item.priceMax
+            ? `${item.priceMin} – ${item.priceMax}`
+            : item.priceMax ? `≤ ${item.priceMax}`
+            : item.priceMin ? `≥ ${item.priceMin}`
+            : null;
+
           return (
-            <View style={styles.planCard}>
-              <View style={styles.planHeader}>
-                <Text style={styles.planName}>{item.label || t('mine.subscriptions.activePlan')}</Text>
-                <Text style={styles.planPrice}>
-                  {item.price === 0 ? t('postAd.free') : `$${item.price}`}
-                  {item.price > 0 && item.days > 0 && (
-                    <Text style={styles.planPer}>/{item.days}d</Text>
-                  )}
-                </Text>
-              </View>
-              {item.features.map((f: string, i: number) => (
-                <View key={i} style={styles.featureRow}>
-                  <MaterialCommunityIcons name="check-circle" size={16} color={Colors.success} />
-                  <Text style={styles.featureText}>{f}</Text>
+            <TouchableOpacity
+              style={styles.card}
+              activeOpacity={0.85}
+              onPress={() => router.push({ pathname: '/listing/subscription/[id]', params: { id: item.id || item._id || '' } })}
+            >
+              <View style={styles.cardHeader}>
+                <View style={styles.cardTitleRow}>
+                  <MaterialCommunityIcons name="bell-outline" size={18} color={Colors.primary} />
+                  <Text style={styles.cardTitle} numberOfLines={1}>{item.title}</Text>
                 </View>
-              ))}
-              <TouchableOpacity
-                style={styles.subscribeBtn}
-                onPress={() => router.push('/(tabs)/new-ad')}
-              >
-                <Text style={styles.subscribeBtnText}>{t('plan.clickToSelect')} — {item.label}</Text>
-              </TouchableOpacity>
-            </View>
+                <View style={[styles.badge, isActive ? styles.badgeActive : styles.badgeInactive]}>
+                  <Text style={[styles.badgeText, isActive ? styles.badgeTextActive : styles.badgeTextInactive]}>
+                    {isActive ? t('mine.subscriptions.status.active', 'Active') : t('mine.subscriptions.status.expired', 'Expired')}
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.metaGrid}>
+                <View style={styles.metaItem}>
+                  <MaterialCommunityIcons name="tag-outline" size={13} color={Colors.textMuted} />
+                  <Text style={styles.metaText} numberOfLines={1}>{item.category}</Text>
+                </View>
+                {!!item.region && (
+                  <View style={styles.metaItem}>
+                    <MaterialCommunityIcons name="map-marker-outline" size={13} color={Colors.textMuted} />
+                    <Text style={styles.metaText} numberOfLines={1}>{item.region}</Text>
+                  </View>
+                )}
+                {!!priceRange && (
+                  <View style={styles.metaItem}>
+                    <MaterialCommunityIcons name="currency-usd" size={13} color={Colors.textMuted} />
+                    <Text style={styles.metaText}>{priceRange}</Text>
+                  </View>
+                )}
+                {!!item.notificationCount && (
+                  <View style={styles.metaItem}>
+                    <MaterialCommunityIcons name="bell-ring-outline" size={13} color={Colors.primary} />
+                    <Text style={[styles.metaText, { color: Colors.primary }]}>{item.notificationCount} matches</Text>
+                  </View>
+                )}
+              </View>
+
+              {Array.isArray(item.cities) && item.cities.length > 0 && (
+                <Text style={styles.cities} numberOfLines={1}>
+                  {item.cities.join(' · ')}
+                </Text>
+              )}
+
+              <View style={styles.cardFooter}>
+                {!!item.createdAt && (
+                  <Text style={styles.dateText}>{formatDate(item.createdAt)}</Text>
+                )}
+                <TouchableOpacity
+                  style={styles.deleteBtn}
+                  onPress={() => handleDelete(item)}
+                  hitSlop={8}
+                >
+                  <MaterialCommunityIcons name="delete-outline" size={18} color={Colors.error} />
+                </TouchableOpacity>
+              </View>
+            </TouchableOpacity>
           );
         }}
       />
