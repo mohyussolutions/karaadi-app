@@ -57,18 +57,18 @@ export default function JobDetailScreen() {
   const salary = formatSalary(item.salaryMin, item.salaryMax);
 
   const poster = item.user;
-  const posterName = typeof poster === 'object' ? poster?.username || 'Employer' : 'Employer';
+  const posterName = typeof poster === 'object' ? poster?.username || t('jobsPage.labelEmployer') : t('jobsPage.labelEmployer');
   const posterAvatar = typeof poster === 'object' ? poster?.profileImage || null : null;
 
   const specItems: { label: string; value: string }[] = [
-    item.company && { label: 'Company', value: item.company },
-    (item.employmentType || item.type) && { label: 'Job Type', value: item.employmentType || item.type },
-    salary !== 'Negotiable' && { label: 'Salary', value: salary },
-    item.location && { label: 'Location', value: item.location },
-    item.createdAt && { label: 'Posted', value: formatDate(item.createdAt) },
+    item.company && { label: t('jobsPage.labelCompany'), value: item.company },
+    (item.employmentType || item.type) && { label: t('jobsPage.labelJobType'), value: item.employmentType || item.type },
+    salary !== 'Negotiable' && { label: t('jobsPage.labelSalary'), value: salary },
+    item.location && { label: t('jobsPage.labelLocation'), value: item.location },
+    item.createdAt && { label: t('jobsPage.labelPosted'), value: formatDate(item.createdAt) },
   ].filter(Boolean) as { label: string; value: string }[];
 
-  const locationLabel = [item.city, item.region].filter(Boolean).join(', ') || item.location || 'Somalia';
+  const locationLabel = [item.city, item.region].filter(Boolean).join(', ') || item.location || t('vehicleDetail.locationFallback');
 
   const galleryContent = (
     <ImageGallery
@@ -99,10 +99,10 @@ export default function JobDetailScreen() {
         onMessage={handleApply}
         messageBtnLabel={t('realEstateDetail.sendMessage')}
       />
-      {specItems.length > 0 && <SpecGrid title="Job Details" items={specItems} />}
+      {specItems.length > 0 && <SpecGrid title={t('jobsPage.jobDetailsSpec')} items={specItems} />}
       {desc.length > 0 && (
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>{t('jobsPage.jobDescription') || 'Description'}</Text>
+          <Text style={styles.cardTitle}>{t('jobsPage.jobDescription')}</Text>
           <Text style={styles.description}>
             {expanded || desc.length <= TRUNCATE ? desc : `${desc.slice(0, TRUNCATE)}...`}
           </Text>
@@ -117,7 +117,7 @@ export default function JobDetailScreen() {
       )}
       {item.requirements && (
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Requirements</Text>
+          <Text style={styles.cardTitle}>{t('jobsPage.requirementsLabel')}</Text>
           <Text style={styles.description}>{item.requirements}</Text>
         </View>
       )}

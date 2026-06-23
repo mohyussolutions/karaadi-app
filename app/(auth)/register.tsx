@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
-  ScrollView, KeyboardAvoidingView, Alert,
+  ScrollView, KeyboardAvoidingView, Alert, Linking,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -132,6 +132,18 @@ export default function RegisterScreen() {
               {isLoading ? t('auth.register.registering') : t('auth.register.registerButton')}
             </Text>
           </TouchableOpacity>
+
+          <Text style={styles.termsNote}>
+            By creating an account you agree to our{' '}
+            <Text style={styles.termsLink} onPress={() => Linking.openURL('https://karaadi.com/terms')}>
+              Terms of Service
+            </Text>
+            {' '}and{' '}
+            <Text style={styles.termsLink} onPress={() => Linking.openURL('https://karaadi.com/privacy')}>
+              Privacy Policy
+            </Text>
+            , including our zero-tolerance policy for objectionable content and abusive users.
+          </Text>
 
           <View style={styles.loginRow}>
             <Text style={styles.loginText}>{t('auth.register.alreadyAccount')} </Text>

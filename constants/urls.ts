@@ -1,4 +1,4 @@
-export const SITE_URL = 'https://karaadi.ee';
+export const SITE_URL = 'https://karaadi.com';
 
 export const getListingShareUrl = (listingId: string) => `${SITE_URL}/listing/${listingId}`;
 

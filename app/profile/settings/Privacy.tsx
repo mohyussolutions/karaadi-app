@@ -44,8 +44,7 @@ export default function PrivacySettings() {
         ))}
 
         <Text style={s.footer}>
-          © 1996–2025 Karaadi AS. Karaadi waa qayb ka mid ah Vend.{'\n'}
-          Akhri wax badan.
+          © {new Date().getFullYear()} Karaadi. Dhammaan xuquuqda way dhowrsanyihiin.
         </Text>
 
         <View style={s.bottomSpacer} />

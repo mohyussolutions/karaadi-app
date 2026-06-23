@@ -1,18 +1,16 @@
-import { Dimensions, StyleSheet, Platform } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import { RADII } from "../../colors/theme";
 import type { ColorPalette } from "../../../hooks/useTheme";
 
-const { width } = Dimensions.get("window");
+export const IMG_H = 320; // static fallback — ImageGallery component uses useWindowDimensions
 
-export const IMG_H = Math.round(width * 0.88);
-
-export function createStyles(Colors: ColorPalette) {
+export function createStyles(Colors: ColorPalette, width = 390, imgH = 320) {
   return StyleSheet.create({
     wrapper: { backgroundColor: Colors.galleryBg },
-    image: { width, height: IMG_H },
+    image: { width, height: imgH },
     arrow: {
       position: "absolute",
-      top: IMG_H / 2 - 22,
+      top: imgH / 2 - 22,
       width: 40,
       height: 40,
       borderRadius: 20,

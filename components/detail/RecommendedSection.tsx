@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, memo } from 'react';
 import {
   View, Text, FlatList, TouchableOpacity, Image,
 } from 'react-native';
+import { useGlobal } from '../../hooks/useGlobal';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { getRecommendedByEndpoint } from '../../api/categories/feed.actions';
@@ -15,8 +16,9 @@ import { createStyles } from '../../util/styles/detail/RecommendedSection.styles
 
 function RecommendedSection({ endpoint, excludeId, title, categoryKey }: RecommendedSectionProps) {
   const { t } = useTranslation();
+  const { width } = useGlobal();
   const router = useRouter();
-  const styles = useThemedStyles(createStyles);
+  const styles = useThemedStyles((c) => createStyles(c, width));
   const [items, setItems] = useState<ListingBase[]>([]);
 
   useEffect(() => {

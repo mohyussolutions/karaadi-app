@@ -5,7 +5,7 @@ import { useThemeColors, useThemedStyles, useThemeMode } from "../../hooks/useTh
 import { useAppTranslation } from "../../hooks/useAppTranslation";
 import { createLayoutStyles } from "../../util/styles/tabs/layout.styles";
 import { TabButtonBackground } from "./TabButtonBackground";
-import type { TabItem } from "../../util/types/interfaces/common";
+import type { TabItem } from "../../util/types/navigation.types";
 
 interface BottomTabItemProps {
   item: TabItem;

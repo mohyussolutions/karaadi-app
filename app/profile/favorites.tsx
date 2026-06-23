@@ -8,6 +8,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
+import { useGlobal } from '../../hooks/useGlobal';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -33,8 +34,9 @@ export default function FavoritesScreen() {
     handleCardPress,
   } = useFavoritesData();
 
+  const { width } = useGlobal();
   const Colors = useThemeColors();
-  const s = useThemedStyles(createStyles);
+  const s = useThemedStyles((c) => createStyles(c, width));
 
   if (!user) {
     return (

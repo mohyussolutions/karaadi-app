@@ -65,21 +65,21 @@ export default function VehicleDetailScreen() {
     : null;
 
   const specItems: { label: string; value: string }[] = [
-    item.brand && { label: 'Make', value: item.brand },
+    item.brand && { label: t('vehicleDetail.make'), value: item.brand },
     (item.model || item.vehicleModel || item.modelName || item.boatModel || item.traktortModel) && {
-      label: 'Model', value: item.model || item.vehicleModel || item.modelName || item.boatModel || item.traktortModel,
+      label: t('vehicleDetail.model'), value: item.model || item.vehicleModel || item.modelName || item.boatModel || item.traktortModel,
     },
-    item.year && { label: 'Year', value: String(item.year) },
-    item.mileage && { label: 'Mileage', value: `${Number(item.mileage).toLocaleString()} km` },
-    item.hours && { label: 'Hours', value: `${item.hours} h` },
-    item.fuelType && { label: 'Fuel Type', value: item.fuelType },
-    item.transmission && { label: 'Transmission', value: item.transmission },
-    item.color && { label: 'Color', value: item.color },
-    item.type && { label: 'Type', value: item.type },
-    item.length && { label: 'Length', value: `${item.length} ft` },
+    item.year && { label: t('vehicleDetail.year'), value: String(item.year) },
+    item.mileage && { label: t('vehicleDetail.mileage'), value: `${Number(item.mileage).toLocaleString()} km` },
+    item.hours && { label: t('vehicleDetail.hours'), value: `${item.hours} h` },
+    item.fuelType && { label: t('vehicleDetail.fuelType'), value: item.fuelType },
+    item.transmission && { label: t('vehicleDetail.transmission'), value: item.transmission },
+    item.color && { label: t('vehicleDetail.color'), value: item.color },
+    item.type && { label: t('vehicleDetail.type'), value: item.type },
+    item.length && { label: t('vehicleDetail.length'), value: `${item.length} ft` },
   ].filter(Boolean) as { label: string; value: string }[];
 
-  const locationStr = [item.city, item.region].filter(Boolean).join(', ') || 'Somalia';
+  const locationStr = [item.city, item.region].filter(Boolean).join(', ') || t('vehicleDetail.locationFallback');
   const shareMsg = `${item.title}\n${item.price > 0 ? formatPrice(item.price) : 'Price on request'}\n📍 ${locationStr}\n\nKaraadi`;
 
   const galleryAndSpecs = (
@@ -92,7 +92,7 @@ export default function VehicleDetailScreen() {
       />
       {specItems.length > 0 && (
         <View style={styles.specWrap}>
-          <SpecGrid title="Technical Specifications" items={specItems} />
+          <SpecGrid title={t('vehicleDetail.techSpecs')} items={specItems} />
         </View>
       )}
     </>
@@ -111,12 +111,12 @@ export default function VehicleDetailScreen() {
       </View>
 
       {!isTabletLandscape && specItems.length > 0 && (
-        <SpecGrid title="Technical Specifications" items={specItems} />
+        <SpecGrid title={t('vehicleDetail.techSpecs')} items={specItems} />
       )}
 
       {desc.length > 0 && (
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Description</Text>
+          <Text style={styles.cardTitle}>{t('vehicleDetail.description')}</Text>
           <Text style={styles.description}>
             {expanded || desc.length <= TRUNCATE ? desc : `${desc.slice(0, TRUNCATE)}...`}
           </Text>

@@ -1,11 +1,9 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
 
-const { width } = Dimensions.get('window');
-const CARD_W = width * 0.42;
-const CARD_H = CARD_W * 0.75;
-
-export function createStyles(Colors: ColorPalette) {
+export function createStyles(Colors: ColorPalette, width = 390) {
+  const CARD_W = width * 0.42;
+  const CARD_H = CARD_W * 0.75;
   return StyleSheet.create({
     wrap: {
       marginTop: 24,

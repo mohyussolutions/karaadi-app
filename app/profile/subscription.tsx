@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Alert, Dimensions } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { useGlobal } from '../../hooks/useGlobal';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -13,7 +14,6 @@ import type { Subscription } from '../../util/types/listing.types';
 
 const COLUMN_GAP = 10;
 const H_PAD = 14;
-const CARD_WIDTH = (Dimensions.get('window').width - H_PAD * 2 - COLUMN_GAP) / 2;
 
 function formatDate(iso: string | undefined): string {
   if (!iso) return '';
@@ -27,6 +27,8 @@ function formatDate(iso: string | undefined): string {
 export default function SubscriptionScreen() {
   const router = useRouter();
   const { t } = useTranslation();
+  const { twoColCardW } = useGlobal();
+  const CARD_WIDTH = twoColCardW(H_PAD, COLUMN_GAP);
   const Colors = useThemeColors();
   const styles = useThemedStyles(createSubscriptionListStyles);
 
@@ -131,7 +133,7 @@ export default function SubscriptionScreen() {
               <View style={styles.cardFooter}>
                 <View style={[styles.badge, isActive ? styles.badgeActive : styles.badgeInactive]}>
                   <Text style={[styles.badgeText, isActive ? styles.badgeTextActive : styles.badgeTextInactive]}>
-                    {isActive ? t('mine.subscriptions.status.active', 'Active') : t('mine.subscriptions.status.expired', 'Expired')}
+                    {isActive ? t('mine.subscriptions.status.active') : t('mine.subscriptions.status.expired')}
                   </Text>
                 </View>
                 {!!item.createdAt && (

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { useGlobal } from '../../../hooks/useGlobal';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
@@ -11,7 +12,8 @@ function ImageCarousel({ images, index, onChangeIndex }: {
   images: string[]; index: number; onChangeIndex: (i: number) => void;
 }) {
   const Colors = useThemeColors();
-  const s = useThemedStyles(createStyles);
+  const { width } = useGlobal();
+  const s = useThemedStyles((c) => createStyles(c, width));
   return (
     <View style={s.imgBox}>
       <Image source={{ uri: images[index] }} style={s.img} resizeMode="cover" />
@@ -38,7 +40,8 @@ function ImageCarousel({ images, index, onChangeIndex }: {
 
 function TitleSection({ item, categoryName }: { item: CreatedItemSummary | null; categoryName?: string }) {
   const Colors = useThemeColors();
-  const s = useThemedStyles(createStyles);
+  const { width } = useGlobal();
+  const s = useThemedStyles((c) => createStyles(c, width));
   return (
     <View style={s.titleSection}>
       {!!item?.title && <Text style={s.listingTitle} numberOfLines={2}>{item.title}</Text>}
@@ -63,7 +66,8 @@ function TitleSection({ item, categoryName }: { item: CreatedItemSummary | null;
 }
 
 function AllFieldsGrid({ attrs }: { attrs: Array<{ label: string; value: string }> }) {
-  const s = useThemedStyles(createStyles);
+  const { width } = useGlobal();
+  const s = useThemedStyles((c) => createStyles(c, width));
   return (
     <View style={s.attrsGrid}>
       {attrs.map((a) => (
@@ -77,7 +81,8 @@ function AllFieldsGrid({ attrs }: { attrs: Array<{ label: string; value: string 
 }
 
 function DescriptionBox({ text }: { text: string }) {
-  const s = useThemedStyles(createStyles);
+  const { width } = useGlobal();
+  const s = useThemedStyles((c) => createStyles(c, width));
   const { t } = useAppTranslation();
   return (
     <View style={s.descBox}>
@@ -88,7 +93,8 @@ function DescriptionBox({ text }: { text: string }) {
 }
 
 function PriceBreakdown({ plan, ps, feeAmount }: { plan: Plan; ps: ReturnType<typeof planStyle>; feeAmount: number }) {
-  const s = useThemedStyles(createStyles);
+  const { width } = useGlobal();
+  const s = useThemedStyles((c) => createStyles(c, width));
   const { t } = useAppTranslation();
   return (
     <View style={s.breakdown}>
@@ -115,7 +121,8 @@ function PriceBreakdown({ plan, ps, feeAmount }: { plan: Plan; ps: ReturnType<ty
 
 function TotalDue({ total }: { total: number }) {
   const Colors = useThemeColors();
-  const s = useThemedStyles(createStyles);
+  const { width } = useGlobal();
+  const s = useThemedStyles((c) => createStyles(c, width));
   const { t } = useAppTranslation();
   const isFree = total === 0;
   return (
@@ -132,7 +139,8 @@ function TotalDue({ total }: { total: number }) {
 }
 
 export function OrderSummary({ plan, item, categoryName, feeAmount }: OrderSummaryProps) {
-  const s = useThemedStyles(createStyles);
+  const { width } = useGlobal();
+  const s = useThemedStyles((c) => createStyles(c, width));
   const [imgIdx, setImgIdx] = useState(0);
   const ps = planStyle(plan, useThemeColors());
   const total = feeAmount + plan.price;

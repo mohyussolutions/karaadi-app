@@ -12,6 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { LoadingSpinner } from "../../components/loading";
 import BottomTabBar from "../../components/layout/BottomTabBar";
+import { useTranslation } from "react-i18next";
 import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
 import { SOCIAL_LINK_BUILDERS, placeholderAvatar } from "../../constants";
 import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL } from "../../util/types";
@@ -25,6 +26,7 @@ export default function BusinessDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { business, loading } = useBusinessDetail(id);
+  const { t } = useTranslation();
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const tabletPortrait = useThemedStyles(createTabletPortraitStyles);
@@ -52,9 +54,9 @@ export default function BusinessDetailScreen() {
           size={52}
           color={Colors.textMuted}
         />
-        <Text style={s.errorTitle}>Business not found</Text>
+        <Text style={s.errorTitle}>{t('vehicleDetail.businessNotFound')}</Text>
         <TouchableOpacity style={s.errorBack} onPress={() => router.back()}>
-          <Text style={s.errorBackText}>Go back</Text>
+          <Text style={s.errorBackText}>{t('vehicleDetail.goBack')}</Text>
         </TouchableOpacity>
       </View>
     );

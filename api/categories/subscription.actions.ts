@@ -3,10 +3,28 @@ import { apiClient } from '../client';
 import { SUBSCRIPTION_ENDPOINTS } from '../../constants';
 import { searchCategory } from '../search';
 import { scheduleLocalNotification } from '../../services/notificationService';
-import type { Subscription, SubscriptionPayload } from '../../util/types';
+import type { Subscription, SubscriptionPayload, Plan } from '../../util/types';
 
 const LAST_CHECKED_KEY = 'karaadi_alerts_last_checked_v1';
 const MIN_CHECK_INTERVAL_MS = 5 * 60 * 1000;
+
+export async function fetchSubscriptionPlans(): Promise<Plan[]> {
+  try {
+    const { data } = await apiClient.get(SUBSCRIPTION_ENDPOINTS.PLANS);
+    return Array.isArray(data) ? data : data?.plans ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchMyPlan(): Promise<any> {
+  try {
+    const { data } = await apiClient.get(SUBSCRIPTION_ENDPOINTS.MY);
+    return data ?? null;
+  } catch {
+    return null;
+  }
+}
 
 export async function fetchMySubscriptions(): Promise<Subscription[]> {
   try {

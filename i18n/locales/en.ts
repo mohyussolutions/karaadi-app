@@ -1692,6 +1692,10 @@ export const descriptions = {
 
 export const messages = {
   title: "Messages",
+  noConversationsTitle: "No conversations yet",
+  noConversationsMessage: "When you contact a seller, your chat will appear here.",
+  unknownSender: "Unknown",
+  noMessagesPreview: "No messages yet",
 } as const;
 
 export const chats = {
@@ -1804,8 +1808,8 @@ export const postAd = {
   payVia: "Pay ${{total}} via {{method}}",
   securedCheckout: "Secured · SSL encrypted · Safe checkout",
   iosPaymentTitle: "Complete payment on our website",
-  iosPaymentBody: "To promote your listing, please visit karaadi.ee on your browser and sign in to complete the payment.",
-  iosPaymentBtn: "Open karaadi.ee",
+  iosPaymentBody: "To promote your listing, please visit karaadi.com on your browser and sign in to complete the payment.",
+  iosPaymentBtn: "Open karaadi.com",
   paymentMethod: "Payment Method",
   phoneNumberForMethod: "{{method}} Phone Number",
   enterPhoneForMethod: "Enter the number linked to your {{method}} account",
@@ -2095,6 +2099,14 @@ export const jobsPage = {
   seaportLink: "Seaport",
   notFound: "Job not found",
   jobDescription: "Job Description",
+  labelCompany: "Company",
+  labelJobType: "Job Type",
+  labelSalary: "Salary",
+  labelLocation: "Location",
+  labelPosted: "Posted",
+  labelEmployer: "Employer",
+  jobDetailsSpec: "Job Details",
+  requirementsLabel: "Requirements",
   applyNow: "Apply Now",
   applicationSuccess: "Application Submitted Successfully!",
   backLabel: "Back to Job Listings",
@@ -2243,7 +2255,7 @@ export const realEstateDetail = {
 export const report = {
   goBack: "Go Back to Item",
   heading: "Report Listing",
-  intro: "please provide details about why this item should be reviewed.",
+  intro: "please let us know why this listing should be reviewed.",
   reasonLabel: "Reason for report",
   reasonPlaceholder: "Select a reason",
   reasonScam: "Scam / Fake listing",
@@ -2263,6 +2275,45 @@ export const report = {
   errorNoUser: "Unable to identify user or item. Please try again.",
   errorNoReason: "Please select a reason for reporting",
   errorFailed: "Failed to submit report",
+} as const;
+
+export const subscriptionDetail = {
+  notFound:      "Subscription not found",
+  category:      "Category",
+  subCategory:   "Sub-category",
+  condition:     "Condition",
+  brand:         "Brand",
+  expires:       "Expires",
+  posted:        "Posted",
+  matches:       "Matches",
+  detailsTitle:  "Subscription Details",
+  description:   "Description",
+  titleFallback: "Subscription",
+  priceUpTo:     "Up to",
+  priceFrom:     "From",
+} as const;
+
+export const vehicleDetail = {
+  techSpecs:    "Technical Specifications",
+  description:  "Description",
+  make:         "Make",
+  model:        "Model",
+  year:         "Year",
+  mileage:      "Mileage",
+  hours:        "Hours",
+  fuelType:     "Fuel Type",
+  transmission: "Transmission",
+  color:        "Color",
+  type:         "Type",
+  length:       "Length",
+  condition:    "Condition",
+  subcategory:  "Subcategory",
+  locationFallback: "Somalia",
+  furnishedYes: "Yes",
+  furnishedNo:  "No",
+  notFound:     "Listing not found",
+  businessNotFound: "Business not found",
+  goBack:       "Go back",
 } as const;
 
 export const hage = {
@@ -2398,6 +2449,8 @@ const en = {
   recommendations,
   recommended,
   realEstateDetail,
+  subscriptionDetail,
+  vehicleDetail,
   report,
   hage,
 } as const;

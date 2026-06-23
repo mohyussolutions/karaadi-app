@@ -29,6 +29,6 @@ export function createStyles(Colors: ColorPalette) {
     readMore: { fontSize: 13, color: Colors.primary, fontWeight: '600' },
     specWrap: { padding: 16, paddingTop: 8 },
     readMoreBtn: { marginTop: 8 },
-    bottomSpacer: { height: 8 },
+    bottomSpacer: { height: 100 },
   });
 }

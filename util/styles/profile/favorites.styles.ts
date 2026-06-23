@@ -1,14 +1,12 @@
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import type { ColorPalette } from "../../../hooks/useTheme";
 import { RADII } from "../../colors/theme";
 
-const { width } = Dimensions.get("window");
-
 export const H_PAD = 16;
 export const COL_GAP = 12;
-export const CARD_W = (width - H_PAD * 2 - COL_GAP) / 2;
 
-export function createStyles(Colors: ColorPalette) {
+export function createStyles(Colors: ColorPalette, width = 390) {
+  const CARD_W = (width - H_PAD * 2 - COL_GAP) / 2;
   return StyleSheet.create({
     safe: { flex: 1, backgroundColor: Colors.background },
     guestWrap: {

@@ -1,22 +1,27 @@
-export * from './interfaces/common';
-
-// listing-card props kept here due to dependency on ListingBase
-import type { ListingBase } from './listing.types';
-
-export interface ListingCardProps {
-  item: ListingBase;
-  onPress?: () => void;
-  categoryKey?: string;
+export interface Region {
+  _id: string;
+  name: string;
+  nameEn?: string;
+  nameSo?: string;
 }
 
-export interface MyAdCardProps {
-  item: ListingBase;
-  deleting?: boolean;
-  onDelete: (item: ListingBase) => void;
-  onPayNow: (item: ListingBase) => void;
+export interface City {
+  _id: string;
+  name: string;
+  region?: string;
 }
 
-// geo picker props
+export interface RegionPickerItem {
+  id: string;
+  name: string;
+  cities?: CityPickerItem[];
+}
+
+export interface CityPickerItem {
+  id: string;
+  name: string;
+}
+
 export interface RegionCityPickerProps {
   selectedRegion: string;
   selectedCity: string;
@@ -38,7 +43,7 @@ export interface PickerFieldsProps {
 export interface CityAccordionPanelProps {
   search: string;
   onSearchChange: (v: string) => void;
-  cities: import('./interfaces/common').CityPickerItem[];
+  cities: CityPickerItem[];
   selectedCity: string;
   savingCity: boolean;
   onSelectCity: (name: string) => void;
@@ -47,8 +52,8 @@ export interface CityAccordionPanelProps {
 }
 
 export interface RegionAccordionPanelProps {
-  regions: import('./interfaces/common').RegionPickerItem[];
+  regions: RegionPickerItem[];
   selectedRegion: string;
-  onSelectRegion: (r: import('./interfaces/common').RegionPickerItem) => void;
+  onSelectRegion: (r: RegionPickerItem) => void;
   onClose: () => void;
 }

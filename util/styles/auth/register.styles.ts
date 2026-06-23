@@ -68,8 +68,10 @@ export function createStyles(Colors: ColorPalette) {
     },
     btnDisabled: { opacity: 0.5 },
     btnText: { color: Colors.white, fontSize: 16, fontWeight: '700' },
-    loginRow: { flexDirection: 'row', justifyContent: 'center' },
+    loginRow:  { flexDirection: 'row', justifyContent: 'center' },
     loginText: { fontSize: 14, color: Colors.textSecondary },
     loginLink: { fontSize: 14, color: Colors.primary, fontWeight: '600' },
+    termsNote: { fontSize: 12, color: Colors.textMuted, textAlign: 'center', lineHeight: 18, marginBottom: 12 },
+    termsLink: { color: Colors.primary, fontWeight: '600' },
   });
 }

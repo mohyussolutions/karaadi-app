@@ -14,7 +14,7 @@ export function createStyles(Colors: ColorPalette) {
       backgroundColor: Colors.surface,
     },
     sidebarContent: { paddingVertical: 8 },
-    scroll: { paddingBottom: 32 },
+    scroll: { paddingBottom: 120 },
     section: { paddingTop: 8 },
     videoSection: { paddingTop: 8, paddingHorizontal: H_PAD },
     sectionTitle: { fontSize: 16, fontWeight: '700', color: Colors.textPrimary },

@@ -4,7 +4,7 @@ import type { ColorPalette } from '../../../hooks/useTheme';
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
     safe: { flex: 1, backgroundColor: Colors.background },
-    bottomSpacer: { height: 8 },
+    bottomSpacer: { height: 100 },
     body: { backgroundColor: Colors.card, padding: 16 },
     title: { fontSize: 22, fontWeight: '800', color: Colors.textPrimary, lineHeight: 30, marginBottom: 6 },
     salary: { fontSize: 24, fontWeight: '800', color: Colors.primary, marginBottom: 10 },

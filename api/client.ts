@@ -18,9 +18,9 @@ import type {
   ApiData,
   ApiResponse,
   RequestOptions,
-} from "../util/types/client.types";
+} from "../util/types/api.types";
 
-export type { ApiResponse, RequestOptions } from "../util/types/client.types";
+export type { ApiResponse, RequestOptions } from "../util/types/api.types";
 
 function buildUrl(path: string, params?: Params): string {
   const base = `${API_BASE_URL}${path}`;

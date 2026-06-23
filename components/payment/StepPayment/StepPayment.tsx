@@ -87,7 +87,7 @@ function IOSPaymentScreen() {
       </Text>
       <TouchableOpacity
         style={{ marginTop: 24, backgroundColor: Colors.primary, borderRadius: 12, paddingVertical: 14, paddingHorizontal: 32 }}
-        onPress={() => Linking.openURL('https://karaadi.ee')}
+        onPress={() => Linking.openURL('https://karaadi.com')}
         activeOpacity={0.85}
       >
         <Text style={{ color: Colors.white, fontWeight: '700', fontSize: 16 }}>{t('postAd.iosPaymentBtn')}</Text>

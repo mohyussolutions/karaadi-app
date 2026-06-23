@@ -7,7 +7,7 @@ export function createStyles(Colors: ColorPalette) {
     specWrap: { padding: 16, paddingTop: 8 },
     amenitiesCard: { margin: 16, marginTop: 0 },
     readMoreBtn: { marginTop: 8 },
-    bottomSpacer: { height: 8 },
+    bottomSpacer: { height: 100 },
     body: { backgroundColor: Colors.card, padding: 16 },
     title: { fontSize: 22, fontWeight: '800', color: Colors.textPrimary, lineHeight: 30, marginBottom: 6 },
     price: { fontSize: 26, fontWeight: '800', color: Colors.primary, marginBottom: 10 },

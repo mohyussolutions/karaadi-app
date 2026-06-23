@@ -1,10 +1,8 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
 
-const { width } = Dimensions.get('window');
-const IMG_H = Math.round((width - 32) * 0.56);
-
-export function createStyles(Colors: ColorPalette) {
+export function createStyles(Colors: ColorPalette, width = 390) {
+  const IMG_H = Math.round((width - 32) * 0.56);
   return StyleSheet.create({
     wrap: { marginBottom: 20 },
     imgBox: { borderRadius: 14, overflow: 'hidden', marginBottom: 12, height: IMG_H },

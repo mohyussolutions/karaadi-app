@@ -1,4 +1,4 @@
-import { API_BASE_URL, HAGE_ENDPOINTS, SEARCH_ENDPOINTS } from '../../../constants';
+import { HAGE_ENDPOINTS, SEARCH_ENDPOINTS } from '../../../constants';
 import { apiClient } from '../../../api/client';
 import { extractList } from '../../../util/helpers';
 import type {
@@ -24,11 +24,8 @@ export async function sendHageChat(
   }));
 
   const [chatRes, searchRes] = await Promise.allSettled([
-    fetch(`${API_BASE_URL}${HAGE_ENDPOINTS.CHAT}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: content, lang, history: chatHistory }),
-    }).then((r) => r.json() as Promise<HageChatApiResponse>),
+    apiClient.post<HageChatApiResponse>(HAGE_ENDPOINTS.CHAT, { message: content, lang, history: chatHistory })
+      .then((r) => r.data),
     apiClient.get<unknown>(SEARCH_ENDPOINTS.GLOBAL, { params: { title: content, limit: 5 } }),
   ]);
 

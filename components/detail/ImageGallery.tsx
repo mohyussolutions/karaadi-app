@@ -4,25 +4,26 @@ import {
   View, Image, ScrollView, Pressable, Text, Platform, Modal, TouchableOpacity,
   NativeSyntheticEvent, NativeScrollEvent,
 } from 'react-native';
-import { Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useGlobal } from '../../hooks/useGlobal';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles, createSheetStyles } from '../../util/styles/detail/ImageGallery.styles';
 
-const { width } = Dimensions.get('window');
-export const IMG_H = Math.round(width * 0.88);
+export const IMG_H = 320; // fallback; component uses live width
 
 export default function ImageGallery({
   images, activeIndex, onActiveChange, onImagePress,
   isFavorite, onFavorite, onShare,
   badge, isSold,
 }: ImageGalleryProps) {
+  const { width, imgH: calcImgH } = useGlobal();
+  const imgH = calcImgH();
   const insets = useSafeAreaInsets();
   const scrollRef = useRef<ScrollView>(null);
   const [saveSheet, setSaveSheet] = useState(false);
   const Colors = useThemeColors();
-  const styles = useThemedStyles(createStyles);
+  const styles = useThemedStyles((c) => createStyles(c, width, imgH));
   const sheetStyles = useThemedStyles(createSheetStyles);
 
   function goTo(i: number) {
@@ -57,7 +58,7 @@ export default function ImageGallery({
             key={i}
             onPress={onImagePress}
             disabled={!onImagePress}
-            style={{ width, height: IMG_H }}
+            style={{ width, height: imgH }}
           >
             <Image
               source={{ uri: img }}

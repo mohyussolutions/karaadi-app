@@ -146,6 +146,7 @@ export default function ReportScreen() {
               {submitting ? t('report.submitting') : t('report.submit')}
             </Text>
           </TouchableOpacity>
+          <View style={{ height: 32 }} />
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

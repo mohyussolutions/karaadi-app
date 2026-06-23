@@ -31,5 +31,6 @@ export function createStyles(Colors: ColorPalette) {
     badgeText: { color: Colors.white, fontSize: 11, fontWeight: '700' },
     separator: { height: 1, backgroundColor: Colors.border },
     listFlex: { flex: 1 },
+    listPadded: { paddingBottom: 120 },
   });
 }

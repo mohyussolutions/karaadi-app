@@ -1,5 +1,6 @@
 import { memo, useCallback } from "react";
 import { View } from "react-native";
+import { useGlobal } from "../../hooks/useGlobal";
 import { useRouter, usePathname } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuthStore } from "../../store/authStore";
@@ -11,6 +12,7 @@ import { getActiveTab } from "./BottomTabBar.utils";
 
 export default memo(function BottomTabBar() {
   const insets = useSafeAreaInsets();
+  const { tabBarSide } = useGlobal();
   const router = useRouter();
   const pathname = usePathname();
   const styles = useThemedStyles(createLayoutStyles);
@@ -32,7 +34,7 @@ export default memo(function BottomTabBar() {
   }, [router]);
 
   return (
-    <View style={[styles.wrapper, { paddingBottom: insets.bottom }]}>
+    <View style={[styles.wrapper, { paddingBottom: insets.bottom, left: tabBarSide(), right: tabBarSide() }]}>
       <View style={[styles.glass, glassOverride]}>
         {items.map((item) => (
           <BottomTabItem

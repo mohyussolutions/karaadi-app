@@ -1,4 +1,4 @@
-import type { RegionPickerItem } from './shared.types';
+import type { RegionPickerItem } from './geo.types';
 
 export interface NestedSubCategory {
   key: string;

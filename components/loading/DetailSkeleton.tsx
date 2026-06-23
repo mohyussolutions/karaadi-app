@@ -1,11 +1,9 @@
 import React from 'react';
-import { View, Dimensions } from 'react-native';
+import { View } from 'react-native';
+import { useGlobal } from '../../hooks/useGlobal';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { IMG_H } from '../detail/ImageGallery';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/loading/detailSkeleton.styles';
-
-const { width } = Dimensions.get('window');
 
 function Bone({ w, h, r = 8 }: { w: number | string; h: number; r?: number }) {
   const Colors = useThemeColors();
@@ -13,7 +11,9 @@ function Bone({ w, h, r = 8 }: { w: number | string; h: number; r?: number }) {
 }
 
 export default function DetailSkeleton() {
-  const styles = useThemedStyles(createStyles);
+  const { width, imgH: calcImgH } = useGlobal();
+  const imgH = calcImgH();
+  const styles = useThemedStyles((c) => createStyles(c, width, imgH));
 
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { clientGetAllRegions } from '../api/categories/geo.actions';
 import { matchesCategoryKey } from '../util/helpers';
 import type { ListingBase } from '../util/types/listing.types';
-import type { RegionPickerItem } from '../util/types/shared.types';
+import type { RegionPickerItem } from '../util/types/geo.types';
 
 export function useLocationFilter(allListings: ListingBase[], subcategoryKey: string) {
   const [regions, setRegions] = useState<RegionPickerItem[]>([]);

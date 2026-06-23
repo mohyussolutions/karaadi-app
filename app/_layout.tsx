@@ -48,7 +48,7 @@ export default function RootLayout() {
   const { mode, resolved } = useThemeMode();
   const Colors = useThemeColors();
   const pathname = usePathname();
-  const showTabBar = !pathname.startsWith("/(auth)");
+  const showTabBar = !pathname.startsWith("/(auth)") && !pathname.startsWith("/listing");
 
   useEffect(() => {
     Appearance.setColorScheme(mode);
@@ -123,7 +123,11 @@ export default function RootLayout() {
         />
         <Stack.Screen
           name="listing/report/[id]"
-          options={{ headerShown: false, presentation: "card" }}
+          options={{
+            headerShown: false,
+            presentation: "modal",
+            animation: "slide_from_bottom",
+          }}
         />
         <Stack.Screen
           name="browse/[category]/index"

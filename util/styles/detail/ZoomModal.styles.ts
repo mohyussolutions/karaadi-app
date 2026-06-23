@@ -1,9 +1,7 @@
-import { Dimensions, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
 
-const { width, height } = Dimensions.get('window');
-
-export function createStyles(Colors: ColorPalette) {
+export function createStyles(Colors: ColorPalette, width = 390, height = 844) {
   return StyleSheet.create({
     root: { flex: 1, backgroundColor: Colors.shadow },
     header: {

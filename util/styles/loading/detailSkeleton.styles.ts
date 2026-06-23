@@ -1,13 +1,10 @@
-import { Dimensions, StyleSheet } from 'react-native';
-import { IMG_H } from '../detail/ImageGallery.styles';
+import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
 
-const { width } = Dimensions.get('window');
-
-export function createStyles(Colors: ColorPalette) {
+export function createStyles(Colors: ColorPalette, width = 390, imgH = 320) {
   return StyleSheet.create({
     safe: { flex: 1, backgroundColor: Colors.card },
-    imgPlaceholder: { width, height: IMG_H, backgroundColor: Colors.border },
+    imgPlaceholder: { width, height: imgH, backgroundColor: Colors.border },
     body: { flex: 1, padding: 16, gap: 10 },
     gap: { height: 4 },
     actions: {

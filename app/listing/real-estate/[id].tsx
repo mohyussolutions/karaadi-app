@@ -61,13 +61,13 @@ export default function RealEstateDetailScreen() {
     item.area && { label: t('realEstateDetail.sizeSqmLabel'), value: `${item.area} ${t('realEstateDetail.sqm')}` },
     item.floor != null && { label: t('realEstateDetail.floorLabel'), value: String(item.floor) },
     item.totalFloors != null && { label: t('realEstateDetail.totalFloorsLabel'), value: String(item.totalFloors) },
-    item.furnished != null && { label: t('realEstateDetail.furnished'), value: item.furnished ? 'Yes' : 'No' },
+    item.furnished != null && { label: t('realEstateDetail.furnished'), value: item.furnished ? t('vehicleDetail.furnishedYes') : t('vehicleDetail.furnishedNo') },
   ].filter(Boolean) as { label: string; value: string }[];
 
   const itemRecord = item as unknown as Record<string, unknown>;
   const amenities = AMENITY_KEYS.filter((k) => itemRecord[k] === true);
 
-  const locationStr = [item.city, item.region].filter(Boolean).join(', ') || 'Somalia';
+  const locationStr = [item.city, item.region].filter(Boolean).join(', ') || t('vehicleDetail.locationFallback');
 
   const leftContent = (
     <>

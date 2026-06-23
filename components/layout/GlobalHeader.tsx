@@ -3,6 +3,7 @@ import {
   View, Image, TouchableOpacity, Text, Modal, Pressable,
   TextInput, Switch,
 } from 'react-native';
+import { useGlobal } from '../../hooks/useGlobal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, usePathname } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -36,6 +37,7 @@ export default function GlobalHeader() {
   const browseQuery = useAppSelector((s) => s.browseSearch.query);
   const user = useAppSelector((s) => s.auth.user);
 
+  const { logoW } = useGlobal();
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
 
@@ -102,7 +104,7 @@ export default function GlobalHeader() {
             )}
           </View>
           <TouchableOpacity onPress={() => router.push('/(tabs)/home')} activeOpacity={0.8}>
-            <Image source={require('../../assets/logo.jpg')} style={[styles.logo, isTablet && tabletHeaderStyles.logo]} resizeMode="contain" />
+            <Image source={require('../../assets/logo.jpg')} style={[styles.logo, { width: logoW() }]} resizeMode="contain" />
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.notifBtn, isTablet && tabletHeaderStyles.notifBtn]}

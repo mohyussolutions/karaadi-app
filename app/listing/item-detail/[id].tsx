@@ -57,12 +57,12 @@ export default function ItemDetailScreen() {
     : null;
 
   const metaItems: { icon: string; label: string; value: string }[] = [
-    item.condition && { icon: 'tag-outline', label: 'Condition', value: item.condition },
-    item.subcategory && { icon: 'shape-outline', label: 'Subcategory', value: item.subcategory },
-    item.nestedSubcategory && { icon: 'dots-horizontal-circle-outline', label: 'Type', value: item.nestedSubcategory },
+    item.condition && { icon: 'tag-outline', label: t('vehicleDetail.condition'), value: item.condition },
+    item.subcategory && { icon: 'shape-outline', label: t('vehicleDetail.subcategory'), value: item.subcategory },
+    item.nestedSubcategory && { icon: 'dots-horizontal-circle-outline', label: t('vehicleDetail.type'), value: item.nestedSubcategory },
   ].filter(Boolean) as any[];
 
-  const locationStr = [item.city, item.region].filter(Boolean).join(', ') || 'Somalia';
+  const locationStr = [item.city, item.region].filter(Boolean).join(', ') || t('vehicleDetail.locationFallback');
 
   const galleryContent = (
     <ImageGallery

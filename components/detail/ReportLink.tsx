@@ -1,6 +1,7 @@
-import { Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuthStore } from '../../store/authStore';
 import { useThemeColors } from '../../hooks/useTheme';
 
@@ -11,20 +12,51 @@ export default function ReportLink({ itemId, itemType }: { itemId: string; itemT
   const Colors = useThemeColors();
 
   function handlePress() {
-    if (!user) { router.push('/(auth)/login'); return; }
-    router.push({ pathname: '/listing/report/[id]', params: { id: String(itemId), itemType: String(itemType) } });
+    if (!user) {
+      router.push('/(auth)/login');
+      return;
+    }
+    router.push({
+      pathname: '/listing/report/[id]',
+      params: { id: String(itemId), itemType: String(itemType) },
+    });
   }
 
   return (
-    <TouchableOpacity
-      onPress={handlePress}
-      hitSlop={{ top: 14, bottom: 14, left: 14, right: 14 }}
-      style={{ alignSelf: 'flex-start', marginTop: 8, marginBottom: 8, paddingVertical: 8, paddingHorizontal: 4 }}
-      activeOpacity={0.5}
-    >
-      <Text style={{ color: Colors.error, fontSize: 13, fontWeight: '700', textDecorationLine: 'underline' }}>
-        {t('realEstateDetail.reportItem')}
-      </Text>
-    </TouchableOpacity>
+    <View style={styles.wrapper}>
+      <TouchableOpacity
+        style={[styles.btn, { borderColor: Colors.error + '40', backgroundColor: Colors.error + '0D' }]}
+        onPress={handlePress}
+        activeOpacity={0.75}
+      >
+        <MaterialCommunityIcons name="flag-outline" size={18} color={Colors.error} />
+        <Text style={[styles.label, { color: Colors.error }]}>
+          {t('realEstateDetail.reportItem')}
+        </Text>
+        <MaterialCommunityIcons name="chevron-right" size={18} color={Colors.error + '80'} />
+      </TouchableOpacity>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  wrapper: {
+    marginTop: 16,
+    marginBottom: 8,
+    paddingHorizontal: 0,
+  },
+  btn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+  },
+  label: {
+    flex: 1,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+});

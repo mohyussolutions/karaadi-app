@@ -41,7 +41,7 @@ export default function SubscriptionDetailScreen() {
   if (loading) return <SwipeDownToClose><DetailSkeleton /></SwipeDownToClose>;
   if (!item) return (
     <SwipeDownToClose>
-      <DetailNotFound icon="bell-outline" message="Subscription not found" onBack={() => router.back()} />
+      <DetailNotFound icon="bell-outline" message={t('subscriptionDetail.notFound')} onBack={() => router.back()} />
     </SwipeDownToClose>
   );
 
@@ -49,19 +49,19 @@ export default function SubscriptionDetailScreen() {
 
   const priceLabel = item.priceMin && item.priceMax
     ? `${formatPrice(item.priceMin)} – ${formatPrice(item.priceMax)}`
-    : item.priceMax ? `Up to ${formatPrice(item.priceMax)}`
-    : item.priceMin ? `From ${formatPrice(item.priceMin)}`
+    : item.priceMax ? `${t('subscriptionDetail.priceUpTo')} ${formatPrice(item.priceMax)}`
+    : item.priceMin ? `${t('subscriptionDetail.priceFrom')} ${formatPrice(item.priceMin)}`
     : t('priceOnRequest');
 
   const infoRows: { icon: string; label: string; value: string }[] = [
-    item.category      && { icon: 'tag-outline',          label: t('subscriptionDetail.category', 'Category'),    value: item.category },
-    item.subCategory   && { icon: 'tag-multiple-outline', label: t('subscriptionDetail.subCategory', 'Sub-category'), value: item.subCategory },
-    item.condition     && { icon: 'check-circle-outline', label: t('subscriptionDetail.condition', 'Condition'),   value: item.condition },
-    item.brand         && { icon: 'shield-star-outline',  label: t('subscriptionDetail.brand', 'Brand'),           value: item.brand },
-    item.expiryDate    && { icon: 'calendar-end',         label: t('subscriptionDetail.expires', 'Expires'),       value: formatDate(item.expiryDate) },
-    item.createdAt     && { icon: 'calendar-plus',        label: t('subscriptionDetail.posted', 'Posted'),         value: formatDate(item.createdAt) },
+    item.category      && { icon: 'tag-outline',          label: t('subscriptionDetail.category'),    value: item.category },
+    item.subCategory   && { icon: 'tag-multiple-outline', label: t('subscriptionDetail.subCategory'), value: item.subCategory },
+    item.condition     && { icon: 'check-circle-outline', label: t('subscriptionDetail.condition'),   value: item.condition },
+    item.brand         && { icon: 'shield-star-outline',  label: t('subscriptionDetail.brand'),       value: item.brand },
+    item.expiryDate    && { icon: 'calendar-end',         label: t('subscriptionDetail.expires'),     value: formatDate(item.expiryDate) },
+    item.createdAt     && { icon: 'calendar-plus',        label: t('subscriptionDetail.posted'),      value: formatDate(item.createdAt) },
     item.notificationCount != null && item.notificationCount > 0
-      && { icon: 'bell-ring-outline', label: t('subscriptionDetail.matches', 'Matches'), value: String(item.notificationCount) },
+      && { icon: 'bell-ring-outline', label: t('subscriptionDetail.matches'), value: String(item.notificationCount) },
   ].filter(Boolean) as { icon: string; label: string; value: string }[];
 
   const heroPanel = (
@@ -77,7 +77,7 @@ export default function SubscriptionDetailScreen() {
         )}
         <View style={[styles.statusBadge, isActive ? styles.statusBadgeActive : styles.statusBadgeInactive]}>
           <Text style={[styles.statusBadgeText, isActive ? styles.statusBadgeTextActive : styles.statusBadgeTextInactive]}>
-            {isActive ? t('mine.subscriptions.status.active', 'Active') : t('mine.subscriptions.status.expired', 'Expired')}
+            {isActive ? t('mine.subscriptions.status.active') : t('mine.subscriptions.status.expired')}
           </Text>
         </View>
       </View>
@@ -86,7 +86,7 @@ export default function SubscriptionDetailScreen() {
 
   const bodyContent = (
     <View style={styles.body}>
-      <Text style={styles.title}>{item.title || item.category || 'Subscription'}</Text>
+      <Text style={styles.title}>{item.title || item.category || t('subscriptionDetail.titleFallback')}</Text>
       <Text style={styles.price}>{priceLabel}</Text>
 
       {/* location pills */}
@@ -112,7 +112,7 @@ export default function SubscriptionDetailScreen() {
       {/* info card */}
       {infoRows.length > 0 && (
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>{t('subscriptionDetail.detailsTitle', 'Subscription Details')}</Text>
+          <Text style={styles.cardTitle}>{t('subscriptionDetail.detailsTitle')}</Text>
           {infoRows.map(({ icon, label, value }, i) => (
             <View key={label} style={[styles.infoRow, i === infoRows.length - 1 && styles.infoRowLast]}>
               <View style={styles.infoLeft}>
@@ -128,7 +128,7 @@ export default function SubscriptionDetailScreen() {
       {/* description */}
       {!!item.description && (
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>{t('subscriptionDetail.description', 'Description')}</Text>
+          <Text style={styles.cardTitle}>{t('subscriptionDetail.description')}</Text>
           <Text style={styles.description}>{item.description}</Text>
         </View>
       )}
@@ -188,8 +188,8 @@ export default function SubscriptionDetailScreen() {
         <SocialShareSheet
           visible={shareVisible}
           onClose={() => setShareVisible(false)}
-          title={item.title || item.category || 'Subscription'}
-          message={`${item.title || item.category}\n📍 ${[...(item.cities ?? []), item.region].filter(Boolean).join(', ') || 'Somalia'}\n\nKaraadi`}
+          title={item.title || item.category || t('subscriptionDetail.titleFallback')}
+          message={`${item.title || item.category}\n📍 ${[...(item.cities ?? []), item.region].filter(Boolean).join(', ') || t('vehicleDetail.locationFallback')}\n\nKaraadi`}
         />
       </SafeAreaView>
     </SwipeDownToClose>

@@ -412,8 +412,8 @@ export const postAd = {
   payVia: "Bixi ${{total}} adigoo isticmaalaya {{method}}",
   securedCheckout: "Waa la ilaaliyay · SSL encrypted · Bixin Ammaan ah",
   iosPaymentTitle: "Bixinta ku dhamee websaydkeenna",
-  iosPaymentBody: "Si aad u taageerto xayeysiiskaaga, fadlan booqo karaadi.ee browser-kaaga oo soo gal si aad u dhammayso bixinta.",
-  iosPaymentBtn: "Fur karaadi.ee",
+  iosPaymentBody: "Si aad u taageerto xayeysiiskaaga, fadlan booqo karaadi.com browser-kaaga oo soo gal si aad u dhammayso bixinta.",
+  iosPaymentBtn: "Fur karaadi.com",
   paymentMethod: "Habka Lacag-bixinta",
   phoneNumberForMethod: "Lambarka Telefoonka {{method}}",
   enterPhoneForMethod: "Geli lambarka ku xiran akoonkaaga {{method}}",
@@ -1824,6 +1824,10 @@ export const descriptions = {
 
 export const messages = {
   title: "Farriimo",
+  noConversationsTitle: "Wax xadiith ah ma jiraan",
+  noConversationsMessage: "Markaad xiriiriso iibiye, xadiithkaaga halkan ayuu ka muuqan doonaa.",
+  unknownSender: "Aan la garanin",
+  noMessagesPreview: "Farriimo ma jiraan",
 } as const;
 
 export const chats = {
@@ -1974,6 +1978,14 @@ export const jobsPage = {
   notFound: "Shaqo lama helin",
   applicationSuccess: "Codsiga Shaqada Wuu Guulaystay!",
   jobDescription: "Sharaxaada Shaqada",
+  labelCompany: "Shirkadda",
+  labelJobType: "Nooca Shaqada",
+  labelSalary: "Mushahar",
+  labelLocation: "Goobta",
+  labelPosted: "La Daabacay",
+  labelEmployer: "Shaqo-bixiye",
+  jobDetailsSpec: "Faahfaahinta Shaqada",
+  requirementsLabel: "Shuruudaha",
   applyNow: "Codso Hadda",
   backLabel: "Ku laabo Liiska Shaqooyinka",
   application: {
@@ -2283,6 +2295,45 @@ export const report = {
   errorFailed: "Gudbinta warbixinta way ku guul-darreysatay",
 } as const;
 
+export const subscriptionDetail = {
+  notFound:      "Qorshaha la raadinayay lama helin",
+  category:      "Qaybta",
+  subCategory:   "Qaybta Hoose",
+  condition:     "Xaalada",
+  brand:         "Nooca",
+  expires:       "Wuu dhacayaa",
+  posted:        "La Daabacay",
+  matches:       "Waxyaabaha la helay",
+  detailsTitle:  "Faahfaahinta Qorshaha",
+  description:   "Sharaxaad",
+  titleFallback: "Qorsho",
+  priceUpTo:     "Ilaa",
+  priceFrom:     "Laga bilaabo",
+} as const;
+
+export const vehicleDetail = {
+  techSpecs:    "Faahfaahinta Farsamada",
+  description:  "Sharaxaad",
+  make:         "Nooca",
+  model:        "Moodeelka",
+  year:         "Sanadka",
+  mileage:      "Maayliyada",
+  hours:        "Saacadaha",
+  fuelType:     "Nooca Shidaalka",
+  transmission: "Giddi-gaarka",
+  color:        "Midabka",
+  type:         "Nooca",
+  length:       "Dhererka",
+  condition:    "Xaalada",
+  subcategory:  "Qaybta Hoose",
+  locationFallback: "Soomaaliya",
+  furnishedYes: "Haa",
+  furnishedNo:  "Maya",
+  notFound:     "Xayeysiiska lama helin",
+  businessNotFound: "Ganacsiga lama helin",
+  goBack:       "Dib u noqo",
+} as const;
+
 export const hage = {
   title:       "Kaaliyaha Hage",
   placeholder: "Qor farriintaada...",
@@ -2416,6 +2467,8 @@ const so = {
   recommendations,
   recommended,
   realEstateDetail,
+  subscriptionDetail,
+  vehicleDetail,
   report,
   hage,
 } as const;

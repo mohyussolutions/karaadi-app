@@ -3,7 +3,7 @@ import type { ZoomModalProps } from '../../util/types';
 import {
   View, Image, FlatList, TouchableOpacity, Modal, StatusBar, Text,
 } from 'react-native';
-import { Dimensions } from 'react-native';
+import { useGlobal } from '../../hooks/useGlobal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
@@ -12,14 +12,13 @@ import { getModalHeaderPaddingTop } from '../common/common-for-ios-andriod';
 import { tabletModalStyles, TABLET_MODAL_ICON_SIZES } from '../common/ipad';
 import { createStyles } from '../../util/styles/detail/ZoomModal.styles';
 
-const { width, height } = Dimensions.get('window');
-
 export default function ZoomModal({ visible, images, startIndex, title, onClose }: ZoomModalProps) {
+  const { width, height } = useGlobal();
   const insets = useSafeAreaInsets();
   const flatRef = useRef<FlatList>(null);
   const [current, setCurrent] = useState(startIndex);
   const Colors = useThemeColors();
-  const styles = useThemedStyles(createStyles);
+  const styles = useThemedStyles((c) => createStyles(c, width, height));
   const { isTablet } = useResponsive();
 
   useEffect(() => {

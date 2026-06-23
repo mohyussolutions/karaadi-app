@@ -164,28 +164,6 @@ export interface OrderSummaryProps {
   feeAmount: number;
 }
 
-export interface BusinessApplyFormState {
-  name: string;
-  orgNumber: string;
-  email: string;
-  phone: string;
-  contactName: string;
-  website: string;
-  address: string;
-  description: string;
-}
-
-export interface BusinessPlan {
-  id: string;
-  name: string;
-  price: number;
-  durationDays: number;
-  maxListings: number;
-  categories: string[];
-  features: string[];
-  isActive: boolean;
-}
-
 export interface StepItem {
   key: string;
   label: string;

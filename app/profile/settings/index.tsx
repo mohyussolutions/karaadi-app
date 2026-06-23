@@ -77,7 +77,7 @@ export default function SettingsIndex() {
         <View style={s.section}>
           <TouchableOpacity
             style={s.row}
-            onPress={() => Linking.openURL('https://karaadi.ee/privacy')}
+            onPress={() => Linking.openURL('https://karaadi.com/privacy')}
             activeOpacity={0.75}
           >
             <View style={s.iconWrap}>
@@ -88,7 +88,7 @@ export default function SettingsIndex() {
           </TouchableOpacity>
           <TouchableOpacity
             style={s.row}
-            onPress={() => Linking.openURL('https://karaadi.ee/terms')}
+            onPress={() => Linking.openURL('https://karaadi.com/terms')}
             activeOpacity={0.75}
           >
             <View style={s.iconWrap}>

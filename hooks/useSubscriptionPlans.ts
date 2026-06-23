@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '../store/authStore';
-import { apiClient } from '../api/client';
-import { SUBSCRIPTION_ENDPOINTS } from '../constants';
+import { fetchSubscriptionPlans, fetchMyPlan } from '../api/categories/subscription.actions';
 import type { Plan } from '../util/types';
 
 export function useSubscriptionPlans() {
@@ -12,17 +11,12 @@ export function useSubscriptionPlans() {
 
   useEffect(() => {
     async function load() {
-      try {
-        const [plansRes, myRes] = await Promise.allSettled([
-          apiClient.get(SUBSCRIPTION_ENDPOINTS.PLANS),
-          user ? apiClient.get(SUBSCRIPTION_ENDPOINTS.MY) : Promise.reject(),
-        ]);
-        if (plansRes.status === 'fulfilled') {
-          const data = plansRes.value.data;
-          setPlans(Array.isArray(data) ? data : data?.plans || []);
-        }
-        if (myRes.status === 'fulfilled') setMyPlan(myRes.value.data);
-      } catch {}
+      const [plansData, myPlanData] = await Promise.all([
+        fetchSubscriptionPlans(),
+        user ? fetchMyPlan() : Promise.resolve(null),
+      ]);
+      setPlans(plansData);
+      setMyPlan(myPlanData);
       setLoading(false);
     }
     load();

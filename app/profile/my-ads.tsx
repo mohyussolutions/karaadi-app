@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, FlatList, TouchableOpacity, Text, RefreshControl } from 'react-native';
+import { useGlobal } from '../../hooks/useGlobal';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -16,10 +17,11 @@ import type { ListingBase } from '../../util/types';
 export default function MyAdsScreen() {
   const router = useRouter();
   const { t } = useTranslation();
+  const { width } = useGlobal();
   const dispatch = useAppDispatch();
   const { user, ads, loading, refreshing, error, deletingId, onRefresh, retry, handleDelete } = useMyAds();
   const Colors = useThemeColors();
-  const styles = useThemedStyles(createStyles);
+  const styles = useThemedStyles((c) => createStyles(c, width));
 
   function handlePayNow(item: ListingBase) {
     dispatch(prefillForPayment({
