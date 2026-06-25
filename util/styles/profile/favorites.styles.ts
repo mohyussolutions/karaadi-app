@@ -75,7 +75,8 @@ export function createStyles(Colors: ColorPalette, width = 390) {
   });
 }
 
-export function createCardStyles(Colors: ColorPalette) {
+export function createCardStyles(Colors: ColorPalette, width = 390) {
+  const CARD_W = (width - H_PAD * 2 - COL_GAP) / 2;
   return StyleSheet.create({
     card: {
       width: CARD_W,

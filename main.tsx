@@ -1,3 +1,4 @@
+// App entry point — wraps the router with global providers
 import './util/suppressWarnings';
 
 import { Provider } from 'react-redux';
