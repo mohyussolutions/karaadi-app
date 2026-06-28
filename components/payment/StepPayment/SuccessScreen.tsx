@@ -8,7 +8,7 @@ import { getListingShareUrl } from '../../../constants';
 import type { SuccessScreenProps } from '../../../util/types';
 import { createStyles } from '../../../util/styles/payment/successScreen.styles';
 
-export function SuccessScreen({ plan, listingTitle, listingId, createdItem, onDone }: SuccessScreenProps) {
+export function SuccessScreen({ plan, listingTitle, listingId, createdItem, onDone, isPremium90 }: SuccessScreenProps) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
@@ -46,6 +46,7 @@ export function SuccessScreen({ plan, listingTitle, listingId, createdItem, onDo
         price={createdItem?.price}
         images={createdItem?.images}
         listingUrl={listingUrl}
+        isPremium90={isPremium90 ?? plan.days >= 90}
       />
 
       <TouchableOpacity style={s.viewBtn} onPress={() => Linking.openURL(listingUrl).catch(() => {})} activeOpacity={0.88}>

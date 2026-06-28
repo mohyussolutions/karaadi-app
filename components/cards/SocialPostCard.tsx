@@ -12,12 +12,28 @@ import { createStyles } from '../../util/styles/social/socialPostCard.styles';
 type SocialAvail = { facebook: boolean; tiktok: boolean };
 type PostState = 'idle' | 'loading' | 'done' | 'error';
 
-function PlatformRow({ icon, color, label, selected, state, statusText, onToggle, disabled }: {
+function PlatformRow({ icon, color, label, selected, state, statusText, onToggle, disabled, locked, lockedReason }: {
   icon: string; color: string; label: string; selected: boolean;
   state: PostState; statusText: string; onToggle: () => void; disabled: boolean;
+  locked?: boolean; lockedReason?: string;
 }) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
+
+  if (locked) {
+    return (
+      <View style={[s.platformRow, { opacity: 0.5, backgroundColor: Colors.background }]}>
+        <View style={[s.platformIconBadge, { backgroundColor: color }]}>
+          <MaterialCommunityIcons name={icon as never} size={18} color={Colors.white} />
+        </View>
+        <View style={s.platformInfo}>
+          <Text style={s.platformName}>{label}</Text>
+          {lockedReason && <Text style={s.platformStatus}>{lockedReason}</Text>}
+        </View>
+        <MaterialCommunityIcons name="lock" size={16} color={Colors.textMuted} />
+      </View>
+    );
+  }
 
   return (
     <TouchableOpacity
@@ -27,7 +43,7 @@ function PlatformRow({ icon, color, label, selected, state, statusText, onToggle
       activeOpacity={0.78}
     >
       <View style={[s.platformIconBadge, { backgroundColor: color }]}>
-        <MaterialCommunityIcons name={icon as any} size={18} color={Colors.white} />
+        <MaterialCommunityIcons name={icon as never} size={18} color={Colors.white} />
       </View>
       <View style={s.platformInfo}>
         <Text style={s.platformName}>{label}</Text>
@@ -43,37 +59,37 @@ function PlatformRow({ icon, color, label, selected, state, statusText, onToggle
         </View>
       )}
       {state === 'loading' && <ActivityIndicator size="small" color={color} />}
-      {state === 'done' && <MaterialCommunityIcons name="check-circle" size={20} color={Colors.success} />}
-      {state === 'error' && <MaterialCommunityIcons name="close-circle" size={20} color={Colors.error} />}
+      {state === 'done'    && <MaterialCommunityIcons name="check-circle" size={20} color={Colors.success} />}
+      {state === 'error'   && <MaterialCommunityIcons name="close-circle" size={20} color={Colors.error} />}
     </TouchableOpacity>
   );
 }
 
-export default function SocialPostCard({ title, description, price, images, listingUrl }: SocialPostCardProps) {
+export default function SocialPostCard({ title, description, price, images, listingUrl, isPremium90 }: SocialPostCardProps) {
   const { t } = useAppTranslation();
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
 
-  const [avail, setAvail] = useState<SocialAvail>({ facebook: false, tiktok: false });
-  const [fbOn, setFbOn] = useState(false);
-  const [ttOn, setTtOn] = useState(false);
+  const [avail, setAvail]         = useState<SocialAvail>({ facebook: false, tiktok: false });
+  const [fbOn, setFbOn]           = useState(false);
+  const [ttOn, setTtOn]           = useState(false);
   const [confirmed, setConfirmed] = useState(false);
-  const [fbState, setFbState] = useState<PostState>('idle');
-  const [ttState, setTtState] = useState<PostState>('idle');
+  const [fbState, setFbState]     = useState<PostState>('idle');
+  const [ttState, setTtState]     = useState<PostState>('idle');
 
   useEffect(() => {
     getSocialStatus()
-      .then(({ data }) => {
-        setAvail(data);
-        setFbOn(!!data.facebook);
-        setTtOn(!!data.tiktok);
+      .then((d: SocialAvail) => {
+        setAvail(d ?? { facebook: false, tiktok: false });
+        setFbOn(!!isPremium90 && !!d?.facebook);
+        setTtOn(!!d?.tiktok);
       })
       .catch(() => {});
-  }, []);
+  }, [isPremium90]);
 
   const noneSelected = !fbOn && !ttOn;
   const posting = fbState === 'loading' || ttState === 'loading';
-  const posted = fbState !== 'idle' || ttState !== 'idle';
+  const posted  = fbState !== 'idle' || ttState !== 'idle';
 
   async function handleConfirm() {
     setConfirmed(true);
@@ -88,13 +104,15 @@ export default function SocialPostCard({ title, description, price, images, list
       listingUrl,
       platforms: { facebook: fbOn, tiktok: ttOn },
     };
-    if (fbOn) setFbState('loading');
-    if (ttOn) setTtState('loading');
+
+    if (fbOn)  setFbState('loading');
+    if (ttOn)  setTtState('loading');
+
     try {
       const data = await postSocialUpdate(payload);
       const results = data?.results ?? {};
       if (fbOn) setFbState(results.facebook?.success ? 'done' : 'error');
-      if (ttOn) setTtState(results.tiktok?.success ? 'done' : 'error');
+      if (ttOn) setTtState(results.tiktok?.success  ? 'done' : 'error');
     } catch {
       if (fbOn) setFbState('error');
       if (ttOn) setTtState('error');
@@ -102,12 +120,12 @@ export default function SocialPostCard({ title, description, price, images, list
   }
 
   const fbStatus = fbState === 'loading' ? t('postAd.socialFbLoading')
-    : fbState === 'done' ? t('postAd.socialFbDone')
-    : fbState === 'error' ? t('postAd.socialFbError')
+    : fbState === 'done'    ? t('postAd.socialFbDone')
+    : fbState === 'error'   ? t('postAd.socialFbError')
     : '';
   const ttStatus = ttState === 'loading' ? t('postAd.socialTtLoading')
-    : ttState === 'done' ? t('postAd.socialTtDone')
-    : ttState === 'error' ? t('postAd.socialTtError')
+    : ttState === 'done'    ? t('postAd.socialTtDone')
+    : ttState === 'error'   ? t('postAd.socialTtError')
     : '';
 
   return (
@@ -118,14 +136,24 @@ export default function SocialPostCard({ title, description, price, images, list
 
       <View style={s.platformList}>
         <PlatformRow
-          icon={SOCIAL_ICONS.facebook} color={SOCIAL_BRAND_COLORS.facebook.color} label="Facebook"
-          selected={fbOn} state={fbState} statusText={fbStatus}
+          icon={SOCIAL_ICONS.facebook}
+          color={SOCIAL_BRAND_COLORS.facebook.color}
+          label="Facebook"
+          selected={fbOn}
+          state={fbState}
+          statusText={fbStatus}
           onToggle={() => setFbOn((v) => !v)}
           disabled={confirmed || !avail.facebook}
+          locked={!isPremium90}
+          lockedReason={!isPremium90 ? t('postAd.socialFbPremiumOnly', '90-Day Premium required') : undefined}
         />
         <PlatformRow
-          icon={SOCIAL_ICONS.tiktok} color={SOCIAL_BRAND_COLORS.tiktok.color} label="TikTok"
-          selected={ttOn} state={ttState} statusText={ttStatus}
+          icon={SOCIAL_ICONS.tiktok}
+          color={SOCIAL_BRAND_COLORS.tiktok.color}
+          label="TikTok"
+          selected={ttOn}
+          state={ttState}
+          statusText={ttStatus}
           onToggle={() => setTtOn((v) => !v)}
           disabled={confirmed || !avail.tiktok}
         />

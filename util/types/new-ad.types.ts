@@ -136,6 +136,7 @@ export interface SuccessScreenProps {
   listingId: string;
   createdItem: CreatedItemSummary | null;
   onDone: () => void;
+  isPremium90?: boolean;
 }
 
 export interface PhoneInputProps {

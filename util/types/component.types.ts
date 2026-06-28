@@ -110,6 +110,7 @@ export interface SocialPostCardProps {
   price?: number;
   images?: string[];
   listingUrl: string;
+  isPremium90?: boolean;
 }
 
 export interface MessageBanner {

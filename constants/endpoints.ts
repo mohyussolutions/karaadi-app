@@ -171,8 +171,9 @@ export const HAGE_ENDPOINTS = {
 };
 
 export const SOCIAL_ENDPOINTS = {
-  STATUS: '/api/social/status',
-  POST:   '/api/social/post',
+  STATUS:          '/api/social/status',
+  POST:            '/api/social/post',
+  FACEBOOK_STATUS: '/api/social/facebook/status',
 };
 
 export const REPORT_ENDPOINTS = {
