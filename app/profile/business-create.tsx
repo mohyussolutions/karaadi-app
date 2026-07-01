@@ -506,7 +506,7 @@ function ApprovalStep({
   const color = Colors[meta.colorKey];
 
   return (
-    <ScrollView contentContainerStyle={s.statusScroll}>
+    <ScrollView contentContainerStyle={s.statusScroll} keyboardShouldPersistTaps="handled">
       <View style={[s.statusIconWrap, { backgroundColor: color + '18' }]}>
         <MaterialCommunityIcons name={meta.icon as any} size={56} color={color} />
       </View>
@@ -593,7 +593,7 @@ function PlanStep({
   if (loading) return <LoadingSpinner fullScreen />;
 
   return (
-    <ScrollView contentContainerStyle={s.scroll}>
+    <ScrollView contentContainerStyle={s.scroll} keyboardShouldPersistTaps="handled">
       <Text style={s.heading}>
         {business.planId ? t('mine.businesses.renewPlan') : t('mine.businesses.selectPlanTitle')}
       </Text>
@@ -670,7 +670,7 @@ function PostStep({
   }));
 
   return (
-    <ScrollView contentContainerStyle={s.scroll}>
+    <ScrollView contentContainerStyle={s.scroll} keyboardShouldPersistTaps="handled">
       <Text style={s.heading}>{t('mine.businesses.postQuestion')}</Text>
       <Text style={s.statusMessage}>{t('mine.businesses.postCategoryDesc', { name: business.name })}</Text>
 

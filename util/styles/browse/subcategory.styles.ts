@@ -106,7 +106,7 @@ export function createStyles(Colors: ColorPalette) {
     filterBackdrop: { ...StyleSheet.absoluteFill, backgroundColor: Colors.shadow45 },
     filterSheet: {
       position: "absolute", bottom: 0, left: 0, right: 0,
-      height: "92%",
+      maxHeight: "92%",
       backgroundColor: Colors.card,
       borderTopLeftRadius: 20, borderTopRightRadius: 20,
       paddingHorizontal: H_PAD,
