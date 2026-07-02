@@ -73,5 +73,13 @@ export function createStyles(Colors: ColorPalette) {
     loginLink: { fontSize: 14, color: Colors.primary, fontWeight: '600' },
     termsNote: { fontSize: 12, color: Colors.textMuted, textAlign: 'center', lineHeight: 18, marginBottom: 12 },
     termsLink: { color: Colors.primary, fontWeight: '600' },
+    checkboxRow: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      gap: 8,
+      marginBottom: 16,
+      paddingHorizontal: 2,
+    },
+    termsNoteInline: { flex: 1, fontSize: 12, color: Colors.textMuted, lineHeight: 18 },
   });
 }

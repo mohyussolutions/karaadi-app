@@ -100,8 +100,6 @@ export default function WantedScreen() {
   async function pickImages() {
     const remaining = MAX_IMAGES - form.images.length;
     if (remaining <= 0) return;
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') return;
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: 'images' as const,
       allowsMultipleSelection: true,

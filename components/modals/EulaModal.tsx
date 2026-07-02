@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, ScrollView, StyleSheet, Linking } from 'react-native';
 import { useThemeColors } from '../../hooks/useTheme';
 
@@ -9,7 +8,6 @@ interface EulaModalProps {
 
 export function EulaModal({ visible, onAccept }: EulaModalProps) {
   const Colors = useThemeColors();
-  const [scrolledToBottom, setScrolledToBottom] = useState(false);
 
   return (
     <Modal visible={visible} transparent={false} animationType="slide">
@@ -24,13 +22,6 @@ export function EulaModal({ visible, onAccept }: EulaModalProps) {
         <ScrollView
           style={styles.scroll}
           contentContainerStyle={styles.scrollContent}
-          onScroll={({ nativeEvent }) => {
-            const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;
-            if (layoutMeasurement.height + contentOffset.y >= contentSize.height - 40) {
-              setScrolledToBottom(true);
-            }
-          }}
-          scrollEventThrottle={16}
         >
           <Text style={[styles.heading, { color: Colors.text }]}>Welcome to Karaadi</Text>
           <Text style={[styles.body, { color: Colors.textSecondary }]}>
@@ -76,15 +67,12 @@ export function EulaModal({ visible, onAccept }: EulaModalProps) {
         </ScrollView>
 
         <View style={[styles.footer, { borderTopColor: Colors.border, backgroundColor: Colors.background }]}>
-          {!scrolledToBottom && (
-            <Text style={[styles.scrollHint, { color: Colors.textMuted }]}>Scroll down to read and accept</Text>
-          )}
           <TouchableOpacity
-            style={[styles.acceptBtn, { backgroundColor: scrolledToBottom ? Colors.primary : Colors.border }]}
-            onPress={scrolledToBottom ? onAccept : undefined}
-            activeOpacity={scrolledToBottom ? 0.85 : 1}
+            style={[styles.acceptBtn, { backgroundColor: Colors.primary }]}
+            onPress={onAccept}
+            activeOpacity={0.85}
           >
-            <Text style={[styles.acceptText, { color: scrolledToBottom ? Colors.white : Colors.textMuted }]}>
+            <Text style={[styles.acceptText, { color: Colors.white }]}>
               I Agree — Continue
             </Text>
           </TouchableOpacity>
@@ -107,7 +95,6 @@ const styles = StyleSheet.create({
   linkRow:       { marginTop: 16 },
   link:          { fontSize: 14, fontWeight: '600' },
   footer:        { padding: 20, borderTopWidth: 1 },
-  scrollHint:    { textAlign: 'center', fontSize: 12, marginBottom: 8 },
   acceptBtn:     { borderRadius: 14, paddingVertical: 16, alignItems: 'center' },
   acceptText:    { fontSize: 16, fontWeight: '700' },
 });

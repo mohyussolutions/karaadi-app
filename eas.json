@@ -40,7 +40,7 @@
     "production": {
       "android": {
         "serviceAccountKeyPath": "./google-play-service-account.json",
-        "track": "internal"
+        "track": "alpha"
       },
       "ios": {
         "ascApiKeyPath": "./AuthKey_T4K9ZTB9VV.p8",

@@ -23,6 +23,7 @@ export default function RegisterScreen() {
     handleSubmit,
   } = useRegister();
   const [showPassword, setShowPassword] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const { isTablet, isMobileLandscape } = useResponsive();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
@@ -34,6 +35,10 @@ export default function RegisterScreen() {
     }
     if (!isPasswordValid) {
       Alert.alert(t('auth.common.error'), t('auth.register.passwordInvalid'));
+      return;
+    }
+    if (!agreedToTerms) {
+      Alert.alert(t('auth.common.error'), t('auth.register.mustAgreeToTerms', 'You must agree to the Terms of Service and Privacy Policy to continue.'));
       return;
     }
     await handleSubmit();
@@ -124,26 +129,37 @@ export default function RegisterScreen() {
           ) : null}
 
           <TouchableOpacity
-            style={[styles.btn, (!isPasswordValid || isLoading) && styles.btnDisabled]}
+            style={styles.checkboxRow}
+            onPress={() => setAgreedToTerms((v) => !v)}
+            activeOpacity={0.7}
+          >
+            <MaterialCommunityIcons
+              name={agreedToTerms ? 'checkbox-marked' : 'checkbox-blank-outline'}
+              size={22}
+              color={agreedToTerms ? Colors.primary : Colors.textMuted}
+            />
+            <Text style={styles.termsNoteInline}>
+              I agree to the{' '}
+              <Text style={styles.termsLink} onPress={() => Linking.openURL('https://karaadi.com/terms')}>
+                Terms of Service
+              </Text>
+              {' '}and{' '}
+              <Text style={styles.termsLink} onPress={() => Linking.openURL('https://karaadi.com/privacy')}>
+                Privacy Policy
+              </Text>
+              , including the zero-tolerance policy for objectionable content and abusive users.
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.btn, (!isPasswordValid || !agreedToTerms || isLoading) && styles.btnDisabled]}
             onPress={onPress}
-            disabled={!isPasswordValid || isLoading}
+            disabled={!isPasswordValid || !agreedToTerms || isLoading}
           >
             <Text style={styles.btnText}>
               {isLoading ? t('auth.register.registering') : t('auth.register.registerButton')}
             </Text>
           </TouchableOpacity>
-
-          <Text style={styles.termsNote}>
-            By creating an account you agree to our{' '}
-            <Text style={styles.termsLink} onPress={() => Linking.openURL('https://karaadi.com/terms')}>
-              Terms of Service
-            </Text>
-            {' '}and{' '}
-            <Text style={styles.termsLink} onPress={() => Linking.openURL('https://karaadi.com/privacy')}>
-              Privacy Policy
-            </Text>
-            , including our zero-tolerance policy for objectionable content and abusive users.
-          </Text>
 
           <View style={styles.loginRow}>
             <Text style={styles.loginText}>{t('auth.register.alreadyAccount')} </Text>

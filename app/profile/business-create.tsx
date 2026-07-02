@@ -208,11 +208,6 @@ function ApplyStep({
   }
 
   async function pickLogo() {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert(t('mine.businesses.permissionRequired'), t('mine.businesses.photoAccessNeeded'));
-      return;
-    }
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: 'images' as const,
       allowsEditing: true,

@@ -34,11 +34,6 @@ export default function EditProfileScreen() {
   const [deleting, setDeleting] = useState(false);
 
   async function handlePickPhoto() {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert(t('mine.editProfile.permissionNeeded'), t('mine.editProfile.grantPhotoAccess'));
-      return;
-    }
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: 'images' as const,
       allowsEditing: true,

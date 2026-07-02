@@ -22,11 +22,6 @@ export function ImagePickerRow({ images, onChange, error }: ImagePickerRowProps)
       Alert.alert(t('postAd.limitReachedTitle'), t('postAd.maxPhotosMessage', { max: MAX_IMAGES }));
       return;
     }
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert(t('mine.businesses.permissionRequired'), t('mine.businesses.photoAccessNeeded'));
-      return;
-    }
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: 'images' as const,
       allowsMultipleSelection: true,
