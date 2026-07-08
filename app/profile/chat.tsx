@@ -221,6 +221,7 @@ export default function ChatScreen() {
           ref={listRef}
           data={messages}
           keyExtractor={(item) => String(item.id)}
+          style={styles.flexFull}
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"

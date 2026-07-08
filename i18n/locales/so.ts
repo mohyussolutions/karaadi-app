@@ -2411,6 +2411,7 @@ const so = {
   seeAll: "Arag dhammaan",
   noListings: "Xayeysiis ma jiro",
   noResults: "Xayeysiis lama helin oo waafaqsan",
+  loadMore: "Arag Wax Dheeraad Ah",
   priceOnRequest: "Qiimaha la weydiisto",
   negotiable: "Waxaa la wadahadlayaa",
   signInRequired: "Geli si aad u aragto",

@@ -2,7 +2,7 @@
   "expo": {
     "name": "Karaadi",
     "slug": "karaadi",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -53,6 +53,12 @@
       ],
       "expo-secure-store",
       [
+        "expo-audio",
+        {
+          "enableBackgroundPlayback": false
+        }
+      ],
+      [
         "expo-notifications",
         {
           "icon": "./assets/icon.png",
@@ -66,7 +72,6 @@
           "photosPermission": "Allow Karaadi to access your photos to add images to your listings."
         }
       ],
-      "expo-audio",
       "expo-asset",
       [
         "expo-splash-screen",

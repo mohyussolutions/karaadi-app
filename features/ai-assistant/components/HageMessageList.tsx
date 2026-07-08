@@ -27,11 +27,12 @@ export function HageMessageList({
   const styles = useThemedStyles(createStyles);
 
   return (
-    <>
+    <View style={styles.messageListWrap}>
       <FlatList
         ref={listRef}
         data={messages}
         keyExtractor={(m) => String(m.id)}
+        style={styles.messageListWrap}
         contentContainerStyle={[styles.messageList, { paddingBottom: insets.bottom + 8 }]}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
@@ -81,6 +82,6 @@ export function HageMessageList({
           <Text style={styles.thinkingText}>{thinkingText}</Text>
         </View>
       )}
-    </>
+    </View>
   );
 }

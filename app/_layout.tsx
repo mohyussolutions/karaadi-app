@@ -50,7 +50,7 @@ export default function RootLayout() {
   const { mode, resolved } = useThemeMode();
   const Colors = useThemeColors();
   const pathname = usePathname();
-  const showTabBar = !pathname.startsWith("/(auth)") && !pathname.startsWith("/listing");
+  const showTabBar = !pathname.startsWith("/(auth)") && !pathname.startsWith("/listing") && !pathname.startsWith("/profile/chat");
 
   useEffect(() => {
     Appearance.setColorScheme(mode);

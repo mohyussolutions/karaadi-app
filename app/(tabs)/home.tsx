@@ -112,7 +112,7 @@ export default function HomeScreen() {
             onPress={showMore}
             activeOpacity={0.8}
           >
-            <Text style={styles.readMoreText}>{t('loadMore') || 'Load more'}</Text>
+            <Text style={styles.readMoreText}>{t('loadMore')}</Text>
             <MaterialCommunityIcons name="chevron-down" size={16} color={Colors.primary} />
           </TouchableOpacity>
         ) : null

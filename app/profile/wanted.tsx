@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { EmptyState, AppIcon } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
@@ -40,6 +41,7 @@ const EMPTY_FORM: WantedFormState = {
 
 export default function WantedScreen() {
   const { t } = useAppTranslation();
+  const router = useRouter();
   const { user } = useAuthStore();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
@@ -211,7 +213,14 @@ export default function WantedScreen() {
             message={t('subscription.myAlertsEmpty')}
           />
         }
-        renderItem={({ item }) => <AlertCard item={item} onDelete={handleDelete} t={t} />}
+        renderItem={({ item }) => (
+          <AlertCard
+            item={item}
+            onDelete={handleDelete}
+            onPress={() => router.push({ pathname: '/listing/subscription/[id]', params: { id: item.id || item._id || '' } })}
+            t={t}
+          />
+        )}
       />
 
       <Modal
@@ -386,7 +395,7 @@ function SectionTitle({ label }: { label: string }) {
   );
 }
 
-function AlertCard({ item, onDelete, t }: { item: Subscription; onDelete: (id: string) => void; t: any }) {
+function AlertCard({ item, onDelete, onPress, t }: { item: Subscription; onDelete: (id: string) => void; onPress: () => void; t: any }) {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
 
@@ -417,7 +426,7 @@ function AlertCard({ item, onDelete, t }: { item: Subscription; onDelete: (id: s
   if (item.region) meta.push(item.region);
 
   return (
-    <View style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
       <View style={styles.iconWrap}>
         <AppIcon name={catIcon} size={22} color={Colors.primary} />
       </View>
@@ -444,6 +453,6 @@ function AlertCard({ item, onDelete, t }: { item: Subscription; onDelete: (id: s
       >
         <MaterialCommunityIcons name="delete-outline" size={18} color={Colors.error} />
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 }

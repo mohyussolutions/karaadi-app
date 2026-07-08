@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { toggleHage, closeHage, addUserMessage, sendHageMessage, clearHage } from '../../../store/slices/hageSlice';
+import { useAuthStore } from '../../../store/authStore';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { getListingDetailRoute, type ListingRoute } from '../../../util/helpers/nav.routing';
@@ -20,6 +21,7 @@ export default function Hage() {
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { user } = useAuthStore();
   const { open, messages, loading } = useAppSelector((s) => s.hage);
   const { t, lang } = useAppTranslation();
   const [input, setInput] = useState('');
@@ -47,7 +49,21 @@ export default function Hage() {
     }
   }, [messages, open]);
 
+  function handleFabPress() {
+    if (!user) {
+      dispatch(closeHage());
+      router.push('/(auth)/login');
+      return;
+    }
+    dispatch(toggleHage());
+  }
+
   function handleSend() {
+    if (!user) {
+      dispatch(closeHage());
+      router.push('/(auth)/login');
+      return;
+    }
     const text = input.trim();
     if (!text || loading) return;
     setInput('');
@@ -119,7 +135,7 @@ export default function Hage() {
       >
         <TouchableOpacity
           style={styles.fab}
-          onPress={() => dispatch(toggleHage())}
+          onPress={handleFabPress}
           activeOpacity={0.85}
         >
           <MaterialCommunityIcons

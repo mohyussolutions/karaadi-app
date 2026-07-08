@@ -19,6 +19,7 @@ import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
 import { createStyles } from '../../../util/styles/listing/subscription.styles';
 import { createTabletSplitNarrowStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplit.styles';
 import { useResponsive } from '../../../hooks/useResponsive';
+import { getCategoryByKey, SUB_I18N_GROUP } from '../../../constants';
 
 export default function SubscriptionDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -47,6 +48,16 @@ export default function SubscriptionDetailScreen() {
 
   const isActive = item.isActive ?? (item.status === 'active');
 
+  const categoryDef = item.category ? getCategoryByKey(item.category) : undefined;
+  const categoryLabel = item.category
+    ? t(`categories.${item.category}`, { defaultValue: categoryDef?.name ?? item.category })
+    : null;
+  const i18nGroup = item.category ? (SUB_I18N_GROUP[item.category] ?? item.category.toLowerCase()) : '';
+  const subCategoryDef = categoryDef?.subCategories.find((s) => s.key === item.subCategory);
+  const subCategoryLabel = item.subCategory
+    ? t(`subcategories.${i18nGroup}.${item.subCategory}`, { defaultValue: subCategoryDef?.name ?? item.subCategory })
+    : null;
+
   const priceLabel = item.priceMin && item.priceMax
     ? `${formatPrice(item.priceMin)} – ${formatPrice(item.priceMax)}`
     : item.priceMax ? `${t('subscriptionDetail.priceUpTo')} ${formatPrice(item.priceMax)}`
@@ -54,8 +65,8 @@ export default function SubscriptionDetailScreen() {
     : t('priceOnRequest');
 
   const infoRows: { icon: string; label: string; value: string }[] = [
-    item.category      && { icon: 'tag-outline',          label: t('subscriptionDetail.category'),    value: item.category },
-    item.subCategory   && { icon: 'tag-multiple-outline', label: t('subscriptionDetail.subCategory'), value: item.subCategory },
+    categoryLabel       && { icon: 'tag-outline',          label: t('subscriptionDetail.category'),    value: categoryLabel },
+    subCategoryLabel    && { icon: 'tag-multiple-outline', label: t('subscriptionDetail.subCategory'), value: subCategoryLabel },
     item.condition     && { icon: 'check-circle-outline', label: t('subscriptionDetail.condition'),   value: item.condition },
     item.brand         && { icon: 'shield-star-outline',  label: t('subscriptionDetail.brand'),       value: item.brand },
     item.expiryDate    && { icon: 'calendar-end',         label: t('subscriptionDetail.expires'),     value: formatDate(item.expiryDate) },
@@ -70,9 +81,9 @@ export default function SubscriptionDetailScreen() {
         <MaterialCommunityIcons name="bell-ring-outline" size={56} color={Colors.primary} />
       </View>
       <View style={styles.statusRow}>
-        {item.category && (
+        {categoryLabel && (
           <View style={styles.categoryBadge}>
-            <Text style={styles.categoryBadgeText}>{item.category}</Text>
+            <Text style={styles.categoryBadgeText}>{categoryLabel}</Text>
           </View>
         )}
         <View style={[styles.statusBadge, isActive ? styles.statusBadgeActive : styles.statusBadgeInactive]}>
@@ -86,7 +97,7 @@ export default function SubscriptionDetailScreen() {
 
   const bodyContent = (
     <View style={styles.body}>
-      <Text style={styles.title}>{item.title || item.category || t('subscriptionDetail.titleFallback')}</Text>
+      <Text style={styles.title}>{item.title || categoryLabel || t('subscriptionDetail.titleFallback')}</Text>
       <Text style={styles.price}>{priceLabel}</Text>
 
       {/* location pills */}
@@ -188,8 +199,8 @@ export default function SubscriptionDetailScreen() {
         <SocialShareSheet
           visible={shareVisible}
           onClose={() => setShareVisible(false)}
-          title={item.title || item.category || t('subscriptionDetail.titleFallback')}
-          message={`${item.title || item.category}\n📍 ${[...(item.cities ?? []), item.region].filter(Boolean).join(', ') || t('vehicleDetail.locationFallback')}\n\nKaraadi`}
+          title={item.title || categoryLabel || t('subscriptionDetail.titleFallback')}
+          message={`${item.title || categoryLabel}\n📍 ${[...(item.cities ?? []), item.region].filter(Boolean).join(', ') || t('vehicleDetail.locationFallback')}\n\nKaraadi`}
         />
       </SafeAreaView>
     </SwipeDownToClose>

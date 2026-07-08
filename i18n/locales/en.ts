@@ -2393,6 +2393,7 @@ const en = {
   seeAll: "See all",
   noListings: "No listings yet",
   noResults: "No matching listings found",
+  loadMore: "See More",
   priceOnRequest: "Price on request",
   negotiable: "Negotiable",
   signInRequired: "Sign in required",

@@ -1,13 +1,17 @@
+import * as SecureStore from 'expo-secure-store';
 import { io, Socket } from 'socket.io-client';
 import { API_BASE_URL } from '../../constants';
+import { AUTH_TOKEN_KEY } from '../client.constants';
 
 let socket: Socket | null = null;
 
-export function connectSocket(userId: string): Socket {
+export async function connectSocket(userId: string): Promise<Socket> {
   if (socket?.connected) return socket;
 
+  const token = await SecureStore.getItemAsync(AUTH_TOKEN_KEY);
+
   socket = io(API_BASE_URL, {
-    auth: { userId },
+    auth: { userId, token },
     transports: ['websocket', 'polling'],
     reconnection: true,
     reconnectionAttempts: 5,

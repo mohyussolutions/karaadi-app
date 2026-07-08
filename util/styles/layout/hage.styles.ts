@@ -58,6 +58,7 @@ export function createStyles(Colors: ColorPalette) {
       justifyContent: 'center',
       backgroundColor: Colors.whiteAlpha15,
     },
+    messageListWrap: { flex: 1 },
     messageList: { padding: 16, gap: 10 },
     emptyWrap: { alignItems: 'center', justifyContent: 'center', paddingVertical: 64, gap: 12 },
     emptyText: { fontSize: 14, color: Colors.textMuted, textAlign: 'center' },
