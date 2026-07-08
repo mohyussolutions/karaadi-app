@@ -1,4 +1,4 @@
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from '../../util/secureStorage';
 import { io, Socket } from 'socket.io-client';
 import { API_BASE_URL } from '../../constants';
 import { AUTH_TOKEN_KEY } from '../client.constants';

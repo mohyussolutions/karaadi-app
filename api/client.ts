@@ -1,4 +1,4 @@
-import * as SecureStore from "expo-secure-store";
+import * as SecureStore from "../util/secureStorage";
 import { API_BASE_URL } from "../constants/config";
 import { storeRef } from "../store/storeRef";
 import { clearCredentials } from "../store/slices/authSlice";

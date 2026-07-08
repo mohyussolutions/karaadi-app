@@ -1,8 +1,11 @@
-import { useWindowDimensions } from 'react-native';
+import { useWindowDimensions, Platform } from 'react-native';
 import { BP_SMALL, BP_TABLET } from '../util/styles/common/common.style';
 
+export const WEB_MAX_WIDTH = 1200;
+
 export function useGlobal() {
-  const { width, height } = useWindowDimensions();
+  const { width: rawWidth, height } = useWindowDimensions();
+  const width = Platform.OS === 'web' ? Math.min(rawWidth, WEB_MAX_WIDTH) : rawWidth;
 
   const isSmall           = width < BP_SMALL;
   const isTablet          = width >= BP_TABLET;
@@ -50,6 +53,7 @@ export function useGlobal() {
 
   return {
     width,
+    rawWidth,
     height,
     isSmall,
     isTablet,

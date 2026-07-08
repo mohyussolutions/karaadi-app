@@ -1,4 +1,4 @@
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from '../util/secureStorage';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { setCredentials, clearCredentials, setLoading } from '../store/slices/authSlice';
 import { login as apiLogin, logout as apiLogout, register as apiRegister, getProfile } from '../api/core/auth.actions';

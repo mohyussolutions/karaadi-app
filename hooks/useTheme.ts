@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { Appearance, StyleSheet } from "react-native";
+import { Appearance, Platform, StyleSheet } from "react-native";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setThemeMode } from "../store/slices/themeSlice";
 import {
@@ -18,7 +18,9 @@ export function useThemeMode() {
   const setMode = useCallback(
     (newMode: ThemeMode) => {
       dispatch(setThemeMode(newMode));
-      Appearance.setColorScheme(newMode);
+      if (Platform.OS !== "web") {
+        Appearance.setColorScheme(newMode);
+      }
     },
     [dispatch],
   );

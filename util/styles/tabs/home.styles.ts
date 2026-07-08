@@ -7,6 +7,7 @@ export const COL_GAP = 8;
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
     safe: { flex: 1, backgroundColor: Colors.background },
+    webCenterWrap: { alignItems: 'center' },
     outerRow: { flexDirection: 'row' },
     sidebar: {
       borderRightWidth: StyleSheet.hairlineWidth,

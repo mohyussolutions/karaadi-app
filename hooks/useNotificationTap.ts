@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { LogBox } from "react-native";
+import { LogBox, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import { getListingDetailRoute } from "../util/helpers/nav.routing";
 
@@ -60,12 +60,11 @@ export function useNotificationTap() {
       router.push("/profile/notifications");
     };
 
-    // Handles the tap that launches the app from a fully-killed state:
-    // addNotificationResponseReceivedListener only fires while the JS
-    // runtime is already alive, so a cold-start tap would otherwise be lost.
-    Notifications.getLastNotificationResponseAsync?.().then((response: any) => {
-      if (response) handleResponse(response);
-    });
+    if (Platform.OS !== "web") {
+      Notifications.getLastNotificationResponseAsync?.().then((response: any) => {
+        if (response) handleResponse(response);
+      });
+    }
 
     const sub = Notifications.addNotificationResponseReceivedListener(handleResponse);
 

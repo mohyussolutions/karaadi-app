@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import {
-  View, Text, TouchableOpacity, RefreshControl, FlatList, ScrollView,
+  View, Text, TouchableOpacity, RefreshControl, FlatList, ScrollView, Platform,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -8,6 +8,7 @@ import { CategoryGrid, HowToUseVideo } from '../../components/shared';
 import ListingCard from '../../components/cards/ListingCard';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { useResponsive } from '../../hooks/useResponsive';
+import { WEB_MAX_WIDTH } from '../../hooks/useGlobal';
 import { useHomeFeed } from '../../hooks/useHomeFeed';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useAppSelector } from '../../store/store';
@@ -132,18 +133,20 @@ export default function HomeScreen() {
 
   if (isTabletLandscape) {
     return (
-      <View style={[styles.safe, styles.outerRow]}>
-        <View style={[styles.sidebar, { width: sidebarWidth }]}>
-          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.sidebarContent}>
-            <View style={styles.videoSection}>
-              <HowToUseVideo />
-            </View>
-            <CategoryGrid />
-            {postBtn}
-          </ScrollView>
-        </View>
-        <View style={styles.mainFlex}>
-          {feedList}
+      <View style={[styles.safe, Platform.OS === 'web' && styles.webCenterWrap]}>
+        <View style={[styles.outerRow, Platform.OS === 'web' && { maxWidth: WEB_MAX_WIDTH, width: '100%' }]}>
+          <View style={[styles.sidebar, { width: sidebarWidth }]}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.sidebarContent}>
+              <View style={styles.videoSection}>
+                <HowToUseVideo />
+              </View>
+              <CategoryGrid />
+              {postBtn}
+            </ScrollView>
+          </View>
+          <View style={styles.mainFlex}>
+            {feedList}
+          </View>
         </View>
       </View>
     );

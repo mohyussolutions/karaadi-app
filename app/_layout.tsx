@@ -53,7 +53,9 @@ export default function RootLayout() {
   const showTabBar = !pathname.startsWith("/(auth)") && !pathname.startsWith("/listing") && !pathname.startsWith("/profile/chat");
 
   useEffect(() => {
-    Appearance.setColorScheme(mode);
+    if (Platform.OS !== "web") {
+      Appearance.setColorScheme(mode);
+    }
   }, [mode]);
 
   useEffect(() => {

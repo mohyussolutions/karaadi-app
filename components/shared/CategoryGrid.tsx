@@ -1,5 +1,5 @@
 import { memo, useCallback } from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, Platform } from "react-native";
 import AppIcon from "./AppIcon";
 import { useRouter } from "expo-router";
 import { MAIN_CATEGORIES, MainCategory } from "../../constants/categories";
@@ -45,8 +45,10 @@ function CategoryGrid({ onPress }: CategoryGridProps) {
   const router = useRouter();
   const { t } = useAppTranslation();
   const styles = useThemedStyles(createStyles);
-  const { iconCols, gridCellWidth } = useResponsive();
-  const cellWidth = gridCellWidth(iconCols, H_PAD, GAP);
+  const { iconCols, gridCellWidth, sidebarWidth, isTabletLandscape } = useResponsive();
+  const cellWidth = Platform.OS === "web" && isTabletLandscape
+    ? Math.floor((sidebarWidth - H_PAD * 2 - GAP * (iconCols - 1)) / iconCols)
+    : gridCellWidth(iconCols, H_PAD, GAP);
 
   const handlePress = useCallback(
     (cat: MainCategory) => {

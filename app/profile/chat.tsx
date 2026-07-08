@@ -120,13 +120,22 @@ export default function ChatScreen() {
     const onReceive = (msg: ChatMessage) => {
       const msgChatId = (msg as any).chatId;
       if (msgChatId && msgChatId !== chatIdNum) return;
+      const tempKey = (msg as any).tempId;
+
       setMessages((prev) => {
-        const tempKey = (msg as any).tempId;
-        if (tempKey) {
-          const withoutTemp = prev.filter((m) => (m as any).tempId !== tempKey);
-          return [...withoutTemp, msg];
+        if (prev.some((m) => m.id === msg.id)) return prev;
+
+        const pendingIndex = prev.findIndex((m) => {
+          const mTempId = (m as any).tempId;
+          if (!mTempId) return false;
+          return tempKey ? mTempId === tempKey : m.content === msg.content;
+        });
+
+        if (pendingIndex !== -1) {
+          const next = [...prev];
+          next[pendingIndex] = { ...msg, tempId: (prev[pendingIndex] as any).tempId } as any;
+          return next;
         }
-        if (prev.find((m) => m.id === msg.id)) return prev;
         return [...prev, msg];
       });
       emitMarkAsRead(chatIdNum);
@@ -146,7 +155,7 @@ export default function ChatScreen() {
     const content = text.trim();
     const tempId = `temp_${Date.now()}`;
     setText('');
-    setSending(false);
+    setSending(true);
 
     const tempMsg: any = {
       id: tempId,
@@ -163,6 +172,7 @@ export default function ChatScreen() {
     const socket = getSocket();
     if (socket?.connected) {
       emitSendMessage(chatIdNum, content, tempId);
+      setSending(false);
     } else {
       try {
         const msg = await sendMessage({ chatId: chatIdNum, senderId: user.id, receiverId: userId || '', content });
@@ -170,6 +180,8 @@ export default function ChatScreen() {
       } catch {
         setText(content);
         setMessages((prev) => prev.filter((m) => (m as any).tempId !== tempId));
+      } finally {
+        setSending(false);
       }
     }
   }
