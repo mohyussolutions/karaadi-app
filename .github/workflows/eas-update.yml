@@ -27,3 +27,5 @@ jobs:
 
       - name: Publish OTA update to production channel
         run: eas update --channel production --message "${{ github.event.head_commit.message }}" --non-interactive
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
