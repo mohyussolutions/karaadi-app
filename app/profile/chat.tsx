@@ -256,7 +256,7 @@ export default function ChatScreen() {
             )
           }
           renderItem={({ item }) => {
-            const isMe = item.senderId === user?.id;
+            const isMe = String(item.senderId) === String(user?.id ?? '');
             const ts = item.timestamp || item.createdAt || '';
             return (
               <View style={[styles.row, isMe ? styles.rowMe : styles.rowThem]}>
