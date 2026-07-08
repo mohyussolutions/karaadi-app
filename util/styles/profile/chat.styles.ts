@@ -36,7 +36,7 @@ export function createStyles(Colors: ColorPalette) {
 
     bubble: { maxWidth: '78%', paddingHorizontal: 14, paddingVertical: 10, borderRadius: 18 },
     bubbleMe: { backgroundColor: Colors.blue600, borderBottomRightRadius: 4 },
-    bubbleThem: { backgroundColor: Colors.card, borderBottomLeftRadius: 4, borderWidth: 1, borderColor: Colors.slate200 },
+    bubbleThem: { backgroundColor: Colors.slate200, borderBottomLeftRadius: 4 },
 
     bubbleText: { fontSize: 15, lineHeight: 21 },
     bubbleTextMe: { color: Colors.white },
