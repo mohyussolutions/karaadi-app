@@ -32,7 +32,9 @@ export async function getChatMessages(chatId: number, userId: string): Promise<C
   const { data } = await apiClient.get(CHATS_ENDPOINTS.MESSAGES(chatId), {
     params: { userId },
   });
-  return Array.isArray(data) ? data : [];
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data?.messages)) return data.messages;
+  return [];
 }
 
 export async function sendMessage(payload: {
