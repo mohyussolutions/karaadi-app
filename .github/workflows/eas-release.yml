@@ -25,9 +25,10 @@ jobs:
 
       - name: Restore store credentials
         env:
+          ASC_API_KEY_P8: ${{ secrets.ASC_API_KEY_P8 }}
           GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON != '' && secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON || secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
         run: |
-          printf '%s' "${{ secrets.ASC_API_KEY_P8 }}" > AuthKey_T4K9ZTB9VV.p8
+          printf '%s' "$ASC_API_KEY_P8" > AuthKey_T4K9ZTB9VV.p8
           printf '%s' "$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" > google-play-service-account.json
 
       - name: Build and submit to both stores
