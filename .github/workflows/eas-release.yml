@@ -45,9 +45,14 @@ jobs:
           printf '%s' "$PLAY_SERVICE_ACCOUNT_JSON" > google-play-service-account.json
           python - <<'PY'
           import json
+          import sys
 
-          with open("google-play-service-account.json", "r", encoding="utf-8") as f:
-              json.load(f)
+          try:
+              with open("google-play-service-account.json", "r", encoding="utf-8") as f:
+                  json.load(f)
+          except json.JSONDecodeError as exc:
+              print(f"Invalid Google Play service account JSON: {exc}", file=sys.stderr)
+              sys.exit(1)
           PY
 
       - name: Build and submit to both stores
