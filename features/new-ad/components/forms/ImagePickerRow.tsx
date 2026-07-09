@@ -5,7 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../../hooks/useTheme';
 import { useAppTranslation } from '../../../../hooks/useAppTranslation';
-import { createStyles } from './ImagePickerRow.styles';
+import { createStyles } from '../../../../util/styles/new-ad/imagePickerRow.styles';
 
 const MIN_IMAGES = 2;
 const MAX_IMAGES = 10;

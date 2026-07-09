@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../../hooks/useTheme';
-import { createStyles } from './Dropdown.styles';
+import { createStyles } from '../../../../util/styles/new-ad/dropdown.styles';
 
 function normalize(opt: string | DropdownOption): DropdownOption {
   return typeof opt === 'string' ? { label: opt, value: opt } : opt;

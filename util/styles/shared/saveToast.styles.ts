@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
+import { shadow } from '../../shadow';
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
@@ -14,11 +15,7 @@ export function createStyles(Colors: ColorPalette) {
       borderRadius: 24,
       paddingVertical: 10,
       paddingHorizontal: 12,
-      shadowColor: Colors.shadow,
-      shadowOffset: { width: 0, height: 6 },
-      shadowOpacity: 0.22,
-      shadowRadius: 16,
-      elevation: 10,
+      ...shadow({ color: Colors.shadow, offset: { width: 0, height: 6 }, opacity: 0.22, radius: 16, elevation: 10 }),
       zIndex: 9999,
     },
     iconWrap: {

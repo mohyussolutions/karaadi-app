@@ -1,5 +1,6 @@
 import { Platform, StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
+import { shadow } from '../../shadow';
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
@@ -10,7 +11,7 @@ export function createStyles(Colors: ColorPalette) {
       flexDirection: 'row', alignItems: 'center', gap: 10,
       paddingHorizontal: 12, paddingVertical: 10,
       backgroundColor: Colors.card, borderBottomWidth: 1, borderBottomColor: Colors.slate100,
-      shadowColor: Colors.shadow, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2,
+      ...shadow({ color: Colors.shadow, offset: { width: 0, height: 1 }, opacity: 0.04, radius: 4, elevation: 2 }),
     },
     backBtn: { marginRight: 2 },
     avatar: {
@@ -36,7 +37,7 @@ export function createStyles(Colors: ColorPalette) {
 
     bubble: { maxWidth: '78%', paddingHorizontal: 14, paddingVertical: 10, borderRadius: 18 },
     bubbleMe: { backgroundColor: Colors.blue600, borderBottomRightRadius: 4 },
-    bubbleThem: { backgroundColor: Colors.slate200, borderBottomLeftRadius: 4 },
+    bubbleThem: { backgroundColor: Colors.gray200, borderBottomLeftRadius: 4 },
 
     bubbleText: { fontSize: 15, lineHeight: 21 },
     bubbleTextMe: { color: Colors.white },

@@ -28,8 +28,6 @@ export default function RootLayout() {
   const [showSplash, setShowSplash] = useState(true);
   const [showEula, setShowEula] = useState(false);
 
-  // Apple App Review (Guideline 1.2 - Safety: UGC): the EULA modal below blocks
-  // every other screen on first launch until the user explicitly accepts it.
   useEffect(() => {
     AsyncStorage.getItem('karaadi_eula_accepted_v1').then((val) => {
       if (!val) setShowEula(true);

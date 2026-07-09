@@ -1,5 +1,6 @@
 import { Platform, StyleSheet } from "react-native";
 import type { ColorPalette } from "../../../hooks/useTheme";
+import { shadow } from "../../shadow";
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
@@ -18,11 +19,7 @@ export function createStyles(Colors: ColorPalette) {
       borderRadius: 18,
       paddingHorizontal: 14,
       paddingVertical: 12,
-      shadowColor: Colors.black,
-      shadowOffset: { width: 0, height: 8 },
-      shadowOpacity: 0.18,
-      shadowRadius: 20,
-      elevation: 14,
+      ...shadow({ color: Colors.black, offset: { width: 0, height: 8 }, opacity: 0.18, radius: 20, elevation: 14 }),
       borderWidth: Platform.OS === "android" ? 1 : 0,
       borderColor: Colors.border,
     },

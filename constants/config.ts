@@ -1,4 +1,10 @@
-export const API_BASE_URL = (process.env.EXPO_PUBLIC_API_URL || 'https://karaadi.onrender.com').replace(/\/$/, '');
+import { Platform } from 'react-native';
+
+const isWebDev = __DEV__ && Platform.OS === 'web';
+
+export const API_BASE_URL = isWebDev
+  ? 'http://localhost:8090'
+  : (process.env.EXPO_PUBLIC_API_URL || 'https://karaadi.onrender.com').replace(/\/$/, '');
 export const PLACEHOLDER_IMAGE = 'https://placehold.co/300x200/e5e7eb/9ca3af?text=No+Image';
 
 export const PLACEHOLDER = '/placeholder.png';

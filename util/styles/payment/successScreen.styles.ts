@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
+import { shadow } from '../../shadow';
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
@@ -29,7 +30,7 @@ export function createStyles(Colors: ColorPalette) {
     doneBtn: {
       flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
       gap: 8, width: '100%', backgroundColor: Colors.primary, borderRadius: 14, paddingVertical: 16,
-      shadowColor: Colors.primary, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5,
+      ...shadow({ color: Colors.primary, offset: { width: 0, height: 4 }, opacity: 0.3, radius: 8, elevation: 5 }),
     },
     doneBtnText: { color: Colors.white, fontSize: 16, fontWeight: '700' },
   });

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Animated } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Animated, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -10,6 +10,7 @@ import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { getListingDetailRoute, type ListingRoute } from '../../../util/helpers/nav.routing';
 import { createStyles } from '../../../util/styles/layout/hage.styles';
+import { NATIVE_DRIVER } from '../../../util/animation';
 import type { HageMessage, ListingRef } from '../../../util/types/hage.types';
 import { SHEET_TOP, H } from '../constants';
 import { useFabDrag } from '../hooks/useFabDrag';
@@ -30,6 +31,9 @@ export default function Hage() {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
 
+  const { height: windowHeight } = useWindowDimensions();
+  const sheetHeight = Math.max(windowHeight - SHEET_TOP, 0);
+
   const slideY = useRef(new Animated.Value(H)).current;
   const { fabPan, fabResponder } = useFabDrag(insets);
   const { dragY, sheetDragResponder } = useSheetDrag(() => dispatch(closeHage()));
@@ -37,7 +41,7 @@ export default function Hage() {
   useEffect(() => {
     Animated.spring(slideY, {
       toValue: open ? SHEET_TOP : H,
-      useNativeDriver: true,
+      useNativeDriver: NATIVE_DRIVER,
       tension: 65,
       friction: 12,
     }).start();
@@ -87,8 +91,15 @@ export default function Hage() {
   return (
     <>
       <Animated.View
-        style={[styles.sheet, { opacity: open ? 1 : 0, transform: [{ translateY: sheetTranslateY }] }]}
-        pointerEvents={open ? 'auto' : 'none'}
+        style={[
+          styles.sheet,
+          {
+            height: sheetHeight,
+            opacity: open ? 1 : 0,
+            transform: [{ translateY: sheetTranslateY }],
+            pointerEvents: open ? 'auto' : 'none',
+          },
+        ]}
       >
         <View style={styles.handleBar} {...sheetDragResponder.panHandlers}>
           <View style={styles.handle} />

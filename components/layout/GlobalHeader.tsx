@@ -12,7 +12,7 @@ import { useAppSelector, useAppDispatch } from '../../store/store';
 import { setBrowseQuery, clearBrowseQuery } from '../../store/slices/browseSearchSlice';
 import { useThemeColors, useThemedStyles, useThemeMode } from '../../hooks/useTheme';
 import { useResponsive } from '../../hooks/useResponsive';
-import { tabletHeaderStyles, TABLET_HEADER_ICON_SIZES, TABLET_LANG_DROPDOWN_TOP_OFFSET } from '../common/ipad';
+import { tabletHeaderStyles, TABLET_HEADER_ICON_SIZES, TABLET_LANG_DROPDOWN_TOP_OFFSET } from '../../util/styles/shared/ipad.styles';
 import type { Lang } from '../../i18n/translations';
 import { createStyles } from '../../util/styles/layout/globalHeader.styles';
 

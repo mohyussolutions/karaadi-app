@@ -1,5 +1,6 @@
 import { StyleSheet, type ViewStyle } from "react-native";
 import { RADII, SPACING, type ColorPalette } from "../../colors/theme";
+import { shadow } from "../../shadow";
 
 export const GLASS_LIGHT: ViewStyle = {
   backgroundColor: "rgba(255,255,255,0.82)",
@@ -26,11 +27,7 @@ export const createLayoutStyles = (Colors: ColorPalette) =>
       borderRadius: RADII.pill,
       borderWidth: 1,
       borderColor: Colors.border,
-      shadowColor: Colors.shadow,
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.1,
-      shadowRadius: 16,
-      elevation: 12,
+      ...shadow({ color: Colors.shadow, offset: { width: 0, height: 4 }, opacity: 0.1, radius: 16, elevation: 12 }),
       paddingHorizontal: SPACING.xs,
       paddingVertical: SPACING.xs,
       flexDirection: "row",

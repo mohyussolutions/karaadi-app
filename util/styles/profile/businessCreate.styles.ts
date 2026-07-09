@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
+import { shadow } from '../../shadow';
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
@@ -57,11 +58,7 @@ export function createStyles(Colors: ColorPalette) {
       flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
       gap: 8, backgroundColor: Colors.primary, borderRadius: 14,
       paddingVertical: 16, marginTop: 16, marginBottom: 4,
-      shadowColor: Colors.primary,
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.28,
-      shadowRadius: 8,
-      elevation: 5,
+      ...shadow({ color: Colors.primary, offset: { width: 0, height: 4 }, opacity: 0.28, radius: 8, elevation: 5 }),
     },
     submitBtnDisabled: { opacity: 0.65 },
     submitText: { color: Colors.white, fontSize: 16, fontWeight: '700' },

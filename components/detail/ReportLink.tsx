@@ -1,9 +1,10 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuthStore } from '../../store/authStore';
 import { useThemeColors } from '../../hooks/useTheme';
+import { styles } from '../../util/styles/detail/reportLink.styles';
 
 export default function ReportLink({ itemId, itemType }: { itemId: string; itemType: string }) {
   const router = useRouter();
@@ -38,25 +39,3 @@ export default function ReportLink({ itemId, itemType }: { itemId: string; itemT
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  wrapper: {
-    marginTop: 16,
-    marginBottom: 8,
-    paddingHorizontal: 0,
-  },
-  btn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-  },
-  label: {
-    flex: 1,
-    fontSize: 14,
-    fontWeight: '600',
-  },
-});

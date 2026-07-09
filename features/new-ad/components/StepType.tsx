@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles, type ColorPalette } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
-import { createStyles } from './StepType.styles';
+import { createStyles } from '../../../util/styles/new-ad/stepType.styles';
 
 function getOptions(Colors: ColorPalette) {
   return [

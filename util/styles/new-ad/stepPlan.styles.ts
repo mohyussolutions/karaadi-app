@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
+import { shadow } from '../../shadow';
 
 export function createPlanCardStyles(Colors: ColorPalette) {
   return StyleSheet.create({
@@ -77,14 +78,12 @@ export function createStyles(Colors: ColorPalette) {
       position: 'absolute', bottom: 0, left: 0, right: 0,
       padding: 16, backgroundColor: Colors.card,
       borderTopWidth: 1, borderTopColor: Colors.border,
-      shadowColor: Colors.black, shadowOffset: { width: 0, height: -2 },
-      shadowOpacity: 0.06, shadowRadius: 8, elevation: 4,
+      ...shadow({ color: Colors.black, offset: { width: 0, height: -2 }, opacity: 0.06, radius: 8, elevation: 4 }),
     },
     continueBtn: {
       flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
       gap: 8, backgroundColor: Colors.primary, borderRadius: 14, paddingVertical: 16,
-      shadowColor: Colors.primary, shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.3, shadowRadius: 8, elevation: 5,
+      ...shadow({ color: Colors.primary, offset: { width: 0, height: 4 }, opacity: 0.3, radius: 8, elevation: 5 }),
     },
     continueBtnText: { color: Colors.white, fontSize: 16, fontWeight: '700' },
     continueBtnOff: {

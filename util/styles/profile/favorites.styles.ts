@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 import type { ColorPalette } from "../../../hooks/useTheme";
 import { RADII } from "../../colors/theme";
+import { shadow } from "../../shadow";
 
 export const H_PAD = 16;
 export const COL_GAP = 12;
@@ -85,11 +86,7 @@ export function createCardStyles(Colors: ColorPalette, width = 390) {
       overflow: "hidden",
       borderWidth: 1,
       borderColor: Colors.gray100,
-      shadowColor: Colors.shadow,
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.06,
-      shadowRadius: 4,
-      elevation: 2,
+      ...shadow({ color: Colors.shadow, offset: { width: 0, height: 1 }, opacity: 0.06, radius: 4, elevation: 2 }),
     },
     cardRemoving: { opacity: 0.4 },
     imgWrap: {

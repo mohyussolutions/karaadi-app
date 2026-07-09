@@ -1,13 +1,13 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
+import { shadow } from '../../shadow';
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
     card: {
       backgroundColor: Colors.card, borderRadius: 16, padding: 16,
       marginBottom: 14, borderWidth: 1, borderColor: Colors.border,
-      shadowColor: Colors.shadow, shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.05, shadowRadius: 4, elevation: 1,
+      ...shadow({ color: Colors.shadow, offset: { width: 0, height: 1 }, opacity: 0.05, radius: 4, elevation: 1 }),
     },
     cardTitle: {
       fontSize: 12, fontWeight: '700', color: Colors.gray500,

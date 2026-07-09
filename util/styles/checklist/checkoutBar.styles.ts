@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
+import { shadow } from '../../shadow';
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
@@ -20,11 +21,7 @@ export function createStyles(Colors: ColorPalette) {
     circlePending: { backgroundColor: Colors.gray100, borderWidth: 1.5, borderColor: Colors.gray300 },
     circleActive: {
       backgroundColor: Colors.primary,
-      shadowColor: Colors.primary,
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.45,
-      shadowRadius: 5,
-      elevation: 5,
+      ...shadow({ color: Colors.primary, offset: { width: 0, height: 2 }, opacity: 0.45, radius: 5, elevation: 5 }),
     },
     activeRing: {
       width: 36, height: 36, borderRadius: 18,

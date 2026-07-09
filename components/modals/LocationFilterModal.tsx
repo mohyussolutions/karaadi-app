@@ -11,7 +11,7 @@ import { useAppTranslation } from "../../hooks/useAppTranslation";
 import { useLocationFilterRows } from "../../hooks/useLocationFilterRows";
 import type { LocationFilterModalProps, FilterRow } from "../../util/types";
 import { KEYBOARD_AVOIDING_BEHAVIOR } from "../common/common-for-ios-andriod";
-import { tabletModalStyles, TABLET_MODAL_ICON_SIZES } from "../common/ipad";
+import { tabletModalStyles, TABLET_MODAL_ICON_SIZES } from "../../util/styles/shared/ipad.styles";
 import { createStyles } from "../../util/styles/browse/subcategory.styles";
 
 function FilterRowItem({

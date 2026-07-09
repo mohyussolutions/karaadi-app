@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
+import { shadow } from '../../shadow';
 
 export function createStyles(Colors: ColorPalette, width = 390) {
   const CARD_W = width * 0.42;
@@ -25,11 +26,7 @@ export function createStyles(Colors: ColorPalette, width = 390) {
       backgroundColor: Colors.card,
       borderRadius: 12,
       overflow: 'hidden',
-      shadowColor: Colors.shadow,
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.08,
-      shadowRadius: 6,
-      elevation: 3,
+      ...shadow({ color: Colors.shadow, offset: { width: 0, height: 2 }, opacity: 0.08, radius: 6, elevation: 3 }),
       borderWidth: 1,
       borderColor: Colors.gray100,
     },

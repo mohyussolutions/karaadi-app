@@ -1,6 +1,6 @@
 {
   "name": "karaadi",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "main.tsx",
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
@@ -53,6 +53,7 @@
   "scripts": {
     "prestart": "xcrun simctl boot 7832DFBA-8B9F-4EF3-A066-192F2D0A0EA7 2>/dev/null; xcrun simctl boot D26B9490-2B8D-4E66-988F-1A73D1BEF39A 2>/dev/null; open -a Simulator; true",
     "start": "expo start",
+    "dev:api-proxy": "node scripts/dev-api-proxy.js",
     "android": "expo run:android",
     "ios": "expo run:ios --device \"iPhone 15\"",
     "ipad": "xcrun simctl shutdown all 2>/dev/null; xcrun simctl boot D26B9490-2B8D-4E66-988F-1A73D1BEF39A 2>/dev/null; xcrun simctl bootstatus D26B9490-2B8D-4E66-988F-1A73D1BEF39A -b >/dev/null 2>&1; ~/Library/Android/sdk/emulator/emulator -avd Tablet_10 -no-audio &>/dev/null & ~/Library/Android/sdk/platform-tools/adb wait-for-device && ~/Library/Android/sdk/platform-tools/adb shell 'while [ \"$(getprop sys.boot_completed)\" != \"1\" ]; do sleep 2; done' && expo start --ios --android --go",

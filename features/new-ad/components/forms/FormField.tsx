@@ -3,7 +3,7 @@ import type { FormFieldProps } from '../../../../util/types';
 import { View, Text, TextInput } from 'react-native';
 import { useThemeColors, useThemedStyles } from '../../../../hooks/useTheme';
 import { Dropdown } from './Dropdown';
-import { createStyles } from './FormField.styles';
+import { createStyles } from '../../../../util/styles/new-ad/formField.styles';
 
 export function FormField({ field, value, onChange, error }: FormFieldProps) {
   const Colors = useThemeColors();

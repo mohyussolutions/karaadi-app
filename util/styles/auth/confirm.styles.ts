@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
+import { shadow } from '../../shadow';
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
@@ -12,11 +13,7 @@ export function createStyles(Colors: ColorPalette) {
       padding: 28,
       borderWidth: 1,
       borderColor: Colors.border,
-      shadowColor: Colors.black,
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.1,
-      shadowRadius: 16,
-      elevation: 6,
+      ...shadow({ color: Colors.black, offset: { width: 0, height: 4 }, opacity: 0.1, radius: 16, elevation: 6 }),
     },
     cardTablet: { alignSelf: 'center', width: '100%', maxWidth: 460 },
     title: { fontSize: 26, fontWeight: '800', color: Colors.textPrimary, textAlign: 'center', marginBottom: 8 },

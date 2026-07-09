@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { Animated, PanResponder } from 'react-native';
 import { DRAG_THRESHOLD } from '../constants';
+import { NATIVE_DRIVER } from '../../../util/animation';
 
 export function useSheetDrag(onDismiss: () => void) {
   const dragY = useRef(new Animated.Value(0)).current;
@@ -25,11 +26,11 @@ export function useSheetDrag(onDismiss: () => void) {
       },
       onPanResponderRelease: () => {
         if (isDraggingDown.current && dragRef.current > DRAG_THRESHOLD) {
-          Animated.timing(dragY, { toValue: 0, duration: 0, useNativeDriver: true }).start();
+          Animated.timing(dragY, { toValue: 0, duration: 0, useNativeDriver: NATIVE_DRIVER }).start();
           onDismiss();
         } else {
           Animated.spring(dragY, {
-            toValue: 0, useNativeDriver: true, tension: 80, friction: 14,
+            toValue: 0, useNativeDriver: NATIVE_DRIVER, tension: 80, friction: 14,
           }).start();
         }
         isDraggingDown.current = false;

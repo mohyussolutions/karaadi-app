@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import type { ColorPalette } from "../../../hooks/useTheme";
+import { shadow } from "../../shadow";
 
 export const H_PAD = 12;
 export const GAP = 8;
@@ -110,8 +111,7 @@ export function createStyles(Colors: ColorPalette) {
       backgroundColor: Colors.card,
       borderTopLeftRadius: 20, borderTopRightRadius: 20,
       paddingHorizontal: H_PAD,
-      shadowColor: Colors.shadow, shadowOffset: { width: 0, height: -4 },
-      shadowOpacity: 0.12, shadowRadius: 12, elevation: 20,
+      ...shadow({ color: Colors.shadow, offset: { width: 0, height: -4 }, opacity: 0.12, radius: 12, elevation: 20 }),
     },
     filterSheetHandle: {
       alignSelf: "center", width: 40, height: 4,

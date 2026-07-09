@@ -7,6 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import type { ToastPayload } from '../../services/toastService';
 import { createStyles } from '../../util/styles/shared/saveToast.styles';
+import { NATIVE_DRIVER } from '../../util/animation';
 
 export default function SaveToast() {
   const [payload, setPayload] = useState<ToastPayload | null>(null);
@@ -26,8 +27,8 @@ export default function SaveToast() {
       opacity.setValue(0);
 
       Animated.parallel([
-        Animated.timing(opacity, { toValue: 1, duration: 160, useNativeDriver: true }),
-        Animated.spring(translateY, { toValue: 0, useNativeDriver: true, tension: 180, friction: 12 }),
+        Animated.timing(opacity, { toValue: 1, duration: 160, useNativeDriver: NATIVE_DRIVER }),
+        Animated.spring(translateY, { toValue: 0, useNativeDriver: NATIVE_DRIVER, tension: 180, friction: 12 }),
       ]).start();
 
       timerRef.current = setTimeout(dismiss, 2600);
@@ -41,8 +42,8 @@ export default function SaveToast() {
   function dismiss() {
     if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; }
     Animated.parallel([
-      Animated.timing(opacity, { toValue: 0, duration: 180, useNativeDriver: true }),
-      Animated.timing(translateY, { toValue: 24, duration: 180, useNativeDriver: true }),
+      Animated.timing(opacity, { toValue: 0, duration: 180, useNativeDriver: NATIVE_DRIVER }),
+      Animated.timing(translateY, { toValue: 24, duration: 180, useNativeDriver: NATIVE_DRIVER }),
     ]).start(() => setPayload(null));
   }
 

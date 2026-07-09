@@ -48,7 +48,7 @@ async function setupAndroidChannels() {
 }
 
 export async function registerForPushNotifications(): Promise<string | null> {
-  if (!Notifications) return null;
+  if (Platform.OS === 'web' || !Notifications) return null;
   try {
     await setupAndroidChannels();
 

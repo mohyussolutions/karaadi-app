@@ -6,6 +6,7 @@ const IGNORED_WARNS = [
   '[expo-notifications] Listening to push token changes is not yet fully supported on web',
   '"shadow*" style props are deprecated. Use "boxShadow"',
   'props.pointerEvents is deprecated. Use style.pointerEvents',
+  'bundle scheme is file - unable to connect to sharedPackageConnection',
 ];
 
 LogBox.ignoreLogs(IGNORED_WARNS);

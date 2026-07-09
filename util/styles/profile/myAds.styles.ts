@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 import type { ColorPalette } from "../../../hooks/useTheme";
 import { RADII } from "../../colors/theme";
+import { shadow } from "../../shadow";
 
 export const COL_GAP = 8;
 export const H_PAD = 12;
@@ -167,11 +168,7 @@ export function createStyles(Colors: ColorPalette, width = 390) {
       backgroundColor: Colors.primary,
       borderRadius: 14,
       paddingVertical: 15,
-      shadowColor: Colors.primary,
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.25,
-      shadowRadius: 8,
-      elevation: 4,
+      ...shadow({ color: Colors.primary, offset: { width: 0, height: 4 }, opacity: 0.25, radius: 8, elevation: 4 }),
     },
     postBtnText: { color: Colors.white, fontWeight: "700", fontSize: 16 },
   });

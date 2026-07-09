@@ -1,11 +1,7 @@
-import { Dimensions, Platform, StatusBar, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
+import { shadow } from '../../shadow';
 
-const { width, height: H } = Dimensions.get('window');
-const STATUSBAR_H = Platform.OS === 'android' ? (StatusBar.currentHeight ?? 24) : 0;
-const SHEET_TOP = STATUSBAR_H + 48;
-
-export const SHEET_H = H - SHEET_TOP;
 export const FAB_SIZE = 56;
 
 export function createStyles(Colors: ColorPalette) {
@@ -14,16 +10,11 @@ export function createStyles(Colors: ColorPalette) {
       position: 'absolute',
       left: 0,
       right: 0,
-      height: SHEET_H,
       backgroundColor: Colors.card,
       borderTopLeftRadius: 24,
       borderTopRightRadius: 24,
       zIndex: 99,
-      shadowColor: Colors.shadow,
-      shadowOffset: { width: 0, height: -4 },
-      shadowOpacity: 0.18,
-      shadowRadius: 16,
-      elevation: 20,
+      ...shadow({ color: Colors.shadow, offset: { width: 0, height: -4 }, opacity: 0.18, radius: 16, elevation: 20 }),
       overflow: 'hidden',
     },
     handleBar: {
@@ -174,11 +165,7 @@ export function createStyles(Colors: ColorPalette) {
       backgroundColor: Colors.hage,
       alignItems: 'center',
       justifyContent: 'center',
-      shadowColor: Colors.shadow,
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.3,
-      shadowRadius: 8,
-      elevation: 8,
+      ...shadow({ color: Colors.shadow, offset: { width: 0, height: 4 }, opacity: 0.3, radius: 8, elevation: 8 }),
     },
   });
 }

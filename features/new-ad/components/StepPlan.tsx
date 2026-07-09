@@ -8,7 +8,7 @@ import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { planStyle, PLAN_CARD_COLORS } from '../constants/config';
 import type { Plan, StepPlanProps } from '../../../util/types';
-import { createStyles, createPlanCardStyles } from './StepPlan.styles';
+import { createStyles, createPlanCardStyles } from '../../../util/styles/new-ad/stepPlan.styles';
 
 function PlanCard({
   plan, selected, isBestValue, onSelect,

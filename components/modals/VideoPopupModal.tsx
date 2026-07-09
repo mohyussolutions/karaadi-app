@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useVideoPlayer, VideoView, type VideoSource } from "expo-video";
 import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
 import { useResponsive } from "../../hooks/useResponsive";
-import { tabletModalStyles, TABLET_MODAL_ICON_SIZES } from "../common/ipad";
+import { tabletModalStyles, TABLET_MODAL_ICON_SIZES } from "../../util/styles/shared/ipad.styles";
 import { createStyles } from "../../util/styles/shared/videoPopupModal.styles";
 
 export default function VideoPopupModal({

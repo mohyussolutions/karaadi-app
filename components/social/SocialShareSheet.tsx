@@ -6,7 +6,7 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemedStyles } from '../../hooks/useTheme';
 import { useResponsive } from '../../hooks/useResponsive';
-import { tabletModalStyles, TABLET_MODAL_ICON_SIZES } from '../common/ipad';
+import { tabletModalStyles, TABLET_MODAL_ICON_SIZES } from '../../util/styles/shared/ipad.styles';
 import { SOCIAL_SHARE_URLS, SOCIAL_BRAND_COLORS } from '../../constants';
 import type { SocialShareSheetProps, SocialAction } from '../../util/types';
 import { createStyles } from '../../util/styles/social/socialShareSheet.styles';

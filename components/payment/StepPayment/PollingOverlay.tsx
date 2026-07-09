@@ -4,6 +4,7 @@ import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import type { PollingOverlayProps } from '../../../util/types';
 import { createStyles } from '../../../util/styles/payment/pollingOverlay.styles';
+import { NATIVE_DRIVER } from '../../../util/animation';
 
 export function PollingOverlay({ visible, attempt, maxAttempts, onCancel }: PollingOverlayProps) {
   const Colors = useThemeColors();
@@ -15,8 +16,8 @@ export function PollingOverlay({ visible, attempt, maxAttempts, onCancel }: Poll
     if (!visible) return;
     const loop = Animated.loop(
       Animated.sequence([
-        Animated.timing(pulse, { toValue: 1.12, duration: 700, useNativeDriver: true }),
-        Animated.timing(pulse, { toValue: 1,    duration: 700, useNativeDriver: true }),
+        Animated.timing(pulse, { toValue: 1.12, duration: 700, useNativeDriver: NATIVE_DRIVER }),
+        Animated.timing(pulse, { toValue: 1,    duration: 700, useNativeDriver: NATIVE_DRIVER }),
       ]),
     );
     loop.start();

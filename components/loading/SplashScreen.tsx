@@ -4,6 +4,7 @@ import { Image, Animated } from 'react-native';
 import { useGlobal } from '../../hooks/useGlobal';
 import { useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/loading/splashScreen.styles';
+import { NATIVE_DRIVER } from '../../util/animation';
 
 export default function SplashScreen({ onFinish }: SplashScreenProps) {
   const { width } = useGlobal();
@@ -17,7 +18,7 @@ export default function SplashScreen({ onFinish }: SplashScreenProps) {
       Animated.timing(opacity, {
         toValue: 0,
         duration: 500,
-        useNativeDriver: true,
+        useNativeDriver: NATIVE_DRIVER,
       }).start(onFinish);
     }, 1600);
 

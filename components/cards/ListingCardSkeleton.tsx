@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { View, Animated } from 'react-native';
 import { useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/shared/listingCardSkeleton.styles';
+import { NATIVE_DRIVER } from '../../util/animation';
 
 function ListingCardSkeleton() {
   const opacity = useRef(new Animated.Value(1)).current;
@@ -10,8 +11,8 @@ function ListingCardSkeleton() {
   useEffect(() => {
     const anim = Animated.loop(
       Animated.sequence([
-        Animated.timing(opacity, { toValue: 0.4, duration: 700, useNativeDriver: true }),
-        Animated.timing(opacity, { toValue: 1, duration: 700, useNativeDriver: true }),
+        Animated.timing(opacity, { toValue: 0.4, duration: 700, useNativeDriver: NATIVE_DRIVER }),
+        Animated.timing(opacity, { toValue: 1, duration: 700, useNativeDriver: NATIVE_DRIVER }),
       ]),
     );
     anim.start();

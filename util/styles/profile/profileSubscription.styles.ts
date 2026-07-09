@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
+import { shadow } from '../../shadow';
 
 export function createSubscriptionListStyles(Colors: ColorPalette) {
   return StyleSheet.create({
@@ -14,11 +15,7 @@ export function createSubscriptionListStyles(Colors: ColorPalette) {
       borderWidth: 1,
       borderColor: Colors.border,
       gap: 12,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 3 },
-      shadowOpacity: 0.09,
-      shadowRadius: 8,
-      elevation: 4,
+      ...shadow({ color: '#000', offset: { width: 0, height: 3 }, opacity: 0.09, radius: 8, elevation: 4 }),
     },
 
     cardTop: {

@@ -9,7 +9,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useResponsive } from '../../hooks/useResponsive';
 import { getModalHeaderPaddingTop } from '../common/common-for-ios-andriod';
-import { tabletModalStyles, TABLET_MODAL_ICON_SIZES } from '../common/ipad';
+import { tabletModalStyles, TABLET_MODAL_ICON_SIZES } from '../../util/styles/shared/ipad.styles';
 import { createStyles } from '../../util/styles/detail/ZoomModal.styles';
 
 export default function ZoomModal({ visible, images, startIndex, title, onClose }: ZoomModalProps) {

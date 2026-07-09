@@ -1,6 +1,7 @@
 import { StyleSheet, Platform } from "react-native";
 import { RADII } from "../../colors/theme";
 import type { ColorPalette } from "../../../hooks/useTheme";
+import { shadow } from "../../shadow";
 
 export const IMG_H = 320; // static fallback — ImageGallery component uses useWindowDimensions
 
@@ -62,11 +63,7 @@ export function createStyles(Colors: ColorPalette, width = 390, imgH = 320) {
       backgroundColor: Colors.overlay,
       alignItems: "center",
       justifyContent: "center",
-      shadowColor: Colors.shadow,
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.3,
-      shadowRadius: 4,
-      elevation: 5,
+      ...shadow({ color: Colors.shadow, offset: { width: 0, height: 2 }, opacity: 0.3, radius: 4, elevation: 5 }),
     },
     soldOverlay: {
       ...StyleSheet.absoluteFill,

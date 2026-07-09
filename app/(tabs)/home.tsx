@@ -152,5 +152,11 @@ export default function HomeScreen() {
     );
   }
 
-  return <View style={styles.safe}>{feedList}</View>;
+  return (
+    <View style={[styles.safe, Platform.OS === 'web' && styles.webCenterWrap]}>
+      <View style={[styles.mainFlex, Platform.OS === 'web' && { maxWidth: WEB_MAX_WIDTH, width: '100%' }]}>
+        {feedList}
+      </View>
+    </View>
+  );
 }
