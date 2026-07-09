@@ -12,7 +12,8 @@
       "bundleIdentifier": "com.karaadi.app",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
-        "UIBackgroundModes": []
+        "UIBackgroundModes": [],
+        "UIViewControllerBasedStatusBarAppearance": false
       }
     },
     "android": {
