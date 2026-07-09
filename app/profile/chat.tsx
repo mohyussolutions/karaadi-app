@@ -52,6 +52,7 @@ export default function ChatScreen() {
 
   const listRef = useRef<FlatList>(null);
   const chatIdRef = useRef(0);
+  const allIdsRef = useRef<number[]>([]);
   const initial = (username?.[0] ?? '?').toUpperCase();
 
   useEffect(() => {
@@ -60,7 +61,11 @@ export default function ChatScreen() {
     if (!user?.id) { setFetching(false); return; }
 
     async function init() {
-      let resolvedId = chatIdParam ? parseInt(chatIdParam, 10) : 0;
+      const parsedIds = (chatIdParam || '')
+        .split(',')
+        .map((v) => parseInt(v, 10))
+        .filter((n) => Number.isFinite(n) && n > 0);
+      let resolvedId = parsedIds[0] || 0;
 
       if (!resolvedId && userId) {
         const cacheKey = `${user!.id}:${userId}:${listingId || ''}`;
@@ -86,21 +91,29 @@ export default function ChatScreen() {
       }
 
       chatIdRef.current = resolvedId;
+      const allIds = parsedIds.length > 0 ? parsedIds : resolvedId ? [resolvedId] : [];
+      allIdsRef.current = allIds;
       setChatIdNum(resolvedId);
 
       if (resolvedId) {
         setActiveChatId(resolvedId);
-        joinChat(resolvedId);
-        emitMarkAsRead(resolvedId);
+        allIds.forEach((id) => {
+          joinChat(id);
+          emitMarkAsRead(id);
+        });
 
-        getChatMessages(resolvedId, user!.id)
-          .then((msgs) => {
-            setMessages(msgs);
+        Promise.all(allIds.map((id) => getChatMessages(id, user!.id).catch(() => [])))
+          .then((lists) => {
+            const merged = lists
+              .flat()
+              .sort((a, b) =>
+                new Date(a.timestamp || a.createdAt || 0).getTime() -
+                new Date(b.timestamp || b.createdAt || 0).getTime());
+            setMessages(merged);
             setTimeout(() => listRef.current?.scrollToEnd({ animated: false }), 60);
           })
-          .catch(() => {})
           .finally(() => setFetching(false));
-        return; 
+        return;
       }
 
       setFetching(false);
@@ -108,7 +121,7 @@ export default function ChatScreen() {
 
     init();
     return () => {
-      if (chatIdRef.current) leaveChat(chatIdRef.current);
+      allIdsRef.current.forEach((id) => leaveChat(id));
       setActiveChatId(null);
     };
   }, [user?.id]);
@@ -119,7 +132,7 @@ export default function ChatScreen() {
 
     const onReceive = (msg: ChatMessage) => {
       const msgChatId = (msg as any).chatId;
-      if (msgChatId && msgChatId !== chatIdNum) return;
+      if (msgChatId && !allIdsRef.current.includes(msgChatId)) return;
       const tempKey = (msg as any).tempId;
 
       setMessages((prev) => {

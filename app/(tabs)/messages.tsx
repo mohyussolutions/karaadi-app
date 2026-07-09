@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import {
   View, Text, FlatList, TouchableOpacity, Image,
 } from 'react-native';
@@ -31,6 +31,28 @@ export default function MessagesScreen() {
     }
   }, [authLoading, user]);
 
+  const groupedChats = useMemo(() => {
+    if (!user) return [];
+    const byUser = new Map<string, Chat & { allIds: number[]; unreadTotal: number }>();
+    for (const item of chats) {
+      const other = item.senderId === user.id ? item.receiver : item.sender;
+      const key = other?.id ? String(other.id) : `chat-${item.id}`;
+      const unread = item._count?.messages ?? 0;
+      const existing = byUser.get(key);
+      if (existing) {
+        existing.allIds.push(item.id);
+        existing.unreadTotal += unread;
+        if (item.updatedAt && (!existing.updatedAt || new Date(item.updatedAt) > new Date(existing.updatedAt))) {
+          existing.updatedAt = item.updatedAt;
+          if (item.messages?.[0]) existing.messages = item.messages;
+        }
+      } else {
+        byUser.set(key, { ...item, allIds: [item.id], unreadTotal: unread });
+      }
+    }
+    return [...byUser.values()];
+  }, [chats, user]);
+
   if (!user) return <LoadingSpinner fullScreen />;
 
   if (!loaded) {
@@ -49,17 +71,17 @@ export default function MessagesScreen() {
       <View style={[styles.header, isTablet && styles.tabletHeader]}><Text style={styles.title}>{t('messages.title')}</Text></View>
       <FlatList
         style={isTablet && styles.tabletList}
-        data={chats}
+        data={groupedChats}
         keyExtractor={(item) => String(item.id)}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={chats.length === 0 ? styles.listFlex : styles.listPadded}
+        contentContainerStyle={groupedChats.length === 0 ? styles.listFlex : styles.listPadded}
         ListEmptyComponent={
           <EmptyState icon="message-off-outline" title={t('messages.noConversationsTitle')} message={t('messages.noConversationsMessage')} />
         }
-        renderItem={({ item }: { item: Chat }) => {
+        renderItem={({ item }: { item: Chat & { allIds: number[]; unreadTotal: number } }) => {
           const other = item.senderId === user.id ? item.receiver : item.sender;
           const lastMsg = item.messages?.[0]?.content || '';
-          const unreadCount = item._count?.messages ?? 0;
+          const unreadCount = item.unreadTotal;
           const unread = unreadCount > 0;
           const time = item.updatedAt
             ? new Date(item.updatedAt).toLocaleDateString()
@@ -72,7 +94,7 @@ export default function MessagesScreen() {
                 router.push({
                   pathname: '/profile/chat',
                   params: {
-                    chatId: String(item.id),
+                    chatId: item.allIds.join(','),
                     userId: other?.id,
                     username: other?.username || t('messages.unknownSender'),
                   },
