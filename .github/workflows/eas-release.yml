@@ -25,11 +25,17 @@ jobs:
 
       - name: Restore store credentials
         env:
+          ASC_API_KEY_P8: ${{ secrets.ASC_API_KEY_P8 }}
           GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
           GOOGLE_PLAY_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
         run: |
-          printf '%s' "${{ secrets.ASC_API_KEY_P8 }}" > AuthKey_T4K9ZTB9VV.p8
-          PLAY_SERVICE_ACCOUNT_JSON="${GOOGLE_PLAY_SERVICE_ACCOUNT_JSON:-${GOOGLE_PLAY_SERVICE_ACCOUNT:-}}"
+          printf '%s' "$ASC_API_KEY_P8" > AuthKey_T4K9ZTB9VV.p8
+
+          if [ -n "$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" ]; then
+            PLAY_SERVICE_ACCOUNT_JSON="$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON"
+          else
+            PLAY_SERVICE_ACCOUNT_JSON="$GOOGLE_PLAY_SERVICE_ACCOUNT"
+          fi
 
           if [ -z "$PLAY_SERVICE_ACCOUNT_JSON" ]; then
             echo "Missing Google Play service account secret. Set GOOGLE_PLAY_SERVICE_ACCOUNT_JSON or GOOGLE_PLAY_SERVICE_ACCOUNT." >&2
