@@ -18,7 +18,6 @@ export function createStyles(Colors: ColorPalette) {
   topBarSpacer: { width: 36 },
   scroll: { padding: 16, flexGrow: 1 },
   flexFull: { flex: 1 },
-  bottomSpacer: { height: 40 },
   fieldWrap: { marginBottom: 14 },
   fieldLabel: {
     fontSize: 13,

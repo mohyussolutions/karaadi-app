@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useThemeColors, useThemedStyles } from "../../../../hooks/useTheme";
 import RegionCityPicker from "../../../../components/geo/RegionCityPicker";
 import { MAIN_CATEGORIES } from "../../../../constants";
@@ -60,6 +61,7 @@ export function StepForm({
   const dispatch = useAppDispatch();
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
+  const insets = useSafeAreaInsets();
 
   const submitStatus = useAppSelector((state) => state.newAd.submitStatus);
   const submitError = useAppSelector((state) => state.newAd.submitError);
@@ -403,7 +405,7 @@ export function StepForm({
             )}
           </TouchableOpacity>
 
-          <View style={s.bottomSpacer} />
+          <View style={{ height: insets.bottom + 84 }} />
         </ScrollView>
       </KeyboardAvoidingView>
     </View>

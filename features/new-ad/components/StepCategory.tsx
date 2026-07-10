@@ -4,6 +4,7 @@ import type { MainCategory } from "../../../constants/categories";
 import { View, Text, TouchableOpacity } from "react-native";
 import { FlashList, type ListRenderItemInfo } from "@shopify/flash-list";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
 import { useAppTranslation } from "../../../hooks/useAppTranslation";
 import { MAIN_CATEGORIES } from "../../../constants/categories";
@@ -53,6 +54,7 @@ export function StepCategory({ selected, onSelect, onNext, onBack }: StepCategor
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
+  const insets = useSafeAreaInsets();
   const renderItem = useCallback(
     ({ item }: ListRenderItemInfo<MainCategory>) => (
       <CategoryCard category={item} selected={selected === item.key} onPress={onSelect} />
@@ -68,6 +70,7 @@ export function StepCategory({ selected, onSelect, onNext, onBack }: StepCategor
           <MaterialCommunityIcons name="arrow-right" size={18} color={Colors.white} />
         </TouchableOpacity>
       )}
+      <View style={{ height: insets.bottom + 84 }} />
     </View>
   );
 

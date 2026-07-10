@@ -17,7 +17,7 @@ export function createStyles(Colors: ColorPalette) {
     scroll: { padding: 16, flexGrow: 1 },
     bottomSpacer: { height: 100 },
     footer: {
-      position: 'absolute', bottom: 0, left: 0, right: 0,
+      position: 'absolute', left: 0, right: 0,
       padding: 16, backgroundColor: Colors.card,
       borderTopWidth: 1, borderTopColor: Colors.border,
       ...shadow({ color: Colors.black, offset: { width: 0, height: -2 }, opacity: 0.06, radius: 8, elevation: 4 }),

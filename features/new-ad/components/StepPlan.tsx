@@ -4,6 +4,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { planStyle, PLAN_CARD_COLORS } from '../constants/config';
@@ -89,6 +90,7 @@ export function StepPlan({ plans, loading, selected, onSelect, onNext, onBack }:
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
+  const insets = useSafeAreaInsets();
   const maxPrice = plans.length > 0 ? Math.max(...plans.map((p) => p.price)) : 0;
 
   return (
@@ -129,7 +131,7 @@ export function StepPlan({ plans, loading, selected, onSelect, onNext, onBack }:
         <View style={s.bottomSpacer} />
       </ScrollView>
 
-      <View style={s.footer}>
+      <View style={[s.footer, { bottom: insets.bottom + 84 }]}>
         {selected ? (
           <TouchableOpacity style={s.continueBtn} onPress={onNext} activeOpacity={0.88}>
             <MaterialCommunityIcons name="lock-outline" size={18} color={Colors.white} />

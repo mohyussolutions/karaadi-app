@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { useAppSelector } from '../../../store/store';
@@ -15,6 +16,7 @@ export function StepSummary({ plan, categoryName, onNext, onBack }: StepSummaryP
   const createdItem = useAppSelector((state) => state.newAd.createdItem);
   const feeAmount = useAppSelector((state) => state.newAd.feeAmount);
   const total = feeAmount + plan.price;
+  const insets = useSafeAreaInsets();
 
   return (
     <View style={s.root}>
@@ -31,7 +33,7 @@ export function StepSummary({ plan, categoryName, onNext, onBack }: StepSummaryP
         <View style={s.bottomSpacer} />
       </ScrollView>
 
-      <View style={s.footer}>
+      <View style={[s.footer, { bottom: insets.bottom + 84 }]}>
         <TouchableOpacity style={s.continueBtn} onPress={onNext} activeOpacity={0.88}>
           <Text style={s.continueBtnText}>{t('postAd.continueToPayment', { price: total })}</Text>
           <MaterialCommunityIcons name="arrow-right" size={18} color={Colors.white} />

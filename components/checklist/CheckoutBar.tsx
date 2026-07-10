@@ -27,7 +27,7 @@ export function CheckoutBar({ steps, currentIndex }: CheckoutBarProps) {
                   </View>
                 ) : done ? (
                   <View style={[s.circle, s.circleDone]}>
-                    <MaterialCommunityIcons name="check" size={14} color={Colors.white} />
+                    <MaterialCommunityIcons name="check" size={12} color={Colors.white} />
                   </View>
                 ) : (
                   <View style={[s.circle, s.circlePending]}>

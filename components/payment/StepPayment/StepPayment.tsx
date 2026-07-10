@@ -2,6 +2,7 @@ import { Platform } from 'react-native';
 import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator, Linking } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { useAppSelector } from '../../../store/store';
@@ -58,8 +59,9 @@ function PayFooter({ total, methodMeta, onPay }: { total: number; methodMeta: Pa
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
+  const insets = useSafeAreaInsets();
   return (
-    <View style={s.footer}>
+    <View style={[s.footer, { bottom: insets.bottom + 84 }]}>
       <TouchableOpacity style={[s.payBtn, { backgroundColor: Colors.primary }]} onPress={onPay} activeOpacity={0.88}>
         <MaterialCommunityIcons name="lock" size={18} color={Colors.white} />
         <Text style={s.payBtnText}>{t('postAd.payVia', { total, method: methodMeta.label })}</Text>
