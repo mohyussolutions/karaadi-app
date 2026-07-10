@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Linking } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
@@ -10,13 +10,14 @@ export default function ContactScreen() {
   const { t } = useAppTranslation();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createDetailStyles);
+  const insets = useSafeAreaInsets();
 
   const email = t('helpPage.contactMethods.email.address');
   const whatsapp = t('helpPage.contactMethods.whatsapp.link');
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }]}>
         <Text style={styles.title}>{t('contact.heading')}</Text>
         <Text style={styles.lead}>{t('contact.description')}</Text>
 

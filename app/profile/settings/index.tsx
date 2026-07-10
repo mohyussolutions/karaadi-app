@@ -1,7 +1,7 @@
 import {
   View, Text, TouchableOpacity, ScrollView, Switch, Linking,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +20,7 @@ export default function SettingsIndex() {
 
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
+  const insets = useSafeAreaInsets();
 
   function handleToggleSound() {
     const willBeEnabled = !soundEnabled;
@@ -29,7 +30,7 @@ export default function SettingsIndex() {
 
   return (
     <SafeAreaView style={s.safe} edges={['bottom']}>
-      <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={[s.content, { paddingBottom: insets.bottom + 84 }]} showsVerticalScrollIndicator={false}>
         <Text style={s.sectionTitle}>{t('mine.settingsPage.account')}</Text>
         <View style={s.section}>
           {SETTINGS_ROWS.map((row) => (

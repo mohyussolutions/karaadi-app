@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
@@ -18,13 +18,14 @@ export default function AboutKaraadiScreen() {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <FlatList
         data={PAGES}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }]}
         ListHeaderComponent={
           <View style={styles.header}>
             <Text style={styles.title}>{t('aboutKaraadiPage.title')}</Text>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../../../hooks/useTheme';
 import { createStyles } from '../../../util/styles/settings/privacy.styles';
 
@@ -25,10 +25,11 @@ const SECTIONS = [
 
 export default function PrivacySettings() {
   const s = useThemedStyles(createStyles);
+  const insets = useSafeAreaInsets();
 
   return (
     <SafeAreaView style={s.safe} edges={['bottom']}>
-      <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={[s.content, { paddingBottom: insets.bottom + 84 }]} showsVerticalScrollIndicator={false}>
 
         <Text style={s.heading}>Dejinta Asturnaanta</Text>
         <Text style={s.intro}>

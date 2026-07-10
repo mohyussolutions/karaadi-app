@@ -3,7 +3,7 @@ import {
   View, Text, ScrollView, TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -38,6 +38,7 @@ export default function SecuritySettings() {
 
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
+  const insets = useSafeAreaInsets();
 
   if (!user) return null;
 
@@ -51,7 +52,7 @@ export default function SecuritySettings() {
 
   return (
     <SafeAreaView style={s.safe} edges={['bottom']}>
-      <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={[s.content, { paddingBottom: insets.bottom + 84 }]} showsVerticalScrollIndicator={false}>
 
         <View style={s.sectionRow}>
           <Text style={s.sectionTitle}>{t('mine.security.activeSessions')}</Text>

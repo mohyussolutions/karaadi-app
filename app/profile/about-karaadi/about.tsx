@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { useThemedStyles } from '../../../hooks/useTheme';
 import { createDetailStyles } from '../../../util/styles/profile/aboutKaraadi.styles';
@@ -16,10 +16,11 @@ const WHAT_ITEM_KEYS = [
 export default function AboutScreen() {
   const { t } = useAppTranslation();
   const styles = useThemedStyles(createDetailStyles);
+  const insets = useSafeAreaInsets();
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }]}>
         <Text style={styles.title}>{t('about.heading')}</Text>
         <Text style={styles.lead}>{t('about.lead')}</Text>
 

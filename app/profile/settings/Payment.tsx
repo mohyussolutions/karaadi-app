@@ -2,7 +2,7 @@ import React from 'react';
 import {
   View, Text, ScrollView, ActivityIndicator,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -43,6 +43,7 @@ export default function PaymentSettings() {
   const Colors = useThemeColors();
   const STATUS_CONFIG = getStatusConfig(t, Colors);
   const s = useThemedStyles(createStyles);
+  const insets = useSafeAreaInsets();
 
   if (!user) return null;
 
@@ -56,7 +57,7 @@ export default function PaymentSettings() {
 
   return (
     <SafeAreaView style={s.safe} edges={['bottom']}>
-      <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={[s.content, { paddingBottom: insets.bottom + 84 }]} showsVerticalScrollIndicator={false}>
 
         <View style={s.summaryRow}>
           <View style={s.summaryCard}>
