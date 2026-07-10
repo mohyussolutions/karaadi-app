@@ -8,7 +8,6 @@ export function createStyles(Colors: ColorPalette) {
     scroll: { paddingBottom: 16 },
     bottomSpacer: { height: 24 },
 
-    // ── Hero ──────────────────────────────────────────────────────────────────
     hero: {
       height: 280,
       backgroundColor: Colors.primaryGhost,
@@ -53,7 +52,6 @@ export function createStyles(Colors: ColorPalette) {
     statusBadgeTextActive: { color: Colors.success },
     statusBadgeTextInactive: { color: Colors.textMuted },
 
-    // ── Body ──────────────────────────────────────────────────────────────────
     body: { padding: 20 },
     title: {
       fontSize: 24,
@@ -85,7 +83,6 @@ export function createStyles(Colors: ColorPalette) {
     },
     locText: { fontSize: 13, color: Colors.primary, fontWeight: '600' },
 
-    // ── Info Card ─────────────────────────────────────────────────────────────
     card: {
       backgroundColor: Colors.card,
       borderRadius: 18,
@@ -122,7 +119,6 @@ export function createStyles(Colors: ColorPalette) {
       marginLeft: 16,
     },
 
-    // ── Cities pills ──────────────────────────────────────────────────────────
     pillsWrap: {
       flexDirection: 'row',
       flexWrap: 'wrap',
@@ -140,10 +136,8 @@ export function createStyles(Colors: ColorPalette) {
     },
     pillText: { fontSize: 13, color: Colors.primary, fontWeight: '600' },
 
-    // ── Description ───────────────────────────────────────────────────────────
     description: { fontSize: 15, color: Colors.gray700, lineHeight: 26 },
 
-    // ── Action bar icon btn ───────────────────────────────────────────────────
     iconBtn: {
       width: 44,
       height: 44,

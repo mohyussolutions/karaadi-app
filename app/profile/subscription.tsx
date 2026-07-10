@@ -95,7 +95,6 @@ export default function SubscriptionScreen() {
               activeOpacity={0.82}
               onPress={() => router.push({ pathname: '/listing/subscription/[id]', params: { id: item.id || item._id || '' } })}
             >
-              {/* top: icon + delete */}
               <View style={styles.cardTop}>
                 <View style={styles.iconCircle}>
                   <MaterialCommunityIcons name="bell-outline" size={26} color={Colors.primary} />
@@ -109,10 +108,8 @@ export default function SubscriptionScreen() {
                 </TouchableOpacity>
               </View>
 
-              {/* title */}
               <Text style={styles.cardTitle} numberOfLines={2}>{item.title}</Text>
 
-              {/* category + region */}
               <View style={styles.metaRow}>
                 <MaterialCommunityIcons name="tag-outline" size={14} color={Colors.textMuted} />
                 <Text style={styles.metaText} numberOfLines={1}>{item.category}</Text>
@@ -130,7 +127,6 @@ export default function SubscriptionScreen() {
                 </View>
               )}
 
-              {/* footer: status badge + date */}
               <View style={styles.cardFooter}>
                 <View style={[styles.badge, isActive ? styles.badgeActive : styles.badgeInactive]}>
                   <Text style={[styles.badgeText, isActive ? styles.badgeTextActive : styles.badgeTextInactive]}>

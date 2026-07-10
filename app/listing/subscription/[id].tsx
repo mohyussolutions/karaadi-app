@@ -100,7 +100,6 @@ export default function SubscriptionDetailScreen() {
       <Text style={styles.title}>{item.title || categoryLabel || t('subscriptionDetail.titleFallback')}</Text>
       <Text style={styles.price}>{priceLabel}</Text>
 
-      {/* location pills */}
       {(item.cities?.length || item.region) && (
         <View style={styles.locRow}>
           <View style={styles.pillsWrap}>
@@ -120,7 +119,6 @@ export default function SubscriptionDetailScreen() {
         </View>
       )}
 
-      {/* info card */}
       {infoRows.length > 0 && (
         <View style={styles.card}>
           <Text style={styles.cardTitle}>{t('subscriptionDetail.detailsTitle')}</Text>
@@ -136,7 +134,6 @@ export default function SubscriptionDetailScreen() {
         </View>
       )}
 
-      {/* description */}
       {!!item.description && (
         <View style={styles.card}>
           <Text style={styles.cardTitle}>{t('subscriptionDetail.description')}</Text>

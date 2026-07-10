@@ -90,34 +90,6 @@ export function createSubscriptionListStyles(Colors: ColorPalette) {
   });
 }
 
-// kept for any existing imports (unused by subscription screen now)
-export function createStyles(Colors: ColorPalette) {
-  return StyleSheet.create({
-    safe: { flex: 1, backgroundColor: Colors.background },
-    content: { padding: 16, gap: 12 },
-    currentPlan: {
-      flexDirection: 'row', alignItems: 'center', gap: 8,
-      backgroundColor: Colors.premium + '20', borderRadius: 10, padding: 12, marginBottom: 8,
-    },
-    currentPlanText: { fontSize: 14, color: Colors.text },
-    planCard: {
-      backgroundColor: Colors.card, borderRadius: 14, padding: 16,
-      borderWidth: 1, borderColor: Colors.gray100,
-    },
-    planHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-    planName: { fontSize: 18, fontWeight: '700', color: Colors.text },
-    planPrice: { fontSize: 20, fontWeight: '800', color: Colors.primary },
-    planPer: { fontSize: 13, fontWeight: '400', color: Colors.textSecondary },
-    featureRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 6 },
-    featureText: { fontSize: 14, color: Colors.textSecondary },
-    subscribeBtn: {
-      backgroundColor: Colors.primary, borderRadius: 10, paddingVertical: 12,
-      alignItems: 'center', marginTop: 14,
-    },
-    subscribeBtnText: { color: Colors.white, fontWeight: '700', fontSize: 15 },
-  });
-}
-
 export function createCurrentStyles(Colors: ColorPalette) {
   return StyleSheet.create({
     card: {
