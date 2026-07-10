@@ -14,7 +14,7 @@ import Hage from "../features/ai-assistant";
 import { EulaModal } from "../components/modals/EulaModal";
 import NotificationBanner from "../components/layout/NotificationBanner";
 import { LoadingSpinner, SplashScreen } from "../components/loading";
-import { SaveToast } from "../components/shared";
+import { SaveToast, UpdateBanner } from "../components/shared";
 import LanguageSync from "../i18n/LanguageSync";
 
 import { useAppInit } from "../hooks/useAppInit";
@@ -147,6 +147,7 @@ export default function RootLayout() {
       {showTabBar && <BottomTabBar />}
       <Hage />
       <SaveToast />
+      <UpdateBanner />
       {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
 
       <EulaModal

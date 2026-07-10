@@ -356,6 +356,9 @@ export const common = {
   clearFilter: "Tirtir Sifeynta",
   minPrice: "Qiimaha ugu yar",
   maxPrice: "Qiimaha ugu badan",
+  updateAvailable: "Cusboonaysiin ayaa la heli karaa",
+  restart: "Dib u bilow",
+  updating: "Cusboonaysiinta...",
 } as const;
 
 export const summary = {

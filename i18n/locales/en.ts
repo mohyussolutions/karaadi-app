@@ -1325,6 +1325,9 @@ export const common = {
   clearFilter: "Clear filter",
   minPrice: "Min Price",
   maxPrice: "Max Price",
+  updateAvailable: "Update available",
+  restart: "Restart",
+  updating: "Updating...",
 } as const;
 
 export const mine = {
