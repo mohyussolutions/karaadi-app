@@ -2,7 +2,7 @@ import React from 'react';
 import { View, FlatList, TouchableOpacity, Text, RefreshControl } from 'react-native';
 import { useGlobal } from '../../hooks/useGlobal';
 import { useRouter } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { EmptyState } from '../../components/shared';
 import MyAdCard from '../../components/cards/MyAdCard';
@@ -22,6 +22,7 @@ export default function MyAdsScreen() {
   const { user, ads, loading, refreshing, error, deletingId, onRefresh, retry, handleDelete } = useMyAds();
   const Colors = useThemeColors();
   const styles = useThemedStyles((c) => createStyles(c, width));
+  const insets = useSafeAreaInsets();
 
   function handlePayNow(item: ListingBase) {
     dispatch(prefillForPayment({
@@ -109,7 +110,7 @@ export default function MyAdsScreen() {
           </View>
         )}
       />
-      <TouchableOpacity style={styles.postBtn} onPress={() => router.push('/(tabs)/new-ad')}>
+      <TouchableOpacity style={[styles.postBtn, { marginBottom: insets.bottom + 84 }]} onPress={() => router.push('/(tabs)/new-ad')}>
         <Text style={styles.postBtnText}>+ {t('postNewAd')}</Text>
       </TouchableOpacity>
     </SafeAreaView>

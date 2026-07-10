@@ -5,7 +5,7 @@ import {
   Image, Pressable,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { z } from 'zod';
@@ -187,6 +187,7 @@ function ApplyStep({
   const [form, setFormState] = useState<BusinessApplyFormState>(() =>
     isEditing ? initialValues : { ...initialValues, email: accountEmail },
   );
+  const insets = useSafeAreaInsets();
   const [logo, setLogo] = useState<string | null>(initialLogo || null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -270,7 +271,7 @@ function ApplyStep({
   return (
     <KeyboardAvoidingView style={s.flexFull} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView
-        contentContainerStyle={s.scroll}
+        contentContainerStyle={[s.scroll, { paddingBottom: insets.bottom + 84 }]}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
@@ -451,6 +452,7 @@ function ApprovalStep({
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
+  const insets = useSafeAreaInsets();
   const [biz, setBiz] = useState(business);
   const [checking, setChecking] = useState(false);
   const id = biz._id || biz.id;
@@ -501,7 +503,7 @@ function ApprovalStep({
   const color = Colors[meta.colorKey];
 
   return (
-    <ScrollView contentContainerStyle={s.statusScroll} keyboardShouldPersistTaps="handled">
+    <ScrollView contentContainerStyle={[s.statusScroll, { paddingBottom: insets.bottom + 84 }]} keyboardShouldPersistTaps="handled">
       <View style={[s.statusIconWrap, { backgroundColor: color + '18' }]}>
         <MaterialCommunityIcons name={meta.icon as any} size={56} color={color} />
       </View>
@@ -554,6 +556,7 @@ function PlanStep({
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
+  const insets = useSafeAreaInsets();
   const [plans, setPlans] = useState<BusinessPlan[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<BusinessPlan | null>(null);
@@ -588,7 +591,7 @@ function PlanStep({
   if (loading) return <LoadingSpinner fullScreen />;
 
   return (
-    <ScrollView contentContainerStyle={s.scroll} keyboardShouldPersistTaps="handled">
+    <ScrollView contentContainerStyle={[s.scroll, { paddingBottom: insets.bottom + 84 }]} keyboardShouldPersistTaps="handled">
       <Text style={s.heading}>
         {business.planId ? t('mine.businesses.renewPlan') : t('mine.businesses.selectPlanTitle')}
       </Text>
@@ -657,6 +660,7 @@ function PostStep({
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
+  const insets = useSafeAreaInsets();
 
   const BUSINESS_CATEGORIES = MAIN_CATEGORIES.map(c => ({
     label: t(`categories.${c.key}`, { defaultValue: c.name }),
@@ -665,7 +669,7 @@ function PostStep({
   }));
 
   return (
-    <ScrollView contentContainerStyle={s.scroll} keyboardShouldPersistTaps="handled">
+    <ScrollView contentContainerStyle={[s.scroll, { paddingBottom: insets.bottom + 84 }]} keyboardShouldPersistTaps="handled">
       <Text style={s.heading}>{t('mine.businesses.postQuestion')}</Text>
       <Text style={s.statusMessage}>{t('mine.businesses.postCategoryDesc', { name: business.name })}</Text>
 

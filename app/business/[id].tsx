@@ -8,7 +8,7 @@ import {
   Linking,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { LoadingSpinner } from "../../components/loading";
 import BottomTabBar from "../../components/layout/BottomTabBar";
@@ -31,6 +31,7 @@ export default function BusinessDetailScreen() {
   const s = useThemedStyles(createStyles);
   const tabletPortrait = useThemedStyles(createTabletPortraitStyles);
   const { isTablet } = useResponsive();
+  const insets = useSafeAreaInsets();
 
   function openLink(type: string, value: string) {
     const map: Record<string, string> = {
@@ -78,7 +79,7 @@ export default function BusinessDetailScreen() {
       <SafeAreaView style={s.flexFull} edges={[]}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={isTablet ? tabletPortrait.scrollContent : undefined}
+        contentContainerStyle={[isTablet ? tabletPortrait.scrollContent : null, { paddingBottom: insets.bottom + 84 }]}
       >
       <View style={isTablet ? tabletPortrait.inner : undefined}>
         <View style={s.hero}>

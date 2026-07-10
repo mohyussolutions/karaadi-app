@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { useGlobal } from '../../hooks/useGlobal';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -31,6 +31,7 @@ export default function SubscriptionScreen() {
   const CARD_WIDTH = twoColCardW(H_PAD, COLUMN_GAP);
   const Colors = useThemeColors();
   const styles = useThemedStyles(createSubscriptionListStyles);
+  const insets = useSafeAreaInsets();
 
   const [subs, setSubs] = useState<Subscription[]>([]);
   const [loading, setLoading] = useState(true);
@@ -71,7 +72,7 @@ export default function SubscriptionScreen() {
         keyExtractor={(item) => item.id || item._id || ''}
         numColumns={2}
         columnWrapperStyle={styles.row}
-        contentContainerStyle={[styles.content, subs.length === 0 && { flex: 1 }]}
+        contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }, subs.length === 0 && { flex: 1 }]}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <EmptyState

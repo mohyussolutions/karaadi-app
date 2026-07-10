@@ -3,7 +3,7 @@ import {
   View, Text, Image, TouchableOpacity,
   ScrollView, Alert, TextInput, ActivityIndicator,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -24,6 +24,7 @@ export default function EditProfileScreen() {
   const { user, setUser, clearAuth } = useAuthStore();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const insets = useSafeAreaInsets();
   const [uploading, setUploading] = useState(false);
 
   const [username, setUsername] = useState(user?.username || '');
@@ -113,7 +114,7 @@ export default function EditProfileScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+      <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }]} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
 
         <View style={styles.avatarSection}>
           <Image

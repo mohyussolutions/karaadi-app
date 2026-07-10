@@ -3,7 +3,7 @@ import {
   View, Text, FlatList, TouchableOpacity, Modal,
   TextInput, Alert, KeyboardAvoidingView, Platform, ScrollView, Image,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
@@ -47,6 +47,7 @@ export default function WantedScreen() {
   const styles = useThemedStyles(createStyles);
   const sheetInline = useThemedStyles(createSheetInlineStyles);
   const imageStyles = useThemedStyles(createImagePickerStyles);
+  const insets = useSafeAreaInsets();
 
   const [subs, setSubs] = useState<Subscription[]>([]);
   const [loading, setLoading] = useState(true);
@@ -205,7 +206,7 @@ export default function WantedScreen() {
       <FlatList
         data={subs}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={[styles.list, subs.length === 0 && styles.flexFull]}
+        contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 84 }, subs.length === 0 && styles.flexFull]}
         ListEmptyComponent={
           <EmptyState
             icon="bell-alert-outline"

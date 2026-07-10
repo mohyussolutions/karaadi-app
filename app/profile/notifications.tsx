@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,7 @@ export default function NotificationsScreen() {
   const { notifications, loading, refreshing, onRefresh, markAllRead, markOneRead } = useNotificationsData();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -39,7 +40,7 @@ export default function NotificationsScreen() {
       <FlatList
         data={notifications}
         keyExtractor={(item) => item._id}
-        contentContainerStyle={[styles.list, notifications.length === 0 && { flex: 1 }]}
+        contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 84 }, notifications.length === 0 && { flex: 1 }]}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}
         ListEmptyComponent={

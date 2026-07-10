@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { EmptyState } from '../../components/shared';
@@ -14,6 +14,7 @@ export default function SavedSearchesScreen() {
   const { searches, loading, deleteSearch } = useSavedSearches();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const insets = useSafeAreaInsets();
 
   if (loading) return <LoadingSpinner fullScreen />;
 
@@ -22,7 +23,7 @@ export default function SavedSearchesScreen() {
       <FlatList
         data={searches}
         keyExtractor={(item) => item._id || item.id}
-        contentContainerStyle={[styles.list, searches.length === 0 && { flex: 1 }]}
+        contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 84 }, searches.length === 0 && { flex: 1 }]}
         ListEmptyComponent={
           <EmptyState
             icon="history"

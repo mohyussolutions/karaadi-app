@@ -1,7 +1,7 @@
 import React from "react";
 import { View, FlatList, Text, RefreshControl } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { useThemeColors, useThemedStyles } from "../../../../hooks/useTheme";
 import { EmptyState } from "../../../../components/shared";
 import ListingCard from "../../../../components/cards/ListingCard";
@@ -34,6 +34,7 @@ export default function SubcategoryScreen() {
   const { isTabletLandscape, sidebarWidth, mainWidth, numColumns, cardWidth } = useResponsive();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const insets = useSafeAreaInsets();
 
   const category = getCategoryByKey(categoryKey);
   const group = SUB_I18N_GROUP[categoryKey] ?? categoryKey.toLowerCase();
@@ -103,7 +104,7 @@ export default function SubcategoryScreen() {
       maxToRenderPerBatch={10}
       initialNumToRender={10}
       columnWrapperStyle={styles.colWrapper}
-      contentContainerStyle={listings.length === 0 && !loading ? styles.emptyContainer : styles.listContent}
+      contentContainerStyle={listings.length === 0 && !loading ? styles.emptyContainer : [styles.listContent, { paddingBottom: insets.bottom + 84 }]}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}
       showsVerticalScrollIndicator={false}
       ListHeaderComponent={isTabletLandscape ? tabletHeader : header}

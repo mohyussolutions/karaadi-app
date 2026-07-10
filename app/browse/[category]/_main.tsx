@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
 import { getCategoryByKey, SUB_I18N_GROUP } from "../../../constants/categories";
@@ -115,6 +115,7 @@ export default function CategoryScreen() {
   const { listings, loading, refreshing, onRefresh } = useCategoryFeed(categoryKey);
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const insets = useSafeAreaInsets();
 
   const category = getCategoryByKey(categoryKey);
   const group = SUB_I18N_GROUP[categoryKey] ?? categoryKey.toLowerCase();
@@ -172,7 +173,7 @@ export default function CategoryScreen() {
       maxToRenderPerBatch={10}
       initialNumToRender={10}
       columnWrapperStyle={styles.colWrapper}
-      contentContainerStyle={filteredListings.length === 0 && !loading ? styles.emptyContainer : styles.listContent}
+      contentContainerStyle={filteredListings.length === 0 && !loading ? styles.emptyContainer : [styles.listContent, { paddingBottom: insets.bottom + 84 }]}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}
       showsVerticalScrollIndicator={false}
       ListHeaderComponent={feedHeader}

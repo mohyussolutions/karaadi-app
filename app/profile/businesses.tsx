@@ -3,7 +3,7 @@ import {
   View, Text, FlatList, TouchableOpacity, Image, RefreshControl,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { EmptyState } from '../../components/shared';
@@ -22,6 +22,7 @@ export default function BusinessesScreen() {
   const { businesses, loading, refreshing, onRefresh, handleDelete } = useMyBusinesses();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const insets = useSafeAreaInsets();
 
   if (loading) return <LoadingSpinner fullScreen />;
 
@@ -30,7 +31,7 @@ export default function BusinessesScreen() {
       <FlatList
         data={businesses}
         keyExtractor={item => item._id || item.id}
-        contentContainerStyle={[styles.list, businesses.length === 0 && styles.listEmpty]}
+        contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 84 }, businesses.length === 0 && styles.listEmpty]}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}
         ListHeaderComponent={

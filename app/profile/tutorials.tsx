@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { VideoSource } from 'expo-video';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
@@ -20,6 +20,7 @@ export default function TutorialsScreen() {
   const { t } = useAppTranslation();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const insets = useSafeAreaInsets();
   const [activeSource, setActiveSource] = useState<VideoSource | null>(null);
 
   return (
@@ -27,7 +28,7 @@ export default function TutorialsScreen() {
       <FlatList
         data={TUTORIALS}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }]}
         ListHeaderComponent={
           <View style={styles.header}>
             <Text style={styles.title}>{t('tutorials.title')}</Text>

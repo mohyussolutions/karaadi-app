@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { useGlobal } from '../../hooks/useGlobal';
 import { useRouter } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner } from '../../components/loading';
@@ -37,6 +37,7 @@ export default function FavoritesScreen() {
   const { width } = useGlobal();
   const Colors = useThemeColors();
   const s = useThemedStyles((c) => createStyles(c, width));
+  const insets = useSafeAreaInsets();
 
   if (!user) {
     return (
@@ -73,7 +74,7 @@ export default function FavoritesScreen() {
         keyExtractor={(fav) => fav.id || fav.itemId}
         numColumns={2}
         columnWrapperStyle={s.row}
-        contentContainerStyle={[s.list, favorites.length === 0 && { flex: 1 }]}
+        contentContainerStyle={[s.list, { paddingBottom: insets.bottom + 84 }, favorites.length === 0 && { flex: 1 }]}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />
