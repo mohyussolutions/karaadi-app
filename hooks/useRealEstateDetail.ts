@@ -6,8 +6,8 @@ import { toggleFavorite } from '../store/slices/favoritesSlice';
 import { useAuthStore } from '../store/authStore';
 import { getRealEstateById } from '../api/categories/realEstate.actions';
 
-import { getCachedListing } from '../services/listingCache';
-import { showToast } from '../services/toastService';
+import { getCachedListing } from '../util/cache/listingCache';
+import { showToast } from '../util/cache/toastService';
 import type { RealEstate } from '../util/types/listing.types';
 
 export function useRealEstateDetail(id: string) {

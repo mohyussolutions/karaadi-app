@@ -5,12 +5,10 @@ import { shadow } from '../../shadow';
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
     container: {
-      backgroundColor: Colors.card,
-      borderBottomWidth: 1,
-      borderBottomColor: Colors.border,
-      paddingHorizontal: 16,
-      paddingTop: 8,
-      paddingBottom: 6,
+      backgroundColor: Colors.background,
+      paddingHorizontal: 20,
+      paddingTop: 14,
+      paddingBottom: 14,
     },
     row: { flexDirection: 'row', alignItems: 'center' },
     connector: { flex: 1, height: 2, backgroundColor: Colors.gray200, marginBottom: 14, borderRadius: 1 },

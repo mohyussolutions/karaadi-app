@@ -8,7 +8,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { useSecuritySettings } from '../../../hooks/useSecuritySettings';
+import { useSecuritySettings } from '../../../features/auth/hooks/useSecuritySettings';
 import { createStyles } from '../../../util/styles/settings/security.styles';
 
 function fmtDate(iso: string) {

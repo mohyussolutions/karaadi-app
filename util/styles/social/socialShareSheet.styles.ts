@@ -72,8 +72,5 @@ export function createStyles(Colors: ColorPalette) {
       fontWeight: '600',
       color: Colors.textPrimary,
     },
-    iosBottom: {
-      height: 20,
-    },
   });
 }

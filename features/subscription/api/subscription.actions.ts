@@ -1,0 +1,119 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { apiClient } from '../../../api/client';
+import { SUBSCRIPTION_ENDPOINTS } from '../../../constants';
+import { searchCategory } from '../../../api/search';
+import { scheduleLocalNotification } from '../../notifications/services/notificationService';
+import type { Subscription, SubscriptionPayload, Plan } from '../../../util/types';
+
+const LAST_CHECKED_KEY = 'karaadi_alerts_last_checked_v1';
+const MIN_CHECK_INTERVAL_MS = 5 * 60 * 1000;
+
+export async function fetchSubscriptionPlans(): Promise<Plan[]> {
+  try {
+    const { data } = await apiClient.get(SUBSCRIPTION_ENDPOINTS.PLANS);
+    return Array.isArray(data) ? data : data?.plans ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchMyPlan(): Promise<any> {
+  try {
+    const { data } = await apiClient.get(SUBSCRIPTION_ENDPOINTS.MY);
+    return data ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchMySubscriptions(): Promise<Subscription[]> {
+  try {
+    const { data } = await apiClient.get(SUBSCRIPTION_ENDPOINTS.MY);
+    const list = data?.subscriptions ?? data?.data ?? data ?? [];
+    return (Array.isArray(list) ? list : []).map((item: any) => ({
+      ...item,
+      id: item.id || item._id,
+    }));
+  } catch {
+    return [];
+  }
+}
+
+export async function createSubscription(payload: SubscriptionPayload): Promise<Subscription | null> {
+  try {
+    const { data } = await apiClient.post(SUBSCRIPTION_ENDPOINTS.SUBSCRIBE, payload);
+    const item = data?.subscription ?? data?.data ?? data;
+    return { ...item, id: item.id || item._id };
+  } catch {
+    return null;
+  }
+}
+
+export async function deleteSubscription(id: string): Promise<void> {
+  try {
+    await apiClient.delete(SUBSCRIPTION_ENDPOINTS.BY_ID(id));
+  } catch {}
+}
+
+export async function checkAlertsForMatches(): Promise<void> {
+  try {
+    const raw = await AsyncStorage.getItem(LAST_CHECKED_KEY);
+    const lastChecked = raw
+      ? new Date(raw)
+      : new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+    if (raw && Date.now() - lastChecked.getTime() < MIN_CHECK_INTERVAL_MS) return;
+
+    const subs = await fetchMySubscriptions();
+    if (!subs.length) return;
+
+    let totalMatches = 0;
+    const matchTitles: string[] = [];
+
+    for (const sub of subs) {
+      const params = {
+        title: sub.title || undefined,
+        region: sub.region || undefined,
+        city: sub.cities?.[0] || undefined,
+        maxPrice: sub.priceMax || undefined,
+        limit: 10,
+      };
+
+      const results = await searchCategory(sub.category, params);
+
+      const fresh = results.filter((r) => {
+        const created = (r as any).createdAt ? new Date((r as any).createdAt) : null;
+        return created && created > lastChecked;
+      });
+
+      if (fresh.length) {
+        totalMatches += fresh.length;
+        const first = fresh[0] as any;
+        if (first.title) matchTitles.push(first.title);
+
+        if (fresh.length === 1) {
+          await scheduleLocalNotification(
+            'New match for your alert!',
+            `"${first.title}" just posted — tap to view`,
+            { type: 'alert_match', listingId: first._id || first.id, category: sub.category },
+          );
+        }
+      }
+    }
+
+    if (totalMatches > 1) {
+      await scheduleLocalNotification(
+        'New matches for your alerts!',
+        `${totalMatches} new listings match your alerts — tap to see`,
+        { type: 'alert_match' },
+      );
+    }
+
+    await AsyncStorage.setItem(LAST_CHECKED_KEY, new Date().toISOString());
+  } catch {}
+}
+
+export async function getSubscriptionById(id: string, signal?: AbortSignal): Promise<any> {
+  const { data } = await apiClient.get(SUBSCRIPTION_ENDPOINTS.BY_ID(id), { signal });
+  return data;
+}

@@ -4,6 +4,7 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles, type ColorPalette } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
+import { useTabBarClearance } from '../../../hooks/useTabBarClearance';
 import { createStyles } from '../../../util/styles/new-ad/stepType.styles';
 
 function getOptions(Colors: ColorPalette) {
@@ -18,6 +19,7 @@ export function StepType({ onSelect }: StepTypeProps) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const OPTIONS = getOptions(Colors);
+  const clearance = useTabBarClearance();
   return (
     <ScrollView contentContainerStyle={s.scroll}>
       <Text style={s.title}>{t('createAd.selectListingType')}</Text>
@@ -35,6 +37,7 @@ export function StepType({ onSelect }: StepTypeProps) {
           </TouchableOpacity>
         ))}
       </View>
+      <View style={{ height: clearance }} />
     </ScrollView>
   );
 }

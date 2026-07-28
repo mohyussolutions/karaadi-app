@@ -6,8 +6,8 @@ import { toggleFavorite } from '../store/slices/favoritesSlice';
 import { useAuthStore } from '../store/authStore';
 import { getJobById } from '../api/categories/job.actions';
 
-import { getCachedListing } from '../services/listingCache';
-import { showToast } from '../services/toastService';
+import { getCachedListing } from '../util/cache/listingCache';
+import { showToast } from '../util/cache/toastService';
 import { formatPrice } from '../util/helpers';
 import type { Job } from '../util/types/listing.types';
 

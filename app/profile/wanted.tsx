@@ -15,7 +15,7 @@ import { useAuthStore } from '../../store/authStore';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import {
   fetchMySubscriptions, createSubscription, deleteSubscription,
-} from '../../api/categories/subscription.actions';
+} from '../../features/subscription/api/subscription.actions';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import {
   createStyles, createSheetInlineStyles, createImagePickerStyles,

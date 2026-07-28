@@ -7,7 +7,7 @@ import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useLogin } from '../../hooks/useLogin';
+import { useLogin } from '../../features/auth/hooks/useLogin';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/auth/login.styles';

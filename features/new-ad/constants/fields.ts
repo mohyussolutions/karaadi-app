@@ -115,19 +115,19 @@ export function getFields(t: TFn): Record<string, FieldDef[]> {
       { key: 'totalFloors', label: t('createRealEstate.totalFloorsLabel'), placeholder: t('createRealEstate.totalFloorsPlaceholder'), type: 'number' },
       {
         key: 'furnished', label: t('createRealEstate.furnishedLabel'), type: 'dropdown',
-        options: [{ label: t('common.continue', { defaultValue: 'Yes' }), value: 'Yes' }, { label: 'No', value: 'No' }],
+        options: [{ label: t('common.yes'), value: 'Yes' }, { label: t('common.no'), value: 'No' }],
       },
       {
         key: 'parking', label: t('createRealEstate.parkingLabel'), type: 'dropdown',
-        options: [{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }],
+        options: [{ label: t('common.yes'), value: 'Yes' }, { label: t('common.no'), value: 'No' }],
       },
       {
         key: 'hasGarage', label: t('createRealEstate.garageLabel'), type: 'dropdown',
-        options: [{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }],
+        options: [{ label: t('common.yes'), value: 'Yes' }, { label: t('common.no'), value: 'No' }],
       },
       {
         key: 'hasGarden', label: t('createRealEstate.gardenLabel'), type: 'dropdown',
-        options: [{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }],
+        options: [{ label: t('common.yes'), value: 'Yes' }, { label: t('common.no'), value: 'No' }],
       },
       { key: 'address', label: t('createRealEstate.addressLabel'), placeholder: 'Street / area (optional)', type: 'text' },
       { key: 'price', label: t('createRealEstate.priceLabel'), placeholder: '0 = price on request', type: 'number', required: true },
@@ -238,9 +238,9 @@ export function getFields(t: TFn): Record<string, FieldDef[]> {
     ],
 
     Jobs: [
-      { key: 'title', label: t('jobsPage.application.fullNameLabel', { defaultValue: 'Job Title' }), placeholder: 'e.g. Senior Software Engineer', type: 'text', required: true },
+      { key: 'title', label: t('createJobs.titleLabel'), placeholder: 'e.g. Senior Software Engineer', type: 'text', required: true },
       {
-        key: 'jobType', label: t('subscription.jobType', { defaultValue: 'Job Type' }), type: 'dropdown', required: true,
+        key: 'jobType', label: t('createJobs.jobTypeLabel'), type: 'dropdown', required: true,
         options: [
           { label: t('subcategories.jobs.fullTime'),   value: 'fullTime' },
           { label: t('subcategories.jobs.partTime'),   value: 'partTime' },
@@ -248,10 +248,10 @@ export function getFields(t: TFn): Record<string, FieldDef[]> {
           { label: t('common.other'),                  value: 'other' },
         ],
       },
-      { key: 'companyName', label: t('mine.businesses.companyName', { defaultValue: 'Company' }), placeholder: 'e.g. Karaadi Ltd', type: 'text', required: true },
-      { key: 'salaryRange', label: t('mine.subscriptions.priceRange', { defaultValue: 'Salary Range ($)' }), placeholder: 'e.g. 500-1500', type: 'text' },
+      { key: 'companyName', label: t('createJobs.companyLabel'), placeholder: 'e.g. Karaadi Ltd', type: 'text', required: true },
+      { key: 'salaryRange', label: t('createJobs.salaryRangeLabel'), placeholder: 'e.g. 500-1500', type: 'text' },
       {
-        key: 'experienceLevel', label: t('subscription.jobType', { defaultValue: 'Experience Level' }), type: 'dropdown',
+        key: 'experienceLevel', label: t('createJobs.experienceLevelLabel'), type: 'dropdown',
         options: [
           { label: t('subcategories.jobsNested.experienceLevels.entry'),  value: 'entry' },
           { label: t('subcategories.jobsNested.experienceLevels.mid'),    value: 'mid' },
@@ -259,7 +259,7 @@ export function getFields(t: TFn): Record<string, FieldDef[]> {
         ],
       },
       {
-        key: 'educationLevel', label: t('subscription.jobType', { defaultValue: 'Education Level' }), type: 'dropdown',
+        key: 'educationLevel', label: t('createJobs.educationLevelLabel'), type: 'dropdown',
         options: [
           { label: t('subcategories.jobsNested.educationLevels.highschool'), value: 'highschool' },
           { label: t('subcategories.jobsNested.educationLevels.diploma'),    value: 'diploma' },
@@ -267,7 +267,7 @@ export function getFields(t: TFn): Record<string, FieldDef[]> {
           { label: t('subcategories.jobsNested.educationLevels.master'),     value: 'master' },
         ],
       },
-      { key: 'applicationDeadline', label: t('jobsPage.application.fullNameLabel', { defaultValue: 'Application Deadline' }), placeholder: 'e.g. 2026-07-31', type: 'text' },
+      { key: 'applicationDeadline', label: t('createJobs.applicationDeadlineLabel'), placeholder: 'e.g. 2026-07-31', type: 'text' },
       { key: 'description', label: t('createMarketplace.descriptionLabel'), placeholder: 'Describe the role and responsibilities…', type: 'textarea', required: true },
     ],
   };

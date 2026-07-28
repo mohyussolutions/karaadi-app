@@ -9,7 +9,7 @@ import { EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
 import { useThemedStyles } from '../../hooks/useTheme';
 import { useResponsive } from '../../hooks/useResponsive';
-import { useChatsData } from '../../hooks/useChatsData';
+import { useChatsData } from '../../features/chat/hooks/useChatsData';
 import { useAppSelector } from '../../store/store';
 import { placeholderAvatar } from '../../constants';
 import { createStyles } from '../../util/styles/tabs/messages.styles';

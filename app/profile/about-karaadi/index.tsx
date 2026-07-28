@@ -1,11 +1,14 @@
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Linking } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { createStyles } from '../../../util/styles/profile/aboutKaraadi.styles';
+import { SOCIAL_LINKS } from '../../../constants';
+import { SOCIAL_ICONS } from '../../../util/icons/icons';
+import { SOCIAL_BRAND_COLORS } from '../../../features/social/constants/socialBrand';
 
 const PAGES: { id: string; icon: string; titleKey: string; route: string }[] = [
   { id: 'about', icon: 'information-outline', titleKey: 'about.heading', route: '/profile/about-karaadi/about' },
@@ -48,6 +51,37 @@ export default function AboutKaraadiScreen() {
             <MaterialCommunityIcons name="chevron-right" size={20} color={Colors.textMuted} />
           </TouchableOpacity>
         )}
+        ListFooterComponent={
+          <View style={styles.footer}>
+            <Text style={styles.followUsLabel}>{t('aboutKaraadiPage.followUs')}</Text>
+            <View style={styles.socialRow}>
+              <TouchableOpacity
+                style={[styles.socialIconBg, { backgroundColor: SOCIAL_BRAND_COLORS.facebook.bg }]}
+                onPress={() => Linking.openURL(SOCIAL_LINKS.FACEBOOK)}
+                activeOpacity={0.8}
+                accessibilityLabel="Facebook"
+              >
+                <MaterialCommunityIcons name={SOCIAL_ICONS.facebook} size={22} color={SOCIAL_BRAND_COLORS.facebook.color} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.socialIconBg, { backgroundColor: SOCIAL_BRAND_COLORS.tiktok.bg }]}
+                onPress={() => Linking.openURL(SOCIAL_LINKS.TIKTOK)}
+                activeOpacity={0.8}
+                accessibilityLabel="TikTok"
+              >
+                <MaterialCommunityIcons name={SOCIAL_ICONS.tiktok} size={22} color={SOCIAL_BRAND_COLORS.tiktok.color} />
+              </TouchableOpacity>
+            </View>
+
+            <Text style={styles.rightsText}>{t('aboutKaraadiPage.rightsShort', { brand: 'Karaadi' })}</Text>
+            <Text style={styles.developedByText}>
+              {t('aboutKaraadiPage.developedBy')}{' '}
+              <Text style={styles.developedByLink} onPress={() => Linking.openURL(SOCIAL_LINKS.DEVELOPER)}>
+                Mohyus
+              </Text>
+            </Text>
+          </View>
+        }
       />
     </SafeAreaView>
   );

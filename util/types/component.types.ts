@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import type { Animated } from 'react-native';
 import type { ListingBase } from './listing.types';
 
 export interface ImageGalleryProps {
@@ -93,6 +92,7 @@ export interface SocialShareSheetProps {
   onClose: () => void;
   title: string;
   message: string;
+  monochrome?: boolean;
 }
 
 export interface SocialAction {
@@ -111,20 +111,6 @@ export interface SocialPostCardProps {
   images?: string[];
   listingUrl: string;
   isPremium90?: boolean;
-}
-
-export interface MessageBanner {
-  senderName: string;
-  content: string;
-  chatId?: number;
-  senderId?: string;
-}
-
-export interface NotificationBannerProps {
-  banner: MessageBanner;
-  translateY: Animated.Value;
-  onPress: () => void;
-  onDismiss: () => void;
 }
 
 export interface LoadingSpinnerProps {

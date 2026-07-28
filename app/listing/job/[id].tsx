@@ -17,7 +17,7 @@ import { SpecGrid } from '../../../components/cards/DetailCard';
 import SellerCard from '../../../components/cards/SellerCard';
 import ReportLink from '../../../components/detail/ReportLink';
 import RecommendedSection from '../../../components/detail/RecommendedSection';
-import { SocialShareSheet } from '../../../components/social';
+import { SocialShareSheet } from '../../../features/social/components';
 import DetailNotFound from '../../../components/detail/DetailNotFound';
 import DetailActionBar from '../../../components/detail/DetailActionBar';
 import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';

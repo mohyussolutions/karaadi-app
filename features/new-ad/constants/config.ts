@@ -23,6 +23,16 @@ export const CATEGORY_ITEM_MODEL: Record<string, string> = {
   Jobs: 'Job',
 };
 
+export const CATEGORY_MAIN_LABEL: Record<string, string> = {
+  Marketplace: 'Marketplace',
+  Cars: 'Cars',
+  RealEstate: 'Real Estate',
+  Motorcycles: 'Motorcycles',
+  Boats: 'Boats',
+  farmequipment: 'Farm Equipment',
+  Jobs: 'Jobs',
+};
+
 export const PLAN_CARD_COLORS = {
   popularBadge: '#374151',
   unselectedBtn: '#111827',

@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import { AppState } from "react-native";
 import { useAuth } from "./useAuth";
 import { loadFavorites, clearFavorites } from "../store/slices/favoritesSlice";
-import { clearChats } from "../store/slices/chatsSlice";
-import { setUnreadCount } from "../store/slices/notificationsSlice";
+import { clearChats } from "../features/chat/store/chatsSlice";
+import { setUnreadCount } from "../features/notifications/store/notificationsSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { registerForPushNotifications } from "../services/notificationService";
-import { checkAlertsForMatches } from "../api/categories/subscription.actions";
-import { getUnreadNotificationCount } from "../api/core/notifications.actions";
+import { registerForPushNotifications } from "../features/notifications/services/notificationService";
+import { checkAlertsForMatches } from "../features/subscription/api/subscription.actions";
+import { getUnreadNotificationCount } from "../features/notifications/api/notifications.actions";
 
 export function useAppInit() {
   const { loadFromStorage } = useAuth();

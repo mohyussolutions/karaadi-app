@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { fetchByCategory } from '../api/categories/feed.actions';
-import { getCached, setCached, isFresh, cacheKey } from '../services/categoryCacheService';
+import { getCached, setCached, isFresh, cacheKey } from '../util/cache/categoryCacheService';
 import { CATEGORY_FEED_LIMIT } from '../constants';
 import type { ListingBase } from '../util/types/listing.types';
 

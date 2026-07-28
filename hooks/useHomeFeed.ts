@@ -1,12 +1,14 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '../store/store';
 import { fetchFeedGroup, getHomeFeedRecommendations } from '../api/categories/feed.actions';
-import { mergeListings, setMemCache, writeDiskCache, readDiskCache } from '../services/feedCacheService';
-import { setFeed, mergeFeed, setRecommendations, isFeedFresh } from '../store/slices/feedSlice';
+import { mergeListings, setMemCache, writeDiskCache, readDiskCache } from '../util/cache/feedCacheService';
+import { setFeed, setRecommendations, isFeedFresh } from '../store/slices/feedSlice';
 import type { ListingBase } from '../util/types/listing.types';
 
 const INITIAL_VISIBLE = 20;
 const READ_MORE_STEP = 10;
+const TOP_ITEMS_DAYS = 90;
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 export function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -18,11 +20,22 @@ export function shuffle<T>(arr: T[]): T[] {
 }
 
 export function sortByTierRandom(listings: ListingBase[]): ListingBase[] {
-  const premium = shuffle(listings.filter((l: any) => l.isPremium90));
-  const standard = shuffle(listings.filter((l: any) => l.isStandard60 && !l.isPremium90));
-  const basic = shuffle(listings.filter((l: any) => l.isBasic30 && !l.isPremium90 && !l.isStandard60));
-  const rest = shuffle(listings.filter((l: any) => !l.isPremium90 && !l.isStandard60 && !l.isBasic30));
-  return [...premium, ...standard, ...basic, ...rest];
+  const now = Date.now();
+  const topItemsCutoff = now - TOP_ITEMS_DAYS * DAY_MS;
+
+  const isTop90Item = (listing: ListingBase): boolean => {
+    if (!listing.isPremium90) return false;
+    const expiryAt = listing.expiryDate ? Date.parse(listing.expiryDate) : Number.NaN;
+    if (Number.isFinite(expiryAt)) return expiryAt > now;
+    const createdAt = Date.parse(listing.createdAt);
+    return Number.isFinite(createdAt) ? createdAt >= topItemsCutoff : true;
+  };
+
+  const top90 = shuffle(listings.filter((l) => isTop90Item(l)));
+  const standard = shuffle(listings.filter((l) => l.isStandard60 && !isTop90Item(l)));
+  const basic = shuffle(listings.filter((l) => l.isBasic30 && !isTop90Item(l) && !l.isStandard60));
+  const rest = shuffle(listings.filter((l) => !isTop90Item(l) && !l.isStandard60 && !l.isBasic30));
+  return [...top90, ...standard, ...basic, ...rest];
 }
 
 async function fetchRecommendations(signal?: AbortSignal): Promise<ListingBase[]> {
@@ -45,7 +58,6 @@ export function useHomeFeed() {
 
   const fetchedAtRef = useRef(fetchedAt);
   fetchedAtRef.current = fetchedAt;
-  const didSortRef = useRef(false);
 
   useEffect(() => {
     const ctrl = new AbortController();
@@ -61,7 +73,6 @@ export function useHomeFeed() {
       const fast = await fetchFeedGroup('fast', ctrl.signal);
       if (ctrl.signal.aborted) return;
       if (fast.length > 0) {
-        didSortRef.current = true;
         const sorted = sortByTierRandom(fast);
         dispatch(setFeed(sorted));
         setMemCache(fast);
@@ -70,8 +81,8 @@ export function useHomeFeed() {
 
       const slow = await fetchFeedGroup('slow', ctrl.signal);
       if (ctrl.signal.aborted || slow.length === 0) return;
-      dispatch(mergeFeed(sortByTierRandom(slow)));
-      const merged = mergeListings(fast, slow);
+      const merged = mergeListings(fast.length > 0 ? fast : (disk ?? []), slow);
+      dispatch(setFeed(sortByTierRandom(merged)));
       setMemCache(merged);
       writeDiskCache(merged);
     }
@@ -89,14 +100,12 @@ export function useHomeFeed() {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     setVisibleCount(INITIAL_VISIBLE);
-    didSortRef.current = false;
 
     const [fast, recs] = await Promise.allSettled([
       fetchFeedGroup('fast'),
       user ? fetchRecommendations() : Promise.resolve([]),
     ]);
     if (fast.status === 'fulfilled' && fast.value.length > 0) {
-      didSortRef.current = true;
       dispatch(setFeed(sortByTierRandom(fast.value)));
       setMemCache(fast.value);
       writeDiskCache(fast.value);
@@ -106,11 +115,12 @@ export function useHomeFeed() {
 
     fetchFeedGroup('slow').then((slow) => {
       if (slow.length === 0) return;
-      dispatch(mergeFeed(sortByTierRandom(slow)));
-      const fastItems = fast.status === 'fulfilled' ? fast.value : [];
-      writeDiskCache(mergeListings(fastItems, slow));
+      const fastItems = fast.status === 'fulfilled' ? fast.value : listings;
+      const merged = mergeListings(fastItems, slow);
+      dispatch(setFeed(sortByTierRandom(merged)));
+      writeDiskCache(merged);
     });
-  }, [user, dispatch]);
+  }, [user, dispatch, listings]);
 
   function showMore() { setVisibleCount((n) => n + READ_MORE_STEP); }
 

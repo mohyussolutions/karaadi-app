@@ -8,12 +8,10 @@ import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import VideoPopupModal from '../../components/modals/VideoPopupModal';
 import { createStyles } from '../../util/styles/profile/tutorials.styles';
 
-const VIDEO_SOURCE: VideoSource = require('../../assets/videos/karaadi-trim.mp4');
-
 const TUTORIALS: { id: string; titleKey: string; source: VideoSource }[] = [
-  { id: '1', titleKey: 'tutorials.video1', source: VIDEO_SOURCE },
-  { id: '2', titleKey: 'tutorials.video2', source: VIDEO_SOURCE },
-  { id: '3', titleKey: 'tutorials.video3', source: VIDEO_SOURCE },
+  { id: '1', titleKey: 'tutorials.video1', source: require('../../assets/videos/karaadi-tutorial-1.mp4') },
+  { id: '2', titleKey: 'tutorials.video2', source: require('../../assets/videos/karaadi-tutorial-2.mp4') },
+  { id: '3', titleKey: 'tutorials.video3', source: require('../../assets/videos/karaadi-tutorial-3.mp4') },
 ];
 
 export default function TutorialsScreen() {
@@ -53,11 +51,13 @@ export default function TutorialsScreen() {
         )}
       />
 
-      <VideoPopupModal
-        visible={!!activeSource}
-        onClose={() => setActiveSource(null)}
-        source={activeSource ?? VIDEO_SOURCE}
-      />
+      {activeSource && (
+        <VideoPopupModal
+          visible={!!activeSource}
+          onClose={() => setActiveSource(null)}
+          source={activeSource}
+        />
+      )}
     </SafeAreaView>
   );
 }

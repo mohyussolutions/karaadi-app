@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
-import { confirmAccount, resendCode } from '../api/core/auth.actions';
+import { confirmAccount, resendCode } from '../features/auth/api/auth.actions';
 
 export function useConfirm(email: string) {
   const router = useRouter();

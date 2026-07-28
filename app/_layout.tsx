@@ -12,15 +12,16 @@ import GlobalHeader from "../components/layout/GlobalHeader";
 import BottomTabBar from "../components/layout/BottomTabBar";
 import Hage from "../features/ai-assistant";
 import { EulaModal } from "../components/modals/EulaModal";
-import NotificationBanner from "../components/layout/NotificationBanner";
+import NotificationBanner from "../features/notifications/components/NotificationBanner";
 import { LoadingSpinner, SplashScreen } from "../components/loading";
 import { SaveToast, UpdateBanner } from "../components/shared";
 import LanguageSync from "../i18n/LanguageSync";
 
 import { useAppInit } from "../hooks/useAppInit";
-import { useMessageBanner } from "../hooks/useMessageBanner";
-import { useSocketMessages } from "../hooks/useSocketMessages";
-import { useNotificationTap } from "../hooks/useNotificationTap";
+import { useMessageBanner } from "../features/chat/hooks/useMessageBanner";
+import { useSocketMessages } from "../features/chat/hooks/useSocketMessages";
+import { useSocketNotifications } from "../features/notifications/hooks/useSocketNotifications";
+import { useNotificationTap } from "../features/notifications/hooks/useNotificationTap";
 import { useThemeColors, useThemeMode } from "../hooks/useTheme";
 
 export default function RootLayout() {
@@ -43,12 +44,17 @@ export default function RootLayout() {
     handleBannerPress,
   } = useMessageBanner();
   useSocketMessages(showBanner);
+  useSocketNotifications();
   useNotificationTap();
 
   const { mode, resolved } = useThemeMode();
   const Colors = useThemeColors();
   const pathname = usePathname();
-  const showTabBar = !pathname.startsWith("/(auth)") && !pathname.startsWith("/listing") && !pathname.startsWith("/profile/chat");
+  const isNewAdFlow = pathname.startsWith("/(tabs)/new-ad") || pathname.startsWith("/new-ad");
+  const showTabBar = !pathname.startsWith("/(auth)")
+    && !pathname.startsWith("/listing")
+    && !pathname.startsWith("/profile/chat")
+    && !isNewAdFlow;
 
   useEffect(() => {
     if (Platform.OS !== "web") {

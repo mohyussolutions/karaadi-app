@@ -11,6 +11,12 @@ export const SOCIAL_SHARE_URLS = {
   facebook: (text: string) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(text)}`,
 } as const;
 
+export const SOCIAL_LINKS = {
+  FACEBOOK: 'https://www.facebook.com/profile.php?id=61591596954242',
+  TIKTOK: 'https://www.tiktok.com/@karaadi_',
+  DEVELOPER: 'https://www.mohyus.com/',
+} as const;
+
 export const SOCIAL_LINK_BUILDERS = {
   whatsapp: (value: string) => `https://wa.me/${value.replace(/\D/g, '')}`,
   facebook: (value: string) => (value.startsWith('http') ? value : `https://facebook.com/${value}`),

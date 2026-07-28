@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -13,17 +13,19 @@ import {
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useThemeColors, useThemedStyles } from "../../../../hooks/useTheme";
+import { useTabBarClearance } from "../../../../hooks/useTabBarClearance";
 import RegionCityPicker from "../../../../components/geo/RegionCityPicker";
 import { MAIN_CATEGORIES } from "../../../../constants";
 import { FormField } from "./FormField";
 import { ImagePickerRow } from "./ImagePickerRow";
+import { CollapsibleSection } from "./CollapsibleSection";
 import { getFields, NUMERIC_KEYS, BOOLEAN_KEYS } from "../../constants/fields";
 import { useAuthStore } from "../../../../store/authStore";
 import { useAppDispatch, useAppSelector } from "../../../../store/store";
 import { submitListing, setFeeInfo } from "../../../../store/slices/newAdSlice";
-import { getFeeForCategory } from "../../../../api/categories/fee.actions";
+import { getFeeForCategory } from "../../../subscription/api/fee.actions";
+import { CATEGORY_MAIN_LABEL } from "../../constants/config";
 import type { FieldDef, StepFormProps } from "../../../../util/types";
 import { createStyles } from "../../../../util/styles/new-ad/stepForm.styles";
 
@@ -61,7 +63,7 @@ export function StepForm({
   const dispatch = useAppDispatch();
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
-  const insets = useSafeAreaInsets();
+  const clearance = useTabBarClearance();
 
   const submitStatus = useAppSelector((state) => state.newAd.submitStatus);
   const submitError = useAppSelector((state) => state.newAd.submitError);
@@ -80,6 +82,11 @@ export function StepForm({
   const fields: FieldDef[] = (allFields[categoryKey] || []).filter(
     (f: FieldDef) => f.key !== "website" || listingType === "public",
   );
+
+  const primaryFields = fields.filter((f) => f.required);
+  const extraFields = fields.filter((f) => !f.required);
+  const extraFieldsHaveError = extraFields.some((f) => !!errors[f.key]);
+  const scrollRef = useRef<ScrollView>(null);
 
   const selectedSubKey = formData.subcategory;
   const selectedSubMeta = categoryMeta?.subCategories.find(
@@ -115,6 +122,7 @@ export function StepForm({
     const newErrors = validate(fields, formData, images, t);
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      scrollRef.current?.scrollTo({ y: 0, animated: true });
       return;
     }
 
@@ -140,13 +148,13 @@ export function StepForm({
       const body: Record<string, any> = {
         ...rest,
         userId: user?.id || user?._id || "",
+        name: formData.title || "",
         images,
-        mainCategory: categoryKey,
+        mainCategory: CATEGORY_MAIN_LABEL[categoryKey] || categoryKey,
         category: subVal ? [subVal] : [],
         subcategory: nestedVal ? [nestedVal] : [],
         categoryTag: subVal,
         isPaid: feeAmount === 0,
-        feeId: feeId || undefined,
         feeAmount: feeAmount,
         listingType: listingType ?? "private",
         contactPhone: formData.contactPhone || user?.phone || "",
@@ -172,7 +180,29 @@ export function StepForm({
         if (k in body) body[k] = body[k] === "Yes";
       });
 
-      if (categoryKey === "Jobs" && subVal) body.type = subVal;
+      if (categoryKey === "Jobs") {
+        if (subVal) body.employmentType = subVal;
+        const salaryDigits = String(body.salaryRange || "").replace(/\D/g, "");
+        body.salary = salaryDigits ? Number(salaryDigits) : 0;
+        delete body.salaryRange;
+        delete body.educationLevel;
+        delete body.name;
+        delete body.categoryTag;
+        delete body.listingType;
+        delete body.contactPhone;
+      }
+
+      if (categoryKey === "farmequipment") {
+        if (body.equipmentType !== undefined) body.type = body.equipmentType;
+        if (body.brand !== undefined) body.make = body.brand;
+        if (body.hoursUsed !== undefined) body.hours = body.hoursUsed;
+      }
+
+      if (categoryKey === "RealEstate") {
+        if (body.region !== undefined) body.county = body.region;
+        if (body.sizeSqm !== undefined) body.squareFeet = body.sizeSqm;
+        if (body.amenities === undefined) body.amenities = [];
+      }
 
       const SKIP_KEYS = new Set([
         'userId', 'images', 'mainCategory', 'category', 'categoryTag',
@@ -233,22 +263,79 @@ export function StepForm({
     }
   }
 
+  function renderField(field: FieldDef) {
+    return (
+      <React.Fragment key={field.key}>
+        <FormField
+          field={field}
+          value={formData[field.key] || ""}
+          onChange={(v) => setField(field.key, v)}
+          error={errors[field.key]}
+        />
+        {field.key === "subcategory" && nestedOptions.length > 0 && (
+          <View style={s.nestedWrap}>
+            <Text style={s.nestedLabel}>{t("postAd.subCategoryLabel")}</Text>
+            <View style={s.nestedSearchBox}>
+              <MaterialCommunityIcons name="magnify" size={16} color={Colors.primary} />
+              <TextInput
+                style={s.nestedSearchInput}
+                value={nestedSearch}
+                onChangeText={setNestedSearch}
+                placeholder={t("postAd.searchTypePlaceholder")}
+                placeholderTextColor={Colors.placeholder}
+                autoCorrect={false}
+              />
+              {nestedSearch.length > 0 && (
+                <TouchableOpacity onPress={() => setNestedSearch("")} hitSlop={8}>
+                  <MaterialCommunityIcons name="close-circle" size={16} color={Colors.textMuted} />
+                </TouchableOpacity>
+              )}
+            </View>
+            {filteredNestedOptions.length > 0 ? (
+              <View style={s.chipsRow}>
+                {filteredNestedOptions.map((n) => {
+                  const active = formData.nestedSubcategory === n.key;
+                  return (
+                    <Pressable
+                      key={n.key}
+                      onPress={() => setField("nestedSubcategory", active ? "" : n.key)}
+                      style={[s.chip, active && s.chipActive]}
+                      hitSlop={4}
+                    >
+                      <MaterialCommunityIcons
+                        name={n.icon as any}
+                        size={13}
+                        color={active ? Colors.white : Colors.textSecondary}
+                      />
+                      <Text style={[s.chipText, active && s.chipTextActive]}>
+                        {t(n.labelKey)}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
+            ) : (
+              <Text style={s.nestedEmptyText}>{t("postAd.noMatches")}</Text>
+            )}
+          </View>
+        )}
+      </React.Fragment>
+    );
+  }
+
   return (
     <View style={s.root}>
       <View style={s.topBar}>
         <TouchableOpacity style={s.backBtn} onPress={onBack} hitSlop={8}>
           <MaterialCommunityIcons name="arrow-left" size={20} color={Colors.textPrimary} />
         </TouchableOpacity>
-        <Text style={s.topBarTitle}>
-          {t(`categories.${categoryKey}`, { defaultValue: categoryMeta?.name ?? categoryKey })}
-        </Text>
-        <View style={s.topBarSpacer} />
       </View>
       <KeyboardAvoidingView
         style={s.flexFull}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <ScrollView
+          ref={scrollRef}
           style={s.flexFull}
           contentContainerStyle={s.scroll}
           showsVerticalScrollIndicator={false}
@@ -284,89 +371,16 @@ export function StepForm({
             error={errors._images}
           />
 
-          {fields.map((field) => {
-            if (field.type === "phone") {
-              return (
-                <View key={field.key} style={s.fieldWrap}>
-                  <Text style={s.fieldLabel}>{field.label}</Text>
-                  <TextInput
-                    style={[s.input, errors[field.key] ? s.inputError : null]}
-                    value={formData[field.key] || ""}
-                    onChangeText={(v) =>
-                      setField(field.key, v.replace(/[^0-9+\-()\s]/g, ""))
-                    }
-                    placeholder={field.placeholder}
-                    placeholderTextColor={Colors.placeholder}
-                    keyboardType="phone-pad"
-                  />
-                  {!!errors[field.key] && (
-                    <Text style={s.errorText}>{errors[field.key]}</Text>
-                  )}
-                </View>
-              );
-            }
-            return (
-              <React.Fragment key={field.key}>
-                <FormField
-                  field={field}
-                  value={formData[field.key] || ""}
-                  onChange={(v) => setField(field.key, v)}
-                  error={errors[field.key]}
-                />
-                {field.key === "subcategory" && nestedOptions.length > 0 && (
-                  <View style={s.nestedWrap}>
-                    <Text style={s.nestedLabel}>{t("postAd.subCategoryLabel")}</Text>
-                    <View style={s.nestedSearchBox}>
-                      <MaterialCommunityIcons name="magnify" size={16} color={Colors.primary} />
-                      <TextInput
-                        style={s.nestedSearchInput}
-                        value={nestedSearch}
-                        onChangeText={setNestedSearch}
-                        placeholder={t("postAd.searchTypePlaceholder")}
-                        placeholderTextColor={Colors.placeholder}
-                        autoCorrect={false}
-                      />
-                      {nestedSearch.length > 0 && (
-                        <TouchableOpacity onPress={() => setNestedSearch("")} hitSlop={8}>
-                          <MaterialCommunityIcons name="close-circle" size={16} color={Colors.textMuted} />
-                        </TouchableOpacity>
-                      )}
-                    </View>
-                    {filteredNestedOptions.length > 0 ? (
-                      <View style={s.chipsRow}>
-                        {filteredNestedOptions.map((n) => {
-                          const active = formData.nestedSubcategory === n.key;
-                          return (
-                            <Pressable
-                              key={n.key}
-                              onPress={() =>
-                                setField("nestedSubcategory", active ? "" : n.key)
-                              }
-                              style={[s.chip, active && s.chipActive]}
-                              hitSlop={4}
-                            >
-                              <MaterialCommunityIcons
-                                name={n.icon as any}
-                                size={13}
-                                color={active ? Colors.white : Colors.textSecondary}
-                              />
-                              <Text
-                                style={[s.chipText, active && s.chipTextActive]}
-                              >
-                                {t(n.labelKey)}
-                              </Text>
-                            </Pressable>
-                          );
-                        })}
-                      </View>
-                    ) : (
-                      <Text style={s.nestedEmptyText}>{t("postAd.noMatches")}</Text>
-                    )}
-                  </View>
-                )}
-              </React.Fragment>
-            );
-          })}
+          {primaryFields.map((field) => renderField(field))}
+
+          {extraFields.length > 0 && (
+            <CollapsibleSection
+              title={t("postAd.additionalDetails", { defaultValue: "Additional details" })}
+              hasError={extraFieldsHaveError}
+            >
+              {extraFields.map((field) => renderField(field))}
+            </CollapsibleSection>
+          )}
 
           <RegionCityPicker
             selectedRegion={formData.region || ""}
@@ -405,7 +419,7 @@ export function StepForm({
             )}
           </TouchableOpacity>
 
-          <View style={{ height: insets.bottom + 84 }} />
+          <View style={{ height: clearance }} />
         </ScrollView>
       </KeyboardAvoidingView>
     </View>

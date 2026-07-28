@@ -5,40 +5,44 @@ import { shadow } from '../../shadow';
 export function createPlanCardStyles(Colors: ColorPalette) {
   return StyleSheet.create({
     card: {
-      backgroundColor: Colors.card, borderRadius: 20,
+      backgroundColor: Colors.card, borderRadius: 16,
       borderWidth: 1, borderColor: Colors.border, overflow: 'hidden',
+      ...shadow({ color: Colors.shadow, offset: { width: 0, height: 4 }, opacity: 0.08, radius: 10, elevation: 3 }),
     },
-    stripe: { height: 5 },
+    cardRecommended: {
+      borderColor: Colors.primary, borderWidth: 1.5,
+    },
+    stripe: { height: 4 },
     badge: {
-      position: 'absolute', top: 14, right: 0,
+      position: 'absolute', top: 10, right: 0,
       flexDirection: 'row', alignItems: 'center', gap: 3,
-      paddingHorizontal: 10, paddingVertical: 4,
+      paddingHorizontal: 8, paddingVertical: 3,
       borderTopLeftRadius: 8, borderBottomLeftRadius: 8,
     },
-    badgeText: { fontSize: 10, fontWeight: '800', color: Colors.white, letterSpacing: 0.3 },
-    inner: { padding: 16 },
-    topRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 14 },
-    iconBox: { width: 46, height: 46, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
+    badgeText: { fontSize: 9, fontWeight: '800', color: Colors.white, letterSpacing: 0.3 },
+    inner: { padding: 12 },
+    topRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 },
+    iconBox: { width: 38, height: 38, borderRadius: 11, alignItems: 'center', justifyContent: 'center' },
     meta: { flex: 1 },
-    name: { fontSize: 17, fontWeight: '800' },
-    dur: { fontSize: 12, color: Colors.textMuted, marginTop: 2 },
-    exp: { fontSize: 11, color: Colors.textMuted, marginTop: 1 },
+    name: { fontSize: 16, fontWeight: '800' },
+    dur: { fontSize: 11, color: Colors.textMuted, marginTop: 1 },
+    exp: { fontSize: 10, color: Colors.textMuted, marginTop: 1 },
     priceBox: { alignItems: 'flex-end' },
-    price: { fontSize: 28, fontWeight: '900', lineHeight: 30 },
-    priceSub: { fontSize: 10, color: Colors.textMuted, fontWeight: '600' },
-    divider: { height: StyleSheet.hairlineWidth, backgroundColor: Colors.gray100, marginBottom: 14 },
-    features: { gap: 10, marginBottom: 16 },
-    featureRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+    price: { fontSize: 22, fontWeight: '900', lineHeight: 24 },
+    priceSub: { fontSize: 9, color: Colors.textMuted, fontWeight: '600' },
+    divider: { height: StyleSheet.hairlineWidth, backgroundColor: Colors.gray100, marginBottom: 10 },
+    features: { gap: 7, marginBottom: 10 },
+    featureRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
     checkCircle: {
-      width: 20, height: 20, borderRadius: 10,
+      width: 16, height: 16, borderRadius: 8,
       backgroundColor: Colors.success + '15', alignItems: 'center', justifyContent: 'center',
     },
-    featureText: { fontSize: 13, color: Colors.textSecondary, flex: 1 },
+    featureText: { fontSize: 12, color: Colors.textSecondary, flex: 1 },
     btn: {
       flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-      gap: 6, paddingVertical: 13, borderRadius: 12,
+      gap: 6, paddingVertical: 10, borderRadius: 10,
     },
-    btnText: { fontSize: 13, fontWeight: '800', color: Colors.white, letterSpacing: 0.4 },
+    btnText: { fontSize: 12, fontWeight: '800', color: Colors.white, letterSpacing: 0.3 },
   });
 }
 
@@ -47,21 +51,16 @@ export function createStyles(Colors: ColorPalette) {
     root: { flex: 1, backgroundColor: Colors.background },
 
     topBar: {
-      flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-      paddingHorizontal: 12, paddingVertical: 10,
-      borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.border,
-      backgroundColor: Colors.card,
+      flexDirection: 'row', alignItems: 'center',
+      paddingHorizontal: 16, paddingVertical: 8,
     },
     backBtn: {
-      width: 36, height: 36, borderRadius: 10,
+      width: 36, height: 36, borderRadius: 18,
       backgroundColor: Colors.gray100, alignItems: 'center', justifyContent: 'center',
     },
-    topBarTitle: { fontSize: 16, fontWeight: '700', color: Colors.textPrimary },
-    topBarSpacer: { width: 36 },
 
     scroll: { padding: 16, flexGrow: 1 },
     loadingIndicator: { marginTop: 48 },
-    bottomSpacer: { height: 100 },
 
     header: { alignItems: 'center', marginBottom: 20, gap: 6 },
     headerIcon: {
@@ -72,23 +71,30 @@ export function createStyles(Colors: ColorPalette) {
     title: { fontSize: 22, fontWeight: '800', color: Colors.textPrimary },
     sub: { fontSize: 13, color: Colors.textMuted, textAlign: 'center' },
 
-    cards: { gap: 14 },
+    cardsCol: { gap: 10 },
 
     footer: {
       position: 'absolute', left: 0, right: 0,
-      padding: 16, backgroundColor: Colors.card,
-      borderTopWidth: 1, borderTopColor: Colors.border,
-      ...shadow({ color: Colors.black, offset: { width: 0, height: -2 }, opacity: 0.06, radius: 8, elevation: 4 }),
+      paddingHorizontal: 16, paddingTop: 14, paddingBottom: 16,
+      backgroundColor: Colors.card,
+      borderTopLeftRadius: 24, borderTopRightRadius: 24,
+      borderWidth: 1, borderColor: Colors.border, borderBottomWidth: 0,
+      ...shadow({ color: Colors.black, offset: { width: 0, height: -4 }, opacity: 0.08, radius: 16, elevation: 8 }),
+    },
+    footerHandle: {
+      width: 36, height: 4, borderRadius: 2,
+      backgroundColor: Colors.border, alignSelf: 'center', marginBottom: 12,
     },
     continueBtn: {
       flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-      gap: 8, backgroundColor: Colors.primary, borderRadius: 14, paddingVertical: 16,
-      ...shadow({ color: Colors.primary, offset: { width: 0, height: 4 }, opacity: 0.3, radius: 8, elevation: 5 }),
+      gap: 8, backgroundColor: Colors.primary, borderRadius: 16, paddingVertical: 17,
+      ...shadow({ color: Colors.primary, offset: { width: 0, height: 6 }, opacity: 0.28, radius: 12, elevation: 6 }),
     },
     continueBtnText: { color: Colors.white, fontSize: 16, fontWeight: '700' },
     continueBtnOff: {
-      borderRadius: 14, paddingVertical: 16,
-      backgroundColor: Colors.gray100, alignItems: 'center',
+      flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
+      borderRadius: 16, paddingVertical: 17,
+      backgroundColor: Colors.gray100,
     },
     continueBtnOffText: { fontSize: 15, fontWeight: '600', color: Colors.textMuted },
   });

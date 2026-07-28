@@ -3,14 +3,14 @@ import type { ColorPalette } from '../../../hooks/useTheme';
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
-    wrap: { marginBottom: 14 },
-    label: { fontSize: 13, fontWeight: '600', color: Colors.textPrimary, marginBottom: 6 },
+    wrap: { marginBottom: 16 },
+    label: { fontSize: 12, fontWeight: '600', color: Colors.textMuted, marginBottom: 7, marginLeft: 4 },
     req: { color: Colors.error },
     trigger: {
       flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-      backgroundColor: Colors.inputBg, borderRadius: 10,
-      paddingHorizontal: 14, paddingVertical: 13,
-      borderWidth: 1, borderColor: Colors.border,
+      backgroundColor: Colors.surface, borderRadius: 18,
+      paddingHorizontal: 16, minHeight: 56,
+      borderWidth: 1.5, borderColor: Colors.border,
     },
     triggerError: { borderColor: Colors.error },
     triggerVal: { fontSize: 15, color: Colors.text, flex: 1 },

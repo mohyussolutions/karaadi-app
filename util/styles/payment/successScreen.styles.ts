@@ -7,10 +7,10 @@ export function createStyles(Colors: ColorPalette) {
     scroll: { padding: 20, flexGrow: 1, alignItems: 'center' },
     bottomSpacer: { height: 40 },
     iconCircle: {
-      width: 110, height: 110, borderRadius: 55,
+      width: 96, height: 96, borderRadius: 48,
       backgroundColor: Colors.success + '15', alignItems: 'center', justifyContent: 'center', marginBottom: 20,
     },
-    title: { fontSize: 26, fontWeight: '900', color: Colors.textPrimary, marginBottom: 8 },
+    title: { fontSize: 24, fontWeight: '900', color: Colors.textPrimary, marginBottom: 8, textAlign: 'center' },
     sub: { fontSize: 14, color: Colors.textSecondary, textAlign: 'center', lineHeight: 20, marginBottom: 22 },
     bold: { fontWeight: '700', color: Colors.textPrimary },
     checkCard: {
@@ -20,13 +20,6 @@ export function createStyles(Colors: ColorPalette) {
     checkRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
     checkDot: { width: 26, height: 26, borderRadius: 13, backgroundColor: Colors.success + '15', alignItems: 'center', justifyContent: 'center' },
     checkLabel: { fontSize: 14, fontWeight: '600', color: Colors.textPrimary },
-    viewBtn: {
-      flexDirection: 'row', alignItems: 'center', gap: 6,
-      marginBottom: 14, paddingVertical: 10, paddingHorizontal: 18,
-      borderRadius: 12, borderWidth: 1, borderColor: Colors.primary,
-      backgroundColor: Colors.primaryGhost,
-    },
-    viewBtnText: { fontSize: 14, fontWeight: '600', color: Colors.primary },
     doneBtn: {
       flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
       gap: 8, width: '100%', backgroundColor: Colors.primary, borderRadius: 14, paddingVertical: 16,

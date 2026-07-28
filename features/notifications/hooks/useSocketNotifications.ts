@@ -1,0 +1,71 @@
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
+import { addNotification } from '../store/notificationsSlice';
+import { getSocket } from '../../../api/sockets/socket.actions';
+import { playNotificationSound } from '../services/soundService';
+
+function toNotification(userId: string, type: string, data: any) {
+  return {
+    _id: String(data?.id ?? Date.now()),
+    userId,
+    title: data?.title ?? 'Karaadi',
+    body: data?.message ?? data?.body ?? 'You have a new notification',
+    type: data?.category ?? type,
+    read: false,
+    data: data?.link ? { link: data.link } : undefined,
+    createdAt: data?.createdAt ?? new Date().toISOString(),
+  };
+}
+
+export function useSocketNotifications() {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((s) => s.auth.user);
+
+  useEffect(() => {
+    if (!user?.id) return;
+
+    function attach() {
+      const socket = getSocket();
+      if (!socket) return;
+
+      function handleOne(type: string) {
+        return (payload: any) => {
+          playNotificationSound();
+          dispatch(addNotification(toNotification(user!.id, type, payload)));
+        };
+      }
+
+      function handleMany(type: string) {
+        return (payload: any) => {
+          const list = Array.isArray(payload) ? payload : [payload];
+          if (list.length === 0) return;
+          playNotificationSound();
+          list.forEach((item) => dispatch(addNotification(toNotification(user!.id, type, item))));
+        };
+      }
+
+      const events: Array<[string, (payload: any) => void]> = [
+        ['newNotification', handleOne('notification')],
+        ['newNotifications', handleMany('subscription_alert')],
+        ['subscription_match', handleOne('subscription_match')],
+        ['wanted_match', handleOne('wanted_match')],
+        ['i_have_this', handleOne('i_have_this')],
+        ['notification', handleOne('notification')],
+      ];
+
+      function bind() {
+        events.forEach(([event, handler]) => {
+          socket!.off(event, handler);
+          socket!.on(event, handler);
+        });
+      }
+
+      bind();
+      socket.on('connect', bind);
+    }
+
+    attach();
+    const t = setTimeout(attach, 800);
+    return () => clearTimeout(t);
+  }, [user?.id, dispatch]);
+}

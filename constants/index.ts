@@ -5,7 +5,7 @@ export * from './detailConfig';
 export * from './endpoints';
 export * from './languages';
 export * from './regex';
-export * from './socialBrand';
+export * from '../features/social/constants/socialBrand';
 export * from './sockets';
 export * from './urls';
 export * from './vehicleConfig';

@@ -11,9 +11,9 @@ import * as ImagePicker from 'expo-image-picker';
 import { z } from 'zod';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
-import { getBusinessById, getMyBusinesses, createBusiness, updateBusiness } from '../../api/core/business.actions';
+import { getBusinessById, getMyBusinesses, createBusiness, updateBusiness } from '../../features/business/api/business.actions';
 import { getImageUrl } from '../../util/helpers';
-import { CheckoutBar } from '../../components/checklist';
+import { CheckoutBar } from '../../features/subscription/components/checklist';
 import { BIZ_STEPS } from '../../config/navigation/checkbusiness';
 import type { StepItem, BusinessPlan, BusinessApplyFormState } from '../../util/types';
 import { LoadingSpinner } from '../../components/loading';
@@ -23,7 +23,7 @@ import { useAppDispatch } from '../../store/store';
 import { setListingType, setStep, setCategoryKey, setBusinessId } from '../../store/slices/newAdSlice';
 import {
   fetchBusinessPlans, selectBusinessPlan, extendBusinessPlan,
-} from '../../api/categories/businessPlan.actions';
+} from '../../features/subscription/api/businessPlan.actions';
 import { createStyles } from '../../util/styles/profile/businessCreate.styles';
 
 const APPROVAL_POLL_INTERVAL_MS = 5000;

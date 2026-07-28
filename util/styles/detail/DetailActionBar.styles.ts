@@ -3,10 +3,14 @@ import type { ColorPalette } from '../../../hooks/useTheme';
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
+    actionsBar: {
+      backgroundColor: Colors.card, borderTopWidth: 1, borderTopColor: Colors.border,
+      alignItems: 'center',
+    },
     actions: {
       flexDirection: 'row', alignItems: 'center', gap: 10,
       paddingHorizontal: 16, paddingVertical: 14,
-      backgroundColor: Colors.card, borderTopWidth: 1, borderTopColor: Colors.border,
+      width: '100%', maxWidth: 760,
     },
     callBtn: {
       flexDirection: 'row', alignItems: 'center', gap: 6,

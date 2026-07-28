@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
-import { getSocialStatus, postSocialUpdate } from '../../api/core/social.actions';
+import { getSocialStatus, postSocialUpdate } from '../../features/social/api/social.actions';
 import { SOCIAL_BRAND_COLORS } from '../../constants';
 import { SOCIAL_ICONS } from '../../util/icons/icons';
 import type { SocialPostCardProps } from '../../util/types';
@@ -82,7 +82,7 @@ export default function SocialPostCard({ title, description, price, images, list
       .then((d: SocialAvail) => {
         setAvail(d ?? { facebook: false, tiktok: false });
         setFbOn(!!isPremium90 && !!d?.facebook);
-        setTtOn(!!d?.tiktok);
+        setTtOn(!!isPremium90 && !!d?.tiktok);
       })
       .catch(() => {});
   }, [isPremium90]);
@@ -156,6 +156,8 @@ export default function SocialPostCard({ title, description, price, images, list
           statusText={ttStatus}
           onToggle={() => setTtOn((v) => !v)}
           disabled={confirmed || !avail.tiktok}
+          locked={!isPremium90}
+          lockedReason={!isPremium90 ? t('postAd.socialTtPremiumOnly', '90-Day Premium required') : undefined}
         />
       </View>
 

@@ -8,11 +8,12 @@ import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
 import { SUBSCRIPTION_ENDPOINTS } from '../../../constants';
 import { formatPrice, formatDate } from '../../../util/helpers';
-import { useSubscriptionDetail } from '../../../hooks/useSubscriptionDetail';
+import { useSubscriptionDetail } from '../../../features/subscription/hooks/useSubscriptionDetail';
 import SellerCard from '../../../components/cards/SellerCard';
 import ReportLink from '../../../components/detail/ReportLink';
+import { styles as reportLinkStyles } from '../../../util/styles/detail/reportLink.styles';
 import RecommendedSection from '../../../components/detail/RecommendedSection';
-import { SocialShareSheet } from '../../../components/social';
+import { SocialShareSheet } from '../../../features/social/components';
 import DetailNotFound from '../../../components/detail/DetailNotFound';
 import DetailActionBar from '../../../components/detail/DetailActionBar';
 import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
@@ -152,6 +153,19 @@ export default function SubscriptionDetailScreen() {
       />
 
       <ReportLink itemId={id} itemType="SUBSCRIPTION" />
+      <View style={reportLinkStyles.wrapper}>
+        <TouchableOpacity
+          style={[reportLinkStyles.btn, { borderColor: Colors.primary + '40', backgroundColor: Colors.primary + '0D' }]}
+          onPress={handleShare}
+          activeOpacity={0.75}
+        >
+          <MaterialCommunityIcons name="share-variant-outline" size={18} color={Colors.primary} />
+          <Text style={[reportLinkStyles.label, { color: Colors.primary }]}>
+            {t('subscriptionDetail.share', { defaultValue: 'Share' })}
+          </Text>
+          <MaterialCommunityIcons name="chevron-right" size={18} color={Colors.primary + '80'} />
+        </TouchableOpacity>
+      </View>
       <RecommendedSection endpoint={SUBSCRIPTION_ENDPOINTS.MY} excludeId={id} />
       <View style={styles.bottomSpacer} />
     </View>
@@ -182,15 +196,8 @@ export default function SubscriptionDetailScreen() {
         )}
 
         <DetailActionBar
-          extra={
-            <TouchableOpacity style={styles.iconBtn} onPress={handleShare}>
-              <MaterialCommunityIcons name="share-variant-outline" size={20} color={Colors.primary} />
-            </TouchableOpacity>
-          }
           onCall={ownerPhone ? (showPhone ? handleCall : () => setShowPhone(true)) : undefined}
           callLabel={showPhone ? ownerPhone! : t('realEstateDetail.showPhone')}
-          onMessage={handleMessage}
-          messageLabel={t('realEstateDetail.sendMessage')}
         />
 
         <SocialShareSheet

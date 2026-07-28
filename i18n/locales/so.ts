@@ -337,6 +337,8 @@ export const plan = {
   clickToSelect: "Guji si aad u doorato",
   days: "maalmo",
   currency: "USD",
+  perDay: "${{price}}/maalintii",
+  recommended: "Lagula Talinayo",
 } as const;
 
 export const common = {
@@ -356,6 +358,8 @@ export const common = {
   clearFilter: "Tirtir Sifeynta",
   minPrice: "Qiimaha ugu yar",
   maxPrice: "Qiimaha ugu badan",
+  yes: "Haa",
+  no: "Maya",
   updateAvailable: "Cusboonaysiin ayaa la heli karaa",
   restart: "Dib u bilow",
   updating: "Cusboonaysiinta...",
@@ -410,6 +414,13 @@ export const postAd = {
   minPhotosHint: "(ugu yaraan {{min}})",
   addPhoto: "Ku dar",
   maxReached: "Xadka waa la gaaray",
+  addPhotoSourceTitle: "Ku Dar Sawir",
+  takePhoto: "Qaad Sawir",
+  chooseFromLibrary: "Ka Dooro Sawirrada",
+  cameraPermissionTitle: "Waxaa loo baahan yahay ogolaanshaha kamarada",
+  cameraPermissionMessage: "Fadlan ka ogolow gelitaanka kamarada dejinta qalabkaaga si aad sawir u qaadato.",
+  cameraOpenSettings: "Fur Dejinta",
+  cancel: "Jooji",
   activatingListing: "Waa la firfircooneynayaa xayeysiiskaaga…",
   completePayment: "Dhammaystir Lacag-bixinta",
   payVia: "Bixi ${{total}} adigoo isticmaalaya {{method}}",
@@ -474,7 +485,7 @@ export const about = {
     services:
       "Adeegyada: Hel ama bixi adeegyo sida dhismaha, hagaajinta, iyo la-talinta.",
   },
-  contactHeading: "Nala Soo Xiriir",
+  contactHeading: "Nala Soo Xiriir Karaadi",
   contactIntro:
     "Ma qabtaa su'aal, talo ama cabasho? Fadlan nala soo xiriir — waxaan diyaar u nahay inaan ku caawino.",
   contact: {
@@ -500,9 +511,15 @@ export const terms = {
 } as const;
 
 export const contact = {
-  title: "Nala Soo Xiriir",
+  title: "Nala Soo Xiriir Karaadi",
   heading: "Nala Soo Xiriir Karaadi",
   description: "La xidhiidh kooxda Karaadi wixii taageero ama su'aalo ah.",
+  supportEmailSubject: "Codsi Taageero Karaadi",
+  supportMessageIntro: "Asc kooxda Karaadi, waxaan u baahanahay taageero.",
+  supportMessageName: "Magac",
+  supportMessageEmail: "E-mail",
+  supportMessagePhone: "Telefoon",
+  supportMessageUserId: "Aqoonsiga User-ka",
   metaTitle: "Nala Soo Xiriir Karaadi",
   metaDescription:
     "Faahfaahinta xiriirka iyo taageerada isticmaalayaasha Karaadi.",
@@ -1083,6 +1100,16 @@ export const createFarmequipment = {
     plow: "Qalabka Qodista",
     irrigationSystem: "Nidaamka Waraabka",
   },
+} as const;
+
+export const createJobs = {
+  titleLabel: "Cinwaanka Shaqada",
+  jobTypeLabel: "Nooca Shaqada",
+  companyLabel: "Shirkadda",
+  salaryRangeLabel: "Xadka Mushaharka ($)",
+  experienceLevelLabel: "Heerka Khibradda",
+  educationLevelLabel: "Heerka Waxbarashada",
+  applicationDeadlineLabel: "Taariikhda Dhammaadka Codsiga",
 } as const;
 
 export const createBoats = {
@@ -1876,6 +1903,25 @@ export const supportModule = {
     bodyPlaceholder: "Sideen ku caawin karnaa?",
     submit: "Gudbi Tigidh",
     submitting: "Waa la gudbinayaa...",
+    submitError: "Lama gudbin karin tigidhkaaga. Fadlan mar kale isku day.",
+  },
+} as const;
+
+export const ticketHistory = {
+  loginRequired: "Fadlan gelid si aad u aragto taariikhda tigidhyadaada.",
+  title: "Tigidhyadayda",
+  noTickets: "Wax tigidh ah lama helin.",
+  id: "ID:",
+  open: "Fur",
+  close: "Xir",
+  typeMessage: "Qor fariin...",
+  yourOriginalRequest: "Codsigaaga Asalka ah",
+  you: "Adiga",
+  supportTeam: "Kooxda Taageerada",
+  caseResolved: "Kiiska waa la xaliyay",
+  status: {
+    done: "Dhammaystiran",
+    inProgress: "Socda",
   },
 } as const;
 
@@ -2213,6 +2259,9 @@ export const aboutKaraadiPage = {
   title: "Ku Saabsan Karaadi",
   subtitle: "Wax kasta oo aad u baahan tahay ku saabsan suuqa Karaadi",
   open: "Taabo si aad u aragto",
+  followUs: "Noo soo raac",
+  rightsShort: "{{brand}}. Xuquuqda waa la ilaaliyaa.",
+  developedBy: "Waxaa sameeyay",
 } as const;
 
 export const recommendations = {
@@ -2448,6 +2497,7 @@ const so = {
   createCars,
   createMotorcycle,
   createFarmequipment,
+  createJobs,
   createBoats,
   mohyusLogoAlt,
   subcategories,
@@ -2457,6 +2507,7 @@ const so = {
   messages: messages,
   chats,
   supportModule,
+  ticketHistory,
   helpPage,
   cookiesPage,
   privacyPage,

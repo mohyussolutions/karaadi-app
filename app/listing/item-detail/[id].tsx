@@ -17,7 +17,7 @@ import ZoomModal from '../../../components/modals/ZoomModal';
 import SellerCard from '../../../components/cards/SellerCard';
 import ReportLink from '../../../components/detail/ReportLink';
 import RecommendedSection from '../../../components/detail/RecommendedSection';
-import { SocialShareSheet } from '../../../components/social';
+import { SocialShareSheet } from '../../../features/social/components';
 import DetailNotFound from '../../../components/detail/DetailNotFound';
 import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
 import { createStyles } from '../../../util/styles/listing/itemDetail.styles';

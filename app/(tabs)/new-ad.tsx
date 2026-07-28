@@ -1,32 +1,30 @@
 import { useEffect, useCallback } from "react";
-import { View, Text, Image, Alert } from "react-native";
+import { View, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { useFocusEffect } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { useThemedStyles } from "../../hooks/useTheme";
 import { createStyles } from "../../util/styles/tabs/newAd.styles";
 import { LoadingSpinner } from "../../components/loading";
-import { getImageUrl } from "../../util/helpers";
 import { useAuthStore } from "../../store/authStore";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import {
-  setStep,
   setListingType,
   setCategoryKey,
   setSelectedPlan,
   resetNewAd,
   fetchPlans,
 } from "../../store/slices/newAdSlice";
-import { CheckoutBar } from "../../components/checklist";
+import { useNewAdStepNavigation } from "../../hooks/useNewAdStepNavigation";
+import { CheckoutBar } from "../../features/subscription/components/checklist";
 import { StepType } from "../../features/new-ad/components/StepType";
 import { StepCategory } from "../../features/new-ad/components/StepCategory";
 import { StepForm } from "../../features/new-ad/components/forms";
 import { StepPlan } from "../../features/new-ad/components/StepPlan";
-import { StepSummary, StepPayment } from "../../components/payment";
+import { StepSummary, StepPayment } from "../../features/subscription/components/payment";
 
 import type { ListingType, Step, StepItem } from "../../util/types/new-ad.types";
 import { MAIN_CATEGORIES } from "../../config/navigation/categories";
-import { placeholderAvatar } from "../../constants";
 
 const STEP_INDEX: Record<Step, number> = {
   login: 0,
@@ -37,8 +35,6 @@ const STEP_INDEX: Record<Step, number> = {
   summary: 4,
   payment: 5,
 };
-
-const AVATAR = placeholderAvatar(80, '2563eb', 'Me');
 
 export default function NewAdScreen() {
   const router = useRouter();
@@ -68,6 +64,8 @@ export default function NewAdScreen() {
     }
   }, [step]);
 
+  const goToStep = useNewAdStepNavigation();
+
   const submitStatus = useAppSelector((s) => s.newAd.submitStatus);
   useFocusEffect(
     useCallback(() => {
@@ -91,18 +89,11 @@ export default function NewAdScreen() {
     : AD_STEPS;
 
   const s = useThemedStyles(createStyles);
-  const isCheckoutStep = step === "summary" || step === "payment";
 
   if (!user) return <LoadingSpinner fullScreen />;
 
   return (
     <View style={s.safe}>
-      {!isCheckoutStep && (
-        <View style={s.header}>
-          <Image source={{ uri: getImageUrl(user.profileImage) || AVATAR }} style={s.avatar} />
-          <Text style={s.headerTitle}>{t("nav.newAd")}</Text>
-        </View>
-      )}
       <CheckoutBar steps={adSteps} currentIndex={STEP_INDEX[step]} />
 
       {step === "type" && (
@@ -113,7 +104,7 @@ export default function NewAdScreen() {
               return;
             }
             dispatch(setListingType(type));
-            dispatch(setStep("category"));
+            goToStep("category");
           }}
         />
       )}
@@ -122,8 +113,8 @@ export default function NewAdScreen() {
         <StepCategory
           selected={categoryKey}
           onSelect={(key) => dispatch(setCategoryKey(key))}
-          onNext={() => dispatch(setStep("form"))}
-          onBack={() => dispatch(setStep("type"))}
+          onNext={() => goToStep("form")}
+          onBack={() => goToStep("type")}
         />
       )}
 
@@ -140,10 +131,10 @@ export default function NewAdScreen() {
                 [{ text: t("auth.common.ok"), onPress: () => router.replace("/profile/businesses") }],
               );
             } else {
-              dispatch(setStep("plan"));
+              goToStep("plan");
             }
           }}
-          onBack={() => dispatch(setStep("category"))}
+          onBack={() => goToStep("category")}
         />
       )}
 
@@ -153,8 +144,8 @@ export default function NewAdScreen() {
           loading={plansLoading}
           selected={selectedPlan}
           onSelect={(plan) => dispatch(setSelectedPlan(plan))}
-          onNext={() => dispatch(setStep("summary"))}
-          onBack={() => dispatch(setStep("form"))}
+          onNext={() => goToStep("summary")}
+          onBack={() => goToStep("form")}
         />
       )}
 
@@ -162,8 +153,8 @@ export default function NewAdScreen() {
         <StepSummary
           plan={selectedPlan}
           categoryName={categoryMeta?.name}
-          onNext={() => dispatch(setStep("payment"))}
-          onBack={() => dispatch(setStep("plan"))}
+          onNext={() => goToStep("payment")}
+          onBack={() => goToStep("plan")}
         />
       )}
 
@@ -173,7 +164,7 @@ export default function NewAdScreen() {
           listingId={createdId}
           listingTitle={createdTitle}
           categoryKey={categoryKey}
-          onBack={() => dispatch(setStep("summary"))}
+          onBack={() => goToStep("summary")}
         />
       )}
     </View>

@@ -36,7 +36,6 @@ export type {
   DetailActionBarProps, RecommendedSectionProps,
   SellerCardProps, ListingCardProps, MyAdCardProps,
   SocialShareSheetProps, SocialAction, SocialPostCardProps,
-  MessageBanner, NotificationBannerProps,
   LoadingSpinnerProps, EmptyStateProps, SplashScreenProps, ResponsiveLayoutProps,
   PaymentStatusConfig, PaymentCategoryInfo,
 } from './component.types';
@@ -51,16 +50,12 @@ export type {
   PollingOverlayProps, OrderSummaryProps, StepItem, CheckoutBarProps,
 } from './new-ad.types';
 
-export interface Notification {
-  _id: string;
-  userId: string;
-  title: string;
-  body: string;
-  type: string;
-  read: boolean;
-  data?: Record<string, unknown>;
-  createdAt: string;
-}
+export type { Notification, MessageBanner, NotificationBannerProps } from '../../features/notifications/types/notification.types';
+
+export type {
+  SupportRole, TicketStatus, Ticket, TicketMessage,
+  CreateTicketPayload, AddTicketMessagePayload,
+} from './support.types';
 
 import type { ComponentProps } from 'react';
 import type MaterialCommunityIconsType from '@expo/vector-icons/MaterialCommunityIcons';

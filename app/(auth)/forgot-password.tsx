@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { useForgotPassword } from '../../hooks/useForgotPassword';
+import { useForgotPassword } from '../../features/auth/hooks/useForgotPassword';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/auth/forgot-password.styles';

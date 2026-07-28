@@ -92,11 +92,17 @@ export const MESSAGES_ENDPOINTS = {
   UNREAD_COUNT: (userId: string) => `/api/messages/unread/${userId}`,
 };
 
+export const SUPPORT_ENDPOINTS = {
+  TICKETS: '/api/contactUs/tickets',
+  TICKET_BY_ID: (ticketId: number | string) => `/api/contactUs/tickets/${ticketId}`,
+  MESSAGES: (ticketId: number | string) => `/api/contactUs/tickets/${ticketId}/messages`,
+};
+
 export const NOTIFICATIONS_ENDPOINTS = {
   LIST: (userId: string) => `/api/notifications/user/${userId}`,
   MARK_READ: (id: string) => `/api/notifications/${id}/read`,
   MARK_ALL_READ: (userId: string) => `/api/notifications/user/${userId}/read-all`,
-  UNREAD_COUNT: (userId: string) => `/api/notifications/user/${userId}/unread-count`,
+  STATS: (userId: string) => `/api/notifications/user/${userId}/stats`,
   CLEAR_ALL: (userId: string) => `/api/notifications/user/${userId}/clear-all`,
   DELETE: (id: string) => `/api/notifications/${id}`,
 };

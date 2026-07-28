@@ -4,12 +4,14 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
+import { useTabBarClearance } from '../../../hooks/useTabBarClearance';
 import { planStyle, PLAN_CARD_COLORS } from '../constants/config';
 import type { Plan, StepPlanProps } from '../../../util/types';
 import { createStyles, createPlanCardStyles } from '../../../util/styles/new-ad/stepPlan.styles';
+
+const FOOTER_HEIGHT = 108;
 
 function PlanCard({
   plan, selected, isBestValue, onSelect,
@@ -25,7 +27,11 @@ function PlanCard({
 
   return (
     <TouchableOpacity
-      style={[pc.card, selected && { borderColor: ps.color, borderWidth: 2 }]}
+      style={[
+        pc.card,
+        !!plan.popular && !selected && pc.cardRecommended,
+        selected && { borderColor: ps.color, borderWidth: 2 },
+      ]}
       onPress={() => onSelect(plan)}
       activeOpacity={0.88}
     >
@@ -60,7 +66,9 @@ function PlanCard({
             <Text style={[pc.price, { color: ps.color }]}>
               {plan.price === 0 ? t('postAd.free') : `$${plan.price}`}
             </Text>
-            {plan.price > 0 && <Text style={pc.priceSub}>{t('plan.currency')}</Text>}
+            {plan.price > 0 && (
+              <Text style={pc.priceSub}>{t('plan.perDay', { price: (plan.price / plan.days).toFixed(2) })}</Text>
+            )}
           </View>
         </View>
 
@@ -90,8 +98,9 @@ export function StepPlan({ plans, loading, selected, onSelect, onNext, onBack }:
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
-  const insets = useSafeAreaInsets();
+  const clearance = useTabBarClearance();
   const maxPrice = plans.length > 0 ? Math.max(...plans.map((p) => p.price)) : 0;
+  const sortedPlans = [...plans].sort((a, b) => a.days - b.days);
 
   return (
     <View style={s.root}>
@@ -99,8 +108,6 @@ export function StepPlan({ plans, loading, selected, onSelect, onNext, onBack }:
         <TouchableOpacity style={s.backBtn} onPress={onBack} hitSlop={8}>
           <MaterialCommunityIcons name="arrow-left" size={20} color={Colors.textPrimary} />
         </TouchableOpacity>
-        <Text style={s.topBarTitle}>{t('postAd.choosePlanTitle')}</Text>
-        <View style={s.topBarSpacer} />
       </View>
 
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
@@ -115,12 +122,12 @@ export function StepPlan({ plans, loading, selected, onSelect, onNext, onBack }:
         {loading ? (
           <ActivityIndicator size="large" color={Colors.primary} style={s.loadingIndicator} />
         ) : (
-          <View style={s.cards}>
-            {plans.map((plan) => (
+          <View style={s.cardsCol}>
+            {sortedPlans.map((plan) => (
               <PlanCard
                 key={plan.key}
                 plan={plan}
-                selected={selected?._id === plan._id}
+                selected={selected?.key === plan.key}
                 isBestValue={maxPrice > 0 && plan.price === maxPrice}
                 onSelect={onSelect}
               />
@@ -128,10 +135,11 @@ export function StepPlan({ plans, loading, selected, onSelect, onNext, onBack }:
           </View>
         )}
 
-        <View style={s.bottomSpacer} />
+        <View style={{ height: clearance + FOOTER_HEIGHT }} />
       </ScrollView>
 
-      <View style={[s.footer, { bottom: insets.bottom + 84 }]}>
+      <View style={[s.footer, { bottom: clearance }]}>
+        <View style={s.footerHandle} />
         {selected ? (
           <TouchableOpacity style={s.continueBtn} onPress={onNext} activeOpacity={0.88}>
             <MaterialCommunityIcons name="lock-outline" size={18} color={Colors.white} />
@@ -140,6 +148,7 @@ export function StepPlan({ plans, loading, selected, onSelect, onNext, onBack }:
           </TouchableOpacity>
         ) : (
           <View style={s.continueBtnOff}>
+            <MaterialCommunityIcons name="gesture-tap" size={16} color={Colors.textMuted} />
             <Text style={s.continueBtnOffText}>{t('postAd.selectPlanToContinue')}</Text>
           </View>
         )}

@@ -1,6 +1,6 @@
 import { useAuth } from '../hooks/useAuth';
 import { useAppSelector, useAppDispatch } from './store';
-import { clearCredentials, setCredentials } from './slices/authSlice';
+import { clearCredentials, setCredentials } from '../features/auth/store/authSlice';
 import * as SecureStore from '../util/secureStorage';
 import { disconnectSocket, connectSocket } from '../api/sockets/socket.actions';
 import type { User } from '../util/types/user.types';

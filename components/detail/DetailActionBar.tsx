@@ -20,35 +20,37 @@ export default function DetailActionBar({
   const detailStyles = useThemedStyles(createStyles);
 
   return (
-    <View style={detailStyles.actions}>
-      {extra}
+    <View style={detailStyles.actionsBar}>
+      <View style={detailStyles.actions}>
+        {extra}
 
-      {onCall && (
-        <TouchableOpacity style={detailStyles.callBtn} onPress={onCall}>
-          <MaterialCommunityIcons name="phone" size={20} color={Colors.primary} />
-          {callLabel ? <Text style={detailStyles.callText}>{callLabel}</Text> : null}
-        </TouchableOpacity>
-      )}
+        {onCall && (
+          <TouchableOpacity style={detailStyles.callBtn} onPress={onCall}>
+            <MaterialCommunityIcons name="phone" size={20} color={Colors.primary} />
+            {callLabel ? <Text style={detailStyles.callText}>{callLabel}</Text> : null}
+          </TouchableOpacity>
+        )}
 
-      {priceLabel && (
-        <View style={detailStyles.actionsLeft}>
-          <Text style={detailStyles.actionPrice} numberOfLines={1}>{priceLabel}</Text>
-          {titleLabel ? (
-            <Text style={detailStyles.actionTitle} numberOfLines={1}>{titleLabel}</Text>
-          ) : null}
-        </View>
-      )}
+        {priceLabel && (
+          <View style={detailStyles.actionsLeft}>
+            <Text style={detailStyles.actionPrice} numberOfLines={1}>{priceLabel}</Text>
+            {titleLabel ? (
+              <Text style={detailStyles.actionTitle} numberOfLines={1}>{titleLabel}</Text>
+            ) : null}
+          </View>
+        )}
 
-      {onMessage && (
-        <TouchableOpacity
-          style={[detailStyles.msgBtn, messageDisabled && detailStyles.msgBtnDisabled]}
-          onPress={onMessage}
-          disabled={messageDisabled}
-        >
-          <MaterialCommunityIcons name={messageIcon as never} size={20} color={Colors.white} />
-          <Text style={detailStyles.msgBtnText}>{messageLabel}</Text>
-        </TouchableOpacity>
-      )}
+        {onMessage && (
+          <TouchableOpacity
+            style={[detailStyles.msgBtn, messageDisabled && detailStyles.msgBtnDisabled]}
+            onPress={onMessage}
+            disabled={messageDisabled}
+          >
+            <MaterialCommunityIcons name={messageIcon as never} size={20} color={Colors.white} />
+            <Text style={detailStyles.msgBtnText}>{messageLabel}</Text>
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 }

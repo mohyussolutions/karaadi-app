@@ -6,8 +6,8 @@ import { toggleFavorite } from '../store/slices/favoritesSlice';
 import { useAuthStore } from '../store/authStore';
 import { getVehicleDetailById } from '../api/categories/listing.actions';
 import { VEHICLE_ENDPOINTS } from '../constants/detailConfig';
-import { getCachedListing } from '../services/listingCache';
-import { showToast } from '../services/toastService';
+import { getCachedListing } from '../util/cache/listingCache';
+import { showToast } from '../util/cache/toastService';
 import type { VehicleListing } from '../util/types/listing.types';
 
 export function useVehicleDetail(id: string, category: string) {

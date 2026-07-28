@@ -6,7 +6,7 @@ import {
 import { useLocalSearchParams } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useResetPassword } from '../../hooks/useResetPassword';
+import { useResetPassword } from '../../features/auth/hooks/useResetPassword';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/auth/reset-password.styles';

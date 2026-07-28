@@ -6,8 +6,8 @@ import { toggleFavorite } from '../store/slices/favoritesSlice';
 import { useAuthStore } from '../store/authStore';
 import { getMarketplaceItemById } from '../api/categories/marketplace.actions';
 
-import { getCachedListing } from '../services/listingCache';
-import { showToast } from '../services/toastService';
+import { getCachedListing } from '../util/cache/listingCache';
+import { showToast } from '../util/cache/toastService';
 import type { MarketplaceItem } from '../util/types/listing.types';
 
 export function useItemDetail(id: string) {

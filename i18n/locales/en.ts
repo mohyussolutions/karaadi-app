@@ -329,7 +329,7 @@ export const about = {
     services:
       "Services: Find or offer services like construction, repairs, and consulting.",
   },
-  contactHeading: "Contact Us",
+  contactHeading: "Contact Karaadi",
   contactIntro:
     "Have questions, feedback, or concerns? Please contact us — we're here to help.",
   contact: {
@@ -355,9 +355,15 @@ export const terms = {
 } as const;
 
 export const contact = {
-  title: "Contact Us",
+  title: "Contact Karaadi",
   heading: "Contact Karaadi",
   description: "Get in touch with the Karaadi team for support or inquiries.",
+  supportEmailSubject: "Karaadi Support Request",
+  supportMessageIntro: "Hello Karaadi team, I need support.",
+  supportMessageName: "Name",
+  supportMessageEmail: "Email",
+  supportMessagePhone: "Phone",
+  supportMessageUserId: "User ID",
   metaTitle: "Contact Karaadi",
   metaDescription: "Support and contact information for Karaadi.",
 } as const;
@@ -936,6 +942,16 @@ export const createFarmequipment = {
   },
 } as const;
 
+export const createJobs = {
+  titleLabel: "Job Title",
+  jobTypeLabel: "Job Type",
+  companyLabel: "Company",
+  salaryRangeLabel: "Salary Range ($)",
+  experienceLevelLabel: "Experience Level",
+  educationLevelLabel: "Education Level",
+  applicationDeadlineLabel: "Application Deadline",
+} as const;
+
 export const createBoats = {
   title: "Boats Listing",
   pageTitle: "Boats",
@@ -1325,6 +1341,8 @@ export const common = {
   clearFilter: "Clear filter",
   minPrice: "Min Price",
   maxPrice: "Max Price",
+  yes: "Yes",
+  no: "No",
   updateAvailable: "Update available",
   restart: "Restart",
   updating: "Updating...",
@@ -1755,6 +1773,8 @@ export const plan = {
   clickToSelect: "Click to select",
   days: "days",
   currency: "USD",
+  perDay: "${{price}}/day",
+  recommended: "Recommended",
 } as const;
 
 export const summary = {
@@ -1806,6 +1826,13 @@ export const postAd = {
   minPhotosHint: "(min {{min}})",
   addPhoto: "Add",
   maxReached: "Max reached",
+  addPhotoSourceTitle: "Add Photo",
+  takePhoto: "Take Photo",
+  chooseFromLibrary: "Choose from Library",
+  cameraPermissionTitle: "Camera access needed",
+  cameraPermissionMessage: "Please allow camera access in your device settings to take photos.",
+  cameraOpenSettings: "Open Settings",
+  cancel: "Cancel",
   activatingListing: "Activating your listing…",
   completePayment: "Complete Payment",
   payVia: "Pay ${{total}} via {{method}}",
@@ -2025,6 +2052,25 @@ export const supportModule = {
     bodyPlaceholder: "How can we help you?",
     submit: "Submit Ticket",
     submitting: "Submitting...",
+    submitError: "Could not submit your ticket. Please try again.",
+  },
+} as const;
+
+export const ticketHistory = {
+  loginRequired: "Please log in to view your ticket history.",
+  title: "My Tickets",
+  noTickets: "No tickets found.",
+  id: "ID:",
+  open: "Open",
+  close: "Close",
+  typeMessage: "Type a message...",
+  yourOriginalRequest: "Your Original Request",
+  you: "You",
+  supportTeam: "Support Team",
+  caseResolved: "Case Resolved",
+  status: {
+    done: "Done",
+    inProgress: "In Progress",
   },
 } as const;
 
@@ -2197,6 +2243,9 @@ export const aboutKaraadiPage = {
   title: "About Karaadi",
   subtitle: "Everything you need to know about the Karaadi marketplace",
   open: "Tap to view",
+  followUs: "Follow Us",
+  rightsShort: "{{brand}}. All rights reserved.",
+  developedBy: "Developed by",
 } as const;
 
 export const recommendations = {
@@ -2425,6 +2474,7 @@ const en = {
   createCars,
   createMotorcycle,
   createFarmequipment,
+  createJobs,
   createBoats,
   subcategories,
   marketplace,
@@ -2441,6 +2491,7 @@ const en = {
   paymentPage,
   subscription,
   supportModule,
+  ticketHistory,
   helpPage,
   cookiesPage,
   privacyPage,
