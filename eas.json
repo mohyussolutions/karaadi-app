@@ -4,29 +4,28 @@
     "appVersionSource": "remote"
   },
   "build": {
+    "base": {
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://api.karaadi.com"
+      }
+    },
     "development": {
+      "extends": "base",
       "developmentClient": true,
       "distribution": "internal",
-      "env": {
-        "EXPO_PUBLIC_API_URL": "https://karaadi.onrender.com"
-      },
       "channel": "development"
     },
     "preview": {
+      "extends": "base",
       "distribution": "internal",
       "android": {
         "buildType": "apk"
       },
-      "env": {
-        "EXPO_PUBLIC_API_URL": "https://karaadi.onrender.com"
-      },
       "channel": "preview"
     },
     "production": {
+      "extends": "base",
       "autoIncrement": true,
-      "env": {
-        "EXPO_PUBLIC_API_URL": "https://karaadi.onrender.com"
-      },
       "channel": "production",
       "android": {
         "buildType": "app-bundle"
