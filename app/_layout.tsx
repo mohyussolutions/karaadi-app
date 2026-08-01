@@ -1,28 +1,31 @@
 import { useEffect, useState } from "react";
+
 import { Appearance, Platform, View } from "react-native";
+
 import { Stack, usePathname } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import * as NavigationBar from "expo-navigation-bar";
+import { NavigationBar } from "expo-navigation-bar";
 import * as SystemUI from "expo-system-ui";
 import { useFonts } from "expo-font";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import GlobalHeader from "../components/layout/GlobalHeader";
 import BottomTabBar from "../components/layout/BottomTabBar";
-import Hage from "../features/ai-assistant";
 import { EulaModal } from "../components/modals/EulaModal";
-import NotificationBanner from "../features/notifications/components/NotificationBanner";
 import { LoadingSpinner, SplashScreen } from "../components/loading";
 import { SaveToast, UpdateBanner } from "../components/shared";
+import Hage from "../features/ai-assistant";
+import NotificationBanner from "../features/notifications/components/NotificationBanner";
 import LanguageSync from "../i18n/LanguageSync";
-
 import { useAppInit } from "../hooks/useAppInit";
+import { useThemeColors, useThemeMode } from "../hooks/useTheme";
+import { useShowTabBar } from "../hooks/useShowTabBar";
 import { useMessageBanner } from "../features/chat/hooks/useMessageBanner";
 import { useSocketMessages } from "../features/chat/hooks/useSocketMessages";
 import { useSocketNotifications } from "../features/notifications/hooks/useSocketNotifications";
 import { useNotificationTap } from "../features/notifications/hooks/useNotificationTap";
-import { useThemeColors, useThemeMode } from "../hooks/useTheme";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({ ...MaterialCommunityIcons.font });
@@ -30,7 +33,7 @@ export default function RootLayout() {
   const [showEula, setShowEula] = useState(false);
 
   useEffect(() => {
-    AsyncStorage.getItem('karaadi_eula_accepted_v1').then((val) => {
+    AsyncStorage.getItem("karaadi_eula_accepted_v1").then((val) => {
       if (!val) setShowEula(true);
     });
   }, []);
@@ -50,11 +53,7 @@ export default function RootLayout() {
   const { mode, resolved } = useThemeMode();
   const Colors = useThemeColors();
   const pathname = usePathname();
-  const isNewAdFlow = pathname.startsWith("/(tabs)/new-ad") || pathname.startsWith("/new-ad");
-  const showTabBar = !pathname.startsWith("/(auth)")
-    && !pathname.startsWith("/listing")
-    && !pathname.startsWith("/profile/chat")
-    && !isNewAdFlow;
+  const showTabBar = useShowTabBar(pathname);
 
   useEffect(() => {
     if (Platform.OS !== "web") {
@@ -159,7 +158,7 @@ export default function RootLayout() {
       <EulaModal
         visible={showEula}
         onAccept={() => {
-          AsyncStorage.setItem('karaadi_eula_accepted_v1', '1');
+          AsyncStorage.setItem("karaadi_eula_accepted_v1", "1");
           setShowEula(false);
         }}
       />

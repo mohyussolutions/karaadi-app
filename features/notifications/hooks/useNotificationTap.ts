@@ -3,6 +3,9 @@ import { LogBox, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import { getListingDetailRoute } from "../../../util/helpers/nav.routing";
 
+type Router = ReturnType<typeof useRouter>;
+type NotificationData = Record<string, any>;
+
 LogBox.ignoreLogs([
   "expo-notifications: Android Push notifications",
   "`expo-notifications` functionality is not fully supported in Expo Go",
@@ -13,6 +16,66 @@ try {
   Notifications = require("expo-notifications");
 } catch {}
 
+const ROUTES = {
+  chat: "/profile/chat",
+  wanted: "/profile/wanted",
+  subscription: "/profile/subscription",
+  messages: "/(tabs)/messages",
+  notifications: "/profile/notifications",
+} as const;
+
+function getChatId(data: NotificationData) {
+  return data?.chatId ?? data?.chat_id ?? data?.conversationId ?? data?.conversation_id;
+}
+
+function navigateToChat(router: Router, data: NotificationData, chatId: string) {
+  router.push({
+    pathname: ROUTES.chat,
+    params: {
+      chatId: String(chatId),
+      userId: data.senderId || "",
+      username: data.username || "Chat",
+    },
+  });
+}
+
+function navigateToAlertMatch(router: Router, data: NotificationData) {
+  if (data?.listingId && data?.category) {
+    router.push(
+      getListingDetailRoute({ id: data.listingId, category: data.category }) as any,
+    );
+  } else {
+    router.push(ROUTES.wanted);
+  }
+}
+
+function handleNotificationData(router: Router, data: NotificationData) {
+  const type = data?.type as string | undefined;
+  const chatId = getChatId(data);
+
+  if (chatId) {
+    navigateToChat(router, data, chatId);
+    return;
+  }
+
+  if (type === "alert_match" || type === "new_listing" || type === "saved_search") {
+    navigateToAlertMatch(router, data);
+    return;
+  }
+
+  if (type === "subscription" || type === "subscription_expiry") {
+    router.push(ROUTES.subscription);
+    return;
+  }
+
+  if (type === "message") {
+    router.push(ROUTES.messages);
+    return;
+  }
+
+  router.push(ROUTES.notifications);
+}
+
 export function useNotificationTap() {
   const router = useRouter();
 
@@ -20,44 +83,8 @@ export function useNotificationTap() {
     if (!Notifications?.addNotificationResponseReceivedListener) return;
 
     const handleResponse = (response: any) => {
-      const data = response.notification.request.content.data as Record<string, any>;
-      const type = data?.type as string | undefined;
-      const chatId = data?.chatId ?? data?.chat_id ?? data?.conversationId ?? data?.conversation_id;
-
-      if (chatId) {
-        router.push({
-          pathname: "/profile/chat",
-          params: {
-            chatId: String(chatId),
-            userId: data.senderId || "",
-            username: data.username || "Chat",
-          },
-        });
-        return;
-      }
-
-      if (type === "alert_match" || type === "new_listing" || type === "saved_search") {
-        if (data?.listingId && data?.category) {
-          router.push(
-            getListingDetailRoute({ id: data.listingId, category: data.category }) as any,
-          );
-        } else {
-          router.push("/profile/wanted");
-        }
-        return;
-      }
-
-      if (type === "subscription" || type === "subscription_expiry") {
-        router.push("/profile/subscription");
-        return;
-      }
-
-      if (type === "message") {
-        router.push("/(tabs)/messages");
-        return;
-      }
-
-      router.push("/profile/notifications");
+      const data = response.notification.request.content.data as NotificationData;
+      handleNotificationData(router, data);
     };
 
     if (Platform.OS !== "web") {
