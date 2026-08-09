@@ -18,7 +18,7 @@ import { storeRef } from './storeRef';
 const persistConfig = {
   key: 'karaadi-mobile-v1',
   storage: AsyncStorage,
-  whitelist: ['auth', 'language', 'theme', 'favorites', 'feed', 'notificationSettings'],
+  whitelist: ['auth', 'language', 'theme', 'favorites', 'notificationSettings'],
 };
 
 const rootReducer = combineReducers({

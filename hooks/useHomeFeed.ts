@@ -1,8 +1,9 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useAppSelector, useAppDispatch } from '../store/store';
 import { fetchFeedGroup, getHomeFeedRecommendations } from '../api/categories/feed.actions';
-import { mergeListings, setMemCache, writeDiskCache, readDiskCache } from '../util/cache/feedCacheService';
-import { setFeed, setRecommendations, isFeedFresh } from '../store/slices/feedSlice';
+import { mergeListings } from '../util/cache/feedCacheService';
+import { waitForImages } from '../util/helpers';
+import { setFeed, setRecommendations } from '../store/slices/feedSlice';
 import type { ListingBase } from '../util/types/listing.types';
 
 const INITIAL_VISIBLE = 20;
@@ -51,40 +52,26 @@ export function useHomeFeed() {
   const user = useAppSelector((s) => s.auth.user);
   const listings = useAppSelector((s) => s.feed.listings ?? []);
   const recommendations = useAppSelector((s) => s.feed.recommendations ?? []);
-  const fetchedAt = useAppSelector((s) => s.feed.fetchedAt);
 
   const [refreshing, setRefreshing] = useState(false);
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
 
-  const fetchedAtRef = useRef(fetchedAt);
-  fetchedAtRef.current = fetchedAt;
-
   useEffect(() => {
     const ctrl = new AbortController();
     async function init() {
-      if (isFeedFresh(fetchedAtRef.current)) return;
-
-      const disk = await readDiskCache();
-      if (disk && disk.length > 0 && !ctrl.signal.aborted) {
-        dispatch(setFeed(sortByTierRandom(disk)));
-        setMemCache(disk);
-      }
-
       const fast = await fetchFeedGroup('fast', ctrl.signal);
       if (ctrl.signal.aborted) return;
       if (fast.length > 0) {
         const sorted = sortByTierRandom(fast);
+        await waitForImages(sorted, INITIAL_VISIBLE);
+        if (ctrl.signal.aborted) return;
         dispatch(setFeed(sorted));
-        setMemCache(fast);
-        writeDiskCache(fast);
       }
 
       const slow = await fetchFeedGroup('slow', ctrl.signal);
       if (ctrl.signal.aborted || slow.length === 0) return;
-      const merged = mergeListings(fast.length > 0 ? fast : (disk ?? []), slow);
+      const merged = mergeListings(fast, slow);
       dispatch(setFeed(sortByTierRandom(merged)));
-      setMemCache(merged);
-      writeDiskCache(merged);
     }
     init();
     return () => ctrl.abort();
@@ -93,7 +80,15 @@ export function useHomeFeed() {
   useEffect(() => {
     if (!user) return;
     const ctrl = new AbortController();
-    fetchRecommendations(ctrl.signal).then((recs) => dispatch(setRecommendations(recs)));
+    fetchRecommendations(ctrl.signal).then(async (recs) => {
+      if (ctrl.signal.aborted || recs.length === 0) {
+        if (!ctrl.signal.aborted) dispatch(setRecommendations(recs));
+        return;
+      }
+      await waitForImages(recs);
+      if (ctrl.signal.aborted) return;
+      dispatch(setRecommendations(recs));
+    });
     return () => ctrl.abort();
   }, [user?.id, dispatch]);
 
@@ -105,12 +100,12 @@ export function useHomeFeed() {
       fetchFeedGroup('fast'),
       user ? fetchRecommendations() : Promise.resolve([]),
     ]);
-    if (fast.status === 'fulfilled' && fast.value.length > 0) {
-      dispatch(setFeed(sortByTierRandom(fast.value)));
-      setMemCache(fast.value);
-      writeDiskCache(fast.value);
-    }
-    if (recs.status === 'fulfilled') dispatch(setRecommendations(recs.value as ListingBase[]));
+    const fastValue = fast.status === 'fulfilled' ? fast.value : [];
+    const recsValue = recs.status === 'fulfilled' ? (recs.value as ListingBase[]) : [];
+    await Promise.all([waitForImages(fastValue, INITIAL_VISIBLE), waitForImages(recsValue)]);
+
+    if (fastValue.length > 0) dispatch(setFeed(sortByTierRandom(fastValue)));
+    if (recs.status === 'fulfilled') dispatch(setRecommendations(recsValue));
     setRefreshing(false);
 
     fetchFeedGroup('slow').then((slow) => {
@@ -118,7 +113,6 @@ export function useHomeFeed() {
       const fastItems = fast.status === 'fulfilled' ? fast.value : listings;
       const merged = mergeListings(fastItems, slow);
       dispatch(setFeed(sortByTierRandom(merged)));
-      writeDiskCache(merged);
     });
   }, [user, dispatch, listings]);
 

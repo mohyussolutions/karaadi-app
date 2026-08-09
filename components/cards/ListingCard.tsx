@@ -14,7 +14,7 @@ import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import type { ListingCardProps } from '../../util/types';
 import { createStyles } from '../../util/styles/shared/listingCard.styles';
 
-const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey }: ListingCardProps) {
+const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey, imageAspectRatio }: ListingCardProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -53,11 +53,12 @@ const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey
 
   return (
     <TouchableOpacity style={styles.card} onPress={handlePress} activeOpacity={0.88}>
-      <View style={styles.imgWrap}>
+      <View style={[styles.imgWrap, imageAspectRatio ? { aspectRatio: imageAspectRatio } : null]}>
         <Image
           source={{ uri: image }}
           style={styles.img}
           resizeMode="cover"
+          fadeDuration={0}
         />
 
         {item.maGaday ? (

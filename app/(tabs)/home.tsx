@@ -24,7 +24,7 @@ export default function HomeScreen() {
   const styles = useThemedStyles(createStyles);
 
   const CARD_W = cardWidth(mainWidth, numColumns, H_PAD, COL_GAP);
-  const REC_CARD_W = cardWidth(mainWidth, numColumns, H_PAD, COL_GAP);
+  const REC_CARD_W = cardWidth(mainWidth, numColumns, H_PAD, COL_GAP) * 1.12;
 
   const filteredListings = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -80,7 +80,7 @@ export default function HomeScreen() {
             contentContainerStyle={styles.recListContent}
             renderItem={({ item }) => (
               <View style={{ width: REC_CARD_W }}>
-                <ListingCard item={item} />
+                <ListingCard item={item} imageAspectRatio={0.85} />
               </View>
             )}
           />

@@ -78,6 +78,7 @@ export interface ListingCardProps {
   item: ListingBase;
   onPress?: () => void;
   categoryKey?: string;
+  imageAspectRatio?: number;
 }
 
 export interface MyAdCardProps {

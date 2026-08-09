@@ -3,8 +3,8 @@ import type { ColorPalette } from '../../../hooks/useTheme';
 import { shadow } from '../../shadow';
 
 export function createStyles(Colors: ColorPalette, width = 390) {
-  const CARD_W = width * 0.42;
-  const CARD_H = CARD_W * 0.75;
+  const CARD_W = width * 0.46;
+  const CARD_H = CARD_W * 0.9;
   return StyleSheet.create({
     wrap: {
       marginTop: 24,

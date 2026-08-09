@@ -7,7 +7,7 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { getRecommendedByEndpoint } from '../../api/categories/feed.actions';
 import { extractList } from '../../util/helpers';
-import { getImageUrl, formatPrice } from '../../util/helpers';
+import { getImageUrl, formatPrice, waitForImages } from '../../util/helpers';
 import { getListingDetailRoute } from '../../util/helpers';
 import { PLACEHOLDER_IMAGE } from '../../constants';
 import { useThemedStyles } from '../../hooks/useTheme';
@@ -23,11 +23,13 @@ function RecommendedSection({ endpoint, excludeId, title, categoryKey }: Recomme
 
   useEffect(() => {
     let cancelled = false;
-    getRecommendedByEndpoint(endpoint).then((list) => {
+    getRecommendedByEndpoint(endpoint).then(async (list) => {
       if (cancelled) return;
       const filtered = list
         .filter((i: any) => i._id !== excludeId && i.id !== excludeId)
         .slice(0, 8) as ListingBase[];
+      await waitForImages(filtered);
+      if (cancelled) return;
       setItems(filtered);
     }).catch(() => {});
     return () => { cancelled = true; };
@@ -58,6 +60,7 @@ function RecommendedSection({ endpoint, excludeId, title, categoryKey }: Recomme
               source={{ uri: getImageUrl(item.images?.[0]) || PLACEHOLDER_IMAGE }}
               style={styles.img}
               resizeMode="cover"
+              fadeDuration={0}
             />
             <View style={styles.info}>
               <Text style={styles.cardTitle} numberOfLines={2}>{item.title}</Text>

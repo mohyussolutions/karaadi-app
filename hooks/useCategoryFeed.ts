@@ -1,15 +1,12 @@
 import { useState, useCallback, useEffect } from 'react';
 import { fetchByCategory } from '../api/categories/feed.actions';
-import { getCached, setCached, isFresh, cacheKey } from '../util/cache/categoryCacheService';
+import { waitForImages } from '../util/helpers';
 import { CATEGORY_FEED_LIMIT } from '../constants';
 import type { ListingBase } from '../util/types/listing.types';
 
 export function useCategoryFeed(categoryKey: string, subcategoryKey?: string) {
-  const key = cacheKey(categoryKey, subcategoryKey);
-  const cached = getCached(key);
-
-  const [listings, setListings] = useState<ListingBase[]>(cached ?? []);
-  const [loading, setLoading] = useState(cached === null);
+  const [listings, setListings] = useState<ListingBase[]>([]);
+  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchData = useCallback(async (signal?: AbortSignal) => {
@@ -21,22 +18,23 @@ export function useCategoryFeed(categoryKey: string, subcategoryKey?: string) {
         params.categoryTag = subcategoryKey;
       }
       const data = await fetchByCategory(categoryKey, params, signal);
-      setCached(key, data);
+      await waitForImages(data);
+      if (signal?.aborted) return;
       setListings(data);
     } catch {
-      if (!getCached(key)) setListings([]);
+      setListings([]);
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [categoryKey, subcategoryKey, key]);
+  }, [categoryKey, subcategoryKey]);
 
   useEffect(() => {
-    if (isFresh(key)) return;
     const ctrl = new AbortController();
+    setLoading(true);
     fetchData(ctrl.signal);
     return () => ctrl.abort();
-  }, [key]);
+  }, [categoryKey, subcategoryKey]);
 
   function onRefresh() {
     setRefreshing(true);
