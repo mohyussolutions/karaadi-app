@@ -3,7 +3,7 @@ import { View, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { useFocusEffect } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { useThemedStyles } from "../../hooks/useTheme";
+import { useThemedStyles } from "../../components/hooks/useTheme";
 import { createStyles } from "../../util/styles/tabs/newAd.styles";
 import { LoadingSpinner } from "../../components/loading";
 import { useAuthStore } from "../../store/authStore";
@@ -15,13 +15,13 @@ import {
   resetNewAd,
   fetchPlans,
 } from "../../store/slices/newAdSlice";
-import { useNewAdStepNavigation } from "../../hooks/useNewAdStepNavigation";
-import { CheckoutBar } from "../../features/subscription/components/checklist";
-import { StepType } from "../../features/new-ad/components/StepType";
-import { StepCategory } from "../../features/new-ad/components/StepCategory";
-import { StepForm } from "../../features/new-ad/components/forms";
-import { StepPlan } from "../../features/new-ad/components/StepPlan";
-import { StepSummary, StepPayment } from "../../features/subscription/components/payment";
+import { useNewAdStepNavigation } from "../../components/hooks/useNewAdStepNavigation";
+import { CheckoutBar } from "../../components/features/subscription/components/checklist";
+import { StepType } from "../../components/features/new-ad/components/StepType";
+import { StepCategory } from "../../components/features/new-ad/components/StepCategory";
+import { StepForm } from "../../components/features/new-ad/components/forms";
+import { StepPlan } from "../../components/features/new-ad/components/StepPlan";
+import { StepSummary, StepPayment } from "../../components/features/subscription/components/payment";
 
 import type { ListingType, Step, StepItem } from "../../util/types/new-ad.types";
 import { MAIN_CATEGORIES } from "../../config/navigation/categories";

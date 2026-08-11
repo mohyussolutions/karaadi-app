@@ -1,6 +1,6 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import { getNativeIcon } from "../../util/icons/icons";
-import { useThemeColors } from "../../hooks/useTheme";
+import { useThemeColors } from "../hooks/useTheme";
 
 interface AppIconProps {
   name: string;

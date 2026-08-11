@@ -3,9 +3,9 @@ import { View, Text, Pressable, Platform } from "react-native";
 import AppIcon from "./AppIcon";
 import { useRouter } from "expo-router";
 import { MAIN_CATEGORIES, MainCategory } from "../../constants/categories";
-import { useAppTranslation } from "../../hooks/useAppTranslation";
-import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
-import { useResponsive } from "../../hooks/useResponsive";
+import { useAppTranslation } from "../hooks/useAppTranslation";
+import { useThemeColors, useThemedStyles } from "../hooks/useTheme";
+import { useResponsive } from "../hooks/useResponsive";
 import { createStyles, H_PAD, GAP } from "../../util/styles/shared/categoryGrid.styles";
 import type { CategoryGridProps } from "../../util/types";
 

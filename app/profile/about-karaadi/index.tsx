@@ -3,12 +3,12 @@ import { View, Text, FlatList, TouchableOpacity, Linking } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useAppTranslation } from '../../../hooks/useAppTranslation';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
+import { useAppTranslation } from '../../../components/hooks/useAppTranslation';
+import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
 import { createStyles } from '../../../util/styles/profile/aboutKaraadi.styles';
 import { SOCIAL_LINKS } from '../../../constants';
 import { SOCIAL_ICONS } from '../../../util/icons/icons';
-import { SOCIAL_BRAND_COLORS } from '../../../features/social/constants/socialBrand';
+import { SOCIAL_BRAND_COLORS } from '../../../components/features/social/constants/socialBrand';
 
 const PAGES: { id: string; icon: string; titleKey: string; route: string }[] = [
   { id: 'about', icon: 'information-outline', titleKey: 'about.heading', route: '/profile/about-karaadi/about' },

@@ -1,5 +1,5 @@
 import { Modal, View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
-import { useThemeColors } from '../../hooks/useTheme';
+import { useThemeColors } from '../hooks/useTheme';
 import { styles } from '../../util/styles/modals/eulaModal.styles';
 
 interface EulaModalProps {

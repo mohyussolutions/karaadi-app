@@ -1,15 +1,15 @@
 import { useEffect, useState, useCallback } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
-import { useGlobal } from '../../hooks/useGlobal';
+import { useGlobal } from '../../components/hooks/useGlobal';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner } from '../../components/loading';
 import { EmptyState } from '../../components/shared';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { createSubscriptionListStyles } from '../../util/styles/profile/profileSubscription.styles';
-import { fetchMySubscriptions, deleteSubscription } from '../../features/subscription/api/subscription.actions';
+import { fetchMySubscriptions, deleteSubscription } from '../../components/features/subscription/api/subscription.actions';
 import type { Subscription } from '../../util/types/listing.types';
 
 const COLUMN_GAP = 10;

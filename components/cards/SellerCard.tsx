@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
 import { getReviewsByUser } from '../../api/core/reviews.actions';
 import { placeholderAvatar } from '../../constants';
 import type { SellerCardProps } from '../../util/types';

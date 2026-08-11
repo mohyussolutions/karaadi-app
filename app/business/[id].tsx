@@ -13,14 +13,14 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { LoadingSpinner } from "../../components/loading";
 import BottomTabBar from "../../components/layout/BottomTabBar";
 import { useTranslation } from "react-i18next";
-import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
+import { useThemeColors, useThemedStyles } from "../../components/hooks/useTheme";
 import { SOCIAL_LINK_BUILDERS, placeholderAvatar } from "../../constants";
 import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL } from "../../util/types";
-import { useBusinessDetail } from "../../features/business/hooks/useBusinessDetail";
+import { useBusinessDetail } from "../../components/features/business/hooks/useBusinessDetail";
 import { SOCIAL_ICONS, type SocialIcons } from "../../util/icons/icons";
 import { createStyles } from "../../util/styles/business/businessDetail.styles";
 import { createTabletPortraitStyles } from "../../util/styles/listing/tabletSplit.styles";
-import { useResponsive } from "../../hooks/useResponsive";
+import { useResponsive } from "../../components/hooks/useResponsive";
 
 export default function BusinessDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

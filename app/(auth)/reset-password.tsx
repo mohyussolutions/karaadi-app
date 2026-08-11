@@ -6,9 +6,9 @@ import {
 import { useLocalSearchParams } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useResetPassword } from '../../features/auth/hooks/useResetPassword';
-import { useResponsive } from '../../hooks/useResponsive';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useResetPassword } from '../../components/features/auth/hooks/useResetPassword';
+import { useResponsive } from '../../components/hooks/useResponsive';
+import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { createStyles } from '../../util/styles/auth/reset-password.styles';
 
 export default function ResetPasswordScreen() {

@@ -5,9 +5,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { createStyles } from '../../util/styles/profile/savedSearches.styles';
-import { useSavedSearches } from '../../hooks/useSavedSearches';
+import { useSavedSearches } from '../../components/hooks/useSavedSearches';
 
 export default function SavedSearchesScreen() {
   const { t } = useTranslation();

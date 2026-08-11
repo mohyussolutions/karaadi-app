@@ -7,7 +7,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
 import { useAuthStore } from '../../../store/authStore';
 import { createReport } from '../../../api/core/report.actions';
 import { createStyles } from '../../../util/styles/listing/report.styles';

@@ -6,9 +6,9 @@ import {
 import { useRouter } from 'expo-router';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useRegister, PASSWORD_RULES } from '../../features/auth/hooks/useRegister';
-import { useResponsive } from '../../hooks/useResponsive';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useRegister, PASSWORD_RULES } from '../../components/features/auth/hooks/useRegister';
+import { useResponsive } from '../../components/hooks/useResponsive';
+import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { createStyles } from '../../util/styles/auth/register.styles';
 
 export default function RegisterScreen() {

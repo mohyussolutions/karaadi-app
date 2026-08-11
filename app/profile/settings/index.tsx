@@ -6,9 +6,9 @@ import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
-import { toggleSound } from '../../../features/notifications/store/notificationSettingsSlice';
-import { playNotificationSound } from '../../../features/notifications/services/soundService';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
+import { toggleSound } from '../../../components/features/notifications/store/notificationSettingsSlice';
+import { playNotificationSound } from '../../../components/features/notifications/services/soundService';
+import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
 import { createStyles } from '../../../util/styles/settings/settings.styles';
 import { SETTINGS_ROWS } from '../../../config/navigation/settingsRows';
 

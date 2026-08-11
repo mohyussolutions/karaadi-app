@@ -10,7 +10,7 @@ import { cacheListing } from '../../util/cache/listingCache';
 import { showToast } from '../../util/cache/toastService';
 import { useAppSelector, useAppDispatch } from '../../store/store';
 import { toggleFavorite } from '../../store/slices/favoritesSlice';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
 import type { ListingCardProps } from '../../util/types';
 import { createStyles } from '../../util/styles/shared/listingCard.styles';
 

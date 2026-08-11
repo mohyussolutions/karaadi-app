@@ -1,7 +1,7 @@
 import * as SecureStore from "../util/secureStorage";
 import { API_BASE_URL } from "../constants/config";
 import { storeRef } from "../store/storeRef";
-import { clearCredentials } from "../features/auth/store/authSlice";
+import { clearCredentials } from "../components/features/auth/store/authSlice";
 import { disconnectSocket } from "./sockets/socket.actions";
 import {
   AUTH_TOKEN_KEY,

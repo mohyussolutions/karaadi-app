@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback, memo } from 'react';
 import {
   View, Text, FlatList, TouchableOpacity, Image,
 } from 'react-native';
-import { useGlobal } from '../../hooks/useGlobal';
+import { useGlobal } from '../hooks/useGlobal';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { getRecommendedByEndpoint } from '../../api/categories/feed.actions';
@@ -10,7 +10,7 @@ import { extractList } from '../../util/helpers';
 import { getImageUrl, formatPrice, waitForImages } from '../../util/helpers';
 import { getListingDetailRoute } from '../../util/helpers';
 import { PLACEHOLDER_IMAGE } from '../../constants';
-import { useThemedStyles } from '../../hooks/useTheme';
+import { useThemedStyles } from '../hooks/useTheme';
 import type { ListingBase, RecommendedSectionProps } from '../../util/types';
 import { createStyles } from '../../util/styles/detail/RecommendedSection.styles';
 

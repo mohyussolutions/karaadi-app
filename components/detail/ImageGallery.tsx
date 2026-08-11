@@ -5,9 +5,9 @@ import {
   NativeSyntheticEvent, NativeScrollEvent,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useGlobal } from '../../hooks/useGlobal';
+import { useGlobal } from '../hooks/useGlobal';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
 import { createStyles, createSheetStyles } from '../../util/styles/detail/ImageGallery.styles';
 
 export const IMG_H = 320; // fallback; component uses live width

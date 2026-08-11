@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Stack, useRouter } from "expo-router";
 import { useAppSelector } from "../../store/store";
-import { useThemeColors } from "../../hooks/useTheme";
+import { useThemeColors } from "../../components/hooks/useTheme";
 
 export default function AuthLayout() {
   const router = useRouter();

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import type { ColorPalette } from '../../../hooks/useTheme';
+import type { ColorPalette } from '../../../components/hooks/useTheme';
 
 export const H_PAD = 12;
 export const COL_GAP = 8;

@@ -5,10 +5,10 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
-import { useResponsive } from "../../hooks/useResponsive";
-import { useAppTranslation } from "../../hooks/useAppTranslation";
-import { useLocationFilterRows } from "../../hooks/useLocationFilterRows";
+import { useThemeColors, useThemedStyles } from "../hooks/useTheme";
+import { useResponsive } from "../hooks/useResponsive";
+import { useAppTranslation } from "../hooks/useAppTranslation";
+import { useLocationFilterRows } from "../hooks/useLocationFilterRows";
 import type { LocationFilterModalProps, FilterRow } from "../../util/types";
 import { KEYBOARD_AVOIDING_BEHAVIOR } from "../common/common-for-ios-andriod";
 import { tabletModalStyles, TABLET_MODAL_ICON_SIZES } from "../../util/styles/shared/ipad.styles";

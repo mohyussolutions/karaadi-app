@@ -16,16 +16,16 @@ import BottomTabBar from "../components/layout/BottomTabBar";
 import { EulaModal } from "../components/modals/EulaModal";
 import { LoadingSpinner, SplashScreen } from "../components/loading";
 import { SaveToast, UpdateBanner } from "../components/shared";
-import Hage from "../features/ai-assistant";
-import NotificationBanner from "../features/notifications/components/NotificationBanner";
+import Hage from "../components/features/ai-assistant";
+import NotificationBanner from "../components/features/notifications/components/NotificationBanner";
 import LanguageSync from "../i18n/LanguageSync";
-import { useAppInit } from "../hooks/useAppInit";
-import { useThemeColors, useThemeMode } from "../hooks/useTheme";
-import { useShowTabBar } from "../hooks/useShowTabBar";
-import { useMessageBanner } from "../features/chat/hooks/useMessageBanner";
-import { useSocketMessages } from "../features/chat/hooks/useSocketMessages";
-import { useSocketNotifications } from "../features/notifications/hooks/useSocketNotifications";
-import { useNotificationTap } from "../features/notifications/hooks/useNotificationTap";
+import { useAppInit } from "../components/hooks/useAppInit";
+import { useThemeColors, useThemeMode } from "../components/hooks/useTheme";
+import { useShowTabBar } from "../components/hooks/useShowTabBar";
+import { useMessageBanner } from "../components/features/chat/hooks/useMessageBanner";
+import { useSocketMessages } from "../components/features/chat/hooks/useSocketMessages";
+import { useSocketNotifications } from "../components/features/notifications/hooks/useSocketNotifications";
+import { useNotificationTap } from "../components/features/notifications/hooks/useNotificationTap";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({ ...MaterialCommunityIcons.font });

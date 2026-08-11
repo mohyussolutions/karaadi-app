@@ -50,7 +50,7 @@ export type {
   PollingOverlayProps, OrderSummaryProps, StepItem, CheckoutBarProps,
 } from './new-ad.types';
 
-export type { Notification, MessageBanner, NotificationBannerProps } from '../../features/notifications/types/notification.types';
+export type { Notification, MessageBanner, NotificationBannerProps } from '../../components/features/notifications/types/notification.types';
 
 export type {
   SupportRole, TicketStatus, Ticket, TicketMessage,

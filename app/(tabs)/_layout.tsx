@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { useThemeColors } from "../../hooks/useTheme";
+import { useThemeColors } from "../../components/hooks/useTheme";
 
 export default function TabLayout() {
   const Colors = useThemeColors();

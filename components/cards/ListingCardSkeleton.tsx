@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Animated } from 'react-native';
-import { useThemedStyles } from '../../hooks/useTheme';
+import { useThemedStyles } from '../hooks/useTheme';
 import { createStyles } from '../../util/styles/shared/listingCardSkeleton.styles';
 import { NATIVE_DRIVER } from '../../util/animation';
 

@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
 import type { ToastPayload } from '../../util/cache/toastService';
 import { createStyles } from '../../util/styles/shared/saveToast.styles';
 import { NATIVE_DRIVER } from '../../util/animation';

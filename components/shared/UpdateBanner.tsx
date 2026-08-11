@@ -3,8 +3,8 @@ import { Animated, AppState, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Updates from 'expo-updates';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { useAppTranslation } from '../../hooks/useAppTranslation';
+import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
+import { useAppTranslation } from '../hooks/useAppTranslation';
 import { createStyles } from '../../util/styles/shared/updateBanner.styles';
 import { NATIVE_DRIVER } from '../../util/animation';
 

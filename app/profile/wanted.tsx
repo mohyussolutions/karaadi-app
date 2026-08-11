@@ -9,14 +9,14 @@ import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { EmptyState, AppIcon } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
-import { Dropdown } from '../../features/new-ad/components/forms';
+import { Dropdown } from '../../components/features/new-ad/components/forms';
 import RegionCityPicker from '../../components/geo/RegionCityPicker';
 import { useAuthStore } from '../../store/authStore';
-import { useAppTranslation } from '../../hooks/useAppTranslation';
+import { useAppTranslation } from '../../components/hooks/useAppTranslation';
 import {
   fetchMySubscriptions, createSubscription, deleteSubscription,
-} from '../../features/subscription/api/subscription.actions';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+} from '../../components/features/subscription/api/subscription.actions';
+import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import {
   createStyles, createSheetInlineStyles, createImagePickerStyles,
 } from '../../util/styles/profile/wanted.styles';

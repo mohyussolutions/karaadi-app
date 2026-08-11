@@ -2,8 +2,8 @@ import React from "react";
 import { Pressable, Text } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
-import { useAppTranslation } from "../../hooks/useAppTranslation";
+import { useThemeColors, useThemedStyles } from "../hooks/useTheme";
+import { useAppTranslation } from "../hooks/useAppTranslation";
 import { createStyles } from "../../util/styles/shared/howToUseVideo.styles";
 
 export default function HowToUseVideo() {

@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuthStore } from '../../store/authStore';
-import { useThemeColors } from '../../hooks/useTheme';
+import { useThemeColors } from '../hooks/useTheme';
 import { styles } from '../../util/styles/detail/reportLink.styles';
 
 export default function ReportLink({ itemId, itemType }: { itemId: string; itemType: string }) {

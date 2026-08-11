@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { Modal, Pressable } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useVideoPlayer, VideoView, type VideoSource } from "expo-video";
-import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
-import { useResponsive } from "../../hooks/useResponsive";
+import { useThemeColors, useThemedStyles } from "../hooks/useTheme";
+import { useResponsive } from "../hooks/useResponsive";
 import { tabletModalStyles, TABLET_MODAL_ICON_SIZES } from "../../util/styles/shared/ipad.styles";
 import { createStyles } from "../../util/styles/shared/videoPopupModal.styles";
 

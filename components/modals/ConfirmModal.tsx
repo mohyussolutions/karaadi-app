@@ -1,5 +1,5 @@
 import { Modal, View, Text, TouchableOpacity } from 'react-native';
-import { useThemeColors } from '../../hooks/useTheme';
+import { useThemeColors } from '../hooks/useTheme';
 import { styles } from '../../util/styles/modals/confirmModal.styles';
 
 interface Action {

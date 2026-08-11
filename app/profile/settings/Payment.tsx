@@ -7,8 +7,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
-import { useThemeColors, useThemedStyles, type ColorPalette } from '../../../hooks/useTheme';
-import { usePaymentHistory, type PaymentItem } from '../../../features/subscription/hooks/usePaymentHistory';
+import { useThemeColors, useThemedStyles, type ColorPalette } from '../../../components/hooks/useTheme';
+import { usePaymentHistory, type PaymentItem } from '../../../components/features/subscription/hooks/usePaymentHistory';
 import { createStyles } from '../../../util/styles/settings/payment.styles';
 import type { PaymentStatusConfig, PaymentCategoryInfo } from '../../../util/types';
 

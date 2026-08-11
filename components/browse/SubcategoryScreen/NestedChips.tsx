@@ -1,8 +1,8 @@
 import React, { memo, useCallback } from "react";
 import { View, Text, Pressable } from "react-native";
 import { FlashList, type ListRenderItemInfo } from "@shopify/flash-list";
-import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
-import { useAppTranslation } from "../../../hooks/useAppTranslation";
+import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
+import { useAppTranslation } from "../../hooks/useAppTranslation";
 import { AppIcon } from "../../../components/shared";
 import type { NestedSubCategory } from "../../../constants";
 import type { NestedChipsProps, ChipItemProps } from "../../../util/types";

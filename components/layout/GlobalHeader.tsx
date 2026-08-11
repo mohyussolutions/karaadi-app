@@ -3,15 +3,15 @@ import {
   View, Image, TouchableOpacity, Text, Modal, Pressable,
   TextInput, Switch, Platform,
 } from 'react-native';
-import { useGlobal, WEB_MAX_WIDTH } from '../../hooks/useGlobal';
+import { useGlobal, WEB_MAX_WIDTH } from '../hooks/useGlobal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, usePathname } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useAppTranslation } from '../../hooks/useAppTranslation';
+import { useAppTranslation } from '../hooks/useAppTranslation';
 import { useAppSelector, useAppDispatch } from '../../store/store';
 import { setBrowseQuery, clearBrowseQuery } from '../../store/slices/browseSearchSlice';
-import { useThemeColors, useThemedStyles, useThemeMode } from '../../hooks/useTheme';
-import { useResponsive } from '../../hooks/useResponsive';
+import { useThemeColors, useThemedStyles, useThemeMode } from '../hooks/useTheme';
+import { useResponsive } from '../hooks/useResponsive';
 import { tabletHeaderStyles, TABLET_HEADER_ICON_SIZES, TABLET_LANG_DROPDOWN_TOP_OFFSET } from '../../util/styles/shared/ipad.styles';
 import type { Lang } from '../../i18n/translations';
 import { createStyles } from '../../util/styles/layout/globalHeader.styles';

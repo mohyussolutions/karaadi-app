@@ -5,9 +5,9 @@ import {
 } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { useConfirm } from '../../hooks/useConfirm';
-import { useResponsive } from '../../hooks/useResponsive';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useConfirm } from '../../components/hooks/useConfirm';
+import { useResponsive } from '../../components/hooks/useResponsive';
+import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { createStyles } from '../../util/styles/auth/confirm.styles';
 
 export default function ConfirmScreen() {

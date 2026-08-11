@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import type { SplashScreenProps } from '../../util/types';
 import { Image, Animated } from 'react-native';
-import { useGlobal } from '../../hooks/useGlobal';
-import { useThemedStyles } from '../../hooks/useTheme';
+import { useGlobal } from '../hooks/useGlobal';
+import { useThemedStyles } from '../hooks/useTheme';
 import { createStyles } from '../../util/styles/loading/splashScreen.styles';
 import { NATIVE_DRIVER } from '../../util/animation';
 

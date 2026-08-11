@@ -8,10 +8,10 @@ import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { placeholderAvatar } from '../../constants';
-import { updateUsername, updatePhone, updateProfileImage, deleteAccount } from '../../features/auth/api/auth.actions';
+import { updateUsername, updatePhone, updateProfileImage, deleteAccount } from '../../components/features/auth/api/auth.actions';
 import { useAuthStore } from '../../store/authStore';
 import { getImageUrl } from '../../util/helpers';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { createStyles } from '../../util/styles/profile/edit.styles';
 import { useTranslation } from 'react-i18next';
 

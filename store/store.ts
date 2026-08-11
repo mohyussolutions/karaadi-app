@@ -2,17 +2,17 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
-import authReducer from '../features/auth/store/authSlice';
-import notificationsReducer from '../features/notifications/store/notificationsSlice';
+import authReducer from '../components/features/auth/store/authSlice';
+import notificationsReducer from '../components/features/notifications/store/notificationsSlice';
 import languageReducer from './slices/languageSlice';
 import themeReducer from './slices/themeSlice';
 import hageReducer from './slices/hageSlice';
 import favoritesReducer from './slices/favoritesSlice';
 import feedReducer from './slices/feedSlice';
-import chatsReducer from '../features/chat/store/chatsSlice';
+import chatsReducer from '../components/features/chat/store/chatsSlice';
 import newAdReducer from './slices/newAdSlice';
 import browseSearchReducer from './slices/browseSearchSlice';
-import notificationSettingsReducer from '../features/notifications/store/notificationSettingsSlice';
+import notificationSettingsReducer from '../components/features/notifications/store/notificationSettingsSlice';
 import { storeRef } from './storeRef';
 
 const persistConfig = {

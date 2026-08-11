@@ -1,15 +1,15 @@
 import React from 'react';
 import { View, FlatList, TouchableOpacity, Text, RefreshControl } from 'react-native';
-import { useGlobal } from '../../hooks/useGlobal';
+import { useGlobal } from '../../components/hooks/useGlobal';
 import { useRouter } from 'expo-router';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { EmptyState } from '../../components/shared';
 import MyAdCard from '../../components/cards/MyAdCard';
 import { LoadingSpinner } from '../../components/loading';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { createStyles } from '../../util/styles/profile/myAds.styles';
-import { useMyAds } from '../../hooks/useMyAds';
+import { useMyAds } from '../../components/hooks/useMyAds';
 import { useAppDispatch } from '../../store/store';
 import { prefillForPayment } from '../../store/slices/newAdSlice';
 import type { ListingBase } from '../../util/types';

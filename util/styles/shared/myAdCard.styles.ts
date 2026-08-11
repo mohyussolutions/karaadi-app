@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import type { ColorPalette } from "../../../hooks/useTheme";
+import type { ColorPalette } from "../../../components/hooks/useTheme";
 import { RADII } from "../../colors/theme";
 import { shadow } from "../../shadow";
 

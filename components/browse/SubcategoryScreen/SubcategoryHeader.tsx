@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
-import { useAppTranslation } from "../../../hooks/useAppTranslation";
+import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
+import { useAppTranslation } from "../../hooks/useAppTranslation";
 import { AppIcon } from "../../../components/shared";
 import type { SubcategoryHeaderProps } from "../../../util/types";
 import { createStyles } from "../../../util/styles/browse/subcategory.styles";

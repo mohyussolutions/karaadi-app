@@ -5,7 +5,7 @@ import { useRegionCityPicker } from './useRegionCityPicker';
 import { PickerFields } from './PickerFields';
 import { RegionAccordionPanel } from './RegionAccordionPanel';
 import { CityAccordionPanel } from './CityAccordionPanel';
-import { useThemedStyles } from '../../../hooks/useTheme';
+import { useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../../util/styles/geo/regionCityPicker.styles';
 
 export default function RegionCityPicker(props: RegionCityPickerProps) {

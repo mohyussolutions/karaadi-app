@@ -6,11 +6,11 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { CategoryGrid, HowToUseVideo } from '../../components/shared';
 import ListingCard from '../../components/cards/ListingCard';
-import { useAppTranslation } from '../../hooks/useAppTranslation';
-import { useResponsive } from '../../hooks/useResponsive';
-import { WEB_MAX_WIDTH } from '../../hooks/useGlobal';
-import { useHomeFeed } from '../../hooks/useHomeFeed';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useAppTranslation } from '../../components/hooks/useAppTranslation';
+import { useResponsive } from '../../components/hooks/useResponsive';
+import { WEB_MAX_WIDTH } from '../../components/hooks/useGlobal';
+import { useHomeFeed } from '../../components/hooks/useHomeFeed';
+import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { useAppSelector } from '../../store/store';
 import { createStyles, H_PAD, COL_GAP } from '../../util/styles/tabs/home.styles';
 

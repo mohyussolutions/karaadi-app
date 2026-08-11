@@ -9,11 +9,11 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { z } from 'zod';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { useAppTranslation } from '../../hooks/useAppTranslation';
-import { getBusinessById, getMyBusinesses, createBusiness, updateBusiness } from '../../features/business/api/business.actions';
+import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
+import { useAppTranslation } from '../../components/hooks/useAppTranslation';
+import { getBusinessById, getMyBusinesses, createBusiness, updateBusiness } from '../../components/features/business/api/business.actions';
 import { getImageUrl } from '../../util/helpers';
-import { CheckoutBar } from '../../features/subscription/components/checklist';
+import { CheckoutBar } from '../../components/features/subscription/components/checklist';
 import { BIZ_STEPS } from '../../config/navigation/checkbusiness';
 import type { StepItem, BusinessPlan, BusinessApplyFormState } from '../../util/types';
 import { LoadingSpinner } from '../../components/loading';
@@ -23,7 +23,7 @@ import { useAppDispatch } from '../../store/store';
 import { setListingType, setStep, setCategoryKey, setBusinessId } from '../../store/slices/newAdSlice';
 import {
   fetchBusinessPlans, selectBusinessPlan, extendBusinessPlan,
-} from '../../features/subscription/api/businessPlan.actions';
+} from '../../components/features/subscription/api/businessPlan.actions';
 import { createStyles } from '../../util/styles/profile/businessCreate.styles';
 
 const APPROVAL_POLL_INTERVAL_MS = 5000;

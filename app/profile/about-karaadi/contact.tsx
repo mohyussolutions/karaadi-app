@@ -3,8 +3,8 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput, Alert, ActivityInd
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useAppTranslation } from '../../../hooks/useAppTranslation';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
+import { useAppTranslation } from '../../../components/hooks/useAppTranslation';
+import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
 import { useAuthStore } from '../../../store/authStore';
 import { createTicket } from '../../../api/core/support.actions';
 import { createDetailStyles } from '../../../util/styles/profile/aboutKaraadi.styles';

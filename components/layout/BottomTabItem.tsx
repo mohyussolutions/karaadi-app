@@ -1,8 +1,8 @@
 import { memo } from "react";
 import { Text, Pressable } from "react-native";
 import { Ionicons, Octicons } from "@expo/vector-icons";
-import { useThemeColors, useThemedStyles, useThemeMode } from "../../hooks/useTheme";
-import { useAppTranslation } from "../../hooks/useAppTranslation";
+import { useThemeColors, useThemedStyles, useThemeMode } from "../hooks/useTheme";
+import { useAppTranslation } from "../hooks/useAppTranslation";
 import { createLayoutStyles } from "../../util/styles/tabs/layout.styles";
 import { TabButtonBackground } from "./TabButtonBackground";
 import type { TabItem } from "../../util/types/navigation.types";

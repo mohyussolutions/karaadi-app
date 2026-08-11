@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { useAppTranslation } from '../../hooks/useAppTranslation';
-import { getSocialStatus, postSocialUpdate } from '../../features/social/api/social.actions';
+import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
+import { useAppTranslation } from '../hooks/useAppTranslation';
+import { getSocialStatus, postSocialUpdate } from '../features/social/api/social.actions';
 import { SOCIAL_BRAND_COLORS } from '../../constants';
 import { SOCIAL_ICONS } from '../../util/icons/icons';
 import type { SocialPostCardProps } from '../../util/types';

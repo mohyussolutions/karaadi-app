@@ -3,8 +3,8 @@ import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { VideoSource } from 'expo-video';
-import { useAppTranslation } from '../../hooks/useAppTranslation';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useAppTranslation } from '../../components/hooks/useAppTranslation';
+import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import VideoPopupModal from '../../components/modals/VideoPopupModal';
 import { createStyles } from '../../util/styles/profile/tutorials.styles';
 

@@ -8,15 +8,15 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import { useGlobal } from '../../hooks/useGlobal';
+import { useGlobal } from '../../components/hooks/useGlobal';
 import { useRouter } from 'expo-router';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner } from '../../components/loading';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { formatPrice, getImageUrl } from '../../util/helpers';
-import { useFavoritesData, CATEGORY_LABELS, CATEGORY_COLORS } from '../../hooks/useFavoritesData';
+import { useFavoritesData, CATEGORY_LABELS, CATEGORY_COLORS } from '../../components/hooks/useFavoritesData';
 import type { Favorite } from '../../util/types';
 import { createStyles, createCardStyles } from '../../util/styles/profile/favorites.styles';
 export default function FavoritesScreen() {

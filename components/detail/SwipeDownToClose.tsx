@@ -6,7 +6,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming,
 } from 'react-native-reanimated';
-import { useThemedStyles } from '../../hooks/useTheme';
+import { useThemedStyles } from '../hooks/useTheme';
 import { createStyles } from '../../util/styles/detail/swipeDownToClose.styles';
 import type { SwipeDownToCloseProps } from '../../util/types';
 

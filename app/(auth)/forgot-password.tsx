@@ -5,9 +5,9 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { useForgotPassword } from '../../features/auth/hooks/useForgotPassword';
-import { useResponsive } from '../../hooks/useResponsive';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useForgotPassword } from '../../components/features/auth/hooks/useForgotPassword';
+import { useResponsive } from '../../components/hooks/useResponsive';
+import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { createStyles } from '../../util/styles/auth/forgot-password.styles';
 
 export default function ForgotPasswordScreen() {
