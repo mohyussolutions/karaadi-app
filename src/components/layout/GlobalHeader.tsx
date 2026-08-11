@@ -67,7 +67,7 @@ export default function GlobalHeader() {
       <View style={[styles.wrapper, { paddingTop: insets.top }]}>
         <View style={[styles.inner, isTablet && tabletHeaderStyles.inner, webCenter]}>
           <TouchableOpacity onPress={() => router.push('/(tabs)/home')} activeOpacity={0.8}>
-            <Image source={require('../../assets/logo.jpg')} style={[styles.logo, isTablet && tabletHeaderStyles.logo]} resizeMode="contain" />
+            <Image source={require('../../../assets/logo.jpg')} style={[styles.logo, isTablet && tabletHeaderStyles.logo]} resizeMode="contain" />
           </TouchableOpacity>
           <View style={styles.rightGroup}>
             <Switch
@@ -107,7 +107,7 @@ export default function GlobalHeader() {
             )}
           </View>
           <TouchableOpacity onPress={() => router.push('/(tabs)/home')} activeOpacity={0.8}>
-            <Image source={require('../../assets/logo.jpg')} style={[styles.logo, { width: logoW() }]} resizeMode="contain" />
+            <Image source={require('../../../assets/logo.jpg')} style={[styles.logo, { width: logoW() }]} resizeMode="contain" />
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.notifBtn, isTablet && tabletHeaderStyles.notifBtn]}

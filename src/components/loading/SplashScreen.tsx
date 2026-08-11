@@ -28,7 +28,7 @@ export default function SplashScreen({ onFinish }: SplashScreenProps) {
   return (
     <Animated.View style={[styles.container, { opacity }]}>
       <Image
-        source={require('../../assets/logo.jpg')}
+        source={require('../../../assets/logo.jpg')}
         style={{ width: LOGO_W, height: LOGO_H }}
         resizeMode="contain"
       />

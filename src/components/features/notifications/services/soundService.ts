@@ -5,7 +5,7 @@ let player: AudioPlayer | null = null;
 
 function getPlayer(): AudioPlayer {
   if (!player) {
-    player = createAudioPlayer(require('../../../../assets/sounds/notification.wav'));
+    player = createAudioPlayer(require('../../../../../assets/sounds/notification.wav'));
   }
   return player;
 }

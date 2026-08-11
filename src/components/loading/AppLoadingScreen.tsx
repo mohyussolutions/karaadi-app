@@ -12,7 +12,7 @@ export default function AppLoadingScreen() {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../../assets/logo.jpg')}
+        source={require('../../../assets/logo.jpg')}
         style={[styles.logo, { width: logoWidth }]}
         resizeMode="contain"
       />

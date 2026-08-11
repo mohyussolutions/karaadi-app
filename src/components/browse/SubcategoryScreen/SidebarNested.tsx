@@ -4,7 +4,7 @@ import { FlashList, type ListRenderItemInfo } from "@shopify/flash-list";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
 import { useAppTranslation } from "../../hooks/useAppTranslation";
-import { AppIcon } from "../../../components/shared";
+import { AppIcon } from "../../shared";
 import type { NestedSubCategory } from "../../../constants";
 import type { SidebarNestedProps, NestedItemProps } from "../../../util/types";
 import { createStyles } from "../../../util/styles/browse/subcategory.styles";
