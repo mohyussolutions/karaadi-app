@@ -10,7 +10,7 @@ import { toggleSound } from '../../../components/features/notifications/store/no
 import { playNotificationSound } from '../../../components/features/notifications/services/soundService';
 import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
 import { createStyles } from '../../../util/styles/settings/settings.styles';
-import { SETTINGS_ROWS } from '../../../config/navigation/settingsRows';
+import { SETTINGS_ROWS } from '../../../config/navigation';
 
 export default function SettingsIndex() {
   const router = useRouter();

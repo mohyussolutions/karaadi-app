@@ -24,7 +24,7 @@ import { StepPlan } from "../../components/features/new-ad/components/StepPlan";
 import { StepSummary, StepPayment } from "../../components/features/subscription/components/payment";
 
 import type { ListingType, Step, StepItem } from "../../util/types/new-ad.types";
-import { MAIN_CATEGORIES } from "../../config/navigation/categories";
+import { MAIN_CATEGORIES } from "../../config/navigation";
 
 const STEP_INDEX: Record<Step, number> = {
   login: 0,

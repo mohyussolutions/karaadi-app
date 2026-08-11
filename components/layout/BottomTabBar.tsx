@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuthStore } from "../../store/authStore";
 import { useThemedStyles, useThemeMode } from "../hooks/useTheme";
 import { createLayoutStyles, GLASS_DARK, GLASS_LIGHT } from "../../util/styles/tabs/layout.styles";
-import { TAB_ITEMS, LOGIN_TAB_ITEM } from "../../config/navigation/tabItems";
+import { TAB_ITEMS, LOGIN_TAB_ITEM } from "../../config/navigation";
 import { BottomTabItem } from "./BottomTabItem";
 import { getActiveTab } from "./BottomTabBar.utils";
 

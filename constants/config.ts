@@ -1,4 +1,5 @@
 import { Platform } from 'react-native';
+import type { Language } from '../util/types';
 
 const isWebDev = __DEV__ && Platform.OS === 'web';
 
@@ -39,3 +40,14 @@ export const OPTION = {
   Public:  'Public',
   Private: 'Private',
 } as const;
+
+export const TOAST_TIMINGS = {
+  FADE_IN: 250,
+  DISPLAY: 2200,
+  FADE_OUT: 300,
+} as const;
+
+export const LANGUAGES: Language[] = [
+  { code: 'so', label: 'SOMALI' },
+  { code: 'en', label: 'ENGLISH' },
+];
