@@ -2,14 +2,16 @@ import { StyleSheet } from "react-native";
 import type { ColorPalette } from "../../../components/hooks/useTheme";
 import { RADII } from "../../colors/theme";
 import { shadow } from "../../shadow";
+import { createCommonStyles } from "../common/common.style";
 
 export const COL_GAP = 8;
 export const H_PAD = 12;
 
 export function createStyles(Colors: ColorPalette, width = 390) {
+  const common = createCommonStyles(Colors);
   const CARD_W = (width - H_PAD * 2 - COL_GAP) / 2;
   return StyleSheet.create({
-    safe: { flex: 1, backgroundColor: Colors.background },
+    safe: common.safeBase,
     center: {
       flex: 1,
       backgroundColor: Colors.background,

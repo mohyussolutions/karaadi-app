@@ -1,9 +1,11 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../components/hooks/useTheme';
+import { createCommonStyles } from '../common/common.style';
 
 export function createStyles(Colors: ColorPalette) {
+  const common = createCommonStyles(Colors);
   return StyleSheet.create({
-    safe: { flex: 1, backgroundColor: Colors.background },
+    safe: common.safeBase,
     content: { padding: 16 },
 
     summaryRow: { flexDirection: 'row', gap: 12, marginBottom: 20 },
@@ -51,7 +53,6 @@ export function createStyles(Colors: ColorPalette) {
       fontSize: 13, color: Colors.textMuted, textAlign: 'center',
       paddingHorizontal: 24, lineHeight: 19,
     },
-    loadingIndicator: { marginTop: 60 },
     flexFull: { flex: 1 },
     amountCol: { alignItems: 'flex-end', gap: 4 },
     bottomSpacer: { height: 32 },

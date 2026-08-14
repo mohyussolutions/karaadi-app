@@ -1,19 +1,8 @@
 import { apiClient } from '../client';
 import { JOBS_ENDPOINTS } from '../../constants';
+import type { CreateJobData } from '../../util/types/listing.types';
 
-export interface CreateJobData {
-  title: string;
-  description: string;
-  company?: string;
-  location?: string;
-  salary?: number;
-  employmentType?: string;
-  experienceLevel?: string;
-  city: string;
-  region: string;
-  type?: string;
-  isPaid?: boolean;
-}
+export type { CreateJobData };
 
 function normJob(item: any) {
   const id = String(item._id ?? item.id ?? '');

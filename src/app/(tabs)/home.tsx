@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import {
-  View, Text, TouchableOpacity, RefreshControl, FlatList, ScrollView, Platform,
+  View, Text, TouchableOpacity, RefreshControl, ScrollView, Platform, ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { CategoryGrid, HowToUseVideo } from '../../components/shared';
@@ -18,12 +19,11 @@ export default function HomeScreen() {
   const router = useRouter();
   const { t } = useAppTranslation();
   const { isTabletLandscape, sidebarWidth, mainWidth, numColumns, cardWidth } = useResponsive();
-  const { user, listings, recommendations, refreshing, visibleListings, hasMore, onRefresh, showMore } = useHomeFeed();
+  const { user, listings, recommendations, refreshing, visibleListings, hasMore, onRefresh, showMore, revealing } = useHomeFeed();
   const searchQuery = useAppSelector((s) => s.browseSearch.query);
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
 
-  const CARD_W = cardWidth(mainWidth, numColumns, H_PAD, COL_GAP);
   const REC_CARD_W = cardWidth(mainWidth, numColumns, H_PAD, COL_GAP) * 1.12;
 
   const filteredListings = useMemo(() => {
@@ -72,14 +72,14 @@ export default function HomeScreen() {
           <Text style={[styles.sectionTitle, styles.recTitle]}>
             {t('recommended') || 'Recommended for You'}
           </Text>
-          <FlatList
+          <FlashList
             horizontal
             data={recommendations}
             keyExtractor={(item) => `rec-${item.id || item._id}`}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.recListContent}
             renderItem={({ item }) => (
-              <View style={{ width: REC_CARD_W }}>
+              <View style={{ width: REC_CARD_W, marginRight: 8 }}>
                 <ListingCard item={item} imageAspectRatio={0.85} />
               </View>
             )}
@@ -91,20 +91,15 @@ export default function HomeScreen() {
   );
 
   const feedList = (
-    <FlatList
+    <FlashList
       key={`feed-${numColumns}`}
       data={displayListings}
       numColumns={numColumns}
       keyExtractor={(item) => item.id || item._id}
-      removeClippedSubviews
-      windowSize={5}
-      maxToRenderPerBatch={8}
-      initialNumToRender={8}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />
       }
       contentContainerStyle={styles.scroll}
-      columnWrapperStyle={styles.colWrapper}
       ListHeaderComponent={feedHeader}
       ListFooterComponent={
         showLoadMore ? (
@@ -112,9 +107,16 @@ export default function HomeScreen() {
             style={styles.readMoreBtn}
             onPress={showMore}
             activeOpacity={0.8}
+            disabled={revealing}
           >
-            <Text style={styles.readMoreText}>{t('loadMore')}</Text>
-            <MaterialCommunityIcons name="chevron-down" size={16} color={Colors.primary} />
+            {revealing ? (
+              <ActivityIndicator size="small" color={Colors.primary} />
+            ) : (
+              <>
+                <Text style={styles.readMoreText}>{t('loadMore')}</Text>
+                <MaterialCommunityIcons name="chevron-down" size={16} color={Colors.primary} />
+              </>
+            )}
           </TouchableOpacity>
         ) : null
       }
@@ -123,8 +125,14 @@ export default function HomeScreen() {
           <Text style={styles.empty}>{filteredListings ? t('noResults') : t('noListings')}</Text>
         ) : null
       }
-      renderItem={({ item }) => (
-        <View style={{ width: CARD_W }}>
+      renderItem={({ item, index }) => (
+        <View
+          style={{
+            paddingLeft: index % numColumns === 0 ? H_PAD : COL_GAP / 2,
+            paddingRight: (index + 1) % numColumns === 0 ? H_PAD : COL_GAP / 2,
+            paddingBottom: COL_GAP,
+          }}
+        >
           <ListingCard item={item} />
         </View>
       )}

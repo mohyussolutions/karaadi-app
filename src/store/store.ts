@@ -2,7 +2,7 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
-import authReducer from '../components/features/auth/store/authSlice';
+import authReducer from './slices/authSlice';
 import notificationsReducer from '../components/features/notifications/store/notificationsSlice';
 import languageReducer from './slices/languageSlice';
 import themeReducer from './slices/themeSlice';
@@ -14,6 +14,7 @@ import newAdReducer from './slices/newAdSlice';
 import browseSearchReducer from './slices/browseSearchSlice';
 import notificationSettingsReducer from '../components/features/notifications/store/notificationSettingsSlice';
 import { storeRef } from './storeRef';
+import type { RootState, AppDispatch } from '../util/types/store.types';
 
 const persistConfig = {
   key: 'karaadi-mobile-v1',
@@ -50,9 +51,6 @@ export const store = configureStore({
 storeRef.dispatch = store.dispatch;
 
 export const persistor = persistStore(store);
-
-export type RootState = ReturnType<typeof rootReducer>;
-export type AppDispatch = typeof store.dispatch;
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector = <T>(selector: (state: RootState) => T) => useSelector(selector);

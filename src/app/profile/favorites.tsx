@@ -3,22 +3,24 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image,
   RefreshControl,
-  FlatList,
   ActivityIndicator,
 } from 'react-native';
-import { useGlobal } from '../../components/hooks/useGlobal';
+import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner } from '../../components/loading';
+import RemoteImage from '../../components/shared/RemoteImage';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { formatPrice, getImageUrl } from '../../util/helpers';
-import { useFavoritesData, CATEGORY_LABELS, CATEGORY_COLORS } from '../../components/hooks/useFavoritesData';
+import { useFavoritesData, CATEGORY_LABELS, CATEGORY_COLOR_KEYS } from '../../components/hooks/useFavoritesData';
 import type { Favorite } from '../../util/types';
-import { createStyles, createCardStyles } from '../../util/styles/profile/favorites.styles';
+import { createStyles, createCardStyles, H_PAD, COL_GAP } from '../../util/styles/profile/favorites.styles';
+
+const NUM_COLUMNS = 2;
+
 export default function FavoritesScreen() {
   const { t } = useTranslation();
   const router = useRouter();
@@ -34,9 +36,8 @@ export default function FavoritesScreen() {
     handleCardPress,
   } = useFavoritesData();
 
-  const { width } = useGlobal();
   const Colors = useThemeColors();
-  const s = useThemedStyles((c) => createStyles(c, width));
+  const s = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
 
   if (!user) {
@@ -69,11 +70,10 @@ export default function FavoritesScreen() {
 
   return (
     <SafeAreaView style={s.safe} edges={['bottom']}>
-      <FlatList
+      <FlashList
         data={favorites}
         keyExtractor={(fav) => fav.id || fav.itemId}
-        numColumns={2}
-        columnWrapperStyle={s.row}
+        numColumns={NUM_COLUMNS}
         contentContainerStyle={[s.list, { paddingBottom: insets.bottom + 84 }, favorites.length === 0 && { flex: 1 }]}
         showsVerticalScrollIndicator={false}
         refreshControl={
@@ -103,13 +103,21 @@ export default function FavoritesScreen() {
             </TouchableOpacity>
           </View>
         }
-        renderItem={({ item: fav }) => (
-          <FavCard
-            fav={fav}
-            isRemoving={removing.has(fav.itemId)}
-            onPress={() => handleCardPress(fav)}
-            onRemove={() => handleRemove(fav)}
-          />
+        renderItem={({ item: fav, index }) => (
+          <View
+            style={{
+              paddingLeft: index % NUM_COLUMNS === 0 ? H_PAD : COL_GAP / 2,
+              paddingRight: (index + 1) % NUM_COLUMNS === 0 ? H_PAD : COL_GAP / 2,
+              paddingBottom: COL_GAP,
+            }}
+          >
+            <FavCard
+              fav={fav}
+              isRemoving={removing.has(fav.itemId)}
+              onPress={() => handleCardPress(fav)}
+              onRemove={() => handleRemove(fav)}
+            />
+          </View>
         )}
       />
     </SafeAreaView>
@@ -134,7 +142,7 @@ const FavCard = React.memo(
 
     const catKey = String(fav.category || '').toLowerCase();
     const catLabel = CATEGORY_LABELS[catKey] || catKey;
-    const catColor = CATEGORY_COLORS[catKey] || Colors.primary;
+    const catColor = Colors[CATEGORY_COLOR_KEYS[catKey]] || Colors.primary;
     const imageUri = getImageUrl(fav.image);
     const price = fav.price ? Number(fav.price) : 0;
 
@@ -146,7 +154,9 @@ const FavCard = React.memo(
         disabled={isRemoving}
       >
         <View style={s.imgWrap}>
-          {!!imageUri && <Image source={{ uri: imageUri }} style={s.img} resizeMode="cover" />}
+          {!!imageUri && (
+            <RemoteImage source={{ uri: imageUri }} style={s.img} resizeMode="cover" recyclingKey={fav.itemId} />
+          )}
 
           {!!catLabel && (
             <View style={[s.catBadge, { backgroundColor: catColor }]}>

@@ -8,6 +8,7 @@ import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTh
 import { useAuthStore } from '../../../store/authStore';
 import { createTicket } from '../../../api/core/support.actions';
 import { createDetailStyles } from '../../../util/styles/profile/aboutKaraadi.styles';
+import { maxLenSchema } from '../../../util/validation/schemas';
 
 export default function ContactScreen() {
   const { t } = useAppTranslation();
@@ -27,6 +28,14 @@ export default function ContactScreen() {
     }
     if (!subject.trim() || !message.trim()) {
       Alert.alert(t('auth.common.error'), t('auth.register.fillAll'));
+      return;
+    }
+    if (!maxLenSchema(150).safeParse(subject).success) {
+      Alert.alert(t('auth.common.error'), t('supportModule.form.subjectTooLong'));
+      return;
+    }
+    if (!maxLenSchema(3000).safeParse(message).success) {
+      Alert.alert(t('auth.common.error'), t('supportModule.form.bodyTooLong'));
       return;
     }
     setSubmitting(true);

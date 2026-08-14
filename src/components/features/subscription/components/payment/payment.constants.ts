@@ -1,13 +1,6 @@
-export type PaymentMethod = 'evc' | 'zaad' | 'sahal' | 'waaafi';
-export type PaymentStatus = 'idle' | 'polling' | 'success' | 'failed';
+import type { PaymentMethod, PaymentStatus, PaymentMethodOption } from '../../../../../util/types/payment.types';
 
-export interface PaymentMethodOption {
-  key: PaymentMethod;
-  label: string;
-  sublabel: string;
-  prefix: string;
-  color: string;
-}
+export type { PaymentMethod, PaymentStatus, PaymentMethodOption };
 
 export const PAYMENT_METHODS: PaymentMethodOption[] = [
   { key: 'waaafi', label: 'Waaafi',   sublabel: 'Hormuud (+252 61)',  prefix: '61', color: '#1A6FB0' },

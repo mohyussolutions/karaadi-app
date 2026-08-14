@@ -1,4 +1,5 @@
 import { Platform, type ViewStyle } from 'react-native';
+import type { ShadowParams } from './types/shadow.types';
 
 function hexToRgba(hex: string, alpha: number): string {
   let c = hex.replace('#', '');
@@ -8,14 +9,6 @@ function hexToRgba(hex: string, alpha: number): string {
   const b = parseInt(c.slice(4, 6), 16);
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
-
-type ShadowParams = {
-  color: string;
-  offset?: { width: number; height: number };
-  opacity: number;
-  radius: number;
-  elevation: number;
-};
 
 export function shadow({ color, offset = { width: 0, height: 0 }, opacity, radius, elevation }: ShadowParams): ViewStyle {
   if (Platform.OS === 'web') {

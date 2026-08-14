@@ -1,13 +1,6 @@
 import { apiClient } from '../client';
 import { REPORT_ENDPOINTS } from '../../constants';
-
-interface ReportPayload {
-  userId: string;
-  itemId: string;
-  itemType: string;
-  reason: string;
-  description?: string;
-}
+import type { ReportPayload } from '../../util/types/api.types';
 
 export async function createReport(payload: ReportPayload): Promise<void> {
   await apiClient.post(REPORT_ENDPOINTS.CREATE, payload);

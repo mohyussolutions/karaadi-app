@@ -12,65 +12,10 @@ export const AUTH_ENDPOINTS = {
   UPDATE_PROFILE_IMAGE: '/api/users/profile/image',
   UPDATE_USERNAME: '/api/users/profile/username',
   UPDATE_PHONE: '/api/users/profile/phone',
+  UPDATE_PHONE_VISIBILITY: '/api/users/profile/phone-visibility',
   UPDATE_PUSH_TOKEN: '/api/users/profile/push-token',
   DELETE_ACCOUNT: '/api/users/delete-account',
   GET_BY_ID: (id: string) => `/api/users/${id}`,
-};
-
-export const CARS_ENDPOINTS = {
-  LIST: '/api/cars',
-  BY_ID: (id: string) => `/api/cars/${id}`,
-  CREATE: '/api/cars',
-  UPDATE: (id: string) => `/api/cars/${id}`,
-  DELETE: (id: string) => `/api/cars/${id}`,
-};
-
-export const BOATS_ENDPOINTS = {
-  LIST: '/api/boats',
-  BY_ID: (id: string) => `/api/boats/${id}`,
-  CREATE: '/api/boats',
-  UPDATE: (id: string) => `/api/boats/${id}`,
-  DELETE: (id: string) => `/api/boats/${id}`,
-};
-
-export const MOTORCYCLES_ENDPOINTS = {
-  LIST: '/api/motorcycles',
-  BY_ID: (id: string) => `/api/motorcycles/${id}`,
-  CREATE: '/api/motorcycles',
-  UPDATE: (id: string) => `/api/motorcycles/${id}`,
-  DELETE: (id: string) => `/api/motorcycles/${id}`,
-};
-
-export const REAL_ESTATE_ENDPOINTS = {
-  LIST: '/api/real-estate',
-  BY_ID: (id: string) => `/api/real-estate/${id}`,
-  CREATE: '/api/real-estate',
-  UPDATE: (id: string) => `/api/real-estate/${id}`,
-  DELETE: (id: string) => `/api/real-estate/${id}`,
-};
-
-export const FARM_EQUIPMENT_ENDPOINTS = {
-  LIST: '/api/traktor',
-  BY_ID: (id: string) => `/api/traktor/${id}`,
-  CREATE: '/api/traktor',
-  UPDATE: (id: string) => `/api/traktor/${id}`,
-  DELETE: (id: string) => `/api/traktor/${id}`,
-};
-
-export const MARKETPLACE_ENDPOINTS = {
-  LIST: '/api/marketplace',
-  BY_ID: (id: string) => `/api/marketplace/${id}`,
-  CREATE: '/api/marketplace',
-  UPDATE: (id: string) => `/api/marketplace/${id}`,
-  DELETE: (id: string) => `/api/marketplace/${id}`,
-};
-
-export const JOBS_ENDPOINTS = {
-  LIST: '/api/jobs',
-  BY_ID: (id: string) => `/api/jobs/${id}`,
-  CREATE: '/api/jobs',
-  UPDATE: (id: string) => `/api/jobs/${id}`,
-  DELETE: (id: string) => `/api/jobs/${id}`,
 };
 
 export const FAVORITES_ENDPOINTS = {
@@ -207,4 +152,9 @@ export const GEO_ENDPOINTS = {
 
 export const FEE_ENDPOINTS = {
   BASE: '/api/Fee',
+};
+
+export const IDENTIFICATION_ENDPOINTS = {
+  STATUS: '/api/identification/status',
+  SUBMIT: '/api/identification/submit',
 };

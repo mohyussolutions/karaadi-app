@@ -1,53 +1,11 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiClient } from '../client';
 import { GEO_ENDPOINTS } from '../../constants';
-
-interface GeoRegion {
-  id?: string;
-  _id?: string;
-  name: string;
-  cities?: GeoCity[];
-}
-
-interface GeoCity {
-  id?: string;
-  _id?: string;
-  name: string;
-  region?: string;
-}
-
-interface CacheEntry<T> {
-  data: T;
-  ts: number;
-}
-
-const CACHE_KEY = 'karaadi_geo_regions';
-const CACHE_TTL = 3_600_000;
-
-async function readCache<T>(): Promise<CacheEntry<T> | null> {
-  try {
-    const raw = await AsyncStorage.getItem(CACHE_KEY);
-    return raw ? (JSON.parse(raw) as CacheEntry<T>) : null;
-  } catch {
-    return null;
-  }
-}
-
-async function writeCache<T>(data: T): Promise<void> {
-  try {
-    await AsyncStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() }));
-  } catch {}
-}
+import type { GeoRegion, GeoCity } from '../../util/types/geo.types';
 
 export async function clientGetAllRegions(): Promise<GeoRegion[]> {
-  const cached = await readCache<GeoRegion[]>();
-  if (cached && Date.now() - cached.ts < CACHE_TTL) return cached.data;
-
   try {
     const res = await apiClient.get<GeoRegion[]>(GEO_ENDPOINTS.REGIONS);
-    const data = res.data ?? [];
-    await writeCache(data);
-    return data;
+    return res.data ?? [];
   } catch {
     return [];
   }
@@ -77,10 +35,6 @@ export async function clientAddCity(payload: {
   name: string;
   regionId: string;
 }): Promise<{ success: boolean; data: Record<string, unknown> }> {
-  try {
-    await AsyncStorage.removeItem(CACHE_KEY);
-  } catch {}
-
   try {
     const res = await apiClient.post(GEO_ENDPOINTS.CITIES, payload);
     return { success: true, data: res.data };

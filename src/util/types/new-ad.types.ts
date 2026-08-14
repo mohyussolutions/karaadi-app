@@ -1,3 +1,5 @@
+export type TFn = (key: string, opts?: Record<string, unknown>) => string;
+
 export type ListingType = 'private' | 'public';
 
 export type Step = 'login' | 'type' | 'category' | 'form' | 'plan' | 'summary' | 'payment';
@@ -91,6 +93,12 @@ export interface StepCategoryProps {
   onSelect: (key: string) => void;
   onNext: () => void;
   onBack: () => void;
+}
+
+export interface CategoryCardProps {
+  category: import('./category.types').MainCategory;
+  selected: boolean;
+  onPress: (key: string) => void;
 }
 
 export interface StepPaymentProps {

@@ -1,10 +1,12 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../components/hooks/useTheme';
 import { shadow } from '../../shadow';
+import { createCommonStyles } from '../common/common.style';
 
 export function createStyles(Colors: ColorPalette) {
+  const common = createCommonStyles(Colors);
   return StyleSheet.create({
-    root: { flex: 1, backgroundColor: Colors.background },
+    root: common.safeBase,
     topBar: {
       flexDirection: 'row', alignItems: 'center',
       paddingHorizontal: 16, paddingTop: 14, paddingBottom: 10,

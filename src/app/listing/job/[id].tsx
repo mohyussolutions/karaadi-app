@@ -8,7 +8,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
-import { JOBS_ENDPOINTS, DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE } from '../../../constants';
+import { JOBS_ENDPOINTS, DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, JOBS_CONFIG, buildSpecItems } from '../../../constants';
 import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
 import { useJobDetail, formatSalary } from '../../../components/hooks/useJobDetail';
 import ImageGallery from '../../../components/detail/ImageGallery';
@@ -59,14 +59,13 @@ export default function JobDetailScreen() {
   const poster = item.user;
   const posterName = typeof poster === 'object' ? poster?.username || t('jobsPage.labelEmployer') : t('jobsPage.labelEmployer');
   const posterAvatar = typeof poster === 'object' ? poster?.profileImage || null : null;
+  const posterVerified = typeof poster === 'object' ? poster?.isVerified : false;
 
-  const specItems: { label: string; value: string }[] = [
-    item.company && { label: t('jobsPage.labelCompany'), value: item.company },
-    (item.employmentType || item.type) && { label: t('jobsPage.labelJobType'), value: item.employmentType || item.type },
-    salary !== 'Negotiable' && { label: t('jobsPage.labelSalary'), value: salary },
-    item.location && { label: t('jobsPage.labelLocation'), value: item.location },
-    item.createdAt && { label: t('jobsPage.labelPosted'), value: formatDate(item.createdAt) },
-  ].filter(Boolean) as { label: string; value: string }[];
+  const specItems = buildSpecItems(
+    { ...item, salary: salary !== 'Negotiable' ? salary : undefined },
+    JOBS_CONFIG.fields,
+    t,
+  );
 
   const locationLabel = [item.city, item.region].filter(Boolean).join(', ') || item.location || t('vehicleDetail.locationFallback');
 
@@ -94,6 +93,7 @@ export default function JobDetailScreen() {
         profileImage={posterAvatar}
         userId={item?.userId || item?.user?._id || item?.user?.id || null}
         phone={item.user?.phone}
+        isVerified={posterVerified}
         subtitle={item.company || t('realEstateDetail.activeSeller')}
         onCall={handleCall}
         onMessage={handleApply}

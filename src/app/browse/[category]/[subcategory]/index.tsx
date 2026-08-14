@@ -1,12 +1,13 @@
 import React from "react";
-import { View, FlatList, Text, RefreshControl } from "react-native";
+import { View, Text, RefreshControl } from "react-native";
+import { FlashList } from "@shopify/flash-list";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { useThemeColors, useThemedStyles } from "../../../../components/hooks/useTheme";
 import { EmptyState } from "../../../../components/shared";
 import ListingCard from "../../../../components/cards/ListingCard";
-import ListingCardSkeleton from "../../../../components/cards/ListingCardSkeleton";
-import BottomTabBar from "../../../../components/layout/BottomTabBar";
+import { ListingCardSkeleton } from "../../../../components/loading";
+import BottomTabBar from "../../../../navigation/BottomTabBar";
 import { useAppSelector } from "../../../../store/store";
 import { useAppTranslation } from "../../../../components/hooks/useAppTranslation";
 import { useResponsive } from "../../../../components/hooks/useResponsive";
@@ -18,6 +19,7 @@ import { createStyles } from "../../../../util/styles/browse/subcategory.styles"
 import { SubcategoryHeader } from "../../../../components/browse/SubcategoryScreen/SubcategoryHeader";
 import { SidebarNested } from "../../../../components/browse/SubcategoryScreen/SidebarNested";
 import { LocationFilterModal } from "../../../../components/modals/LocationFilterModal";
+import type { ListingBase } from "../../../../util/types/listing.types";
 
 const H_PAD = 12;
 const GAP = 8;
@@ -31,7 +33,7 @@ export default function SubcategoryScreen() {
   const user = useAppSelector((s) => s.auth.user);
   const searchQuery = useAppSelector((s) => s.browseSearch.query);
   const { t } = useAppTranslation();
-  const { isTabletLandscape, sidebarWidth, mainWidth, numColumns, cardWidth } = useResponsive();
+  const { isTabletLandscape, sidebarWidth, numColumns } = useResponsive();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
@@ -55,7 +57,6 @@ export default function SubcategoryScreen() {
   const categoryLabel = t(`categories.${categoryKey}`, { defaultValue: category?.name ?? categoryKey });
   const subLabel = t(`subcategories.${group}.${subcategoryKey}`, { defaultValue: sub?.name ?? subcategoryKey });
   const subIcon = (sub?.icon ?? "tag-outline") as string;
-  const CARD_W = cardWidth(isTabletLandscape ? mainWidth : undefined, numColumns, H_PAD, GAP);
 
   function handlePost() {
     router.push(user ? "/(tabs)/new-ad" : "/(auth)/login");
@@ -94,16 +95,11 @@ export default function SubcategoryScreen() {
   );
 
   const feedList = (
-    <FlatList
+    <FlashList<ListingBase>
       key={`sub-${numColumns}`}
-      data={loading ? (skeletonData as any) : listings}
+      data={loading ? (skeletonData as unknown as ListingBase[]) : listings}
       numColumns={numColumns}
       keyExtractor={(item) => item.id || item._id}
-      removeClippedSubviews
-      windowSize={5}
-      maxToRenderPerBatch={10}
-      initialNumToRender={10}
-      columnWrapperStyle={styles.colWrapper}
       contentContainerStyle={listings.length === 0 && !loading ? styles.emptyContainer : [styles.listContent, { paddingBottom: insets.bottom + 84 }]}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}
       showsVerticalScrollIndicator={false}
@@ -117,8 +113,14 @@ export default function SubcategoryScreen() {
           />
         ) : null
       }
-      renderItem={({ item }) => (
-        <View style={{ width: CARD_W }}>
+      renderItem={({ item, index }) => (
+        <View
+          style={{
+            paddingLeft: index % numColumns === 0 ? H_PAD : GAP / 2,
+            paddingRight: (index + 1) % numColumns === 0 ? H_PAD : GAP / 2,
+            paddingBottom: GAP,
+          }}
+        >
           {loading ? <ListingCardSkeleton /> : <ListingCard item={item} categoryKey={categoryKey} />}
         </View>
       )}

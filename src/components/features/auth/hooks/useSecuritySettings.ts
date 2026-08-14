@@ -7,22 +7,9 @@ import {
   getSessions, getLoginHistory, logoutSession,
   logoutAllSessions, deleteLoginHistoryEntry, clearLoginHistory,
 } from '../api/security.actions';
+import type { Session, LoginEntry } from '../../../../util/types';
 
-export interface Session {
-  id: string;
-  device?: string | null;
-  browser?: string | null;
-  active?: boolean;
-  lastActive?: string | null;
-}
-
-export interface LoginEntry {
-  id: number;
-  device?: string | null;
-  browser?: string | null;
-  ipAddress?: string | null;
-  loggedAt: string;
-}
+export type { Session, LoginEntry };
 
 export function useSecuritySettings() {
   const router = useRouter();

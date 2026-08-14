@@ -19,10 +19,10 @@ export function createStyles(Colors: ColorPalette, width = 390) {
     },
     list: {
       paddingHorizontal: 16,
-      gap: 10,
     },
     card: {
       width: CARD_W,
+      marginRight: 10,
       backgroundColor: Colors.card,
       borderRadius: 12,
       overflow: 'hidden',

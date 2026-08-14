@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import {
   View, Text, FlatList, TouchableOpacity, Modal,
   TextInput, Alert, KeyboardAvoidingView, Platform, ScrollView, Image,
@@ -9,7 +9,7 @@ import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { EmptyState, AppIcon } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
-import { Dropdown } from '../../components/features/new-ad/components/forms';
+import { Dropdown } from '../../components/forms';
 import RegionCityPicker from '../../components/geo/RegionCityPicker';
 import { useAuthStore } from '../../store/authStore';
 import { useAppTranslation } from '../../components/hooks/useAppTranslation';
@@ -23,6 +23,7 @@ import {
 import { MAIN_CATEGORIES, getCategoryByKey, SUB_I18N_GROUP } from '../../constants';
 import { formatPrice } from '../../util/helpers';
 import type { Subscription, SubscriptionPayload, WantedFormState } from '../../util/types';
+import { maxLenSchema } from '../../util/validation/schemas';
 
 const MAX_IMAGES = 3;
 
@@ -74,23 +75,23 @@ export default function WantedScreen() {
   const nestedSubCategories = selectedSubCategory?.nested ?? [];
   const i18nGroup = SUB_I18N_GROUP[form.category] ?? form.category.toLowerCase();
 
-  const categoryOptions = MAIN_CATEGORIES.map((c) => ({
+  const categoryOptions = useMemo(() => MAIN_CATEGORIES.map((c) => ({
     label: t(`categories.${c.key}`, { defaultValue: c.name }),
     value: c.key,
-  }));
+  })), [t]);
 
-  const subCategoryOptions = [
+  const subCategoryOptions = useMemo(() => [
     { label: t('subscription.allCategories'), value: '' },
     ...subCategories.map((sub) => ({
       label: t(`subcategories.${i18nGroup}.${sub.key}`, { defaultValue: sub.name }),
       value: sub.key,
     })),
-  ];
+  ], [subCategories, i18nGroup, t]);
 
-  const nestedSubCategoryOptions = [
+  const nestedSubCategoryOptions = useMemo(() => [
     { label: t('subscription.allCategories'), value: '' },
     ...nestedSubCategories.map((n) => ({ label: t(n.labelKey), value: n.key })),
-  ];
+  ], [nestedSubCategories, t]);
 
   function handleCategoryChange(value: string) {
     setForm((prev) => ({ ...prev, category: value, subCategory: '', nestedSubCategory: '' }));
@@ -128,6 +129,14 @@ export default function WantedScreen() {
   async function handleSave() {
     if (!form.title.trim() || !form.region.trim() || !form.city.trim()) {
       Alert.alert(t('subscription.required'));
+      return;
+    }
+    if (!maxLenSchema(120).safeParse(form.title).success || !maxLenSchema(1000).safeParse(form.description).success) {
+      Alert.alert(t('subscription.required'));
+      return;
+    }
+    if (form.priceMin && form.priceMax && Number(form.priceMin) > Number(form.priceMax)) {
+      Alert.alert(t('subscription.priceRangeInvalid'));
       return;
     }
     setSaving(true);

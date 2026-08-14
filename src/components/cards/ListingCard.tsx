@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,7 @@ import { showToast } from '../../util/cache/toastService';
 import { useAppSelector, useAppDispatch } from '../../store/store';
 import { toggleFavorite } from '../../store/slices/favoritesSlice';
 import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
+import RemoteImage from '../shared/RemoteImage';
 import type { ListingCardProps } from '../../util/types';
 import { createStyles } from '../../util/styles/shared/listingCard.styles';
 
@@ -54,11 +55,11 @@ const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey
   return (
     <TouchableOpacity style={styles.card} onPress={handlePress} activeOpacity={0.88}>
       <View style={[styles.imgWrap, imageAspectRatio ? { aspectRatio: imageAspectRatio } : null]}>
-        <Image
+        <RemoteImage
           source={{ uri: image }}
           style={styles.img}
           resizeMode="cover"
-          fadeDuration={0}
+          recyclingKey={listingId}
         />
 
         {item.maGaday ? (
@@ -88,9 +89,9 @@ const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey
       <View style={styles.body}>
         <Text style={styles.title} numberOfLines={2}>{item.title}</Text>
 
-        {item.description ? (
-          <Text style={styles.description} numberOfLines={1}>{truncate(item.description, 80)}</Text>
-        ) : null}
+        <Text style={styles.description} numberOfLines={1}>
+          {item.description ? truncate(item.description, 80) : ''}
+        </Text>
 
         <View style={styles.footer}>
           <Text style={styles.price} numberOfLines={1}>

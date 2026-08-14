@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
 import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
-import { REAL_ESTATE_ENDPOINTS, DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE } from '../../../constants';
+import { REAL_ESTATE_ENDPOINTS, DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, REAL_ESTATE_CONFIG, buildSpecItems } from '../../../constants';
 import { AMENITY_ICONS, AMENITY_KEYS } from '../../../util/icons/icons';
 import { useRealEstateDetail } from '../../../components/hooks/useRealEstateDetail';
 import ImageGallery from '../../../components/detail/ImageGallery';
@@ -52,17 +52,7 @@ export default function RealEstateDetailScreen() {
   const TRUNCATE = DESCRIPTION_TRUNCATE;
   const badge = item.maGaday ? { label: t('realEstateDetail.waaLaGatay'), color: Colors.error } : null;
 
-  const specItems: { label: string; value: string }[] = [
-    item.propertyType && { label: t('realEstateDetail.propertyTypeLabel'), value: item.propertyType },
-    item.category && { label: t('realEstateDetail.categoryLabel'), value: item.category },
-    item.subcategory && { label: t('realEstateDetail.subcategoryLabel'), value: item.subcategory },
-    item.bedrooms != null && { label: t('realEstateDetail.bedroomsLabel'), value: String(item.bedrooms) },
-    item.bathrooms != null && { label: t('realEstateDetail.bathroomsLabel'), value: String(item.bathrooms) },
-    item.area && { label: t('realEstateDetail.sizeSqmLabel'), value: `${item.area} ${t('realEstateDetail.sqm')}` },
-    item.floor != null && { label: t('realEstateDetail.floorLabel'), value: String(item.floor) },
-    item.totalFloors != null && { label: t('realEstateDetail.totalFloorsLabel'), value: String(item.totalFloors) },
-    item.furnished != null && { label: t('realEstateDetail.furnished'), value: item.furnished ? t('vehicleDetail.furnishedYes') : t('vehicleDetail.furnishedNo') },
-  ].filter(Boolean) as { label: string; value: string }[];
+  const specItems = buildSpecItems(item, REAL_ESTATE_CONFIG.fields, t);
 
   const itemRecord = item as unknown as Record<string, unknown>;
   const amenities = AMENITY_KEYS.filter((k) => itemRecord[k] === true);
@@ -146,6 +136,7 @@ export default function RealEstateDetailScreen() {
         username={item.user?.username} profileImage={item.user?.profileImage}
         userId={item?.userId || item?.user?._id || item?.user?.id || null}
         phone={item.user?.phone} subtitle={t('realEstateDetail.activeSeller')}
+        isVerified={item.user?.isVerified}
         onMessage={item.maGaday ? undefined : handleContact}
         disabled={Boolean(item.maGaday)}
       />

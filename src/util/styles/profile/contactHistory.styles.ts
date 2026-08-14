@@ -1,9 +1,11 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../components/hooks/useTheme';
+import { createCommonStyles } from '../common/common.style';
 
 export function createStyles(Colors: ColorPalette) {
+  const common = createCommonStyles(Colors);
   return StyleSheet.create({
-    safe: { flex: 1, backgroundColor: Colors.background },
+    safe: common.safeBase,
     center: { flex: 1, justifyContent: 'center' },
     content: { padding: 16, paddingBottom: 32 },
     loadingBox: { paddingVertical: 40, alignItems: 'center' },

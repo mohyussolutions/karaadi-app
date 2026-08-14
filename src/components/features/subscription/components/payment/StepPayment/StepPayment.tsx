@@ -1,10 +1,11 @@
 import { Platform } from 'react-native';
-import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useThemeColors, useThemedStyles } from '../../../../../hooks/useTheme';
 import { useAppTranslation } from '../../../../../hooks/useAppTranslation';
 import { useTabBarClearance } from '../../../../../hooks/useTabBarClearance';
+import { LoadingSpinner } from '../../../../../loading';
 import { useAppSelector } from '../../../../../../store/store';
 import type { StepPaymentProps } from '../../../../../../util/types';
 import { MAX_POLL_ATTEMPTS, type PaymentMethodOption } from '../payment.constants';
@@ -16,13 +17,12 @@ import { usePaymentFlow } from './usePaymentFlow';
 import { createStyles } from '../../../../../../util/styles/payment/stepPayment.styles';
 
 function ActivatingScreen() {
-  const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
   return (
     <View style={s.root}>
       <View style={s.activatingWrap}>
-        <ActivityIndicator size="large" color={Colors.primary} />
+        <LoadingSpinner />
         <Text style={s.activatingText}>{t('postAd.activatingListing')}</Text>
       </View>
     </View>

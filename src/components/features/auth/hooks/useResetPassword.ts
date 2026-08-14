@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { resetPassword, forgotPassword } from '../api/auth.actions';
+import { passwordSchema, confirmationCodeSchema } from '../../../../util/validation/schemas';
 
 export function useResetPassword(email: string) {
   const router = useRouter();
@@ -16,11 +17,14 @@ export function useResetPassword(email: string) {
     if (!code.trim() || !password.trim() || !confirmPassword.trim()) {
       return { success: false, key: 'fillAll' };
     }
+    if (!confirmationCodeSchema.safeParse(code).success) {
+      return { success: false, key: 'invalidCode' };
+    }
     if (password !== confirmPassword) {
       return { success: false, key: 'passwordsMustMatch' };
     }
-    if (password.length < 8) {
-      return { success: false, key: 'minChars' };
+    if (!passwordSchema.safeParse(password).success) {
+      return { success: false, key: 'passwordInvalid' };
     }
     setIsLoading(true);
     try {

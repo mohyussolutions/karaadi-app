@@ -2,14 +2,15 @@ import { StyleSheet } from "react-native";
 import type { ColorPalette } from "../../../components/hooks/useTheme";
 import { RADII } from "../../colors/theme";
 import { shadow } from "../../shadow";
+import { createCommonStyles } from "../common/common.style";
 
 export const H_PAD = 16;
 export const COL_GAP = 12;
 
-export function createStyles(Colors: ColorPalette, width = 390) {
-  const CARD_W = (width - H_PAD * 2 - COL_GAP) / 2;
+export function createStyles(Colors: ColorPalette) {
+  const common = createCommonStyles(Colors);
   return StyleSheet.create({
-    safe: { flex: 1, backgroundColor: Colors.background },
+    safe: common.safeBase,
     guestWrap: {
       flex: 1,
       backgroundColor: Colors.background,
@@ -38,9 +39,8 @@ export function createStyles(Colors: ColorPalette, width = 390) {
       paddingHorizontal: 48,
     },
     signInText: { color: Colors.white, fontWeight: "600", fontSize: 16 },
-    list: { padding: H_PAD, paddingBottom: 32 },
-    row: { gap: COL_GAP, marginBottom: COL_GAP },
-    listHeader: { paddingBottom: 10, paddingHorizontal: 2 },
+    list: { paddingTop: H_PAD, paddingBottom: 32 },
+    listHeader: { paddingBottom: 10, paddingHorizontal: H_PAD },
     countText: { fontSize: 14, color: Colors.textMuted, fontWeight: "600" },
     emptyWrap: {
       flex: 1,
@@ -76,11 +76,10 @@ export function createStyles(Colors: ColorPalette, width = 390) {
   });
 }
 
-export function createCardStyles(Colors: ColorPalette, width = 390) {
-  const CARD_W = (width - H_PAD * 2 - COL_GAP) / 2;
+export function createCardStyles(Colors: ColorPalette) {
   return StyleSheet.create({
     card: {
-      width: CARD_W,
+      flex: 1,
       backgroundColor: Colors.card,
       borderRadius: RADII.xl,
       overflow: "hidden",

@@ -1,10 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { ListingBase } from '../../util/types/listing.types';
-
-interface FeedState {
-  listings: ListingBase[];
-  recommendations: ListingBase[];
-}
+import type { FeedState } from '../../util/types/redux.types';
 
 const initialState: FeedState = {
   listings: [],

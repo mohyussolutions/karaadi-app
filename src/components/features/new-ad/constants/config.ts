@@ -33,16 +33,18 @@ export const CATEGORY_MAIN_LABEL: Record<string, string> = {
   Jobs: 'Jobs',
 };
 
-export const PLAN_CARD_COLORS = {
-  popularBadge: '#374151',
-  unselectedBtn: '#111827',
-} as const;
+export function getPlanCardColors(Colors: ColorPalette) {
+  return {
+    popularBadge: Colors.gray700,
+    unselectedBtn: Colors.gray900,
+  } as const;
+}
 
 export function getPlanStyle(Colors: ColorPalette): Record<string, { color: string; icon: string; bg: string }> {
   return {
     basic:    { color: Colors.gray500, icon: 'shield-outline',  bg: Colors.gray100 },
     standard: { color: Colors.primary, icon: 'lightning-bolt', bg: Colors.primaryGhost },
-    premium:  { color: '#D97706', icon: 'star',           bg: '#FFFBEB' },
+    premium:  { color: Colors.premium, icon: 'star',           bg: Colors.premium + '15' },
   };
 }
 
@@ -56,7 +58,7 @@ export function planStyle(plan: { key?: string }, Colors: ColorPalette) {
 export const BASE_PLANS = [
   {
     key: 'premium90', label: 'Premium', days: 90, popular: false,
-    features: ['90 Maalmood', 'Social Media Boost', 'Safka hore (Top)', 'Premium Badge', 'Sawirro aan xadidnayn', 'Taageero 24/7 ah'],
+    features: ['90 Maalmood', 'Social Media Boost', 'Safka hore (Top)', 'Taageero 24/7 ah'],
   },
   {
     key: 'standard60', label: 'Standard', days: 60, popular: true,
@@ -64,7 +66,7 @@ export const BASE_PLANS = [
   },
   {
     key: 'basic30', label: 'Basic', days: 30, popular: false,
-    features: ['30 Maalmood', 'Raadinta aasaasiga ah', '10 Sawir', 'Taageero email'],
+    features: ['30 Maalmood', 'Raadinta aasaasiga ah', 'Taageero email'],
   },
 ];
 

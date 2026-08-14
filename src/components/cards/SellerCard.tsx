@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
@@ -7,6 +7,8 @@ import { getReviewsByUser } from '../../api/core/reviews.actions';
 import { placeholderAvatar } from '../../constants';
 import type { SellerCardProps } from '../../util/types';
 import { createStyles } from '../../util/styles/detail/SellerCard.styles';
+import RemoteImage from '../shared/RemoteImage';
+import VerifiedBadge from '../shared/VerifiedBadge';
 
 function StarRating({ rating, count }: { rating: number; count: number }) {
   const Colors = useThemeColors();
@@ -28,7 +30,7 @@ function StarRating({ rating, count }: { rating: number; count: number }) {
 }
 
 export default function SellerCard({
-  username, profileImage, phone, subtitle, userId,
+  username, profileImage, phone, subtitle, userId, isVerified,
   onMessage, onCall, messageBtnLabel, messageBtnIcon = 'message-outline', disabled,
 }: SellerCardProps) {
   const { t } = useTranslation();
@@ -55,9 +57,12 @@ export default function SellerCard({
   return (
     <View style={s.card}>
       <View style={s.row}>
-        <Image source={{ uri: profileImage || fallback }} style={s.avatar} />
+        <RemoteImage source={{ uri: profileImage || fallback }} style={s.avatar} iconSize={16} />
         <View style={s.info}>
-          <Text style={s.name}>{username || t('chats.seller')}</Text>
+          <View style={s.nameRow}>
+            <Text style={s.name}>{username || t('chats.seller')}</Text>
+            <VerifiedBadge visible={isVerified} size={15} />
+          </View>
           {subtitle && <Text style={s.sub}>{subtitle}</Text>}
           {rating !== null && <StarRating rating={rating} count={reviewCount} />}
         </View>

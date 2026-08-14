@@ -1,7 +1,7 @@
 import React, { useRef, useCallback, useState } from 'react';
 import type { ImageGalleryProps } from '../../util/types';
 import {
-  View, Image, ScrollView, Pressable, Text, Platform, Modal, TouchableOpacity,
+  View, ScrollView, Pressable, Text, Platform, Modal, TouchableOpacity,
   NativeSyntheticEvent, NativeScrollEvent,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -9,6 +9,7 @@ import { useGlobal } from '../hooks/useGlobal';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
 import { createStyles, createSheetStyles } from '../../util/styles/detail/ImageGallery.styles';
+import RemoteImage from '../shared/RemoteImage';
 
 export const IMG_H = 320; // fallback; component uses live width
 
@@ -60,7 +61,7 @@ export default function ImageGallery({
             disabled={!onImagePress}
             style={{ width, height: imgH }}
           >
-            <Image
+            <RemoteImage
               source={{ uri: img }}
               style={styles.image}
               resizeMode="cover"
@@ -134,10 +135,11 @@ export default function ImageGallery({
         >
           {images.map((img, i) => (
             <Pressable key={i} onPress={() => goTo(i)} hitSlop={4}>
-              <Image
+              <RemoteImage
                 source={{ uri: img }}
                 style={[styles.thumb, i === activeIndex && styles.thumbActive]}
                 resizeMode="cover"
+                iconSize={14}
               />
             </Pressable>
           ))}

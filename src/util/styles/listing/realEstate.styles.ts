@@ -1,9 +1,11 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../components/hooks/useTheme';
+import { createCommonStyles } from '../common/common.style';
 
 export function createStyles(Colors: ColorPalette) {
+  const common = createCommonStyles(Colors);
   return StyleSheet.create({
-    safe: { flex: 1, backgroundColor: Colors.background },
+    safe: common.safeBase,
     specWrap: { padding: 16, paddingTop: 8 },
     amenitiesCard: { margin: 16, marginTop: 0 },
     readMoreBtn: { marginTop: 8 },

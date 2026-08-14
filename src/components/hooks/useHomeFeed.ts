@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useAppSelector, useAppDispatch } from '../../store/store';
 import { fetchFeedGroup, getHomeFeedRecommendations } from '../../api/categories/feed.actions';
 import { mergeListings } from '../../util/cache/feedCacheService';
-import { waitForImages } from '../../util/helpers';
+import { prefetchImages } from '../../util/helpers';
 import { setFeed, setRecommendations } from '../../store/slices/feedSlice';
 import type { ListingBase } from '../../util/types/listing.types';
 
@@ -55,6 +55,7 @@ export function useHomeFeed() {
 
   const [refreshing, setRefreshing] = useState(false);
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
+  const [revealing, setRevealing] = useState(false);
 
   useEffect(() => {
     const ctrl = new AbortController();
@@ -63,9 +64,8 @@ export function useHomeFeed() {
       if (ctrl.signal.aborted) return;
       if (fast.length > 0) {
         const sorted = sortByTierRandom(fast);
-        await waitForImages(sorted, INITIAL_VISIBLE);
-        if (ctrl.signal.aborted) return;
         dispatch(setFeed(sorted));
+        prefetchImages(sorted, INITIAL_VISIBLE).catch(() => {});
       }
 
       const slow = await fetchFeedGroup('slow', ctrl.signal);
@@ -80,14 +80,10 @@ export function useHomeFeed() {
   useEffect(() => {
     if (!user) return;
     const ctrl = new AbortController();
-    fetchRecommendations(ctrl.signal).then(async (recs) => {
-      if (ctrl.signal.aborted || recs.length === 0) {
-        if (!ctrl.signal.aborted) dispatch(setRecommendations(recs));
-        return;
-      }
-      await waitForImages(recs);
+    fetchRecommendations(ctrl.signal).then((recs) => {
       if (ctrl.signal.aborted) return;
       dispatch(setRecommendations(recs));
+      if (recs.length > 0) prefetchImages(recs).catch(() => {});
     });
     return () => ctrl.abort();
   }, [user?.id, dispatch]);
@@ -102,11 +98,11 @@ export function useHomeFeed() {
     ]);
     const fastValue = fast.status === 'fulfilled' ? fast.value : [];
     const recsValue = recs.status === 'fulfilled' ? (recs.value as ListingBase[]) : [];
-    await Promise.all([waitForImages(fastValue, INITIAL_VISIBLE), waitForImages(recsValue)]);
 
     if (fastValue.length > 0) dispatch(setFeed(sortByTierRandom(fastValue)));
     if (recs.status === 'fulfilled') dispatch(setRecommendations(recsValue));
     setRefreshing(false);
+    Promise.all([prefetchImages(fastValue, INITIAL_VISIBLE), prefetchImages(recsValue)]).catch(() => {});
 
     fetchFeedGroup('slow').then((slow) => {
       if (slow.length === 0) return;
@@ -116,10 +112,14 @@ export function useHomeFeed() {
     });
   }, [user, dispatch, listings]);
 
-  function showMore() { setVisibleCount((n) => n + READ_MORE_STEP); }
+  const showMore = useCallback(() => {
+    const nextBatch = listings.slice(visibleCount, visibleCount + READ_MORE_STEP);
+    setVisibleCount((n) => n + READ_MORE_STEP);
+    prefetchImages(nextBatch).catch(() => {});
+  }, [listings, visibleCount]);
 
   const visibleListings = listings.slice(0, visibleCount);
   const hasMore = visibleCount < listings.length;
 
-  return { user, listings, recommendations, refreshing, visibleListings, hasMore, onRefresh, showMore };
+  return { user, listings, recommendations, refreshing, visibleListings, hasMore, onRefresh, showMore, revealing };
 }

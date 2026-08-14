@@ -11,6 +11,7 @@ export function createStyles(Colors: ColorPalette) {
     row: { flexDirection: 'row', alignItems: 'center', gap: 12 },
     avatar: { width: 52, height: 52, borderRadius: 26, backgroundColor: Colors.border },
     info: { flex: 1, gap: 3 },
+    nameRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
     name: { fontSize: 15, fontWeight: '700', color: Colors.text },
     sub: { fontSize: 13, color: Colors.textSecondary },
     starRow: { flexDirection: 'row', alignItems: 'center', gap: 3, marginTop: 2 },

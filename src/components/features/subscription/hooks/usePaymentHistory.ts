@@ -2,25 +2,9 @@ import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'expo-router';
 import { useAuthStore } from '../../../../store/authStore';
 import { getPaymentHistory } from '../api/payment.actions';
+import type { PaymentItem } from '../../../../util/types/payment.types';
 
-export interface PaymentItem {
-  id: string;
-  totalAmount?: number;
-  status?: string;
-  paymentMethod?: string;
-  transactionId?: string;
-  paidAt?: string;
-  createdAt?: string;
-  boatId?: string;
-  carId?: string;
-  realEstateId?: string;
-  motorcycleId?: string;
-  farmequipmentId?: string;
-  marketplaceId?: string;
-  jobId?: string;
-  subscriptionId?: string;
-  businessId?: string;
-}
+export type { PaymentItem };
 
 export function usePaymentHistory() {
   const router = useRouter();

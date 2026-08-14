@@ -2,7 +2,7 @@
   "expo": {
     "name": "Karaadi",
     "slug": "karaadi",
-    "version": "1.0.8",
+    "version": "1.0.10",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -92,7 +92,8 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-video"
+      "expo-video",
+      "expo-image"
     ],
     "extra": {
       "eas": {

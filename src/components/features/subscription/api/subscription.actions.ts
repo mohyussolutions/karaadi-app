@@ -75,7 +75,9 @@ export async function checkAlertsForMatches(): Promise<void> {
         title: sub.title || undefined,
         region: sub.region || undefined,
         city: sub.cities?.[0] || undefined,
+        minPrice: sub.priceMin || undefined,
         maxPrice: sub.priceMax || undefined,
+        ...(sub.subCategory ? { category: sub.subCategory, categoryTag: sub.subCategory } : {}),
         limit: 10,
       };
 

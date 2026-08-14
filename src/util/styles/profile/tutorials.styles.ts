@@ -1,9 +1,11 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../components/hooks/useTheme';
+import { createCommonStyles } from '../common/common.style';
 
 export function createStyles(Colors: ColorPalette) {
+  const common = createCommonStyles(Colors);
   return StyleSheet.create({
-    safe: { flex: 1, backgroundColor: Colors.background },
+    safe: common.safeBase,
     content: { padding: 16 },
     header: { marginBottom: 16 },
     title: { fontSize: 22, fontWeight: '800', color: Colors.text, marginBottom: 6 },

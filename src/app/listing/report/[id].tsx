@@ -11,6 +11,7 @@ import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTh
 import { useAuthStore } from '../../../store/authStore';
 import { createReport } from '../../../api/core/report.actions';
 import { createStyles } from '../../../util/styles/listing/report.styles';
+import { maxLenSchema } from '../../../util/validation/schemas';
 
 const REASON_OPTIONS = [
   { value: 'scam', labelKey: 'report.reasonScam' },
@@ -50,6 +51,7 @@ export default function ReportScreen() {
   async function handleSubmit() {
     if (!user?.id || !id) { setError(t('report.errorNoUser')); return; }
     if (!reason) { setError(t('report.errorNoReason')); return; }
+    if (!maxLenSchema(1000).safeParse(details).success) { setError(t('report.errorDetailsTooLong')); return; }
 
     setSubmitting(true);
     setError('');

@@ -1,12 +1,14 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../components/hooks/useTheme';
+import { createCommonStyles } from '../common/common.style';
 
 export const H_PAD = 12;
 export const COL_GAP = 8;
 
 export function createStyles(Colors: ColorPalette) {
+  const common = createCommonStyles(Colors);
   return StyleSheet.create({
-    safe: { flex: 1, backgroundColor: Colors.background },
+    safe: common.safeBase,
     webCenterWrap: { alignItems: 'center' },
     outerRow: { flexDirection: 'row' },
     sidebar: {
@@ -32,7 +34,6 @@ export function createStyles(Colors: ColorPalette) {
       gap: 8,
     },
     postBtnText: { flex: 1, color: Colors.white, fontWeight: '700', fontSize: 15 },
-    colWrapper: { paddingHorizontal: H_PAD, gap: COL_GAP, marginBottom: COL_GAP },
     empty: { textAlign: 'center', color: Colors.textMuted, padding: 32 },
     readMoreBtn: {
       flexDirection: 'row',
@@ -50,7 +51,7 @@ export function createStyles(Colors: ColorPalette) {
     readMoreText: { fontSize: 14, fontWeight: '600', color: Colors.primary },
     recSection: { marginTop: 8 },
     recTitle: { paddingHorizontal: H_PAD, marginBottom: 8 },
-    recListContent: { paddingHorizontal: H_PAD, gap: 8 },
+    recListContent: { paddingHorizontal: H_PAD },
     mainFlex: { flex: 1 },
   });
 }

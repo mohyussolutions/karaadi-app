@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  View, Text, ScrollView, ActivityIndicator,
+  View, Text, ScrollView,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -8,6 +8,7 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { useThemeColors, useThemedStyles, type ColorPalette } from '../../../components/hooks/useTheme';
+import { LoadingSpinner } from '../../../components/loading';
 import { usePaymentHistory, type PaymentItem } from '../../../components/features/subscription/hooks/usePaymentHistory';
 import { createStyles } from '../../../util/styles/settings/payment.styles';
 import type { PaymentStatusConfig, PaymentCategoryInfo } from '../../../util/types';
@@ -47,13 +48,7 @@ export default function PaymentSettings() {
 
   if (!user) return null;
 
-  if (loading) {
-    return (
-      <SafeAreaView style={s.safe} edges={['bottom']}>
-        <ActivityIndicator style={s.loadingIndicator} color={Colors.primary} />
-      </SafeAreaView>
-    );
-  }
+  if (loading) return <LoadingSpinner fullScreen />;
 
   return (
     <SafeAreaView style={s.safe} edges={['bottom']}>

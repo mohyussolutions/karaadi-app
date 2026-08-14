@@ -1,4 +1,4 @@
-import { Image } from 'react-native';
+import { Image } from 'expo-image';
 import { API_BASE_URL } from '../../constants';
 
 export function getImageUrl(path: string | undefined | null): string {
@@ -7,19 +7,17 @@ export function getImageUrl(path: string | undefined | null): string {
   return `${API_BASE_URL}/${path.startsWith('/') ? path.slice(1) : path}`;
 }
 
-const PREFETCH_TIMEOUT_MS = 700;
+const PREFETCH_TIMEOUT_MS = 1200;
 
 export function prefetchImages(items: { images?: string[] }[], limit?: number): Promise<void> {
   const list = typeof limit === 'number' ? items.slice(0, limit) : items;
-  const promises = list
+  const uris = list
     .map((item) => getImageUrl(item.images?.[0]))
-    .filter((uri): uri is string => !!uri)
-    .map((uri) => Image.prefetch(uri).catch(() => {}));
-  return Promise.all(promises).then(() => undefined);
+    .filter((uri): uri is string => !!uri);
+  if (uris.length === 0) return Promise.resolve();
+  return Image.prefetch(uris, 'memory-disk').catch(() => false).then(() => undefined);
 }
 
-// Waits for thumbnails to finish downloading (capped) so cards mount with images
-// already loaded instead of the image popping in after the card's text/price.
 export function waitForImages(items: { images?: string[] }[], limit?: number): Promise<void> {
   return Promise.race([
     prefetchImages(items, limit),

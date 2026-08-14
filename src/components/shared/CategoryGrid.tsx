@@ -7,14 +7,7 @@ import { useAppTranslation } from "../hooks/useAppTranslation";
 import { useThemeColors, useThemedStyles } from "../hooks/useTheme";
 import { useResponsive } from "../hooks/useResponsive";
 import { createStyles, H_PAD, GAP } from "../../util/styles/shared/categoryGrid.styles";
-import type { CategoryGridProps } from "../../util/types";
-
-interface CategoryCellProps {
-  category: MainCategory;
-  label: string;
-  width: number;
-  onPress: (category: MainCategory) => void;
-}
+import type { CategoryGridProps, CategoryCellProps } from "../../util/types";
 
 const CategoryCell = memo(function CategoryCell({ category, label, width, onPress }: CategoryCellProps) {
   const Colors = useThemeColors();

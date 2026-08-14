@@ -1,14 +1,16 @@
 import { StyleSheet } from "react-native";
 import type { ColorPalette } from "../../../components/hooks/useTheme";
+import { createCommonStyles } from "../common/common.style";
 
 export const H_PAD = 12;
 export const GAP = 8;
 export const GRID_GAP = 6;
 
 export function createStyles(Colors: ColorPalette) {
+  const common = createCommonStyles(Colors);
   return StyleSheet.create({
-    safe: { flex: 1, backgroundColor: Colors.background },
-    root: { flex: 1, backgroundColor: Colors.background },
+    safe: common.safeBase,
+    root: common.safeBase,
     outerRow: { flex: 1, flexDirection: "row" },
     flexFull: { flex: 1 },
     sidebar: {
@@ -62,7 +64,6 @@ export function createStyles(Colors: ColorPalette) {
     },
     postBtnSpaced: { marginHorizontal: H_PAD, marginBottom: 8 },
     postBtnText: { color: Colors.white, fontWeight: "700", fontSize: 13 },
-    colWrapper: { paddingHorizontal: H_PAD, gap: GAP, marginBottom: GAP },
     listContent: { paddingBottom: 32 },
     emptyContainer: { flex: 1, paddingTop: 40 },
     countRow: { paddingHorizontal: H_PAD, paddingVertical: 6 },

@@ -6,6 +6,7 @@ export interface User {
   profileImage?: string | null;
   phone?: string;
   phoneVerified?: boolean;
+  hidePhone?: boolean;
   isAdmin: boolean;
   cognitoId?: string;
   token: string;
@@ -16,4 +17,20 @@ export interface User {
 export interface AuthResponse {
   token: string;
   user: User & { accessToken?: string };
+}
+
+export interface Session {
+  id: string;
+  device?: string | null;
+  browser?: string | null;
+  active?: boolean;
+  lastActive?: string | null;
+}
+
+export interface LoginEntry {
+  id: number;
+  device?: string | null;
+  browser?: string | null;
+  ipAddress?: string | null;
+  loggedAt: string;
 }

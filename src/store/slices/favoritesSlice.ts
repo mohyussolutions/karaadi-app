@@ -1,13 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getFavorites, addFavorite, removeFavorite } from '../../api/categories/favorite.actions';
 import type { Favorite } from '../../util/types';
-
-interface FavoritesState {
-  ids: string[];
-  idMap: Record<string, string>;
-  items: Favorite[];
-  loaded: boolean;
-}
+import type { FavoritesState } from '../../util/types/redux.types';
 
 const initialState: FavoritesState = {
   ids: [],

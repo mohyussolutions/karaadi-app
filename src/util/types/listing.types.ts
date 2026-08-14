@@ -1,3 +1,13 @@
+export interface ListingUser {
+  _id?: string;
+  id?: string;
+  username: string;
+  email: string;
+  phone?: string;
+  profileImage?: string;
+  isVerified?: boolean;
+}
+
 export interface ListingBase {
   _id: string;
   id: string;
@@ -21,14 +31,7 @@ export interface ListingBase {
   nestedSubcategory?: string;
   createdAt: string;
   updatedAt: string;
-  user?: {
-    _id?: string;
-    id?: string;
-    username: string;
-    email: string;
-    phone?: string;
-    profileImage?: string;
-  };
+  user?: ListingUser;
 }
 
 export interface Car extends ListingBase {
@@ -101,6 +104,20 @@ export interface Job extends ListingBase {
 
 export interface WantedItem extends ListingBase {}
 
+export interface CreateJobData {
+  title: string;
+  description: string;
+  company?: string;
+  location?: string;
+  salary?: number;
+  employmentType?: string;
+  experienceLevel?: string;
+  city: string;
+  region: string;
+  type?: string;
+  isPaid?: boolean;
+}
+
 export interface Subscription {
   id: string;
   _id?: string;
@@ -126,14 +143,7 @@ export interface Subscription {
   expiryDate?: string | null;
   createdAt?: string;
   metadata?: Record<string, unknown>;
-  user?: {
-    _id?: string;
-    id?: string;
-    username: string;
-    email: string;
-    phone?: string;
-    profileImage?: string;
-  };
+  user?: ListingUser;
 }
 
 export interface SubscriptionPayload {
@@ -184,16 +194,17 @@ export interface VehicleListing extends ListingBase {
   length?: number;
 }
 
-export interface VehicleSpecField {
+export interface CategorySpecField {
   key: string;
-  label: string;
-  format?: (v: any) => string;
+  labelKey: string;
+  icon?: string;
+  format?: (v: any, t: (key: string) => string) => string;
 }
 
-export interface VehicleTypeConfig {
+export interface CategoryTypeConfig {
   label: string;
   endpoint: string;
-  fields: VehicleSpecField[];
+  fields: CategorySpecField[];
 }
 
 export interface PaginatedResponse<T> {

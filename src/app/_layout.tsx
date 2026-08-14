@@ -12,16 +12,18 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import GlobalHeader from "../components/layout/GlobalHeader";
-import BottomTabBar from "../components/layout/BottomTabBar";
+import BottomTabBar from "../navigation/BottomTabBar";
 import { EulaModal } from "../components/modals/EulaModal";
-import { LoadingSpinner, SplashScreen } from "../components/loading";
+import { IdentityGate } from "../components/features/identification/components/IdentityGate";
+import { useIdentityGate } from "../components/features/identification/hooks/useIdentityGate";
+import { LoadingSpinner } from "../components/loading";
 import { SaveToast, UpdateBanner } from "../components/shared";
-import Hage from "../components/features/ai-assistant";
+import Hage from "../components/ai-assistant";
 import NotificationBanner from "../components/features/notifications/components/NotificationBanner";
 import LanguageSync from "../i18n/LanguageSync";
 import { useAppInit } from "../components/hooks/useAppInit";
 import { useThemeColors, useThemeMode } from "../components/hooks/useTheme";
-import { useShowTabBar } from "../components/hooks/useShowTabBar";
+import { useTabBarVisibility } from "../navigation/useTabBarVisibility";
 import { useMessageBanner } from "../components/features/chat/hooks/useMessageBanner";
 import { useSocketMessages } from "../components/features/chat/hooks/useSocketMessages";
 import { useSocketNotifications } from "../components/features/notifications/hooks/useSocketNotifications";
@@ -29,7 +31,6 @@ import { useNotificationTap } from "../components/features/notifications/hooks/u
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({ ...MaterialCommunityIcons.font });
-  const [showSplash, setShowSplash] = useState(true);
   const [showEula, setShowEula] = useState(false);
 
   useEffect(() => {
@@ -39,6 +40,7 @@ export default function RootLayout() {
   }, []);
 
   useAppInit();
+  const { gateOpen, idCardRequired, selfieRequired, onVerified } = useIdentityGate();
   const {
     messageBanner,
     bannerY,
@@ -53,7 +55,7 @@ export default function RootLayout() {
   const { mode, resolved } = useThemeMode();
   const Colors = useThemeColors();
   const pathname = usePathname();
-  const showTabBar = useShowTabBar(pathname);
+  const showTabBar = useTabBarVisibility(pathname);
 
   useEffect(() => {
     if (Platform.OS !== "web") {
@@ -75,7 +77,14 @@ export default function RootLayout() {
       <LanguageSync />
       <StatusBar style={resolved === "dark" ? "light" : "dark"} />
       <GlobalHeader />
-      <Stack screenOptions={{ headerShown: false, title: "" }}>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          title: "",
+          contentStyle: { backgroundColor: Colors.background },
+          animation: Platform.OS === "web" ? "none" : "default",
+        }}
+      >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen
@@ -153,7 +162,6 @@ export default function RootLayout() {
       <Hage />
       <SaveToast />
       <UpdateBanner />
-      {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
 
       <EulaModal
         visible={showEula}
@@ -161,6 +169,13 @@ export default function RootLayout() {
           AsyncStorage.setItem("karaadi_eula_accepted_v1", "1");
           setShowEula(false);
         }}
+      />
+
+      <IdentityGate
+        visible={gateOpen}
+        idCardRequired={idCardRequired}
+        selfieRequired={selfieRequired}
+        onVerified={onVerified}
       />
 
       {messageBanner && (

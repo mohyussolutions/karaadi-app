@@ -1,8 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-
-interface NotificationSettingsState {
-  soundEnabled: boolean;
-}
+import type { NotificationSettingsState } from '../../../../util/types/redux.types';
 
 const initialState: NotificationSettingsState = {
   soundEnabled: true,

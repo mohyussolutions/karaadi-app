@@ -5,14 +5,9 @@ import { useAppSelector } from '../../../../../../store/store';
 import type { PayMethod, Plan } from '../../../../../../util/types';
 import { MAX_POLL_ATTEMPTS, PAYMENT_METHODS, POLL_INTERVAL_MS } from '../payment.constants';
 import { getPhoneError, normalizePhone } from './phone.utils';
+import type { PayStatus, UsePaymentFlowParams } from '../../../../../../util/types/payment.types';
 
-export type PayStatus = 'idle' | 'polling' | 'success' | 'failed';
-
-interface UsePaymentFlowParams {
-  plan: Plan;
-  listingId: string;
-  categoryKey: string;
-}
+export type { PayStatus };
 
 export function usePaymentFlow({ plan, listingId, categoryKey }: UsePaymentFlowParams) {
   const feeAmount = useAppSelector((s) => s.newAd.feeAmount);

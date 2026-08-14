@@ -1,11 +1,7 @@
 import { Modal, View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import { useThemeColors } from '../hooks/useTheme';
 import { styles } from '../../util/styles/modals/eulaModal.styles';
-
-interface EulaModalProps {
-  visible: boolean;
-  onAccept: () => void;
-}
+import type { EulaModalProps } from '../../util/types/modal.types';
 
 export function EulaModal({ visible, onAccept }: EulaModalProps) {
   const Colors = useThemeColors();

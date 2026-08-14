@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../../hooks/useAuth';
+import { emailSchema } from '../../../../util/validation/schemas';
 
 export function useLogin() {
   const router = useRouter();
@@ -12,9 +13,18 @@ export function useLogin() {
 
   const handleSubmit = async () => {
     setError(null);
+    const parsedEmail = emailSchema.safeParse(email);
+    if (!parsedEmail.success) {
+      setError('Enter a valid email address.');
+      return;
+    }
+    if (!password) {
+      setError('Enter your password.');
+      return;
+    }
     setIsLoading(true);
     try {
-      await login(email.trim().toLowerCase(), password);
+      await login(parsedEmail.data.toLowerCase(), password);
       router.replace('/(tabs)/home');
     } catch (err: any) {
       setError(err?.response?.data?.message || err?.message || 'Login failed. Please try again.');

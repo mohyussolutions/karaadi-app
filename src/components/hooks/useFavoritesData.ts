@@ -18,15 +18,15 @@ export const CATEGORY_LABELS: Record<string, string> = {
   jobs: 'Jobs',
 };
 
-export const CATEGORY_COLORS: Record<string, string> = {
-  marketplace: '#6366F1',
-  cars: '#F59E0B',
-  motorcycles: '#EF4444',
-  boats: '#0EA5E9',
-  realestate: '#10B981',
-  'real-estate': '#10B981',
-  farmequipment: '#84CC16',
-  jobs: '#8B5CF6',
+export const CATEGORY_COLOR_KEYS: Record<string, 'catMarketplace' | 'catCars' | 'catMotorcycles' | 'catBoats' | 'catRealEstate' | 'catFarmEquipment' | 'catJobs'> = {
+  marketplace: 'catMarketplace',
+  cars: 'catCars',
+  motorcycles: 'catMotorcycles',
+  boats: 'catBoats',
+  realestate: 'catRealEstate',
+  'real-estate': 'catRealEstate',
+  farmequipment: 'catFarmEquipment',
+  jobs: 'catJobs',
 };
 
 export function useFavoritesData() {

@@ -18,3 +18,5 @@ export const REGEX_PASSWORD_SPECIAL = /[@$!%*?&#_\-]/;
 export const REGEX_SOMALI_PHONE_FULL = /^\+252\d{9}$/;
 export const REGEX_SOMALI_PHONE_LOCAL = /^[69]\d{8}$/;
 export const REGEX_ALPHANUMERIC_ID = /^[a-zA-Z0-9]+$/;
+export const REGEX_WEBSITE = /^(https?:\/\/)?([\w-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
+export const REGEX_USERNAME = /^[a-zA-Z0-9_.]+$/;

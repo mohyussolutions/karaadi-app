@@ -7,6 +7,7 @@ import {
   REGEX_PASSWORD_DIGIT,
   REGEX_PASSWORD_SPECIAL,
 } from '../../../../constants';
+import { emailSchema, usernameSchema } from '../../../../util/validation/schemas';
 
 export const PASSWORD_RULES = [
   { id: 'length',  labelKey: 'auth.passwordRules.length',    test: (p: string) => p.length >= 8 },
@@ -35,14 +36,26 @@ export function useRegister() {
   const handleSubmit = async () => {
     if (!isPasswordValid) return;
     setErrorMessage('');
+
+    const parsedUsername = usernameSchema.safeParse(username);
+    if (!parsedUsername.success) {
+      setErrorMessage(parsedUsername.error.issues[0]?.message || 'Enter a valid username.');
+      return;
+    }
+    const parsedEmail = emailSchema.safeParse(email);
+    if (!parsedEmail.success) {
+      setErrorMessage('Enter a valid email address.');
+      return;
+    }
+
     setIsLoading(true);
     try {
       await register({
-        username: username.trim(),
-        email: email.trim().toLowerCase(),
+        username: parsedUsername.data,
+        email: parsedEmail.data.toLowerCase(),
         password,
       });
-      router.push({ pathname: '/(auth)/confirm', params: { email: email.trim().toLowerCase() } });
+      router.push({ pathname: '/(auth)/confirm', params: { email: parsedEmail.data.toLowerCase() } });
     } catch (err: any) {
       setErrorMessage(err?.response?.data?.message || err?.message || '');
     } finally {

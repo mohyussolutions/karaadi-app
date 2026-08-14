@@ -8,7 +8,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
-import { MARKETPLACE_ENDPOINTS } from '../../../constants';
+import { MARKETPLACE_ENDPOINTS, MARKETPLACE_CONFIG, buildSpecItems } from '../../../constants';
 import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
 import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, CONDITION_COLORS } from '../../../constants';
 import { useItemDetail } from '../../../components/hooks/useItemDetail';
@@ -56,11 +56,7 @@ export default function ItemDetailScreen() {
     ? (CONDITION_COLORS[item.condition.toLowerCase()] ?? Colors.textMuted)
     : null;
 
-  const metaItems: { icon: string; label: string; value: string }[] = [
-    item.condition && { icon: 'tag-outline', label: t('vehicleDetail.condition'), value: item.condition },
-    item.subcategory && { icon: 'shape-outline', label: t('vehicleDetail.subcategory'), value: item.subcategory },
-    item.nestedSubcategory && { icon: 'dots-horizontal-circle-outline', label: t('vehicleDetail.type'), value: item.nestedSubcategory },
-  ].filter(Boolean) as any[];
+  const metaItems = buildSpecItems(item, MARKETPLACE_CONFIG.fields, t);
 
   const locationStr = [item.city, item.region].filter(Boolean).join(', ') || t('vehicleDetail.locationFallback');
 
@@ -106,6 +102,7 @@ export default function ItemDetailScreen() {
         userId={item?.userId || item?.user?._id || item?.user?.id || null}
         profileImage={item.user?.profileImage}
         phone={item.user?.phone}
+        isVerified={item.user?.isVerified}
         subtitle={t('realEstateDetail.activeSeller')}
         onMessage={item.maGaday ? undefined : handleContact}
         disabled={Boolean(item.maGaday)}

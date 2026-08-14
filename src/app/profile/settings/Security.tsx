@@ -1,13 +1,13 @@
 import React from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity,
-  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
+import { LoadingSpinner } from '../../../components/loading';
 import { useSecuritySettings } from '../../../components/features/auth/hooks/useSecuritySettings';
 import { createStyles } from '../../../util/styles/settings/security.styles';
 
@@ -42,13 +42,7 @@ export default function SecuritySettings() {
 
   if (!user) return null;
 
-  if (loading) {
-    return (
-      <SafeAreaView style={s.safe} edges={['bottom']}>
-        <ActivityIndicator style={s.loadingIndicator} color={Colors.primary} />
-      </SafeAreaView>
-    );
-  }
+  if (loading) return <LoadingSpinner fullScreen />;
 
   return (
     <SafeAreaView style={s.safe} edges={['bottom']}>

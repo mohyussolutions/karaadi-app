@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { confirmAccount, resendCode } from '../features/auth/api/auth.actions';
+import { confirmationCodeSchema } from '../../util/validation/schemas';
 
 export function useConfirm(email: string) {
   const router = useRouter();
@@ -12,6 +13,11 @@ export function useConfirm(email: string) {
 
   const handleConfirm = async (): Promise<{ success: boolean; message?: string }> => {
     setError(null);
+    if (!confirmationCodeSchema.safeParse(code).success) {
+      const msg = 'Enter the 6-digit code.';
+      setError(msg);
+      return { success: false, message: msg };
+    }
     setIsConfirmLoading(true);
     try {
       await confirmAccount(email, code.trim());

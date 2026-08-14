@@ -4,10 +4,10 @@ import {
   Text,
   Pressable,
   TouchableOpacity,
-  FlatList,
   RefreshControl,
   ScrollView,
 } from "react-native";
+import { FlashList } from "@shopify/flash-list";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -15,8 +15,8 @@ import { useThemeColors, useThemedStyles } from "../../../components/hooks/useTh
 import { getCategoryByKey, SUB_I18N_GROUP } from "../../../constants/categories";
 import { EmptyState, AppIcon } from "../../../components/shared";
 import ListingCard from "../../../components/cards/ListingCard";
-import ListingCardSkeleton from "../../../components/cards/ListingCardSkeleton";
-import BottomTabBar from "../../../components/layout/BottomTabBar";
+import { ListingCardSkeleton } from "../../../components/loading";
+import BottomTabBar from "../../../navigation/BottomTabBar";
 import { useAppTranslation } from "../../../components/hooks/useAppTranslation";
 import { useResponsive } from "../../../components/hooks/useResponsive";
 import { useCategoryFeed } from "../../../components/hooks/useCategoryFeed";
@@ -111,7 +111,7 @@ export default function CategoryScreen() {
   const { t } = useAppTranslation();
   const user = useAppSelector((s) => s.auth.user);
   const searchQuery = useAppSelector((s) => s.browseSearch.query);
-  const { isTabletLandscape, sidebarWidth, mainWidth, numColumns, cardWidth } = useResponsive();
+  const { isTabletLandscape, sidebarWidth, numColumns } = useResponsive();
   const { listings, loading, refreshing, onRefresh } = useCategoryFeed(categoryKey);
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
@@ -121,7 +121,6 @@ export default function CategoryScreen() {
   const group = SUB_I18N_GROUP[categoryKey] ?? categoryKey.toLowerCase();
   const subs = category?.subCategories ?? [];
   const categoryLabel = t(`categories.${categoryKey}`, { defaultValue: category?.name ?? categoryKey });
-  const CARD_W = cardWidth(isTabletLandscape ? mainWidth : undefined, numColumns, H_PAD, GAP);
 
   const filteredListings = listings.filter((l) => {
     const q = searchQuery.trim().toLowerCase();
@@ -163,16 +162,11 @@ export default function CategoryScreen() {
   const skeletonData = Array.from({ length: SKELETON_COUNT }, (_, i) => ({ _id: `sk-${i}`, id: `sk-${i}` }));
 
   const feedList = (
-    <FlatList
+    <FlashList<ListingBase>
       key={`cat-${numColumns}`}
-      data={loading ? (skeletonData as any) : (filteredListings as ListingBase[])}
+      data={loading ? (skeletonData as unknown as ListingBase[]) : filteredListings}
       numColumns={numColumns}
       keyExtractor={(item) => item.id || item._id}
-      removeClippedSubviews
-      windowSize={5}
-      maxToRenderPerBatch={10}
-      initialNumToRender={10}
-      columnWrapperStyle={styles.colWrapper}
       contentContainerStyle={filteredListings.length === 0 && !loading ? styles.emptyContainer : [styles.listContent, { paddingBottom: insets.bottom + 84 }]}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}
       showsVerticalScrollIndicator={false}
@@ -180,8 +174,14 @@ export default function CategoryScreen() {
       ListEmptyComponent={
         !loading ? <EmptyState icon="tag-off-outline" title={t("common.noResults")} message={categoryLabel} /> : null
       }
-      renderItem={({ item }) => (
-        <View style={{ width: CARD_W }}>
+      renderItem={({ item, index }) => (
+        <View
+          style={{
+            paddingLeft: index % numColumns === 0 ? H_PAD : GAP / 2,
+            paddingRight: (index + 1) % numColumns === 0 ? H_PAD : GAP / 2,
+            paddingBottom: GAP,
+          }}
+        >
           {loading ? <ListingCardSkeleton /> : <ListingCard item={item} categoryKey={categoryKey} />}
         </View>
       )}

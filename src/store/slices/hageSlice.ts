@@ -1,12 +1,7 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
-import { sendHageChat } from '../../components/features/ai-assistant/api/hage.actions';
+import { sendHageChat } from '../../components/ai-assistant/api/hage.actions';
 import type { HageMessage } from '../../util/types/hage.types';
-
-interface HageState {
-  open: boolean;
-  messages: HageMessage[];
-  loading: boolean;
-}
+import type { HageState } from '../../util/types/redux.types';
 
 const initialState: HageState = {
   open: false,

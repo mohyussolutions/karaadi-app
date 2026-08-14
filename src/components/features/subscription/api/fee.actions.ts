@@ -14,9 +14,6 @@ const CATEGORY_FEE_KEY: Record<string, string> = {
   Jobs: 'marketplace',
 };
 
-// Maps each category's `subcategory` value (from features/new-ad/constants/fields.ts)
-// to the fee-config field name returned by /api/Fee/<category> — mirrors the
-// website's *_FEE_MAPPING objects in app/(storeFront)/components/forms/*Form.tsx.
 const SUBCATEGORY_FEE_FIELD: Record<string, Record<string, string>> = {
   Marketplace: {
     antiques: 'art',

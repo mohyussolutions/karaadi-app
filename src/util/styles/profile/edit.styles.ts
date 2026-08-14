@@ -1,9 +1,11 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../components/hooks/useTheme';
+import { createCommonStyles } from '../common/common.style';
 
 export function createStyles(Colors: ColorPalette) {
+  const common = createCommonStyles(Colors);
   return StyleSheet.create({
-    safe: { flex: 1, backgroundColor: Colors.background },
+    safe: common.safeBase,
     content: { padding: 24, alignItems: 'center', gap: 12 },
     avatarSection: { alignItems: 'center', marginBottom: 8 },
     avatar: { width: 100, height: 100, borderRadius: 50, backgroundColor: Colors.border },

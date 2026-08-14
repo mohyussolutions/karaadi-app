@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { FilterRow } from '../../util/types';
-import type { RegionPickerItem } from '../../util/types/geo.types';
+import type { RegionPickerItem, UseLocationFilterRowsArgs } from '../../util/types/geo.types';
 
 function filterRegionsBySearch(regions: RegionPickerItem[], search: string): RegionPickerItem[] {
   const q = search.trim().toLowerCase();
@@ -24,14 +24,6 @@ function buildCityRows(region: RegionPickerItem, cityCounts: Record<string, numb
     name: c.name,
     count: cityCounts[c.name.toLowerCase()] ?? 0,
   }));
-}
-
-interface UseLocationFilterRowsArgs {
-  visible: boolean;
-  regions: RegionPickerItem[];
-  selectedRegions: string[];
-  regionCounts: Record<string, number>;
-  cityCounts: Record<string, number>;
 }
 
 export function useLocationFilterRows({ visible, regions, selectedRegions, regionCounts, cityCounts }: UseLocationFilterRowsArgs) {

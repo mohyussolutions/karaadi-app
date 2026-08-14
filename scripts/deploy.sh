@@ -4,14 +4,12 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "  Karaadi Deploy"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-# 1. Check for uncommitted changes
 if ! git diff --quiet || ! git diff --cached --quiet; then
   echo "❌ Uncommitted changes — commit first then run npm run deploy"
   git status --short
   exit 1
 fi
 
-# 2. TypeScript check
 echo ""
 echo "▶ Step 1/4 — TypeScript check"
 if ! npx tsc --noEmit; then
@@ -20,13 +18,11 @@ if ! npx tsc --noEmit; then
 fi
 echo "✅ Types clean"
 
-# 3. Push to GitHub
 echo ""
 echo "▶ Step 2/4 — Push to GitHub"
 git push origin main
 echo "✅ GitHub up to date"
 
-# 4. iOS — EAS cloud build + auto-submit to App Store
 echo ""
 echo "▶ Step 3/4 — iOS: build + submit to App Store"
 echo "   (Apple reviews in 1-3 days, then releases to users)"
@@ -36,7 +32,6 @@ else
   echo "⚠️  iOS build/submit failed — check logs above"
 fi
 
-# 5. Android — local build (no Expo quota used)
 echo ""
 echo "▶ Step 4/4 — Android: local build"
 

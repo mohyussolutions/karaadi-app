@@ -8,6 +8,7 @@ import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme
 import { useAuthStore } from '../../store/authStore';
 import { getTicketHistory, getTicketDetails, addTicketMessage } from '../../api/core/support.actions';
 import { EmptyState } from '../../components/shared';
+import { LoadingSpinner } from '../../components/loading';
 import { createStyles } from '../../util/styles/profile/contactHistory.styles';
 import type { Ticket } from '../../util/types';
 
@@ -107,7 +108,7 @@ export default function ContactHistoryScreen() {
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       {loading && tickets.length === 0 ? (
         <View style={styles.center}>
-          <ActivityIndicator color={Colors.primary} />
+          <LoadingSpinner />
         </View>
       ) : tickets.length === 0 ? (
         <View style={styles.center}>

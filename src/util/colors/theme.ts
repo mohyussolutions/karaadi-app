@@ -1,3 +1,9 @@
+import type {
+  ColorKey, ColorPalette, ThemeMode, SpacingKey, RadiusKey, TypographyKey, Theme,
+} from '../types/theme.types';
+
+export type { ColorKey, ColorPalette, ThemeMode, SpacingKey, RadiusKey, TypographyKey, Theme };
+
 export const COLORS = {
   primary: '#0063FB',
   primaryLight: '#60A5FA',
@@ -94,10 +100,6 @@ export const COLORS = {
   favorite: '#FF3B5C',
   favoriteTint: 'rgba(255,59,92,0.18)',
 } as const;
-
-export type ColorKey = keyof typeof COLORS;
-export type ColorPalette = { [K in keyof typeof COLORS]: string };
-export type ThemeMode = 'light' | 'dark';
 
 export const Colors = COLORS;
 
@@ -219,8 +221,6 @@ export const SPACING = {
   xxl: 32,
 } as const;
 
-export type SpacingKey = keyof typeof SPACING;
-
 export const RADII = {
   sm: 8,
   md: 10,
@@ -229,8 +229,6 @@ export const RADII = {
   xxl: 20,
   pill: 999,
 } as const;
-
-export type RadiusKey = keyof typeof RADII;
 
 export const TYPOGRAPHY = {
   caption: { fontSize: 11, fontWeight: '500', lineHeight: 14 },
@@ -242,8 +240,6 @@ export const TYPOGRAPHY = {
   display: { fontSize: 26, fontWeight: '800', lineHeight: 32 },
 } as const;
 
-export type TypographyKey = keyof typeof TYPOGRAPHY;
-
 export const THEME = {
   colors: COLORS,
   catColors: CAT_COLORS,
@@ -251,7 +247,5 @@ export const THEME = {
   radii: RADII,
   typography: TYPOGRAPHY,
 } as const;
-
-export type Theme = typeof THEME;
 
 export default THEME;

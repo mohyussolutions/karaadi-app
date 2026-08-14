@@ -1,12 +1,13 @@
 import { useEffect, useMemo } from 'react';
 import {
-  View, Text, FlatList, TouchableOpacity, Image,
+  View, Text, FlatList, TouchableOpacity,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
+import RemoteImage from '../../components/shared/RemoteImage';
 import { useThemedStyles } from '../../components/hooks/useTheme';
 import { useResponsive } from '../../components/hooks/useResponsive';
 import { useChatsData } from '../../components/features/chat/hooks/useChatsData';
@@ -61,7 +62,9 @@ export default function MessagesScreen() {
         <View style={[styles.header, isTablet && styles.tabletHeader]}>
           <Text style={styles.title}>{t('messages.title')}</Text>
         </View>
-        <View style={styles.center} />
+        <View style={styles.center}>
+          <LoadingSpinner />
+        </View>
       </SafeAreaView>
     );
   }
@@ -101,9 +104,11 @@ export default function MessagesScreen() {
                 })
               }
             >
-              <Image
+              <RemoteImage
                 source={{ uri: other?.profileImage || AVATAR }}
                 style={styles.avatar}
+                resizeMode="cover"
+                recyclingKey={String(item.id)}
               />
               <View style={styles.convoInfo}>
                 <View style={styles.convoHeader}>

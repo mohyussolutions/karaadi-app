@@ -26,6 +26,13 @@ export interface CategoryGridProps {
   onPress?: (category: MainCategory) => void;
 }
 
+export interface CategoryCellProps {
+  category: MainCategory;
+  label: string;
+  width: number;
+  onPress: (category: MainCategory) => void;
+}
+
 export interface NestedChipsProps {
   items: NestedSubCategory[];
   selectedKey: string | null;

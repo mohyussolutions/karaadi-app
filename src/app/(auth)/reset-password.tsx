@@ -4,7 +4,7 @@ import {
   KeyboardAvoidingView, Alert, ScrollView,
 } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { Feather } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useResetPassword } from '../../components/features/auth/hooks/useResetPassword';
 import { useResponsive } from '../../components/hooks/useResponsive';
@@ -89,7 +89,7 @@ export default function ResetPasswordScreen() {
                 secureTextEntry={!showPassword}
               />
               <TouchableOpacity style={styles.eyeBtn} onPress={() => setShowPassword((v) => !v)}>
-                <Feather
+                <MaterialCommunityIcons
                   name={showPassword ? 'eye-off' : 'eye'}
                   size={20}
                   color={Colors.textMuted}
@@ -110,7 +110,7 @@ export default function ResetPasswordScreen() {
                 secureTextEntry={!showConfirm}
               />
               <TouchableOpacity style={styles.eyeBtn} onPress={() => setShowConfirm((v) => !v)}>
-                <Feather
+                <MaterialCommunityIcons
                   name={showConfirm ? 'eye-off' : 'eye'}
                   size={20}
                   color={Colors.textMuted}

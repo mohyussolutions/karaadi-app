@@ -1,0 +1,52 @@
+import { memo, useCallback } from "react";
+import { View } from "react-native";
+import { useGlobal } from "../components/hooks/useGlobal";
+import { useRouter, usePathname } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useAuthStore } from "../store/authStore";
+import { useThemedStyles, useThemeMode } from "../components/hooks/useTheme";
+import { createLayoutStyles, GLASS_DARK, GLASS_LIGHT } from "../util/styles/tabs/layout.styles";
+import { TAB_ITEMS, LOGIN_TAB_ITEM } from "./main";
+import { BottomTabItem } from "./BottomTabItem";
+import { getActiveTab } from "./getActiveTab";
+
+export default memo(function BottomTabBar() {
+  const insets = useSafeAreaInsets();
+  const { tabBarSide } = useGlobal();
+  const router = useRouter();
+  const pathname = usePathname();
+  const styles = useThemedStyles(createLayoutStyles);
+  const { mode } = useThemeMode();
+
+  const active = getActiveTab(pathname);
+  const glassOverride = mode === "dark" ? GLASS_DARK : GLASS_LIGHT;
+
+  const { isAuthenticated } = useAuthStore();
+  const items = isAuthenticated
+    ? TAB_ITEMS
+    : TAB_ITEMS.map((item) =>
+        item.name === "profile" ? LOGIN_TAB_ITEM : item,
+      );
+
+  const handlePress = useCallback((name: string) => {
+    if (name === "login") router.push("/(auth)/login");
+    else router.navigate(`/(tabs)/${name}` as any);
+  }, [router]);
+
+  const side = tabBarSide();
+
+  return (
+    <View style={[styles.wrapper, { paddingBottom: insets.bottom, left: side, right: side }]}>
+      <View style={[styles.glass, glassOverride]}>
+        {items.map((item) => (
+          <BottomTabItem
+            key={item.name}
+            item={item}
+            focused={item.name === active}
+            onPress={() => handlePress(item.name)}
+          />
+        ))}
+      </View>
+    </View>
+  );
+});

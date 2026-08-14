@@ -12,7 +12,7 @@ import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme
 import { useResponsive } from '../../components/hooks/useResponsive';
 import { getImageUrl } from '../../util/helpers';
 import { placeholderAvatar } from '../../constants';
-import { PROFILE_MENU_ITEMS } from '../../config/navigation';
+import { PROFILE_MENU_ITEMS } from '../../navigation/main';
 import type { MenuItem } from '../../util/types';
 import { createStyles } from '../../util/styles/tabs/profile.styles';
 

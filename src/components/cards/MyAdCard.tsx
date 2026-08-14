@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -8,6 +8,7 @@ import { formatPrice, getImageUrl, getListingDetailRoute } from '../../util/help
 import { PLACEHOLDER_IMAGE } from '../../constants';
 import type { MyAdCardProps } from '../../util/types';
 import { createStyles } from '../../util/styles/shared/myAdCard.styles';
+import RemoteImage from '../shared/RemoteImage';
 
 function getExpiryInfo(
   expiryDate: string | null | undefined,
@@ -56,7 +57,7 @@ function MyAdCard({ item, deleting, onDelete, onPayNow }: MyAdCardProps) {
   return (
     <TouchableOpacity style={s.card} onPress={handlePress} activeOpacity={0.9}>
       <View style={s.imgWrap}>
-        <Image source={{ uri: image }} style={s.img} resizeMode="cover" />
+        <RemoteImage source={{ uri: image }} style={s.img} resizeMode="cover" />
         <View style={s.badgeRow}>
           {item.maGaday && (
             <View style={[s.badge, s.badgeSold]}>

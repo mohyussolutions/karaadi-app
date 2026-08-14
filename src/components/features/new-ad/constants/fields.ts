@@ -1,6 +1,4 @@
-import type { FieldDef } from '../../../../util/types/new-ad.types';
-
-type TFn = (key: string, opts?: Record<string, unknown>) => string;
+import type { FieldDef, TFn } from '../../../../util/types/new-ad.types';
 
 export function getFields(t: TFn): Record<string, FieldDef[]> {
   return {

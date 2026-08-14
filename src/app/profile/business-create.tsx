@@ -9,12 +9,13 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { z } from 'zod';
+import { isSomaliPhone, isValidWebsite } from '../../util/validation/schemas';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { useAppTranslation } from '../../components/hooks/useAppTranslation';
 import { getBusinessById, getMyBusinesses, createBusiness, updateBusiness } from '../../components/features/business/api/business.actions';
 import { getImageUrl } from '../../util/helpers';
 import { CheckoutBar } from '../../components/features/subscription/components/checklist';
-import { BIZ_STEPS, MAIN_CATEGORIES } from '../../config/navigation';
+import { BIZ_STEPS, MAIN_CATEGORIES } from '../../navigation/main';
 import type { StepItem, BusinessPlan, BusinessApplyFormState } from '../../util/types';
 import { LoadingSpinner } from '../../components/loading';
 import { useAuthStore } from '../../store/authStore';
@@ -192,14 +193,16 @@ function ApplyStep({
   const [submitting, setSubmitting] = useState(false);
 
   const applySchema = useMemo(() => z.object({
-    name: z.string().trim().min(1, { message: t('mine.businesses.nameRequired') }),
-    orgNumber: z.string(),
+    name: z.string().trim().min(1, { message: t('mine.businesses.nameRequired') }).max(150, { message: t('mine.businesses.nameTooLong') }),
+    orgNumber: z.string().trim().max(50),
     email: z.string().trim().min(1, { message: t('mine.businesses.emailRequired') }).email({ message: t('mine.businesses.emailInvalid') }),
-    phone: z.string().trim().min(1, { message: t('mine.businesses.phoneRequired') }),
-    contactName: z.string(),
-    website: z.string(),
-    address: z.string(),
-    description: z.string(),
+    phone: z.string().trim().min(1, { message: t('mine.businesses.phoneRequired') })
+      .refine(isSomaliPhone, { message: t('mine.businesses.phoneInvalid') }),
+    contactName: z.string().trim().max(100, { message: t('mine.businesses.contactNameTooLong') }),
+    website: z.string().trim().max(200)
+      .refine((v) => v === '' || isValidWebsite(v), { message: t('mine.businesses.websiteInvalid') }),
+    address: z.string().trim().max(200, { message: t('mine.businesses.addressTooLong') }),
+    description: z.string().trim().max(2000, { message: t('mine.businesses.descriptionTooLong') }),
   }), [t]);
 
   function set(key: keyof BusinessApplyFormState, value: string) {
@@ -661,11 +664,11 @@ function PostStep({
   const { t } = useAppTranslation();
   const insets = useSafeAreaInsets();
 
-  const BUSINESS_CATEGORIES = MAIN_CATEGORIES.map(c => ({
+  const BUSINESS_CATEGORIES = useMemo(() => MAIN_CATEGORIES.map(c => ({
     label: t(`categories.${c.key}`, { defaultValue: c.name }),
     value: c.key,
     icon: c.icon,
-  }));
+  })), [t]);
 
   return (
     <ScrollView contentContainerStyle={[s.scroll, { paddingBottom: insets.bottom + 84 }]} keyboardShouldPersistTaps="handled">

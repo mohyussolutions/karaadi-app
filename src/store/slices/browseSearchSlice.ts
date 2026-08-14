@@ -1,8 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-
-interface BrowseSearchState {
-  query: string;
-}
+import type { BrowseSearchState } from '../../util/types/redux.types';
 
 const initialState: BrowseSearchState = {
   query: '',

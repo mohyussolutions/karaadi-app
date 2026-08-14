@@ -5,17 +5,9 @@ import {
   CARS_ENDPOINTS, REAL_ESTATE_ENDPOINTS, MOTORCYCLES_ENDPOINTS,
   BOATS_ENDPOINTS, MARKETPLACE_ENDPOINTS, FARM_EQUIPMENT_ENDPOINTS, JOBS_ENDPOINTS,
 } from '../../constants';
-import type { SearchResult } from '../../util/types';
+import type { SearchResult, SearchParams } from '../../util/types';
 
-export interface SearchParams {
-  title?: string;
-  region?: string;
-  city?: string;
-  minPrice?: number;
-  maxPrice?: number;
-  limit?: number;
-  [key: string]: string | number | boolean | undefined | null;
-}
+export type { SearchParams };
 
 const CATEGORY_ENDPOINTS: Record<string, string> = {
   Cars: CARS_ENDPOINTS.LIST,

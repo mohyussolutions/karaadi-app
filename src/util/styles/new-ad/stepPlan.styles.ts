@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../components/hooks/useTheme';
 import { shadow } from '../../shadow';
+import { createCommonStyles } from '../common/common.style';
 
 export function createPlanCardStyles(Colors: ColorPalette) {
   return StyleSheet.create({
@@ -47,8 +48,9 @@ export function createPlanCardStyles(Colors: ColorPalette) {
 }
 
 export function createStyles(Colors: ColorPalette) {
+  const common = createCommonStyles(Colors);
   return StyleSheet.create({
-    root: { flex: 1, backgroundColor: Colors.background },
+    root: common.safeBase,
 
     topBar: {
       flexDirection: 'row', alignItems: 'center',
@@ -60,7 +62,6 @@ export function createStyles(Colors: ColorPalette) {
     },
 
     scroll: { padding: 16, flexGrow: 1 },
-    loadingIndicator: { marginTop: 48 },
 
     header: { alignItems: 'center', marginBottom: 20, gap: 6 },
     headerIcon: {
@@ -86,16 +87,15 @@ export function createStyles(Colors: ColorPalette) {
       backgroundColor: Colors.border, alignSelf: 'center', marginBottom: 12,
     },
     continueBtn: {
-      flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-      gap: 8, backgroundColor: Colors.primary, borderRadius: 16, paddingVertical: 17,
-      ...shadow({ color: Colors.primary, offset: { width: 0, height: 6 }, opacity: 0.28, radius: 12, elevation: 6 }),
+      flexDirection: 'row', alignItems: 'center', justifyContent: 'center', alignSelf: 'center',
+      gap: 6, backgroundColor: Colors.primary, borderRadius: 999, paddingVertical: 10, paddingHorizontal: 20,
     },
-    continueBtnText: { color: Colors.white, fontSize: 16, fontWeight: '700' },
+    continueBtnText: { color: Colors.white, fontSize: 14, fontWeight: '600' },
     continueBtnOff: {
-      flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
-      borderRadius: 16, paddingVertical: 17,
+      flexDirection: 'row', alignItems: 'center', justifyContent: 'center', alignSelf: 'center', gap: 6,
+      borderRadius: 999, paddingVertical: 10, paddingHorizontal: 20,
       backgroundColor: Colors.gray100,
     },
-    continueBtnOffText: { fontSize: 15, fontWeight: '600', color: Colors.textMuted },
+    continueBtnOffText: { fontSize: 13, fontWeight: '600', color: Colors.textMuted },
   });
 }

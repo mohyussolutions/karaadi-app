@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '../../../../store/authStore';
 import { getNotifications, markNotificationRead, markAllNotificationsRead } from '../api/notifications.actions';
-import type { Notification } from '../types/notification.types';
+import type { Notification } from '../../../../util/types/notification.types';
 
 export function useNotificationsData() {
   const { user } = useAuthStore();

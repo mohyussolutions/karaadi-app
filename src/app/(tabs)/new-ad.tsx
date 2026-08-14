@@ -17,14 +17,14 @@ import {
 } from "../../store/slices/newAdSlice";
 import { useNewAdStepNavigation } from "../../components/hooks/useNewAdStepNavigation";
 import { CheckoutBar } from "../../components/features/subscription/components/checklist";
-import { StepType } from "../../components/features/new-ad/components/StepType";
-import { StepCategory } from "../../components/features/new-ad/components/StepCategory";
-import { StepForm } from "../../components/features/new-ad/components/forms";
-import { StepPlan } from "../../components/features/new-ad/components/StepPlan";
+import { StepType } from "../../components/forms/StepType";
+import { StepCategory } from "../../components/forms/StepCategory";
+import { StepForm } from "../../components/forms/StepForm";
+import { StepPlan } from "../../components/forms/StepPlan";
 import { StepSummary, StepPayment } from "../../components/features/subscription/components/payment";
 
 import type { ListingType, Step, StepItem } from "../../util/types/new-ad.types";
-import { MAIN_CATEGORIES } from "../../config/navigation";
+import { MAIN_CATEGORIES } from "../../navigation/main";
 
 const STEP_INDEX: Record<Step, number> = {
   login: 0,

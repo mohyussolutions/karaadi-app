@@ -10,3 +10,21 @@ export type RequestOptions = {
   headers?: ExtraHeaders;
   signal?: AbortSignal;
 };
+
+export interface SearchParams {
+  title?: string;
+  region?: string;
+  city?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  limit?: number;
+  [key: string]: string | number | boolean | undefined | null;
+}
+
+export interface ReportPayload {
+  userId: string;
+  itemId: string;
+  itemType: string;
+  reason: string;
+  description?: string;
+}

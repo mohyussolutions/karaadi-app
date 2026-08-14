@@ -17,6 +17,11 @@ function toNotification(userId: string, type: string, data: any) {
   };
 }
 
+function isForCurrentUser(payload: any, userId: string): boolean {
+  const owner = payload?.userId ?? payload?.targetUserId ?? payload?.ownerId ?? payload?.recipientId;
+  return owner == null || String(owner) === String(userId);
+}
+
 export function useSocketNotifications() {
   const dispatch = useAppDispatch();
   const user = useAppSelector((s) => s.auth.user);
@@ -30,6 +35,7 @@ export function useSocketNotifications() {
 
       function handleOne(type: string) {
         return (payload: any) => {
+          if (!isForCurrentUser(payload, user!.id)) return;
           playNotificationSound();
           dispatch(addNotification(toNotification(user!.id, type, payload)));
         };
@@ -37,7 +43,7 @@ export function useSocketNotifications() {
 
       function handleMany(type: string) {
         return (payload: any) => {
-          const list = Array.isArray(payload) ? payload : [payload];
+          const list = (Array.isArray(payload) ? payload : [payload]).filter((item) => isForCurrentUser(item, user!.id));
           if (list.length === 0) return;
           playNotificationSound();
           list.forEach((item) => dispatch(addNotification(toNotification(user!.id, type, item))));

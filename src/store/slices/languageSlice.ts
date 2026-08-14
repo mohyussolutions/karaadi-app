@@ -1,9 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { Lang } from '../../i18n/translations';
-
-interface LanguageState {
-  lang: Lang;
-}
+import type { LanguageState } from '../../util/types/redux.types';
 
 const initialState: LanguageState = { lang: 'so' };
 

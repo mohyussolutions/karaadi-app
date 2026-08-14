@@ -1,12 +1,25 @@
 import type { ImageSourcePropType } from 'react-native';
+import type { ReactNode } from 'react';
 
 export interface TabItem {
   name: string;
   labelKey: string;
   icon: string;
   iconOutline: string;
-  iconFamily?: 'Ionicons' | 'Octicons';
   image?: ImageSourcePropType;
+}
+
+export interface BottomTabItemProps {
+  item: TabItem;
+  focused: boolean;
+  onPress: () => void;
+}
+
+export interface TabButtonBackgroundProps {
+  image?: ImageSourcePropType;
+  focused: boolean;
+  pressed: boolean;
+  children: ReactNode;
 }
 
 export interface MenuItem {

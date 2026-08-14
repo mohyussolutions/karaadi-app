@@ -1,14 +1,16 @@
 import { StyleSheet } from "react-native";
 import type { ColorPalette } from "../../../components/hooks/useTheme";
 import { shadow } from "../../shadow";
+import { createCommonStyles } from "../common/common.style";
 
 export const H_PAD = 12;
 export const GAP = 8;
 
 export function createStyles(Colors: ColorPalette) {
+  const common = createCommonStyles(Colors);
   return StyleSheet.create({
-    root: { flex: 1, backgroundColor: Colors.background },
-    safe: { flex: 1, backgroundColor: Colors.background },
+    root: common.safeBase,
+    safe: common.safeBase,
     outerRow: { flex: 1, flexDirection: "row" },
     flexFull: { flex: 1 },
 
@@ -100,7 +102,6 @@ export function createStyles(Colors: ColorPalette) {
     countLabel: { fontSize: 13, color: Colors.textSecondary },
     countValue: { fontSize: 13, fontWeight: "700", color: Colors.primary },
 
-    colWrapper: { paddingHorizontal: H_PAD, gap: GAP, marginBottom: GAP },
     listContent: { paddingBottom: 32 },
     emptyContainer: { flex: 1, paddingTop: 40 },
 

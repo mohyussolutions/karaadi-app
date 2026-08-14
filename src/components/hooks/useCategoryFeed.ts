@@ -1,8 +1,10 @@
 import { useState, useCallback, useEffect } from 'react';
 import { fetchByCategory } from '../../api/categories/feed.actions';
-import { waitForImages } from '../../util/helpers';
+import { prefetchImages } from '../../util/helpers';
 import { CATEGORY_FEED_LIMIT } from '../../constants';
 import type { ListingBase } from '../../util/types/listing.types';
+
+const PREFETCH_LIMIT = 20;
 
 export function useCategoryFeed(categoryKey: string, subcategoryKey?: string) {
   const [listings, setListings] = useState<ListingBase[]>([]);
@@ -18,9 +20,9 @@ export function useCategoryFeed(categoryKey: string, subcategoryKey?: string) {
         params.categoryTag = subcategoryKey;
       }
       const data = await fetchByCategory(categoryKey, params, signal);
-      await waitForImages(data);
       if (signal?.aborted) return;
       setListings(data);
+      prefetchImages(data, PREFETCH_LIMIT).catch(() => {});
     } catch {
       setListings([]);
     } finally {

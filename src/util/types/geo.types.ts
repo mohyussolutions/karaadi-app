@@ -1,3 +1,17 @@
+export interface GeoCity {
+  id?: string;
+  _id?: string;
+  name: string;
+  region?: string;
+}
+
+export interface GeoRegion {
+  id?: string;
+  _id?: string;
+  name: string;
+  cities?: GeoCity[];
+}
+
 export interface Region {
   _id: string;
   name: string;
@@ -56,4 +70,12 @@ export interface RegionAccordionPanelProps {
   selectedRegion: string;
   onSelectRegion: (r: RegionPickerItem) => void;
   onClose: () => void;
+}
+
+export interface UseLocationFilterRowsArgs {
+  visible: boolean;
+  regions: RegionPickerItem[];
+  selectedRegions: string[];
+  regionCounts: Record<string, number>;
+  cityCounts: Record<string, number>;
 }

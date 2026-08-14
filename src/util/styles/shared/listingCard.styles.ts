@@ -57,8 +57,9 @@ export function createStyles(Colors: ColorPalette) {
       fontWeight: "700",
       color: Colors.slate900,
       lineHeight: 17,
+      minHeight: 34,
     },
-    description: { fontSize: 12, color: Colors.textSecondary, lineHeight: 16 },
+    description: { fontSize: 12, color: Colors.textSecondary, lineHeight: 16, minHeight: 16 },
     footer: {
       flexDirection: "row",
       alignItems: "center",

@@ -26,6 +26,10 @@ const LANGS: { code: Lang; label: string }[] = [
   { code: 'so', label: 'Soomaali' },
 ];
 
+const WEB_CENTER = Platform.OS === 'web'
+  ? ({ maxWidth: WEB_MAX_WIDTH, alignSelf: 'center' as const, width: '100%' as const })
+  : null;
+
 export default function GlobalHeader() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -51,9 +55,6 @@ export default function GlobalHeader() {
   const isTab = TAB_PATHS.has(pathname);
   const showBack = !isTab && !isAuth && !isChat && !isDetail && router.canGoBack();
   const showSearchBar = !isDetail && !isAuth && !isChat;
-  const webCenter = Platform.OS === 'web'
-    ? ({ maxWidth: WEB_MAX_WIDTH, alignSelf: 'center' as const, width: '100%' as const })
-    : null;
 
   useEffect(() => {
     dispatch(clearBrowseQuery());
@@ -65,7 +66,7 @@ export default function GlobalHeader() {
   if (isAuth) {
     return (
       <View style={[styles.wrapper, { paddingTop: insets.top }]}>
-        <View style={[styles.inner, isTablet && tabletHeaderStyles.inner, webCenter]}>
+        <View style={[styles.inner, isTablet && tabletHeaderStyles.inner, WEB_CENTER]}>
           <TouchableOpacity onPress={() => router.push('/(tabs)/home')} activeOpacity={0.8}>
             <Image source={require('../../../assets/logo.jpg')} style={[styles.logo, isTablet && tabletHeaderStyles.logo]} resizeMode="contain" />
           </TouchableOpacity>
@@ -97,7 +98,7 @@ export default function GlobalHeader() {
 
   return (
     <View style={[styles.wrapper, { paddingTop: insets.top }]}>
-      <View style={[styles.inner, isTablet && tabletHeaderStyles.inner, webCenter]}>
+      <View style={[styles.inner, isTablet && tabletHeaderStyles.inner, WEB_CENTER]}>
         <View style={styles.left}>
           <View style={[styles.backSlot, isTablet && tabletHeaderStyles.backSlot]}>
             {showBack && (
@@ -144,7 +145,7 @@ export default function GlobalHeader() {
       </View>
 
       {showSearchBar && (
-        <View style={[styles.searchBar, isTablet && tabletHeaderStyles.searchBar, webCenter, searchFocused && { borderColor: Colors.primary }]}>
+        <View style={[styles.searchBar, isTablet && tabletHeaderStyles.searchBar, WEB_CENTER, searchFocused && { borderColor: Colors.primary }]}>
           <MaterialCommunityIcons name="magnify" size={isTablet ? TABLET_HEADER_ICON_SIZES.search : 16} color={searchFocused ? Colors.primary : Colors.textMuted} />
           <TextInput
             style={[styles.searchInput, isTablet && tabletHeaderStyles.searchInput]}

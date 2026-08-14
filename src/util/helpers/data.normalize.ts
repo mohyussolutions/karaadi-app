@@ -1,4 +1,4 @@
-type RawItem = Record<string, unknown>;
+import type { RawItem } from '../types/normalize.types';
 
 function toStr(val: unknown): string {
   if (!val) return '';

@@ -1,31 +1,57 @@
+import { useEffect, useState } from 'react';
 import {
-  View, Text, TouchableOpacity, ScrollView, Switch, Linking,
+  View, Text, TouchableOpacity, ScrollView, Switch, Linking, Alert,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
+import { useAuthStore } from '../../../store/authStore';
 import { toggleSound } from '../../../components/features/notifications/store/notificationSettingsSlice';
 import { playNotificationSound } from '../../../components/features/notifications/services/soundService';
+import { updatePhoneVisibility } from '../../../components/features/auth/api/auth.actions';
 import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
 import { createStyles } from '../../../util/styles/settings/settings.styles';
-import { SETTINGS_ROWS } from '../../../config/navigation';
+import { SETTINGS_ROWS } from '../../../navigation/main';
 
 export default function SettingsIndex() {
   const router = useRouter();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const soundEnabled = useAppSelector((s) => s.notificationSettings.soundEnabled);
+  const { user, setUser } = useAuthStore();
 
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
 
+  const [hidePhone, setHidePhone] = useState(!!user?.hidePhone);
+  const [updatingHidePhone, setUpdatingHidePhone] = useState(false);
+
+  useEffect(() => {
+    setHidePhone(!!user?.hidePhone);
+  }, [user?.hidePhone]);
+
   function handleToggleSound() {
     const willBeEnabled = !soundEnabled;
     dispatch(toggleSound());
     if (willBeEnabled) playNotificationSound();
+  }
+
+  async function handleToggleHidePhone(value: boolean) {
+    const previous = hidePhone;
+    setHidePhone(value);
+    setUpdatingHidePhone(true);
+    try {
+      const updated = await updatePhoneVisibility(value);
+      if (user) await setUser({ ...user, ...updated }, user.token);
+    } catch {
+      setHidePhone(previous);
+      Alert.alert(t('error'), t('mine.settingsPage.hidePhoneUpdateFailed'));
+    } finally {
+      setUpdatingHidePhone(false);
+    }
   }
 
   return (
@@ -68,6 +94,32 @@ export default function SettingsIndex() {
             <Switch
               value={soundEnabled}
               onValueChange={handleToggleSound}
+              trackColor={{ false: Colors.border, true: Colors.primary }}
+              thumbColor={Colors.white}
+            />
+          </View>
+        </View>
+
+        <Text style={[s.sectionTitle, s.sectionTitleSpaced]}>{t('mine.settingsPage.privacy')}</Text>
+        <View style={s.section}>
+          <View style={s.row}>
+            <View style={s.iconWrap}>
+              <MaterialCommunityIcons
+                name={hidePhone ? 'phone-off' : 'phone'}
+                size={20}
+                color={hidePhone ? Colors.primary : Colors.textMuted}
+              />
+            </View>
+            <View style={s.rowTextWrap}>
+              <Text style={s.rowLabel}>{t('mine.settingsPage.hidePhoneNumber')}</Text>
+              <Text style={s.rowSub}>
+                {hidePhone ? t('mine.settingsPage.hidePhoneOn') : t('mine.settingsPage.hidePhoneOff')}
+              </Text>
+            </View>
+            <Switch
+              value={hidePhone}
+              onValueChange={handleToggleHidePhone}
+              disabled={updatingHidePhone}
               trackColor={{ false: Colors.border, true: Colors.primary }}
               thumbColor={Colors.white}
             />

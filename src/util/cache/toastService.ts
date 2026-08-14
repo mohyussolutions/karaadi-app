@@ -1,10 +1,7 @@
 import { DeviceEventEmitter } from 'react-native';
+import type { ToastPayload } from '../types/toast.types';
 
-export interface ToastPayload {
-  message: string;
-  type?: 'saved' | 'removed';
-  onView?: () => void;
-}
+export type { ToastPayload };
 
 export function showToast(payload: ToastPayload) {
   DeviceEventEmitter.emit('KARAADI_TOAST', payload);

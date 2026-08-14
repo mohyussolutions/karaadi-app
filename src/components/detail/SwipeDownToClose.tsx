@@ -14,11 +14,6 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const DISMISS_DISTANCE = 120;
 const DISMISS_VELOCITY = 800;
 
-/**
- * Android-only "pull down to close" wrapper for modal detail screens —
- * react-native-screens ignores gestureDirection="vertical" on Android,
- * so the native swipe-to-dismiss iOS gets for free has to be reimplemented here.
- */
 export default function SwipeDownToClose({ children }: SwipeDownToCloseProps) {
   const router = useRouter();
   const s = useThemedStyles(createStyles);

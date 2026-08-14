@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
 import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
-import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, VEHICLE_ENDPOINTS } from '../../../constants';
+import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, VEHICLE_ENDPOINTS, getVehicleConfig, buildSpecItems } from '../../../constants';
 import { useVehicleDetail } from '../../../components/hooks/useVehicleDetail';
 import ImageGallery from '../../../components/detail/ImageGallery';
 import ZoomModal from '../../../components/modals/ZoomModal';
@@ -59,25 +59,9 @@ export default function VehicleDetailScreen() {
   const desc = item.description || '';
   const TRUNCATE = DESCRIPTION_TRUNCATE;
 
-  const badge = item.maGaday ? { label: t('realEstateDetail.waaLaGatay'), color: Colors.error }
-    : item.isPremium90 ? { label: 'PREMIUM', color: Colors.premium }
-    : item.isStandard60 ? { label: 'STANDARD', color: Colors.standard }
-    : null;
+  const badge = item.maGaday ? { label: t('realEstateDetail.waaLaGatay'), color: Colors.error } : null;
 
-  const specItems: { label: string; value: string }[] = [
-    item.brand && { label: t('vehicleDetail.make'), value: item.brand },
-    (item.model || item.vehicleModel || item.modelName || item.boatModel || item.traktortModel) && {
-      label: t('vehicleDetail.model'), value: item.model || item.vehicleModel || item.modelName || item.boatModel || item.traktortModel,
-    },
-    item.year && { label: t('vehicleDetail.year'), value: String(item.year) },
-    item.mileage && { label: t('vehicleDetail.mileage'), value: `${Number(item.mileage).toLocaleString()} km` },
-    item.hours && { label: t('vehicleDetail.hours'), value: `${item.hours} h` },
-    item.fuelType && { label: t('vehicleDetail.fuelType'), value: item.fuelType },
-    item.transmission && { label: t('vehicleDetail.transmission'), value: item.transmission },
-    item.color && { label: t('vehicleDetail.color'), value: item.color },
-    item.type && { label: t('vehicleDetail.type'), value: item.type },
-    item.length && { label: t('vehicleDetail.length'), value: `${item.length} ft` },
-  ].filter(Boolean) as { label: string; value: string }[];
+  const specItems = buildSpecItems(item, getVehicleConfig(category).fields, t);
 
   const locationStr = [item.city, item.region].filter(Boolean).join(', ') || t('vehicleDetail.locationFallback');
   const shareMsg = `${item.title}\n${item.price > 0 ? formatPrice(item.price) : 'Price on request'}\n📍 ${locationStr}\n\nKaraadi`;
@@ -135,6 +119,7 @@ export default function VehicleDetailScreen() {
         userId={item?.userId || item?.user?._id || item?.user?.id || null}
         profileImage={item.user?.profileImage}
         phone={item.user?.phone}
+        isVerified={item.user?.isVerified}
         subtitle={t('realEstateDetail.activeSeller')}
         onCall={handleCall}
         onMessage={item.maGaday ? undefined : handleContact}

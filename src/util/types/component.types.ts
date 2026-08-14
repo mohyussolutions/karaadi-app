@@ -1,5 +1,30 @@
 import type { ReactNode } from 'react';
+import type { StyleProp, ImageStyle, ViewStyle } from 'react-native';
+import type { ImageProps as ExpoImageProps } from 'expo-image';
 import type { ListingBase } from './listing.types';
+
+export interface AppIconProps {
+  name: string;
+  size?: number;
+  color?: string;
+}
+
+export type RemoteImageProps = Omit<ExpoImageProps, 'style'> & {
+  style?: StyleProp<ImageStyle & ViewStyle>;
+  iconSize?: number;
+};
+
+export interface VerifiedBadgeProps {
+  visible?: boolean | null;
+  size?: number;
+}
+
+export interface CameraCaptureProps {
+  visible: boolean;
+  onCapture: (base64: string, mimeType: string) => void;
+  onClose: () => void;
+  initialFacing?: 'back' | 'front';
+}
 
 export interface ImageGalleryProps {
   images: string[];
@@ -67,6 +92,7 @@ export interface SellerCardProps {
   phone?: string | null;
   subtitle?: string;
   userId?: string | null;
+  isVerified?: boolean | null;
   onMessage?: () => void;
   onCall?: () => void;
   messageBtnLabel?: string;
@@ -95,6 +121,8 @@ export interface SocialShareSheetProps {
   message: string;
   monochrome?: boolean;
 }
+
+export type PostOutcome = 'idle' | 'done' | 'error';
 
 export interface SocialAction {
   key: string;

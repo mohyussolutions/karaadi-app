@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Feather } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useLogin } from '../../components/features/auth/hooks/useLogin';
 import { useResponsive } from '../../components/hooks/useResponsive';
@@ -67,7 +67,7 @@ export default function LoginScreen() {
                 autoComplete="password"
               />
               <TouchableOpacity style={styles.eyeBtn} onPress={() => setShowPassword((v) => !v)}>
-                <Feather
+                <MaterialCommunityIcons
                   name={showPassword ? 'eye-off' : 'eye'}
                   size={20}
                   color={Colors.textMuted}

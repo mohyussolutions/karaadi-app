@@ -14,6 +14,7 @@ import { getImageUrl } from '../../util/helpers';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { createStyles } from '../../util/styles/profile/edit.styles';
 import { useTranslation } from 'react-i18next';
+import { usernameSchema, somaliPhoneSchema } from '../../util/validation/schemas';
 
 const AVATAR = placeholderAvatar(100, '2563eb', 'Me');
 const DELETE_CONFIRM_TEXT = 'delete account';
@@ -61,9 +62,11 @@ export default function EditProfileScreen() {
 
   async function handleSaveUsername() {
     if (!username.trim()) { Alert.alert(t('error'), t('mine.editProfile.usernameEmpty')); return; }
+    const parsedUsername = usernameSchema.safeParse(username);
+    if (!parsedUsername.success) { Alert.alert(t('error'), t('mine.editProfile.usernameInvalid')); return; }
     setSavingUsername(true);
     try {
-      const updated = await updateUsername(username.trim());
+      const updated = await updateUsername(parsedUsername.data);
       if (user) await setUser({ ...user, ...updated }, user.token);
       Alert.alert(t('success'), t('mine.editProfile.usernameUpdated'));
     } catch (err: any) {
@@ -75,9 +78,11 @@ export default function EditProfileScreen() {
 
   async function handleSavePhone() {
     if (!phone.trim()) { Alert.alert(t('error'), t('mine.editProfile.phoneEmpty')); return; }
+    const parsedPhone = somaliPhoneSchema.safeParse(phone);
+    if (!parsedPhone.success) { Alert.alert(t('error'), t('mine.editProfile.phoneInvalid')); return; }
     setSavingPhone(true);
     try {
-      const updated = await updatePhone(phone.trim());
+      const updated = await updatePhone(parsedPhone.data);
       if (user) await setUser({ ...user, ...updated }, user.token);
       Alert.alert(t('success'), t('mine.editProfile.phoneUpdated'));
     } catch (err: any) {

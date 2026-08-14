@@ -2,9 +2,14 @@
 const http = require('http');
 const https = require('https');
 const { URL } = require('url');
+const path = require('path');
+
+try {
+  process.loadEnvFile(path.join(__dirname, '..', '.env'));
+} catch {}
 
 const PORT = 8090;
-const BACKEND_ORIGIN = 'https://karaadi.onrender.com';
+const BACKEND_ORIGIN = process.env.EXPO_PUBLIC_API_URL || 'https://api.karaadi.com';
 
 const server = http.createServer((req, res) => {
   const allowedOrigin = req.headers.origin || '*';

@@ -1,12 +1,6 @@
-import { FontAwesome5 } from "@expo/vector-icons";
-import { getNativeIcon } from "../../util/icons/icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useThemeColors } from "../hooks/useTheme";
-
-interface AppIconProps {
-  name: string;
-  size?: number;
-  color?: string;
-}
+import type { AppIconProps } from "../../util/types";
 
 export default function AppIcon({
   name,
@@ -15,6 +9,6 @@ export default function AppIcon({
 }: AppIconProps) {
   const Colors = useThemeColors();
   return (
-    <FontAwesome5 name={getNativeIcon(name) as any} size={size} color={color ?? Colors.text} />
+    <MaterialCommunityIcons name={name as any} size={size} color={color ?? Colors.text} />
   );
 }
