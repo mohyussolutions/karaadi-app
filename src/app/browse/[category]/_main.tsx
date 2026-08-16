@@ -12,7 +12,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useThemeColors, useThemedStyles } from "../../../components/hooks/useTheme";
-import { getCategoryByKey, SUB_I18N_GROUP } from "../../../constants/categories";
+import { getCategoryByKey, SUB_I18N_GROUP } from "../../../constants";
 import { EmptyState, AppIcon } from "../../../components/shared";
 import ListingCard from "../../../components/cards/ListingCard";
 import { ListingCardSkeleton } from "../../../components/loading";

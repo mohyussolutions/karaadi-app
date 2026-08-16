@@ -2,7 +2,7 @@ import { memo, useCallback } from "react";
 import { View, Text, Pressable, Platform } from "react-native";
 import AppIcon from "./AppIcon";
 import { useRouter } from "expo-router";
-import { MAIN_CATEGORIES, MainCategory } from "../../constants/categories";
+import { MAIN_CATEGORIES, MainCategory } from "../../constants";
 import { useAppTranslation } from "../hooks/useAppTranslation";
 import { useThemeColors, useThemedStyles } from "../hooks/useTheme";
 import { useResponsive } from "../hooks/useResponsive";

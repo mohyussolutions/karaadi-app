@@ -6,9 +6,7 @@ import { Stack, usePathname } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { NavigationBar } from "expo-navigation-bar";
 import * as SystemUI from "expo-system-ui";
-import { useFonts } from "expo-font";
 
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import GlobalHeader from "../components/layout/GlobalHeader";
@@ -16,7 +14,6 @@ import BottomTabBar from "../navigation/BottomTabBar";
 import { EulaModal } from "../components/modals/EulaModal";
 import { IdentityGate } from "../components/features/identification/components/IdentityGate";
 import { useIdentityGate } from "../components/features/identification/hooks/useIdentityGate";
-import { LoadingSpinner } from "../components/loading";
 import { SaveToast, UpdateBanner } from "../components/shared";
 import Hage from "../components/ai-assistant";
 import NotificationBanner from "../components/features/notifications/components/NotificationBanner";
@@ -30,7 +27,6 @@ import { useSocketNotifications } from "../components/features/notifications/hoo
 import { useNotificationTap } from "../components/features/notifications/hooks/useNotificationTap";
 
 export default function RootLayout() {
-  const [fontsLoaded] = useFonts({ ...MaterialCommunityIcons.font });
   const [showEula, setShowEula] = useState(false);
 
   useEffect(() => {
@@ -69,8 +65,6 @@ export default function RootLayout() {
       NavigationBar.setStyle(resolved === "dark" ? "light" : "dark");
     }
   }, [resolved, Colors.background]);
-
-  if (!fontsLoaded) return <LoadingSpinner fullScreen />;
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.background }}>

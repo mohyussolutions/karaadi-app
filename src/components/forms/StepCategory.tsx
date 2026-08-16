@@ -6,7 +6,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useThemeColors, useThemedStyles } from "../hooks/useTheme";
 import { useAppTranslation } from "../hooks/useAppTranslation";
 import { useTabBarClearance } from "../hooks/useTabBarClearance";
-import { MAIN_CATEGORIES, type MainCategory } from "../../constants/categories";
+import { MAIN_CATEGORIES, type MainCategory } from "../../constants";
 import { createStyles } from "../../util/styles/new-ad/stepCategory.styles";
 
 const NUM_COLUMNS = 3;

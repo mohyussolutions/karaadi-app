@@ -1,4 +1,4 @@
-import { MAIN_CATEGORIES } from '../../constants/categories';
+import { MAIN_CATEGORIES } from '../../constants';
 
 export const BUSINESS_TYPE_ICON: Record<string, string> = Object.fromEntries(
   MAIN_CATEGORIES.map((c) => [c.key, c.icon]),
@@ -8,9 +8,6 @@ export const BUSINESS_TYPE_LABEL: Record<string, string> = Object.fromEntries(
   MAIN_CATEGORIES.map((c) => [c.key, c.name]),
 );
 
-// The backend restricts which listing categories a business may post under
-// using its own lowercase key set (see BUSINESS_CATEGORY_KEYS server-side),
-// which differs from the app's MAIN_CATEGORIES keys used for browsing/routing.
 export const BUSINESS_CATEGORY_KEY_MAP: Record<string, string> = {
   RealEstate: 'realestate',
   Cars: 'motor',

@@ -8,7 +8,7 @@ import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTh
 import { createStyles } from '../../../util/styles/profile/aboutKaraadi.styles';
 import { SOCIAL_LINKS } from '../../../constants';
 import { SOCIAL_ICONS } from '../../../util/icons/icons';
-import { SOCIAL_BRAND_COLORS } from '../../../components/features/social/constants/socialBrand';
+import { SOCIAL_BRAND_COLORS } from '../../../constants';
 
 const PAGES: { id: string; icon: string; titleKey: string; route: string }[] = [
   { id: 'about', icon: 'information-outline', titleKey: 'about.heading', route: '/profile/about-karaadi/about' },

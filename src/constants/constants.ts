@@ -1,5 +1,4 @@
 import { Platform } from 'react-native';
-import type { Language } from '../util/types';
 
 const isWebDev = __DEV__ && Platform.OS === 'web';
 
@@ -21,33 +20,8 @@ export const CATEGORY_FEED_LIMIT = 200;
 export const BADGE_MAX_COUNT = 9;
 export const BADGE_MAX_LABEL = '9+';
 
-export const PRIORITY_CONFIG = {
-  PREMIUM:  { label: 'PREMIUM' },
-  STANDARD: { label: 'STANDARD' },
-  BASIC:    { label: 'BASIC' },
-} as const;
+export const SITE_URL = 'https://karaadi.com';
 
-export const GRID_CONFIG = {
-  PAGE_SIZE:      20,
-  INITIAL_PAGE:   1,
-  INITIAL_LOAD:   60,
-  ITEMS_PER_LOAD: 10,
-  MAX_ITEMS:      120,
-  MAX_LOADS:      3,
-} as const;
+export const DETAIL_PLACEHOLDER = 'https://placehold.co/800x560/e5e7eb/9ca3af?text=No+Image';
 
-export const OPTION = {
-  Public:  'Public',
-  Private: 'Private',
-} as const;
-
-export const TOAST_TIMINGS = {
-  FADE_IN: 250,
-  DISPLAY: 2200,
-  FADE_OUT: 300,
-} as const;
-
-export const LANGUAGES: Language[] = [
-  { code: 'so', label: 'SOMALI' },
-  { code: 'en', label: 'ENGLISH' },
-];
+export const DESCRIPTION_TRUNCATE = 300;

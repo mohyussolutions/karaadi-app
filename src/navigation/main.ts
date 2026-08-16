@@ -5,14 +5,14 @@ export {
   MAIN_CATEGORIES,
   SUB_I18N_GROUP,
   getCategoryByKey,
-} from "../constants/categories";
+} from "../constants";
 export type {
   MainCategory,
   SubCategory,
   NestedSubCategory,
-} from "../constants/categories";
+} from "../constants";
 
-import { MAIN_CATEGORIES, SubCategory } from "../constants/categories";
+import { MAIN_CATEGORIES, SubCategory } from "../constants";
 
 export const TAB_ITEMS: TabItem[] = [
   {

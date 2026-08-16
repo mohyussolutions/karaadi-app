@@ -1,7 +1,7 @@
 import type { ListingType, Step, Plan } from '../../../../util/types/new-ad.types';
 export type { ListingType, Step, Plan };
 import type { ColorPalette } from '../../../hooks/useTheme';
-import { CAT_PATHS } from '../../../../constants/categories';
+import { CAT_PATHS } from '../../../../constants';
 
 export const CATEGORY_ENDPOINTS: Record<string, string> = {
   Marketplace: CAT_PATHS.marketplace,

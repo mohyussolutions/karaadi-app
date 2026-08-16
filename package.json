@@ -1,6 +1,6 @@
 {
   "name": "karaadi",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "main": "src/main.tsx",
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
