@@ -11,7 +11,7 @@ import { LoadingSpinner } from '../../components/loading';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { useMyBusinesses } from '../../components/features/business/hooks/useMyBusinesses';
 import { placeholderAvatar } from '../../constants';
-import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL } from '../../util/types';
+import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL, BUSINESS_CATEGORY_KEY_REVERSE } from '../../util/types';
 import { createStyles } from '../../util/styles/profile/businesses.styles';
 
 const PLACEHOLDER = placeholderAvatar(80, '2563eb', 'B');
@@ -53,7 +53,8 @@ export default function BusinessesScreen() {
           />
         }
         renderItem={({ item }) => {
-          const typeKey = item.categories?.[0] || item.category || item.type || '';
+          const rawTypeKey = item.categories?.[0] || item.category || item.type || '';
+          const typeKey = BUSINESS_CATEGORY_KEY_REVERSE[rawTypeKey] || rawTypeKey;
           const typeLabel = BUSINESS_TYPE_LABEL[typeKey] || typeKey || t('mine.businesses.businessLabel');
           const typeIcon = BUSINESS_TYPE_ICON[typeKey] || 'office-building-outline';
           return (

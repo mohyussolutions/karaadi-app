@@ -17,6 +17,7 @@ import { getImageUrl } from '../../util/helpers';
 import { CheckoutBar } from '../../components/features/subscription/components/checklist';
 import { BIZ_STEPS, MAIN_CATEGORIES } from '../../navigation/main';
 import type { StepItem, BusinessPlan, BusinessApplyFormState } from '../../util/types';
+import { BUSINESS_CATEGORY_KEY_MAP } from '../../util/types';
 import { LoadingSpinner } from '../../components/loading';
 import { useAuthStore } from '../../store/authStore';
 import { useAppDispatch } from '../../store/store';
@@ -33,8 +34,27 @@ const EMPTY: BusinessApplyFormState = {
   contactName: '', website: '', address: '', description: '',
 };
 
+// Flow order mirrors the website: Plan -> Apply -> Approval -> Categories -> Post.
+// "Plan" appears twice in practice: once pre-apply (no business yet, just
+// carries the choice into the application) and once post-approval as a
+// fallback for businesses that reach approval without a plan on file.
+type Screen = 'plan' | 'apply' | 'approval' | 'categories' | 'post';
+const CHECKUP_INDEX: Record<Screen, number> = {
+  plan: 0, apply: 1, approval: 2, categories: 3, post: 4,
+};
+
 function isExpired(business: any): boolean {
   return !!business?.expiryDate && new Date(business.expiryDate) < new Date();
+}
+
+function needsCategories(business: any): boolean {
+  return (business?.categories?.length ?? 0) === 0;
+}
+
+function nextScreenAfterApproval(business: any): Screen {
+  if (needsCategories(business)) return 'categories';
+  if (!business.planId || isExpired(business)) return 'plan';
+  return 'post';
 }
 
 export default function BusinessCreateScreen() {
@@ -47,8 +67,9 @@ export default function BusinessCreateScreen() {
 
   const s = useThemedStyles(createStyles);
 
-  const [bizStep, setBizStep] = useState(0);
+  const [screen, setScreen] = useState<Screen>('apply');
   const [business, setBusinessRecord] = useState<any>(null);
+  const [chosenPlan, setChosenPlan] = useState<BusinessPlan | null>(null);
 
   const [initialValues, setInitialValues] = useState<BusinessApplyFormState | null>(null);
   const [initialLogo, setInitialLogo] = useState<string | undefined>(undefined);
@@ -81,7 +102,7 @@ export default function BusinessCreateScreen() {
           if (data.logo) setInitialLogo(getImageUrl(data.logo) || data.logo);
 
           if (data.status === 'active' && data.isVerified) {
-            setBizStep(!data.planId || isExpired(data) ? 2 : 3);
+            setScreen(nextScreenAfterApproval(data));
           }
         })
         .catch(() => Alert.alert(t('auth.common.error'), t('mine.businesses.loadError')))
@@ -95,10 +116,13 @@ export default function BusinessCreateScreen() {
         if (existing) {
           setBusinessRecord(existing);
           if (existing.status === 'active' && existing.isVerified) {
-            setBizStep(!existing.planId || isExpired(existing) ? 2 : 3);
+            setScreen(nextScreenAfterApproval(existing));
           } else {
-            setBizStep(1);
+            setScreen('approval');
           }
+        } else {
+          // No business yet — send them to pick a plan before applying.
+          setScreen('plan');
         }
       })
       .catch(() => {})
@@ -109,9 +133,24 @@ export default function BusinessCreateScreen() {
 
   return (
     <SafeAreaView style={s.safe} edges={['bottom']}>
-      <CheckoutBar steps={bizSteps} currentIndex={bizStep} />
+      <CheckoutBar steps={bizSteps} currentIndex={CHECKUP_INDEX[screen]} />
 
-      {bizStep === 0 && (
+      {screen === 'plan' && (
+        <PlanStep
+          business={business}
+          onSelected={(result) => {
+            if (!business) {
+              setChosenPlan(result);
+              setScreen('apply');
+              return;
+            }
+            setBusinessRecord(result);
+            setScreen('post');
+          }}
+        />
+      )}
+
+      {screen === 'apply' && (
         <ApplyStep
           key={editId || 'new'}
           initialValues={initialValues || EMPTY}
@@ -119,36 +158,37 @@ export default function BusinessCreateScreen() {
           isEditing={isEditing}
           editId={editId}
           accountEmail={user.email}
+          plan={chosenPlan}
           onSuccess={(biz) => {
             if (isEditing) { router.back(); return; }
             setBusinessRecord(biz);
-            setBizStep(1);
+            setScreen('approval');
           }}
           onCancel={() => router.back()}
         />
       )}
 
-      {bizStep === 1 && business && (
+      {screen === 'approval' && business && (
         <ApprovalStep
           business={business}
           onApproved={(biz) => {
             setBusinessRecord(biz);
-            setBizStep(!biz.planId || isExpired(biz) ? 2 : 3);
+            setScreen(nextScreenAfterApproval(biz));
           }}
         />
       )}
 
-      {bizStep === 2 && business && (
-        <PlanStep
+      {screen === 'categories' && business && (
+        <CategoriesStep
           business={business}
-          onSelected={(biz) => {
+          onSaved={(biz) => {
             setBusinessRecord(biz);
-            setBizStep(3);
+            setScreen(!biz.planId ? 'plan' : 'post');
           }}
         />
       )}
 
-      {bizStep === 3 && business && (
+      {screen === 'post' && business && (
         <PostStep
           business={business}
           onSelectCategory={(category) => {
@@ -170,6 +210,7 @@ function ApplyStep({
   isEditing,
   editId,
   accountEmail,
+  plan,
   onSuccess,
   onCancel,
 }: {
@@ -178,6 +219,7 @@ function ApplyStep({
   isEditing: boolean;
   editId?: string;
   accountEmail: string;
+  plan: BusinessPlan | null;
   onSuccess: (business: any) => void;
   onCancel: () => void;
 }) {
@@ -244,6 +286,7 @@ function ApplyStep({
     if (!validate()) return;
     setSubmitting(true);
     try {
+      const planId = plan ? ((plan as any)._id || plan.id) : undefined;
       const payload: Record<string, any> = {
         name: form.name.trim(),
         email: form.email.trim(),
@@ -254,6 +297,7 @@ function ApplyStep({
         address: form.address.trim() || undefined,
         description: form.description.trim() || undefined,
         ...(logo && !logo.startsWith('http') ? { logo } : {}),
+        ...(!isEditing && planId ? { planId } : {}),
       };
 
       if (isEditing && editId) {
@@ -277,6 +321,16 @@ function ApplyStep({
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
+        {plan && (
+          <View style={s.planBanner}>
+            <View>
+              <Text style={s.planBannerLabel}>{t('mine.businesses.selectedPlanLabel')}</Text>
+              <Text style={s.planBannerName}>{plan.name}</Text>
+            </View>
+            <Text style={s.planBannerPrice}>${plan.price}</Text>
+          </View>
+        )}
+
         <View style={s.logoSection}>
           <Pressable onPress={pickLogo}>
             {logo
@@ -548,12 +602,102 @@ function ApprovalStep({
   );
 }
 
+function CategoriesStep({
+  business,
+  onSaved,
+}: {
+  business: any;
+  onSaved: (biz: any) => void;
+}) {
+  const Colors = useThemeColors();
+  const s = useThemedStyles(createStyles);
+  const { t } = useAppTranslation();
+  const insets = useSafeAreaInsets();
+
+  const OPTIONS = useMemo(() => MAIN_CATEGORIES.map(c => ({
+    label: t(`categories.${c.key}`, { defaultValue: c.name }),
+    value: c.key,
+    icon: c.icon,
+  })), [t]);
+
+  const [selected, setSelected] = useState<string[]>(() => {
+    const backendKeys: string[] = business.categories ?? [];
+    return OPTIONS
+      .filter((opt) => backendKeys.includes(BUSINESS_CATEGORY_KEY_MAP[opt.value]))
+      .map((opt) => opt.value);
+  });
+  const [saving, setSaving] = useState(false);
+
+  function toggle(key: string) {
+    setSelected((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]));
+  }
+
+  async function handleSave() {
+    if (selected.length === 0) return;
+    setSaving(true);
+    try {
+      const backendCategories = selected.map((k) => BUSINESS_CATEGORY_KEY_MAP[k]).filter(Boolean);
+      const id = business._id || business.id;
+      await updateBusiness(id, { categories: backendCategories });
+      onSaved({ ...business, categories: backendCategories });
+    } catch (err: any) {
+      Alert.alert(t('auth.common.error'), err?.response?.data?.message || t('mine.businesses.saveError'));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <ScrollView contentContainerStyle={[s.scroll, { paddingBottom: insets.bottom + 84 }]} keyboardShouldPersistTaps="handled">
+      <Text style={s.heading}>{t('mine.businesses.selectCategoriesTitle')}</Text>
+      <Text style={s.statusMessage}>{t('mine.businesses.selectCategoriesDesc')}</Text>
+
+      <View style={s.categoryGrid}>
+        {OPTIONS.map((opt) => {
+          const active = selected.includes(opt.value);
+          return (
+            <TouchableOpacity
+              key={opt.value}
+              style={[s.categoryGridItem, active && s.categoryGridItemActive]}
+              onPress={() => toggle(opt.value)}
+              activeOpacity={0.85}
+            >
+              <View style={[s.categoryGridIconWrap, active && s.categoryGridIconWrapActive]}>
+                <MaterialCommunityIcons name={opt.icon as any} size={28} color={active ? Colors.white : Colors.primary} />
+              </View>
+              <Text style={s.categoryGridLabel}>{opt.label}</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+
+      <TouchableOpacity
+        style={[s.submitBtn, (selected.length === 0 || saving) && s.submitBtnDisabled]}
+        onPress={handleSave}
+        disabled={selected.length === 0 || saving}
+        activeOpacity={0.88}
+      >
+        {saving ? (
+          <ActivityIndicator size="small" color={Colors.white} />
+        ) : (
+          <>
+            <Text style={s.submitText}>{t('mine.businesses.saveAndContinue')}</Text>
+            <MaterialCommunityIcons name="arrow-right" size={18} color={Colors.white} />
+          </>
+        )}
+      </TouchableOpacity>
+
+      <View style={{ height: 40 }} />
+    </ScrollView>
+  );
+}
+
 function PlanStep({
   business,
   onSelected,
 }: {
-  business: any;
-  onSelected: (biz: any) => void;
+  business: any | null;
+  onSelected: (result: any) => void;
 }) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
@@ -576,6 +720,10 @@ function PlanStep({
 
   async function handleConfirm() {
     if (!selected) return;
+    if (!business) {
+      onSelected(selected);
+      return;
+    }
     setSubmitting(true);
     try {
       const id = business._id || business.id;
@@ -595,9 +743,15 @@ function PlanStep({
   return (
     <ScrollView contentContainerStyle={[s.scroll, { paddingBottom: insets.bottom + 84 }]} keyboardShouldPersistTaps="handled">
       <Text style={s.heading}>
-        {business.planId ? t('mine.businesses.renewPlan') : t('mine.businesses.selectPlanTitle')}
+        {!business
+          ? t('mine.businesses.prePlanTitle')
+          : business.planId ? t('mine.businesses.renewPlan') : t('mine.businesses.selectPlanTitle')}
       </Text>
-      <Text style={s.statusMessage}>{t('mine.businesses.selectPlanDesc', { name: business.name })}</Text>
+      <Text style={s.statusMessage}>
+        {!business
+          ? t('mine.businesses.prePlanDesc')
+          : t('mine.businesses.selectPlanDesc', { name: business.name })}
+      </Text>
 
       {plans.map((plan) => {
         const tier = tierFor(plan);
@@ -641,7 +795,9 @@ function PlanStep({
           <ActivityIndicator size="small" color={Colors.white} />
         ) : (
           <>
-            <Text style={s.submitText}>{t('mine.businesses.confirmPlan')}</Text>
+            <Text style={s.submitText}>
+              {!business ? t('mine.businesses.continueToApply') : t('mine.businesses.confirmPlan')}
+            </Text>
             <MaterialCommunityIcons name="arrow-right" size={18} color={Colors.white} />
           </>
         )}
@@ -664,11 +820,17 @@ function PostStep({
   const { t } = useAppTranslation();
   const insets = useSafeAreaInsets();
 
-  const BUSINESS_CATEGORIES = useMemo(() => MAIN_CATEGORIES.map(c => ({
-    label: t(`categories.${c.key}`, { defaultValue: c.name }),
-    value: c.key,
-    icon: c.icon,
-  })), [t]);
+  const allowedBackendKeys: string[] = business.categories ?? [];
+
+  const BUSINESS_CATEGORIES = useMemo(() => {
+    const all = MAIN_CATEGORIES.map(c => ({
+      label: t(`categories.${c.key}`, { defaultValue: c.name }),
+      value: c.key,
+      icon: c.icon,
+    }));
+    if (allowedBackendKeys.length === 0) return all;
+    return all.filter((opt) => allowedBackendKeys.includes(BUSINESS_CATEGORY_KEY_MAP[opt.value]));
+  }, [t, allowedBackendKeys.join(',')]);
 
   return (
     <ScrollView contentContainerStyle={[s.scroll, { paddingBottom: insets.bottom + 84 }]} keyboardShouldPersistTaps="handled">

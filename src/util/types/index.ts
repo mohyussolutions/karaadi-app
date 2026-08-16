@@ -36,7 +36,12 @@ export type {
   HageReplySegment, HageInputBarProps, HageMessageListProps,
 } from './hage.types';
 
-export { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL } from './business.types';
+export {
+  BUSINESS_TYPE_ICON,
+  BUSINESS_TYPE_LABEL,
+  BUSINESS_CATEGORY_KEY_MAP,
+  BUSINESS_CATEGORY_KEY_REVERSE,
+} from './business.types';
 export type { BusinessPlan, BusinessApplyFormState } from './business.types';
 
 export type {

@@ -126,5 +126,17 @@ export function createStyles(Colors: ColorPalette) {
       alignItems: 'center', justifyContent: 'center',
     },
     categoryGridLabel: { fontSize: 14, fontWeight: '700', color: Colors.text, textAlign: 'center' },
+    categoryGridItemActive: { borderColor: Colors.primary, backgroundColor: Colors.primaryGhost },
+    categoryGridIconWrapActive: { backgroundColor: Colors.primary },
+
+    planBanner: {
+      flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+      backgroundColor: Colors.primaryGhost, borderRadius: 16,
+      borderWidth: 1, borderColor: Colors.primary, paddingHorizontal: 16, paddingVertical: 12,
+      marginBottom: 16,
+    },
+    planBannerLabel: { fontSize: 10, fontWeight: '800', color: Colors.primary, textTransform: 'uppercase', letterSpacing: 0.5 },
+    planBannerName: { fontSize: 14, fontWeight: '800', color: Colors.text },
+    planBannerPrice: { fontSize: 14, fontWeight: '800', color: Colors.primary },
   });
 }

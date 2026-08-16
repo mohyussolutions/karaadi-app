@@ -97,9 +97,10 @@ export const SETTINGS_ROWS: SettingsRow[] = [
 ];
 
 export const BIZ_STEPS: BizStepDef[] = [
+  { key: 'plan', labelKey: 'mine.businesses.stepPlan' },
   { key: 'apply', labelKey: 'mine.businesses.stepApply' },
   { key: 'approval', labelKey: 'mine.businesses.stepApproval' },
-  { key: 'plan', labelKey: 'mine.businesses.stepPlan' },
+  { key: 'categories', labelKey: 'mine.businesses.stepCategories' },
   { key: 'post', labelKey: 'mine.businesses.stepPost' },
 ];
 

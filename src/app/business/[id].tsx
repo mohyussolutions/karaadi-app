@@ -15,7 +15,7 @@ import BottomTabBar from "../../navigation/BottomTabBar";
 import { useTranslation } from "react-i18next";
 import { useThemeColors, useThemedStyles } from "../../components/hooks/useTheme";
 import { SOCIAL_LINK_BUILDERS, placeholderAvatar } from "../../constants";
-import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL } from "../../util/types";
+import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL, BUSINESS_CATEGORY_KEY_REVERSE } from "../../util/types";
 import { useBusinessDetail } from "../../components/features/business/hooks/useBusinessDetail";
 import { SOCIAL_ICONS, type SocialIcons } from "../../util/icons/icons";
 import { createStyles } from "../../util/styles/business/businessDetail.styles";
@@ -104,14 +104,14 @@ export default function BusinessDetailScreen() {
           <View style={s.typeBadge}>
             <MaterialCommunityIcons
               name={
-                (BUSINESS_TYPE_ICON[business.categories?.[0]] ||
+                (BUSINESS_TYPE_ICON[BUSINESS_CATEGORY_KEY_REVERSE[business.categories?.[0]]] ||
                   "office-building-outline") as any
               }
               size={13}
               color={Colors.primary}
             />
             <Text style={s.typeText}>
-              {BUSINESS_TYPE_LABEL[business.categories?.[0]] || "Business"}
+              {BUSINESS_TYPE_LABEL[BUSINESS_CATEGORY_KEY_REVERSE[business.categories?.[0]]] || "Business"}
             </Text>
           </View>
           {business.address && (
@@ -130,18 +130,21 @@ export default function BusinessDetailScreen() {
           <View style={s.section}>
             <Text style={s.sectionTitle}>Categories</Text>
             <View style={s.categoryGrid}>
-              {business.categories.map((cat: string) => (
-                <View key={cat} style={s.categoryItem}>
-                  <MaterialCommunityIcons
-                    name={(BUSINESS_TYPE_ICON[cat] || "office-building-outline") as any}
-                    size={16}
-                    color={Colors.primary}
-                  />
-                  <Text style={s.categoryLabel} numberOfLines={1}>
-                    {BUSINESS_TYPE_LABEL[cat] || cat}
-                  </Text>
-                </View>
-              ))}
+              {business.categories.map((cat: string) => {
+                const mainKey = BUSINESS_CATEGORY_KEY_REVERSE[cat] || cat;
+                return (
+                  <View key={cat} style={s.categoryItem}>
+                    <MaterialCommunityIcons
+                      name={(BUSINESS_TYPE_ICON[mainKey] || "office-building-outline") as any}
+                      size={16}
+                      color={Colors.primary}
+                    />
+                    <Text style={s.categoryLabel} numberOfLines={1}>
+                      {BUSINESS_TYPE_LABEL[mainKey] || cat}
+                    </Text>
+                  </View>
+                );
+              })}
             </View>
           </View>
         )}
