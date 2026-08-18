@@ -1348,6 +1348,9 @@ export const common = {
   updateAvailable: "Update available",
   restart: "Restart",
   updating: "Updating...",
+  forceUpdateTitle: "Update Required",
+  forceUpdateMessage: "A new version of Karaadi is available. Please update to continue using the app.",
+  updateNow: "Update Now",
 } as const;
 
 export const mine = {

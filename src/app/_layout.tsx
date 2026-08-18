@@ -12,9 +12,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import GlobalHeader from "../components/layout/GlobalHeader";
 import BottomTabBar from "../navigation/BottomTabBar";
 import { EulaModal } from "../components/modals/EulaModal";
+import ForceUpdateModal from "../components/modals/ForceUpdateModal";
 import { IdentityGate } from "../components/features/identification/components/IdentityGate";
 import { useIdentityGate } from "../components/features/identification/hooks/useIdentityGate";
-import { SaveToast, UpdateBanner } from "../components/shared";
+import { SaveToast } from "../components/shared";
 import Hage from "../components/ai-assistant";
 import NotificationBanner from "../components/features/notifications/components/NotificationBanner";
 import LanguageSync from "../i18n/LanguageSync";
@@ -155,7 +156,7 @@ export default function RootLayout() {
       {showTabBar && <BottomTabBar />}
       <Hage />
       <SaveToast />
-      <UpdateBanner />
+      <ForceUpdateModal />
 
       <EulaModal
         visible={showEula}

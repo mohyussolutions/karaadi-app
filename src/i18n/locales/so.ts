@@ -363,6 +363,9 @@ export const common = {
   updateAvailable: "Cusboonaysiin ayaa la heli karaa",
   restart: "Dib u bilow",
   updating: "Cusboonaysiinta...",
+  forceUpdateTitle: "Waa Inaad Cusboonaysiisaa",
+  forceUpdateMessage: "Nooc cusub oo Karaadi ah ayaa la heli karaa. Fadlan cusboonaysii si aad u sii isticmaasho appka.",
+  updateNow: "Hadda Cusboonaysii",
 } as const;
 
 export const summary = {
