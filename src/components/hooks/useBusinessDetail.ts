@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { getBusinessById } from '../../../../api/core/business.actions';
+import { getBusinessById } from '../../actions/core/business.actions';
 
 
 export function useBusinessDetail(id: string) {

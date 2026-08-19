@@ -2,12 +2,12 @@ import { useEffect, useState, useCallback } from 'react';
 import { Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { useAuthStore } from '../../../../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 import {
   getSessions, getLoginHistory, logoutSession,
   logoutAllSessions, deleteLoginHistoryEntry, clearLoginHistory,
-} from '../../../../api/core/security.actions';
-import type { Session, LoginEntry } from '../../../../util/types';
+} from '../../actions/core/security.actions';
+import type { Session, LoginEntry } from '../../util/types';
 
 export type { Session, LoginEntry };
 

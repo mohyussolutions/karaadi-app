@@ -6,7 +6,7 @@ import {
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useRegister, PASSWORD_RULES } from '../../components/features/auth/hooks/useRegister';
+import { useRegister, PASSWORD_RULES } from '../../components/hooks/useRegister';
 import { useResponsive } from '../../components/hooks/useResponsive';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { createStyles } from '../../util/styles/auth/register.styles';

@@ -15,7 +15,7 @@ import { EulaModal } from "../components/modals/EulaModal";
 import ForceUpdateModal from "../components/modals/ForceUpdateModal";
 import StoreUpdateModal from "../components/modals/StoreUpdateModal";
 import { IdentityGate } from "../components/features/identification/components/IdentityGate";
-import { useIdentityGate } from "../components/features/identification/hooks/useIdentityGate";
+import { useIdentityGate } from "../components/hooks/useIdentityGate";
 import { SaveToast } from "../components/shared";
 import Hage from "../components/ai-assistant";
 import NotificationBanner from "../components/features/notifications/components/NotificationBanner";
@@ -23,10 +23,10 @@ import LanguageSync from "../i18n/LanguageSync";
 import { useAppInit } from "../components/hooks/useAppInit";
 import { useThemeColors, useThemeMode } from "../components/hooks/useTheme";
 import { useTabBarVisibility } from "../navigation/useTabBarVisibility";
-import { useMessageBanner } from "../components/features/chat/hooks/useMessageBanner";
-import { useSocketMessages } from "../components/features/chat/hooks/useSocketMessages";
-import { useSocketNotifications } from "../components/features/notifications/hooks/useSocketNotifications";
-import { useNotificationTap } from "../components/features/notifications/hooks/useNotificationTap";
+import { useMessageBanner } from "../components/hooks/useMessageBanner";
+import { useSocketMessages } from "../components/hooks/useSocketMessages";
+import { useSocketNotifications } from "../components/hooks/useSocketNotifications";
+import { useNotificationTap } from "../components/hooks/useNotificationTap";
 
 export default function RootLayout() {
   const [showEula, setShowEula] = useState(false);

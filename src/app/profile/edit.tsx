@@ -8,7 +8,7 @@ import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { placeholderAvatar } from '../../constants';
-import { updateUsername, updatePhone, updateProfileImage, deleteAccount } from '../../api/core/auth.actions';
+import { updateUsername, updatePhone, updateProfileImage, deleteAccount } from '../../actions/core/auth.actions';
 import { useAuthStore } from '../../store/authStore';
 import { getImageUrl } from '../../util/helpers';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';

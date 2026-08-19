@@ -8,7 +8,7 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
 import { LoadingSpinner } from '../../../components/loading';
-import { useSecuritySettings } from '../../../components/features/auth/hooks/useSecuritySettings';
+import { useSecuritySettings } from '../../../components/hooks/useSecuritySettings';
 import { createStyles } from '../../../util/styles/settings/security.styles';
 
 function fmtDate(iso: string) {

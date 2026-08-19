@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { Animated, PanResponder } from 'react-native';
-import { DRAG_THRESHOLD } from '../constants';
-import { NATIVE_DRIVER } from '../../../util/animation';
+import { DRAG_THRESHOLD } from '../ai-assistant/constants';
+import { NATIVE_DRIVER } from '../../util/animation';
 
 export function useSheetDrag(onDismiss: () => void) {
   const dragY = useRef(new Animated.Value(0)).current;

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getFavorites, addFavorite, removeFavorite } from '../../api/categories/favorite.actions';
+import { getFavorites, addFavorite, removeFavorite } from '../../actions/categories/favorite.actions';
 import type { Favorite } from '../../util/types';
 import type { FavoritesState } from '../../util/types/redux.types';
 

@@ -9,7 +9,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
-import { useMyBusinesses } from '../../components/features/business/hooks/useMyBusinesses';
+import { useMyBusinesses } from '../../components/hooks/useMyBusinesses';
 import { placeholderAvatar } from '../../constants';
 import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL, BUSINESS_CATEGORY_KEY_REVERSE } from '../../util/types';
 import { createStyles } from '../../util/styles/profile/businesses.styles';

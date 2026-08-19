@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { toggleFavorite } from '../../store/slices/favoritesSlice';
 import { useAuthStore } from '../../store/authStore';
-import { getJobById } from '../../api/categories/job.actions';
+import { getJobById } from '../../actions/categories/job.actions';
 
 import { getCachedListing } from '../../util/cache/listingCache';
 import { showToast } from '../../util/cache/toastService';

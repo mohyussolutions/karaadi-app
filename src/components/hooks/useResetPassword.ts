@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
-import { resetPassword, forgotPassword } from '../../../../api/core/auth.actions';
-import { passwordSchema, confirmationCodeSchema } from '../../../../util/validation/schemas';
+import { resetPassword, forgotPassword } from '../../actions/core/auth.actions';
+import { passwordSchema, confirmationCodeSchema } from '../../util/validation/schemas';
 
 export function useResetPassword(email: string) {
   const router = useRouter();

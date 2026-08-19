@@ -1,8 +1,8 @@
 import * as SecureStore from '../../util/secureStorage';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { setCredentials, clearCredentials, setLoading } from '../../store/slices/authSlice';
-import { login as apiLogin, logout as apiLogout, register as apiRegister, getProfile } from '../../api/core/auth.actions';
-import { connectSocket, disconnectSocket } from '../../api/sockets/socket.actions';
+import { login as apiLogin, logout as apiLogout, register as apiRegister, getProfile } from '../../actions/core/auth.actions';
+import { connectSocket, disconnectSocket } from '../../actions/sockets/socket.actions';
 import type { User } from '../../util/types/user.types';
 
 export function useAuth() {

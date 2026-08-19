@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 import { useAppTranslation } from '../../components/hooks/useAppTranslation';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { useAuthStore } from '../../store/authStore';
-import { getTicketHistory, getTicketDetails, addTicketMessage } from '../../api/core/support.actions';
+import { getTicketHistory, getTicketDetails, addTicketMessage } from '../../actions/core/support.actions';
 import { EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
 import { createStyles } from '../../util/styles/profile/contactHistory.styles';

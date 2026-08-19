@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { LogBox, Platform } from "react-native";
 import { useRouter } from "expo-router";
-import { getListingDetailRoute } from "../../../../util/helpers/nav.routing";
-import type { NotificationTapRouter as Router, NotificationData } from "../../../../util/types/notification.types";
+import { getListingDetailRoute } from "../../util/helpers/nav.routing";
+import type { NotificationTapRouter as Router, NotificationData } from "../../util/types/notification.types";
 
 LogBox.ignoreLogs([
   "expo-notifications: Android Push notifications",

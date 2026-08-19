@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../../store/store';
-import { addNotification, markOneRead, markAllRead, removeNotification, clearNotifications } from '../store/notificationsSlice';
-import { getSocket } from '../../../../api/sockets/socket.actions';
-import { playNotificationSound } from '../services/soundService';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { addNotification, markOneRead, markAllRead, removeNotification, clearNotifications } from '../features/notifications/store/notificationsSlice';
+import { getSocket } from '../../actions/sockets/socket.actions';
+import { playNotificationSound } from '../features/notifications/services/soundService';
 
 function toNotification(userId: string, type: string, data: any) {
   return {

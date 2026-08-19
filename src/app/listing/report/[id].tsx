@@ -9,7 +9,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
 import { useAuthStore } from '../../../store/authStore';
-import { createReport } from '../../../api/core/report.actions';
+import { createReport } from '../../../actions/core/report.actions';
 import { createStyles } from '../../../util/styles/listing/report.styles';
 import { maxLenSchema } from '../../../util/validation/schemas';
 

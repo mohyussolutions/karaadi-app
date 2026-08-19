@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { RegionPickerItem, RegionCityPickerProps } from '../../../util/types';
-import { clientAddCity } from '../../../api/categories/geo.actions';
+import { clientAddCity } from '../../../actions/categories/geo.actions';
 import { toRegionPickerItems } from '../../../util/helpers';
 import { fetchGeoRegions, invalidateGeoCache, GEO_CACHE_TTL } from '../../../store/slices/geoSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/store';

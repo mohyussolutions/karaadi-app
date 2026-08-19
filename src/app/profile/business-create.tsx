@@ -12,7 +12,7 @@ import { z } from 'zod';
 import { isSomaliPhone, isValidWebsite } from '../../util/validation/schemas';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { useAppTranslation } from '../../components/hooks/useAppTranslation';
-import { getBusinessById, getMyBusinesses, createBusiness, updateBusiness } from '../../api/core/business.actions';
+import { getBusinessById, getMyBusinesses, createBusiness, updateBusiness } from '../../actions/core/business.actions';
 import { getImageUrl } from '../../util/helpers';
 import { CheckoutBar } from '../../components/features/subscription/components/checklist';
 import { BIZ_STEPS, MAIN_CATEGORIES } from '../../navigation/main';
@@ -24,7 +24,7 @@ import { useAppDispatch } from '../../store/store';
 import { setListingType, setStep, setCategoryKey, setBusinessId } from '../../store/slices/newAdSlice';
 import {
   fetchBusinessPlans, selectBusinessPlan, extendBusinessPlan,
-} from '../../api/categories/businessPlan.actions';
+} from '../../actions/categories/businessPlan.actions';
 import { createStyles } from '../../util/styles/profile/businessCreate.styles';
 
 const APPROVAL_POLL_INTERVAL_MS = 5000;

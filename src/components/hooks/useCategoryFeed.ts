@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { fetchByCategory } from '../../api/categories/feed.actions';
+import { fetchByCategory } from '../../actions/categories/feed.actions';
 import { prefetchImages } from '../../util/helpers';
 import { CATEGORY_FEED_LIMIT } from '../../constants';
 import type { ListingBase } from '../../util/types/listing.types';

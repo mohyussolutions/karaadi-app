@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AppState } from 'react-native';
-import { useAuthStore } from '../../../../store/authStore';
-import { getIdentificationStatus } from '../../../../api/categories/identification.actions';
-import type { IdentificationStatus } from '../../../../util/types';
+import { useAuthStore } from '../../store/authStore';
+import { getIdentificationStatus } from '../../actions/categories/identification.actions';
+import type { IdentificationStatus } from '../../util/types';
 
 export function useIdentityGate() {
   const { user } = useAuthStore();

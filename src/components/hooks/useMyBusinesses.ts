@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useAuthStore } from '../../../../store/authStore';
-import { getMyBusinesses, deleteBusiness } from '../../../../api/core/business.actions';
+import { useAuthStore } from '../../store/authStore';
+import { getMyBusinesses, deleteBusiness } from '../../actions/core/business.actions';
 
 export function useMyBusinesses() {
   const { t } = useTranslation();

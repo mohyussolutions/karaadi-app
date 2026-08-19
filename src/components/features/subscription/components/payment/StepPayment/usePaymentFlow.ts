@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { initiatePayment, getPaymentStatus, activateListing } from '../../../../../../api/core/payment.actions';
+import { initiatePayment, getPaymentStatus, activateListing } from '../../../../../../actions/core/payment.actions';
 import { CATEGORY_ENDPOINTS } from '../../../../new-ad/constants/config';
 import { useAppSelector } from '../../../../../../store/store';
 import type { PayMethod, Plan } from '../../../../../../util/types';

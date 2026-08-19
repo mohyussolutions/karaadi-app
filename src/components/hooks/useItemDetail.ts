@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { toggleFavorite } from '../../store/slices/favoritesSlice';
 import { useAuthStore } from '../../store/authStore';
-import { getMarketplaceItemById } from '../../api/categories/marketplace.actions';
+import { getMarketplaceItemById } from '../../actions/categories/marketplace.actions';
 
 import { getCachedListing } from '../../util/cache/listingCache';
 import { showToast } from '../../util/cache/toastService';

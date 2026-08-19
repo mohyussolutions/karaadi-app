@@ -1,13 +1,13 @@
 import { useState, useMemo } from 'react';
 import { useRouter } from 'expo-router';
-import { useAuth } from '../../../hooks/useAuth';
+import { useAuth } from './useAuth';
 import {
   REGEX_PASSWORD_LOWERCASE,
   REGEX_PASSWORD_UPPERCASE,
   REGEX_PASSWORD_DIGIT,
   REGEX_PASSWORD_SPECIAL,
-} from '../../../../constants';
-import { emailSchema, usernameSchema } from '../../../../util/validation/schemas';
+} from '../../constants';
+import { emailSchema, usernameSchema } from '../../util/validation/schemas';
 
 export const PASSWORD_RULES = [
   { id: 'length',  labelKey: 'auth.passwordRules.length',    test: (p: string) => p.length >= 8 },

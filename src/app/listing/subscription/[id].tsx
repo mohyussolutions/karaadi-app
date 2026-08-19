@@ -8,7 +8,7 @@ import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTh
 import { DetailSkeleton } from '../../../components/loading';
 import { SUBSCRIPTION_ENDPOINTS } from '../../../constants';
 import { formatPrice, formatDate } from '../../../util/helpers';
-import { useSubscriptionDetail } from '../../../components/features/subscription/hooks/useSubscriptionDetail';
+import { useSubscriptionDetail } from '../../../components/hooks/useSubscriptionDetail';
 import SellerCard from '../../../components/cards/SellerCard';
 import ReportLink from '../../../components/detail/ReportLink';
 import { styles as reportLinkStyles } from '../../../util/styles/detail/reportLink.styles';

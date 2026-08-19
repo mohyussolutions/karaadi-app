@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useAuthStore } from '../../../../store/authStore';
-import { getIdentificationStatus, submitIdentification } from '../../../../api/categories/identification.actions';
-import type { IdentificationStatus } from '../../../../util/types';
+import { useAuthStore } from '../../store/authStore';
+import { getIdentificationStatus, submitIdentification } from '../../actions/categories/identification.actions';
+import type { IdentificationStatus } from '../../util/types';
 
 export function useIdentification() {
   const { user } = useAuthStore();

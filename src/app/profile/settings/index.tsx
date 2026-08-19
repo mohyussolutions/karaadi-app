@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { useAuthStore } from '../../../store/authStore';
 import { toggleSound } from '../../../components/features/notifications/store/notificationSettingsSlice';
 import { playNotificationSound } from '../../../components/features/notifications/services/soundService';
-import { updatePhoneVisibility } from '../../../api/core/auth.actions';
+import { updatePhoneVisibility } from '../../../actions/core/auth.actions';
 import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
 import { createStyles } from '../../../util/styles/settings/settings.styles';
 import { SETTINGS_ROWS } from '../../../navigation/main';

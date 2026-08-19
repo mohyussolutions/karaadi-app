@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useAppSelector } from '../../../../store/store';
-import { getBusinessList } from '../../../../api/core/business.actions';
+import { useAppSelector } from '../../store/store';
+import { getBusinessList } from '../../actions/core/business.actions';
 
 
 export function useBusinessDirectory() {

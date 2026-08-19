@@ -10,7 +10,7 @@ import { LoadingSpinner } from '../../components/loading';
 import RemoteImage from '../../components/shared/RemoteImage';
 import { useThemedStyles } from '../../components/hooks/useTheme';
 import { useResponsive } from '../../components/hooks/useResponsive';
-import { useChatsData } from '../../components/features/chat/hooks/useChatsData';
+import { useChatsData } from '../../components/hooks/useChatsData';
 import { useAppSelector } from '../../store/store';
 import { placeholderAvatar } from '../../constants';
 import { createStyles } from '../../util/styles/tabs/messages.styles';

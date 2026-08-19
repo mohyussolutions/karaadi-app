@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { clientGetAllRegions } from '../../api/categories/geo.actions';
+import { clientGetAllRegions } from '../../actions/categories/geo.actions';
 import type { GeoState } from '../../util/types/redux.types';
 
 export const GEO_CACHE_TTL = 3600_000;

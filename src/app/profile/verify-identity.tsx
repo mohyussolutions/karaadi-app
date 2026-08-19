@@ -6,7 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner } from '../../components/loading';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
-import { useIdentification } from '../../components/features/identification/hooks/useIdentification';
+import { useIdentification } from '../../components/hooks/useIdentification';
 import { IdentityCaptureForm } from '../../components/features/identification/components/IdentityCaptureForm';
 import { createStyles } from '../../util/styles/profile/verifyIdentity.styles';
 

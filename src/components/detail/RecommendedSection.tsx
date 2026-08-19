@@ -7,7 +7,7 @@ import RemoteImage from '../shared/RemoteImage';
 import { useGlobal } from '../hooks/useGlobal';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { getRecommendedByEndpoint } from '../../api/categories/feed.actions';
+import { getRecommendedByEndpoint } from '../../actions/categories/feed.actions';
 import { extractList } from '../../util/helpers';
 import { getImageUrl, formatPrice, prefetchImages } from '../../util/helpers';
 import { getListingDetailRoute } from '../../util/helpers';

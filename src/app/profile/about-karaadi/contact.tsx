@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 import { useAppTranslation } from '../../../components/hooks/useAppTranslation';
 import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
 import { useAuthStore } from '../../../store/authStore';
-import { createTicket } from '../../../api/core/support.actions';
+import { createTicket } from '../../../actions/core/support.actions';
 import { createDetailStyles } from '../../../util/styles/profile/aboutKaraadi.styles';
 import { maxLenSchema } from '../../../util/validation/schemas';
 

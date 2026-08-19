@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Linking } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useAuthStore } from '../../../../store/authStore';
-import { getSubscriptionById } from '../../../../api/categories/subscription.actions';
+import { useAuthStore } from '../../store/authStore';
+import { getSubscriptionById } from '../../actions/categories/subscription.actions';
 
-import type { Subscription } from '../../../../util/types/listing.types';
+import type { Subscription } from '../../util/types/listing.types';
 
 export function useSubscriptionDetail(id: string) {
   const router = useRouter();

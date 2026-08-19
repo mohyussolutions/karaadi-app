@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAppSelector, useAppDispatch } from '../../store/store';
-import { fetchFeedGroup, getHomeFeedRecommendations } from '../../api/categories/feed.actions';
+import { fetchFeedGroup, getHomeFeedRecommendations } from '../../actions/categories/feed.actions';
 import { mergeListings } from '../../util/cache/feedCacheService';
 import { prefetchImages } from '../../util/helpers';
 import { setFeed, setRecommendations } from '../../store/slices/feedSlice';

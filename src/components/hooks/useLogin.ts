@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
-import { useAuth } from '../../../hooks/useAuth';
-import { emailSchema } from '../../../../util/validation/schemas';
+import { useAuth } from './useAuth';
+import { emailSchema } from '../../util/validation/schemas';
 
 export function useLogin() {
   const router = useRouter();

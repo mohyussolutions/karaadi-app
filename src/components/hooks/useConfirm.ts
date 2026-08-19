@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
-import { confirmAccount, resendCode } from '../../api/core/auth.actions';
+import { confirmAccount, resendCode } from '../../actions/core/auth.actions';
 import { confirmationCodeSchema } from '../../util/validation/schemas';
 
 export function useConfirm(email: string) {

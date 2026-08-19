@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../store/store";
-import { addNotification } from "../../notifications/store/notificationsSlice";
-import { getSocket } from "../../../../api/sockets/socket.actions";
-import { scheduleLocalNotification } from "../../notifications/services/notificationService";
-import { playNotificationSound } from "../../notifications/services/soundService";
-import { isViewingChat, getCachedUserName } from "../services/chatState";
-import type { MessageBanner } from "../../../../util/types";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { addNotification } from "../features/notifications/store/notificationsSlice";
+import { getSocket } from "../../actions/sockets/socket.actions";
+import { scheduleLocalNotification } from "../features/notifications/services/notificationService";
+import { playNotificationSound } from "../features/notifications/services/soundService";
+import { isViewingChat, getCachedUserName } from "../features/chat/services/chatState";
+import type { MessageBanner } from "../../util/types";
 
 export function useSocketMessages(showBanner: (data: MessageBanner) => void) {
   const dispatch = useAppDispatch();

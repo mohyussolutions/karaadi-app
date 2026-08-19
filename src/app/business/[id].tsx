@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 import { useThemeColors, useThemedStyles } from "../../components/hooks/useTheme";
 import { SOCIAL_LINK_BUILDERS, placeholderAvatar } from "../../constants";
 import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL, BUSINESS_CATEGORY_KEY_REVERSE } from "../../util/types";
-import { useBusinessDetail } from "../../components/features/business/hooks/useBusinessDetail";
+import { useBusinessDetail } from "../../components/hooks/useBusinessDetail";
 import { SOCIAL_ICONS, type SocialIcons } from "../../util/icons/icons";
 import { createStyles } from "../../util/styles/business/businessDetail.styles";
 import { createTabletPortraitStyles } from "../../util/styles/listing/tabletSplit.styles";

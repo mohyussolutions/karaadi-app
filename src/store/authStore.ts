@@ -2,7 +2,7 @@ import { useAuth } from '../components/hooks/useAuth';
 import { useAppSelector, useAppDispatch } from './store';
 import { clearCredentials, setCredentials } from './slices/authSlice';
 import * as SecureStore from '../util/secureStorage';
-import { disconnectSocket, connectSocket } from '../api/sockets/socket.actions';
+import { disconnectSocket, connectSocket } from '../actions/sockets/socket.actions';
 import type { User } from '../util/types/user.types';
 
 export function useAuthStore() {

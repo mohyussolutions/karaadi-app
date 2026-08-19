@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
-import { getReviewsByUser } from '../../api/core/reviews.actions';
+import { getReviewsByUser } from '../../actions/core/reviews.actions';
 import { placeholderAvatar } from '../../constants';
 import type { SellerCardProps } from '../../util/types';
 import { createStyles } from '../../util/styles/detail/SellerCard.styles';

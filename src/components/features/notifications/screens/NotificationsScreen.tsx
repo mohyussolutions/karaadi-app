@@ -8,7 +8,7 @@ import { EmptyState } from '../../../shared';
 import { LoadingSpinner } from '../../../loading';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { createStyles } from '../../../../util/styles/profile/notifications.styles';
-import { useNotificationsData } from '../hooks/useNotificationsData';
+import { useNotificationsData } from '../../../hooks/useNotificationsData';
 import { useAuthStore } from '../../../../store/authStore';
 
 export default function NotificationsScreen() {

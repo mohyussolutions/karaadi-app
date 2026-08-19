@@ -6,8 +6,8 @@ import { clearChats } from "../features/chat/store/chatsSlice";
 import { setUnreadCount } from "../features/notifications/store/notificationsSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { registerForPushNotifications } from "../features/notifications/services/notificationService";
-import { checkAlertsForMatches } from "../../api/categories/subscription.actions";
-import { getUnreadNotificationCount } from "../../api/core/notifications.actions";
+import { checkAlertsForMatches } from "../../actions/categories/subscription.actions";
+import { getUnreadNotificationCount } from "../../actions/core/notifications.actions";
 
 export function useAppInit() {
   const { loadFromStorage } = useAuth();
