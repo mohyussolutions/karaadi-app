@@ -4,7 +4,7 @@ import {
   CARS_ENDPOINTS, REAL_ESTATE_ENDPOINTS, MOTORCYCLES_ENDPOINTS,
   BOATS_ENDPOINTS, MARKETPLACE_ENDPOINTS, FARM_EQUIPMENT_ENDPOINTS,
   JOBS_ENDPOINTS, FEED_ENDPOINTS,
-} from '../../constants';
+} from '../../api/urls';
 import type { Car, RealEstate, Motorcycle, Boat, MarketplaceItem, FarmEquipment, ListingBase } from '../../util/types/listing.types';
 
 export async function fetchCars(params?: Record<string, any>, signal?: AbortSignal): Promise<Car[]> {

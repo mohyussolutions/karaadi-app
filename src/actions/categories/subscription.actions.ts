@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiClient } from '../client';
-import { SUBSCRIPTION_ENDPOINTS } from '../../constants';
+import { SUBSCRIPTION_ENDPOINTS } from '../../api/urls';
 import { searchCategory } from '../search';
 import { scheduleLocalNotification } from '../../components/features/notifications/services/notificationService';
 import type { Subscription, SubscriptionPayload, Plan } from '../../util/types';

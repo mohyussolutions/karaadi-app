@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { API_BASE_URL } from '../../constants/constants';
+import { API_BASE_URL } from '../../api/urls';
 
 export function getImageUrl(path: string | undefined | null): string {
   if (!path) return '';

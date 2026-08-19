@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { PAYMENT_ENDPOINTS, FEE_ENDPOINTS } from '../../constants';
+import { PAYMENT_ENDPOINTS, FEE_ENDPOINTS } from '../../api/urls';
 
 const feeUrl = (sub: string) => `${FEE_ENDPOINTS.BASE}/${sub}`;
 const feeById = (sub: string, id: string) => `${FEE_ENDPOINTS.BASE}/${sub}/${id}`;

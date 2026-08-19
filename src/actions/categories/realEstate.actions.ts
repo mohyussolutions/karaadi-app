@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { REAL_ESTATE_ENDPOINTS } from '../../constants';
+import { REAL_ESTATE_ENDPOINTS } from '../../api/urls';
 
 function normItem(item: any) {
   const id = String(item._id ?? item.id ?? '');

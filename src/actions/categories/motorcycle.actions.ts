@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { MOTORCYCLES_ENDPOINTS } from '../../constants';
+import { MOTORCYCLES_ENDPOINTS } from '../../api/urls';
 
 function normItem(item: any) {
   const id = String(item._id ?? item.id ?? '');

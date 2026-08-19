@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { JOBS_ENDPOINTS } from '../../constants';
+import { JOBS_ENDPOINTS } from '../../api/urls';
 import type { CreateJobData } from '../../util/types/listing.types';
 
 export type { CreateJobData };

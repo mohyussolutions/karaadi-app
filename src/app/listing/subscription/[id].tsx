@@ -6,7 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
-import { SUBSCRIPTION_ENDPOINTS } from '../../../constants';
+import { SUBSCRIPTION_ENDPOINTS } from '../../../api/urls';
 import { formatPrice, formatDate } from '../../../util/helpers';
 import { useSubscriptionDetail } from '../../../components/hooks/useSubscriptionDetail';
 import SellerCard from '../../../components/cards/SellerCard';

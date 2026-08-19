@@ -1,4 +1,4 @@
-import { HAGE_ENDPOINTS, SEARCH_ENDPOINTS } from '../../constants';
+import { HAGE_ENDPOINTS, SEARCH_ENDPOINTS } from '../../api/urls';
 import { apiClient } from '../client';
 import { extractList } from '../../util/helpers';
 import type {

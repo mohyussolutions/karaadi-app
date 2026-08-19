@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { FARM_EQUIPMENT_ENDPOINTS } from '../../constants';
+import { FARM_EQUIPMENT_ENDPOINTS } from '../../api/urls';
 
 function normItem(item: any) {
   const id = String(item._id ?? item.id ?? '');

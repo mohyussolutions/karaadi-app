@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { SEARCH_HISTORY_ENDPOINTS } from '../../constants';
+import { SEARCH_HISTORY_ENDPOINTS } from '../../api/urls';
 
 export async function saveSearchHistory(query: string): Promise<void> {
   if (!query.trim()) return;

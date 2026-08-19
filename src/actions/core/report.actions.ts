@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { REPORT_ENDPOINTS } from '../../constants';
+import { REPORT_ENDPOINTS } from '../../api/urls';
 import type { ReportPayload } from '../../util/types/api.types';
 
 export async function createReport(payload: ReportPayload): Promise<void> {

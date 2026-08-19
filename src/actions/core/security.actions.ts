@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { SECURITY_ENDPOINTS } from '../../constants';
+import { SECURITY_ENDPOINTS } from '../../api/urls';
 
 export async function getSessions(): Promise<any[]> {
   const { data } = await apiClient.post(SECURITY_ENDPOINTS.SESSIONS);

@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { toggleFavorite } from '../../store/slices/favoritesSlice';
 import { useAuthStore } from '../../store/authStore';
 import { getVehicleDetailById } from '../../actions/categories/listing.actions';
-import { VEHICLE_ENDPOINTS } from '../../constants';
+import { VEHICLE_ENDPOINTS } from '../../api/urls';
 import { getCachedListing } from '../../util/cache/listingCache';
 import { showToast } from '../../util/cache/toastService';
 import type { VehicleListing } from '../../util/types/listing.types';

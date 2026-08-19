@@ -1,5 +1,5 @@
 import * as SecureStore from "../util/secureStorage";
-import { API_BASE_URL } from "../constants";
+import { API_BASE_URL } from "../api/urls";
 import { storeRef } from "../store/storeRef";
 import { clearCredentials } from "../store/slices/authSlice";
 import { disconnectSocket } from "./sockets/socket.actions";

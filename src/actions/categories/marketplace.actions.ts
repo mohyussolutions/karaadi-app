@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { MARKETPLACE_ENDPOINTS } from '../../constants';
+import { MARKETPLACE_ENDPOINTS } from '../../api/urls';
 
 function normItem(item: any) {
   const id = String(item._id ?? item.id ?? '');

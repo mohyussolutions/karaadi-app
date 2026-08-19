@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { BUSINESSES_ENDPOINTS } from '../../constants';
+import { BUSINESSES_ENDPOINTS } from '../../api/urls';
 
 export async function getBusinessById(id: string): Promise<any> {
   const { data } = await apiClient.get(BUSINESSES_ENDPOINTS.BY_ID(id));

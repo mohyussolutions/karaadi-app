@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { PAYMENT_ENDPOINTS } from '../../constants';
+import { PAYMENT_ENDPOINTS } from '../../api/urls';
 
 export async function getPaymentHistory(): Promise<any[]> {
   const { data } = await apiClient.get(PAYMENT_ENDPOINTS.ME);

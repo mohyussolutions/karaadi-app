@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { BUSINESS_PLAN_ENDPOINTS } from '../../constants';
+import { BUSINESS_PLAN_ENDPOINTS } from '../../api/urls';
 import type { BusinessPlan } from '../../util/types';
 
 export async function fetchBusinessPlans(): Promise<BusinessPlan[]> {

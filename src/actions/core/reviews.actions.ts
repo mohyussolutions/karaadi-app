@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { REVIEWS_ENDPOINTS } from '../../constants';
+import { REVIEWS_ENDPOINTS } from '../../api/urls';
 
 export async function getReviewsByUser(userId: string): Promise<any[]> {
   const { data } = await apiClient.get(REVIEWS_ENDPOINTS.BY_USER(userId));
