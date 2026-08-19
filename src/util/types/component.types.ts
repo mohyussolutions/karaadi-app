@@ -154,10 +154,6 @@ export interface EmptyStateProps {
   message?: string;
 }
 
-export interface SplashScreenProps {
-  onFinish: () => void;
-}
-
 export interface ResponsiveLayoutProps {
   sidebar: ReactNode;
   main: ReactNode;

@@ -69,7 +69,7 @@ export type {
   DetailActionBarProps, RecommendedSectionProps,
   SellerCardProps, ListingCardProps, MyAdCardProps,
   SocialShareSheetProps, SocialAction, SocialPostCardProps, PostOutcome,
-  LoadingSpinnerProps, EmptyStateProps, SplashScreenProps, ResponsiveLayoutProps,
+  LoadingSpinnerProps, EmptyStateProps, ResponsiveLayoutProps,
   PaymentStatusConfig, PaymentCategoryInfo,
 } from './component.types';
 
