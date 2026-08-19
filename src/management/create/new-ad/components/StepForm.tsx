@@ -1,0 +1,448 @@
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  KeyboardAvoidingView,
+  ActivityIndicator,
+  Alert,
+  Pressable,
+} from "react-native";
+import { useTranslation } from "react-i18next";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useThemeColors, useThemedStyles } from "../../../../components/hooks/useTheme";
+import { KEYBOARD_AVOIDING_BEHAVIOR } from "../../../../common/common-for-ios-andriod";
+import { useTabBarClearance } from "../../../../components/hooks/useTabBarClearance";
+import RegionCityPicker from "../../../../components/geo/RegionCityPicker";
+import { MAIN_CATEGORIES } from "../../../../constants";
+import { FormField } from "../../../../components/forms/FormField";
+import { ImagePickerRow } from "../../../../components/forms/ImagePickerRow";
+import { CollapsibleSection } from "../../../../components/forms/CollapsibleSection";
+import { getFields, NUMERIC_KEYS, BOOLEAN_KEYS } from "../constants/fields";
+import { useAuthStore } from "../../../../store/authStore";
+import { useAppDispatch, useAppSelector } from "../../../../store/store";
+import { submitListing, setFeeInfo } from "../../../../store/slices/newAdSlice";
+import { getFeeForCategory } from "../../../../actions/categories/fee.actions";
+import { CATEGORY_MAIN_LABEL } from "../constants/config";
+import type { FieldDef, StepFormProps } from "../../../../util/types";
+import { createStyles } from "../styles/stepForm.styles";
+import { isValidWebsite } from "../../../../util/validation/schemas";
+
+const MAX_TEXT_LENGTH = 300;
+const MAX_TEXTAREA_LENGTH = 3000;
+
+function validate(
+  fields: FieldDef[],
+  formData: Record<string, string>,
+  images: string[],
+  t: (key: string, opts?: Record<string, unknown>) => string,
+): Record<string, string> {
+  const errors: Record<string, string> = {};
+  fields.forEach((f) => {
+    if (f.required && !formData[f.key]?.trim()) {
+      errors[f.key] = t("postAd.fieldRequired", { label: f.label });
+      return;
+    }
+    if (f.key === "year" && formData.year && !/^\d{4}$/.test(formData.year)) {
+      errors.year = t("postAd.invalidYear");
+    }
+    if (f.key === "price" && formData.price && Number(formData.price) < 0) {
+      errors.price = t("postAd.negativePrice");
+    }
+    if (f.key === "website" && formData.website?.trim() && !isValidWebsite(formData.website.trim())) {
+      errors.website = t("postAd.invalidWebsite");
+    }
+    if (f.type === "textarea" && (formData[f.key]?.length ?? 0) > MAX_TEXTAREA_LENGTH) {
+      errors[f.key] = t("postAd.fieldTooLong", { label: f.label });
+    }
+    if (f.type === "text" && (formData[f.key]?.length ?? 0) > MAX_TEXT_LENGTH) {
+      errors[f.key] = t("postAd.fieldTooLong", { label: f.label });
+    }
+  });
+  if (images.length < 2)
+    errors._images = t("postAd.minPhotosRequired");
+  return errors;
+}
+
+export function StepForm({
+  categoryKey,
+  listingType,
+  onSuccess,
+  onBack,
+}: StepFormProps) {
+  const { t } = useTranslation();
+  const { user } = useAuthStore();
+  const dispatch = useAppDispatch();
+  const Colors = useThemeColors();
+  const s = useThemedStyles(createStyles);
+  const clearance = useTabBarClearance();
+
+  const submitStatus = useAppSelector((state) => state.newAd.submitStatus);
+  const submitError = useAppSelector((state) => state.newAd.submitError);
+
+  const [formData, setFormData] = useState<Record<string, string>>(() => ({
+    contactPhone: user?.phone || "",
+  }));
+  const [images, setImages] = useState<string[]>([]);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [nestedSearch, setNestedSearch] = useState("");
+
+  const submitting = submitStatus === "submitting";
+
+  const categoryMeta = MAIN_CATEGORIES.find((c) => c.key === categoryKey);
+
+  const allFields: Record<string, FieldDef[]> = useMemo(
+    () => getFields(t as (key: string, opts?: Record<string, unknown>) => string),
+    [t],
+  );
+  const fields: FieldDef[] = useMemo(
+    () => (allFields[categoryKey] || []).filter(
+      (f: FieldDef) => f.key !== "website" || listingType === "public",
+    ),
+    [allFields, categoryKey, listingType],
+  );
+
+  const primaryFields = useMemo(() => fields.filter((f) => f.required), [fields]);
+  const extraFields = useMemo(() => fields.filter((f) => !f.required), [fields]);
+  const extraFieldsHaveError = extraFields.some((f) => !!errors[f.key]);
+  const scrollRef = useRef<ScrollView>(null);
+
+  const selectedSubKey = formData.subcategory;
+  const selectedSubMeta = categoryMeta?.subCategories.find(
+    (s) => s.key === selectedSubKey,
+  );
+  const nestedOptions = selectedSubMeta?.nested ?? [];
+
+  useEffect(() => {
+    setNestedSearch("");
+  }, [selectedSubKey]);
+
+  const filteredNestedOptions = useMemo(() => {
+    const q = nestedSearch.trim().toLowerCase();
+    if (!q) return nestedOptions;
+    return nestedOptions.filter((n) => t(n.labelKey).toLowerCase().includes(q));
+  }, [nestedOptions, nestedSearch, t]);
+
+  function setField(key: string, value: string) {
+    setFormData((p) => {
+      const next = { ...p, [key]: value };
+      if (key === "subcategory") delete next.nestedSubcategory;
+      return next;
+    });
+    if (errors[key])
+      setErrors((e) => {
+        const next = { ...e };
+        delete next[key];
+        return next;
+      });
+  }
+
+  async function handleSubmit() {
+    const newErrors = validate(fields, formData, images, t);
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      scrollRef.current?.scrollTo({ y: 0, animated: true });
+      return;
+    }
+
+    try {
+      const subVal =
+        (categoryKey === "Jobs" ? formData.jobType : formData.subcategory) ||
+        "";
+      const nestedVal = formData.nestedSubcategory || "";
+
+      const { feeId, feeAmount } = await getFeeForCategory(
+        categoryKey,
+        subVal || undefined,
+      );
+      dispatch(setFeeInfo({ feeId, feeAmount }));
+
+      const {
+        subcategory: _sub,
+        nestedSubcategory: _nested,
+        jobType: _jt,
+        ...rest
+      } = formData;
+
+      const body: Record<string, any> = {
+        ...rest,
+        userId: user?.id || user?._id || "",
+        name: formData.title || "",
+        images,
+        mainCategory: CATEGORY_MAIN_LABEL[categoryKey] || categoryKey,
+        category: subVal ? [subVal] : [],
+        subcategory: nestedVal ? [nestedVal] : [],
+        categoryTag: subVal,
+        isPaid: feeAmount === 0,
+        feeAmount: feeAmount,
+        listingType: listingType ?? "private",
+        contactPhone: formData.contactPhone || user?.phone || "",
+      };
+
+      const required = new Set(
+        fields.filter((f) => f.required).map((f) => f.key),
+      );
+      Object.keys(body).forEach((k) => {
+        if (
+          body[k] === undefined ||
+          body[k] === null ||
+          (body[k] === "" && !required.has(k) && k !== "contactPhone")
+        ) {
+          delete body[k];
+        }
+      });
+
+      NUMERIC_KEYS.forEach((k) => {
+        if (body[k] !== undefined) body[k] = Number(body[k]);
+      });
+      BOOLEAN_KEYS.forEach((k) => {
+        if (k in body) body[k] = body[k] === "Yes";
+      });
+
+      if (categoryKey === "Jobs") {
+        if (subVal) body.employmentType = subVal;
+        const salaryDigits = String(body.salaryRange || "").replace(/\D/g, "");
+        body.salary = salaryDigits ? Number(salaryDigits) : 0;
+        delete body.salaryRange;
+        delete body.educationLevel;
+        delete body.name;
+        delete body.categoryTag;
+        delete body.listingType;
+        delete body.contactPhone;
+      }
+
+      if (categoryKey === "farmequipment") {
+        if (body.equipmentType !== undefined) body.type = body.equipmentType;
+        if (body.brand !== undefined) body.make = body.brand;
+        if (body.hoursUsed !== undefined) body.hours = body.hoursUsed;
+      }
+
+      if (categoryKey === "RealEstate") {
+        if (body.region !== undefined) body.county = body.region;
+        if (body.sizeSqm !== undefined) body.squareFeet = body.sizeSqm;
+        if (body.amenities === undefined) body.amenities = [];
+      }
+
+      const SKIP_KEYS = new Set([
+        'userId', 'images', 'mainCategory', 'category', 'categoryTag',
+        'isPaid', 'feeId', 'feeAmount', 'listingType', 'contactPhone',
+        'nestedSubcategory',
+      ]);
+
+      const allAttrs = fields
+        .filter((f) => {
+          const v = formData[f.key];
+          return v && v.trim() && !SKIP_KEYS.has(f.key);
+        })
+        .map((f) => {
+          const rawVal = formData[f.key] || '';
+          let displayVal = rawVal;
+          if (f.type === 'dropdown' && f.options) {
+            const matched = f.options.find((o) =>
+              typeof o === 'string' ? o === rawVal : o.value === rawVal,
+            );
+            if (matched && typeof matched !== 'string') displayVal = matched.label;
+            else if (typeof matched === 'string') displayVal = matched;
+          }
+          return { label: f.label, value: displayVal };
+        });
+
+      if (formData.region) allAttrs.push({ label: t('common.region'), value: formData.region });
+      if (formData.city) allAttrs.push({ label: t('common.city'), value: formData.city });
+
+      const summary = {
+        title: String(body.title || ""),
+        price: Number(body.price || 0),
+        images,
+        categoryTag: String(body.categoryTag || body.category?.[0] || ""),
+        mainCategory: categoryKey,
+        region: formData.region || undefined,
+        city: formData.city || undefined,
+        make: body.make ? String(body.make) : undefined,
+        model:
+          body.modelName || body.boatModel || body.model
+            ? String(body.modelName || body.boatModel || body.model)
+            : undefined,
+        year: body.year ? String(body.year) : undefined,
+        mileage: body.mileage ? String(body.mileage) : undefined,
+        type: body.type ? String(body.type) : undefined,
+        color: body.color ? String(body.color) : undefined,
+        description: body.description ? String(body.description) : undefined,
+        allAttrs,
+      };
+      await dispatch(submitListing({ categoryKey, body, summary })).unwrap();
+      onSuccess();
+    } catch (err: any) {
+      Alert.alert(
+        t("auth.common.error"),
+        submitError ||
+          err?.message ||
+          t("postAd.createListingError"),
+      );
+    }
+  }
+
+  function renderField(field: FieldDef) {
+    return (
+      <React.Fragment key={field.key}>
+        <FormField
+          field={field}
+          value={formData[field.key] || ""}
+          onChange={(v) => setField(field.key, v)}
+          error={errors[field.key]}
+        />
+        {field.key === "subcategory" && nestedOptions.length > 0 && (
+          <View style={s.nestedWrap}>
+            <Text style={s.nestedLabel}>{t("postAd.subCategoryLabel")}</Text>
+            <View style={s.nestedSearchBox}>
+              <MaterialCommunityIcons name="magnify" size={16} color={Colors.primary} />
+              <TextInput
+                style={s.nestedSearchInput}
+                value={nestedSearch}
+                onChangeText={setNestedSearch}
+                placeholder={t("postAd.searchTypePlaceholder")}
+                placeholderTextColor={Colors.placeholder}
+                autoCorrect={false}
+              />
+              {nestedSearch.length > 0 && (
+                <TouchableOpacity onPress={() => setNestedSearch("")} hitSlop={8}>
+                  <MaterialCommunityIcons name="close-circle" size={16} color={Colors.textMuted} />
+                </TouchableOpacity>
+              )}
+            </View>
+            {filteredNestedOptions.length > 0 ? (
+              <View style={s.chipsRow}>
+                {filteredNestedOptions.map((n) => {
+                  const active = formData.nestedSubcategory === n.key;
+                  return (
+                    <Pressable
+                      key={n.key}
+                      onPress={() => setField("nestedSubcategory", active ? "" : n.key)}
+                      style={[s.chip, active && s.chipActive]}
+                      hitSlop={4}
+                    >
+                      <MaterialCommunityIcons
+                        name={n.icon as any}
+                        size={13}
+                        color={active ? Colors.white : Colors.textSecondary}
+                      />
+                      <Text style={[s.chipText, active && s.chipTextActive]}>
+                        {t(n.labelKey)}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
+            ) : (
+              <Text style={s.nestedEmptyText}>{t("postAd.noMatches")}</Text>
+            )}
+          </View>
+        )}
+      </React.Fragment>
+    );
+  }
+
+  return (
+    <View style={s.root}>
+      <View style={s.topBar}>
+        <TouchableOpacity style={s.backBtn} onPress={onBack} hitSlop={8}>
+          <MaterialCommunityIcons name="arrow-left" size={20} color={Colors.textPrimary} />
+        </TouchableOpacity>
+      </View>
+      <KeyboardAvoidingView
+        style={s.flexFull}
+        behavior={KEYBOARD_AVOIDING_BEHAVIOR}
+      >
+        <ScrollView
+          ref={scrollRef}
+          style={s.flexFull}
+          contentContainerStyle={s.scroll}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={s.fieldWrap}>
+            <Text style={s.fieldLabel}>{t("postAd.mainCategoryLabel")}</Text>
+            <View style={s.mainCatBadge}>
+              {categoryMeta && (
+                <MaterialCommunityIcons
+                  name={categoryMeta.icon as any}
+                  size={16}
+                  color={Colors.primary}
+                />
+              )}
+              <Text style={s.mainCatText}>
+                {t(`categories.${categoryKey}`, { defaultValue: categoryMeta?.name ?? categoryKey })}
+              </Text>
+            </View>
+          </View>
+
+          <ImagePickerRow
+            images={images}
+            onChange={(imgs) => {
+              setImages(imgs);
+              if (errors._images)
+                setErrors((e) => {
+                  const n = { ...e };
+                  delete n._images;
+                  return n;
+                });
+            }}
+            error={errors._images}
+          />
+
+          {primaryFields.map((field) => renderField(field))}
+
+          {extraFields.length > 0 && (
+            <CollapsibleSection
+              title={t("postAd.additionalDetails", { defaultValue: "Additional details" })}
+              hasError={extraFieldsHaveError}
+            >
+              {extraFields.map((field) => renderField(field))}
+            </CollapsibleSection>
+          )}
+
+          <RegionCityPicker
+            selectedRegion={formData.region || ""}
+            selectedCity={formData.city || ""}
+            onRegionChange={(name) => setField("region", name)}
+            onCityChange={(name) => setField("city", name)}
+          />
+
+          {!!submitError && submitStatus === "error" && (
+            <View style={s.errorBanner}>
+              <MaterialCommunityIcons
+                name="alert-circle-outline"
+                size={16}
+                color={Colors.error}
+              />
+              <Text style={s.errorBannerText}>{submitError}</Text>
+            </View>
+          )}
+
+          <TouchableOpacity
+            style={[s.btn, submitting && s.btnDisabled]}
+            onPress={handleSubmit}
+            disabled={submitting}
+          >
+            {submitting ? (
+              <ActivityIndicator size="small" color={Colors.white} />
+            ) : (
+              <>
+                <Text style={s.btnText}>{t("postAd.continueToPlan")}</Text>
+                <MaterialCommunityIcons
+                  name="arrow-right"
+                  size={18}
+                  color={Colors.white}
+                />
+              </>
+            )}
+          </TouchableOpacity>
+
+          <View style={{ height: clearance }} />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </View>
+  );
+}

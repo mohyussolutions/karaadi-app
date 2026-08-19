@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import { useFocusEffect } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { useThemedStyles } from "../../components/hooks/useTheme";
-import { createStyles } from "../../util/styles/tabs/newAd.styles";
+import { createStyles } from "../../management/create/new-ad/styles/newAd.styles";
 import { LoadingSpinner } from "../../components/loading";
 import { useAuthStore } from "../../store/authStore";
 import { useAppDispatch, useAppSelector } from "../../store/store";
@@ -17,11 +17,7 @@ import {
 } from "../../store/slices/newAdSlice";
 import { useNewAdStepNavigation } from "../../components/hooks/useNewAdStepNavigation";
 import { CheckoutBar } from "../../components/features/subscription/components/checklist";
-import { StepType } from "../../components/forms/StepType";
-import { StepCategory } from "../../components/forms/StepCategory";
-import { StepForm } from "../../components/forms/StepForm";
-import { StepPlan } from "../../components/forms/StepPlan";
-import { StepSummary, StepPayment } from "../../components/features/subscription/components/payment";
+import { StepType, StepCategory, StepForm, StepPlan, StepSummary, StepPayment } from "../../management/create/new-ad/main";
 
 import type { ListingType, Step, StepItem } from "../../util/types/new-ad.types";
 import { MAIN_CATEGORIES } from "../../navigation/main";

@@ -1,6 +1,6 @@
 import { apiClient } from '../client';
 import { PAYMENT_ENDPOINTS } from '../../api/urls';
-import { BASE_PLANS } from '../../components/features/new-ad/constants/config';
+import { BASE_PLANS } from '../../management/create/new-ad/constants/config';
 import type { Plan } from '../../util/types/new-ad.types';
 import { getSubPlans } from './fee.actions';
 

@@ -3,6 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { fetchPlansFromAPI } from '../../actions/categories/plan.actions';
 import { createListing } from '../../actions/categories/listing.actions';
 import type { ListingType, Step, Plan, CreatedItemSummary, NewAdState } from '../../util/types/new-ad.types';
+import type { RootState } from '../../util/types/store.types';
 
 const initialState: NewAdState = {
   step: 'type',
@@ -26,21 +27,22 @@ export const fetchPlans = createAsyncThunk('newAd/fetchPlans', () => fetchPlansF
 export const submitListing = createAsyncThunk(
   'newAd/submit',
   async (
-    { categoryKey, body, summary }: { categoryKey: string; body: Record<string, any>; summary?: CreatedItemSummary },
+    { categoryKey, body, summary }: { categoryKey: string; body: Record<string, unknown>; summary?: CreatedItemSummary },
     { rejectWithValue, getState },
   ) => {
     try {
-      const businessId = (getState() as { newAd: NewAdState }).newAd.businessId;
+      const businessId = (getState() as RootState).newAd.businessId;
       const { id, images } = await createListing(categoryKey, body, businessId);
       return {
         id,
         title: String(body.title || ''),
         summary: summary ? { ...summary, images: images ?? summary.images } : null,
       };
-    } catch (err: any) {
-      return rejectWithValue(
-        err?.response?.data?.message || 'Failed to create listing. Please try again.',
-      );
+    } catch (err) {
+      const message = err instanceof Error && 'response' in err
+        ? (err as { response?: { data?: { message?: string } } }).response?.data?.message
+        : undefined;
+      return rejectWithValue(message || 'Failed to create listing. Please try again.');
     }
   },
 );

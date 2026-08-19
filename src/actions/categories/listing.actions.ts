@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { CATEGORY_ENDPOINTS } from '../../components/features/new-ad/constants/config';
+import { CATEGORY_ENDPOINTS } from '../../management/create/new-ad/constants/config';
 
 export async function createListing(categoryKey: string, body: Record<string, any>, businessId?: string | null) {
   const endpoint = CATEGORY_ENDPOINTS[categoryKey] || '/api/marketplace';
