@@ -5,7 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { IdentityCaptureForm } from './IdentityCaptureForm';
-import { submitIdentification } from '../api/identification.actions';
+import { submitIdentification } from '../../../../api/categories/identification.actions';
 import { createStyles } from '../../../../util/styles/profile/verifyIdentity.styles';
 import type { IdentityGateProps } from '../../../../util/types';
 

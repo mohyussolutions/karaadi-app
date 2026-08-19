@@ -6,7 +6,7 @@ import { useAuthStore } from '../../../../store/authStore';
 import {
   getSessions, getLoginHistory, logoutSession,
   logoutAllSessions, deleteLoginHistoryEntry, clearLoginHistory,
-} from '../api/security.actions';
+} from '../../../../api/core/security.actions';
 import type { Session, LoginEntry } from '../../../../util/types';
 
 export type { Session, LoginEntry };

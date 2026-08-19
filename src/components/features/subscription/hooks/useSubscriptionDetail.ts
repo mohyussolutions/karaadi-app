@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Linking } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuthStore } from '../../../../store/authStore';
-import { getSubscriptionById } from '../api/subscription.actions';
+import { getSubscriptionById } from '../../../../api/categories/subscription.actions';
 
 import type { Subscription } from '../../../../util/types/listing.types';
 

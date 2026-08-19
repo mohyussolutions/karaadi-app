@@ -7,7 +7,7 @@ import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { getChatMessages, sendMessage, createOrFindChat } from '../../components/features/chat/api/message.actions';
+import { getChatMessages, sendMessage, createOrFindChat } from '../../api/core/message.actions';
 import { blockUser } from '../../api/core/block.actions';
 import { ConfirmModal } from '../../components/modals/ConfirmModal';
 import { joinChat, leaveChat, emitSendMessage, emitMarkAsRead, getSocket } from '../../api/sockets/socket.actions';

@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { apiClient } from '../../../../api/client';
-import { SUBSCRIPTION_ENDPOINTS } from '../../../../constants';
-import { searchCategory } from '../../../../api/search';
-import { scheduleLocalNotification } from '../../notifications/services/notificationService';
-import type { Subscription, SubscriptionPayload, Plan } from '../../../../util/types';
+import { apiClient } from '../client';
+import { SUBSCRIPTION_ENDPOINTS } from '../../constants';
+import { searchCategory } from '../search';
+import { scheduleLocalNotification } from '../../components/features/notifications/services/notificationService';
+import type { Subscription, SubscriptionPayload, Plan } from '../../util/types';
 
 const LAST_CHECKED_KEY = 'karaadi_alerts_last_checked_v1';
 const MIN_CHECK_INTERVAL_MS = 5 * 60 * 1000;

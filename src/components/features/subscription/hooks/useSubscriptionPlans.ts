@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '../../../../store/authStore';
-import { fetchSubscriptionPlans, fetchMyPlan } from '../api/subscription.actions';
+import { fetchSubscriptionPlans, fetchMyPlan } from '../../../../api/categories/subscription.actions';
 import type { Plan } from '../../../../util/types';
 
 export function useSubscriptionPlans() {

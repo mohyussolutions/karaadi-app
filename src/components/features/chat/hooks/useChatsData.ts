@@ -3,7 +3,7 @@ import { useFocusEffect } from 'expo-router';
 import { useAuthStore } from '../../../../store/authStore';
 import { useAppSelector, useAppDispatch } from '../../../../store/store';
 import { setChats } from '../store/chatsSlice';
-import { getMyChats } from '../api/message.actions';
+import { getMyChats } from '../../../../api/core/message.actions';
 import { getSocket } from '../../../../api/sockets/socket.actions';
 
 export function useChatsData() {

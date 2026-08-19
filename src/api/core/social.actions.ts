@@ -1,5 +1,5 @@
-import { apiClient } from '../../../../api/client';
-import { SOCIAL_ENDPOINTS } from '../../../../constants';
+import { apiClient } from '../client';
+import { SOCIAL_ENDPOINTS } from '../../constants';
 
 export async function getSocialStatus(): Promise<any> {
   const { data } = await apiClient.get(SOCIAL_ENDPOINTS.STATUS);

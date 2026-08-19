@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '../../../../store/authStore';
-import { getNotifications, markNotificationRead, markAllNotificationsRead } from '../api/notifications.actions';
+import { getNotifications, markNotificationRead, markAllNotificationsRead } from '../../../../api/core/notifications.actions';
 import type { Notification } from '../../../../util/types/notification.types';
 import { useAppDispatch } from '../../../../store/store';
 import { markAllRead as markAllReadAction, markOneRead as markOneReadAction } from '../store/notificationsSlice';

@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'expo-router';
 import { useAuthStore } from '../../../../store/authStore';
-import { getPaymentHistory } from '../api/payment.actions';
+import { getPaymentHistory } from '../../../../api/core/payment.actions';
 import type { PaymentItem } from '../../../../util/types/payment.types';
 
 export type { PaymentItem };

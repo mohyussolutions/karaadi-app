@@ -1,5 +1,5 @@
-import { apiClient } from '../../../../api/client';
-import { PAYMENT_ENDPOINTS } from '../../../../constants';
+import { apiClient } from '../client';
+import { PAYMENT_ENDPOINTS } from '../../constants';
 
 export async function getPaymentHistory(): Promise<any[]> {
   const { data } = await apiClient.get(PAYMENT_ENDPOINTS.ME);

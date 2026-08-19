@@ -9,7 +9,7 @@ import { LoadingSpinner } from '../../components/loading';
 import { EmptyState } from '../../components/shared';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { createSubscriptionListStyles } from '../../util/styles/profile/profileSubscription.styles';
-import { fetchMySubscriptions, deleteSubscription } from '../../components/features/subscription/api/subscription.actions';
+import { fetchMySubscriptions, deleteSubscription } from '../../api/categories/subscription.actions';
 import type { Subscription } from '../../util/types/listing.types';
 
 const COLUMN_GAP = 10;

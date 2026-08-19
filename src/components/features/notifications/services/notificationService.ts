@@ -1,6 +1,6 @@
 import { Platform, Vibration } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { updatePushToken } from '../../auth/api/auth.actions';
+import { updatePushToken } from '../../../../api/core/auth.actions';
 import { isSoundEnabled } from './soundService';
 
 const PUSH_TOKEN_CACHE_KEY = 'karaadi_push_token_v1';

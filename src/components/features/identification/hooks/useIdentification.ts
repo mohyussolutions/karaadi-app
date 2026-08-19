@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useAuthStore } from '../../../../store/authStore';
-import { getIdentificationStatus, submitIdentification } from '../api/identification.actions';
+import { getIdentificationStatus, submitIdentification } from '../../../../api/categories/identification.actions';
 import type { IdentificationStatus } from '../../../../util/types';
 
 export function useIdentification() {

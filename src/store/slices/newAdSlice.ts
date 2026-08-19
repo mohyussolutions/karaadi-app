@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { fetchPlansFromAPI } from '../../components/features/subscription/api/plan.actions';
+import { fetchPlansFromAPI } from '../../api/categories/plan.actions';
 import { createListing } from '../../api/categories/listing.actions';
 import type { ListingType, Step, Plan, CreatedItemSummary, NewAdState } from '../../util/types/new-ad.types';
 

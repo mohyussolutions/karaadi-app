@@ -24,7 +24,7 @@ import { getFields, NUMERIC_KEYS, BOOLEAN_KEYS } from "../features/new-ad/consta
 import { useAuthStore } from "../../store/authStore";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { submitListing, setFeeInfo } from "../../store/slices/newAdSlice";
-import { getFeeForCategory } from "../features/subscription/api/fee.actions";
+import { getFeeForCategory } from "../../api/categories/fee.actions";
 import { CATEGORY_MAIN_LABEL } from "../features/new-ad/constants/config";
 import type { FieldDef, StepFormProps } from "../../util/types";
 import { createStyles } from "../../util/styles/new-ad/stepForm.styles";
