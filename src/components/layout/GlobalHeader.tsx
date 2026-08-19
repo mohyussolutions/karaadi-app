@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   View, Image, TouchableOpacity, Text, Modal, Pressable,
   TextInput, Switch,
@@ -39,12 +39,13 @@ export default function GlobalHeader() {
   const { mode, setMode } = useThemeMode();
   const dispatch = useAppDispatch();
   const unreadCount = useAppSelector((s) => s.notifications.unreadCount);
-  const browseQuery = useAppSelector((s) => s.browseSearch.query);
   const user = useAppSelector((s) => s.auth.user);
 
   const { logoW } = useGlobal();
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
+  const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
@@ -59,7 +60,23 @@ export default function GlobalHeader() {
 
   useEffect(() => {
     dispatch(clearBrowseQuery());
+    setSearchInput('');
+    return () => {
+      if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
+    };
   }, [pathname, dispatch]);
+
+  function handleSearchChange(text: string) {
+    setSearchInput(text);
+    if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
+    searchDebounceRef.current = setTimeout(() => dispatch(setBrowseQuery(text)), 250);
+  }
+
+  function handleClearSearch() {
+    if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
+    setSearchInput('');
+    dispatch(clearBrowseQuery());
+  }
 
   if (isChat) return null;
   if (isDetail) return null;
@@ -150,8 +167,8 @@ export default function GlobalHeader() {
           <MaterialCommunityIcons name="magnify" size={isTablet ? TABLET_HEADER_ICON_SIZES.search : 16} color={searchFocused ? Colors.primary : Colors.textMuted} />
           <TextInput
             style={[styles.searchInput, isTablet && tabletHeaderStyles.searchInput]}
-            value={browseQuery}
-            onChangeText={(text) => dispatch(setBrowseQuery(text))}
+            value={searchInput}
+            onChangeText={handleSearchChange}
             placeholder={t('searchListings')}
             placeholderTextColor={Colors.placeholder}
             autoCorrect={false}
@@ -160,8 +177,8 @@ export default function GlobalHeader() {
             onFocus={() => setSearchFocused(true)}
             onBlur={() => setSearchFocused(false)}
           />
-          {browseQuery.length > 0 && (
-            <TouchableOpacity onPress={() => dispatch(clearBrowseQuery())} hitSlop={8}>
+          {searchInput.length > 0 && (
+            <TouchableOpacity onPress={handleClearSearch} hitSlop={8}>
               <MaterialCommunityIcons name="close-circle" size={isTablet ? TABLET_HEADER_ICON_SIZES.searchClear : 16} color={Colors.textMuted} />
             </TouchableOpacity>
           )}

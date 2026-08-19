@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import {
   View, Text, TouchableOpacity, RefreshControl, ScrollView, ActivityIndicator,
 } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { CategoryGrid, HowToUseVideo } from '../../components/shared';
@@ -14,6 +14,7 @@ import { useHomeFeed } from '../../components/hooks/useHomeFeed';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { useAppSelector } from '../../store/store';
 import { createStyles, H_PAD, COL_GAP } from '../../util/styles/tabs/home.styles';
+import type { ListingBase } from '../../util/types/listing.types';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -40,6 +41,24 @@ export default function HomeScreen() {
 
   const displayListings = filteredListings ?? visibleListings;
   const showLoadMore = !filteredListings && hasMore;
+
+  const renderFeedItem = useCallback(({ item, index }: ListRenderItemInfo<ListingBase>) => (
+    <View
+      style={{
+        paddingLeft: index % numColumns === 0 ? H_PAD : COL_GAP / 2,
+        paddingRight: (index + 1) % numColumns === 0 ? H_PAD : COL_GAP / 2,
+        paddingBottom: COL_GAP,
+      }}
+    >
+      <ListingCard item={item} />
+    </View>
+  ), [numColumns]);
+
+  const renderRecItem = useCallback(({ item }: ListRenderItemInfo<ListingBase>) => (
+    <View style={{ width: REC_CARD_W, marginRight: 8 }}>
+      <ListingCard item={item} imageAspectRatio={0.85} />
+    </View>
+  ), [REC_CARD_W]);
 
   const postBtn = (
     <TouchableOpacity
@@ -78,11 +97,7 @@ export default function HomeScreen() {
             keyExtractor={(item) => `rec-${item.id || item._id}`}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.recListContent}
-            renderItem={({ item }) => (
-              <View style={{ width: REC_CARD_W, marginRight: 8 }}>
-                <ListingCard item={item} imageAspectRatio={0.85} />
-              </View>
-            )}
+            renderItem={renderRecItem}
           />
         </View>
       )}
@@ -126,17 +141,7 @@ export default function HomeScreen() {
           <Text style={styles.empty}>{filteredListings ? t('noResults') : t('noListings')}</Text>
         ) : null
       }
-      renderItem={({ item, index }) => (
-        <View
-          style={{
-            paddingLeft: index % numColumns === 0 ? H_PAD : COL_GAP / 2,
-            paddingRight: (index + 1) % numColumns === 0 ? H_PAD : COL_GAP / 2,
-            paddingBottom: COL_GAP,
-          }}
-        >
-          <ListingCard item={item} />
-        </View>
-      )}
+      renderItem={renderFeedItem}
     />
   );
 

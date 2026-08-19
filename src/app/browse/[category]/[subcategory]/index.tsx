@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { View, Text, RefreshControl } from "react-native";
-import { FlashList } from "@shopify/flash-list";
+import { FlashList, type ListRenderItemInfo } from "@shopify/flash-list";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { useThemeColors, useThemedStyles } from "../../../../components/hooks/useTheme";
@@ -64,6 +64,18 @@ export default function SubcategoryScreen() {
 
   const resultsCount = !loading && listings.length > 0 ? listings.length : null;
 
+  const renderListItem = useCallback(({ item, index }: ListRenderItemInfo<ListingBase>) => (
+    <View
+      style={{
+        paddingLeft: index % numColumns === 0 ? H_PAD : GAP / 2,
+        paddingRight: (index + 1) % numColumns === 0 ? H_PAD : GAP / 2,
+        paddingBottom: GAP,
+      }}
+    >
+      {loading ? <ListingCardSkeleton /> : <ListingCard item={item} categoryKey={categoryKey} />}
+    </View>
+  ), [numColumns, categoryKey, loading]);
+
   const header = (
     <SubcategoryHeader
       subIcon={subIcon}
@@ -113,17 +125,7 @@ export default function SubcategoryScreen() {
           />
         ) : null
       }
-      renderItem={({ item, index }) => (
-        <View
-          style={{
-            paddingLeft: index % numColumns === 0 ? H_PAD : GAP / 2,
-            paddingRight: (index + 1) % numColumns === 0 ? H_PAD : GAP / 2,
-            paddingBottom: GAP,
-          }}
-        >
-          {loading ? <ListingCardSkeleton /> : <ListingCard item={item} categoryKey={categoryKey} />}
-        </View>
-      )}
+      renderItem={renderListItem}
     />
   );
 

@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { ZoomModalProps } from '../../util/types';
 import {
-  View, Image, FlatList, TouchableOpacity, Modal, StatusBar, Text,
+  View, FlatList, TouchableOpacity, Modal, StatusBar, Text,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { useGlobal } from '../hooks/useGlobal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -69,7 +70,7 @@ export default function ZoomModal({ visible, images, startIndex, title, onClose 
           onScroll={(e) => setCurrent(Math.round(e.nativeEvent.contentOffset.x / width))}
           renderItem={({ item: img }) => (
             <View style={styles.imgWrap}>
-              <Image source={{ uri: img }} style={styles.image} resizeMode="contain" />
+              <Image source={{ uri: img }} style={styles.image} contentFit="contain" cachePolicy="memory-disk" recyclingKey={img} />
             </View>
           )}
         />
@@ -87,7 +88,9 @@ export default function ZoomModal({ visible, images, startIndex, title, onClose 
                   <Image
                     source={{ uri: img }}
                     style={[styles.thumb, isTablet && tabletModalStyles.zoomThumb, index === current && styles.thumbActive]}
-                    resizeMode="cover"
+                    contentFit="cover"
+                    cachePolicy="memory-disk"
+                    recyclingKey={img}
                   />
                 </TouchableOpacity>
               )}

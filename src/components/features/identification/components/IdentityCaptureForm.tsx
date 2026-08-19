@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, Modal, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, ActivityIndicator } from 'react-native';
+import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -28,7 +29,7 @@ function Slot({
           </View>
         ) : image ? (
           <>
-            <Image source={{ uri: image }} style={s.slotImage} resizeMode="cover" />
+            <Image source={{ uri: image }} style={s.slotImage} contentFit="cover" />
             <TouchableOpacity style={s.retakeBar} onPress={() => onClear(slotKey)}>
               <MaterialCommunityIcons name="refresh" size={16} color={Colors.primary} />
               <Text style={s.retakeText}>{t('mine.identification.retake')}</Text>
@@ -197,7 +198,7 @@ export function IdentityCaptureForm({
 
       <Modal visible={!!preview} animationType="fade" statusBarTranslucent onRequestClose={() => setPreview(null)}>
         <View style={[s.previewRoot, { backgroundColor: Colors.black }]}>
-          {preview && <Image source={{ uri: preview.uri }} style={s.previewImage} resizeMode="contain" />}
+          {preview && <Image source={{ uri: preview.uri }} style={s.previewImage} contentFit="contain" />}
           <View style={[s.previewActions, { paddingBottom: insets.bottom + 16 }]}>
             <TouchableOpacity style={s.previewBtnSecondary} onPress={retakePreview}>
               <MaterialCommunityIcons name="camera-retake-outline" size={18} color={Colors.white} />

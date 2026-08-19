@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
   RefreshControl,
   ScrollView,
 } from "react-native";
-import { FlashList } from "@shopify/flash-list";
+import { FlashList, type ListRenderItemInfo } from "@shopify/flash-list";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -161,6 +161,18 @@ export default function CategoryScreen() {
 
   const skeletonData = Array.from({ length: SKELETON_COUNT }, (_, i) => ({ _id: `sk-${i}`, id: `sk-${i}` }));
 
+  const renderListItem = useCallback(({ item, index }: ListRenderItemInfo<ListingBase>) => (
+    <View
+      style={{
+        paddingLeft: index % numColumns === 0 ? H_PAD : GAP / 2,
+        paddingRight: (index + 1) % numColumns === 0 ? H_PAD : GAP / 2,
+        paddingBottom: GAP,
+      }}
+    >
+      {loading ? <ListingCardSkeleton /> : <ListingCard item={item} categoryKey={categoryKey} />}
+    </View>
+  ), [numColumns, categoryKey, loading]);
+
   const feedList = (
     <FlashList<ListingBase>
       key={`cat-${numColumns}`}
@@ -174,17 +186,7 @@ export default function CategoryScreen() {
       ListEmptyComponent={
         !loading ? <EmptyState icon="tag-off-outline" title={t("common.noResults")} message={categoryLabel} /> : null
       }
-      renderItem={({ item, index }) => (
-        <View
-          style={{
-            paddingLeft: index % numColumns === 0 ? H_PAD : GAP / 2,
-            paddingRight: (index + 1) % numColumns === 0 ? H_PAD : GAP / 2,
-            paddingBottom: GAP,
-          }}
-        >
-          {loading ? <ListingCardSkeleton /> : <ListingCard item={item} categoryKey={categoryKey} />}
-        </View>
-      )}
+      renderItem={renderListItem}
     />
   );
 

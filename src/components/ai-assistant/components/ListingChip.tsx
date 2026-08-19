@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { getImageUrl, formatPrice } from '../../../util/helpers';
@@ -13,7 +14,7 @@ export function ListingChip({ item, onPress }: { item: ListingRef; onPress: () =
   return (
     <TouchableOpacity style={styles.chip} onPress={onPress} activeOpacity={0.82}>
       {image ? (
-        <Image source={{ uri: image }} style={styles.chipImg} resizeMode="cover" />
+        <Image source={{ uri: image }} style={styles.chipImg} contentFit="cover" cachePolicy="memory-disk" />
       ) : (
         <View style={[styles.chipImg, styles.chipImgPlaceholder]}>
           <MaterialCommunityIcons name="image-outline" size={16} color={Colors.textMuted} />
