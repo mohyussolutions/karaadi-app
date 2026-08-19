@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import { useFocusEffect } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { useThemedStyles } from "../../components/hooks/useTheme";
-import { createStyles } from "../../management/create/new-ad/styles/newAd.styles";
+import { createStyles } from "../../util/styles/tabs/newAd.styles";
 import { LoadingSpinner } from "../../components/loading";
 import { useAuthStore } from "../../store/authStore";
 import { useAppDispatch, useAppSelector } from "../../store/store";

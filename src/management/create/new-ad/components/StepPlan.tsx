@@ -9,7 +9,7 @@ import { useTabBarClearance } from '../../../../components/hooks/useTabBarCleara
 import { LoadingSpinner } from '../../../../components/loading';
 import { planStyle, getPlanCardColors } from '../constants/config';
 import type { Plan, StepPlanProps } from '../../../../util/types';
-import { createStyles, createPlanCardStyles } from '../styles/stepPlan.styles';
+import { createStyles, createPlanCardStyles } from '../../../../util/styles/new-ad/stepPlan.styles';
 
 const FOOTER_HEIGHT = 108;
 

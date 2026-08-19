@@ -27,7 +27,7 @@ import { submitListing, setFeeInfo } from "../../../../store/slices/newAdSlice";
 import { getFeeForCategory } from "../../../../actions/categories/fee.actions";
 import { CATEGORY_MAIN_LABEL } from "../constants/config";
 import type { FieldDef, StepFormProps } from "../../../../util/types";
-import { createStyles } from "../styles/stepForm.styles";
+import { createStyles } from "../../../../util/styles/new-ad/stepForm.styles";
 import { isValidWebsite } from "../../../../util/validation/schemas";
 
 const MAX_TEXT_LENGTH = 300;

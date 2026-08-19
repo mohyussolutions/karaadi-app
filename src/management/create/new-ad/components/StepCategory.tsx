@@ -7,7 +7,7 @@ import { useThemeColors, useThemedStyles } from "../../../../components/hooks/us
 import { useAppTranslation } from "../../../../components/hooks/useAppTranslation";
 import { useTabBarClearance } from "../../../../components/hooks/useTabBarClearance";
 import { MAIN_CATEGORIES, type MainCategory } from "../../../../constants";
-import { createStyles } from "../styles/stepCategory.styles";
+import { createStyles } from "../../../../util/styles/new-ad/stepCategory.styles";
 
 const NUM_COLUMNS = 3;
 

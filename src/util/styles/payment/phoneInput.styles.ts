@@ -1,5 +1,5 @@
 import { StyleSheet, Platform } from 'react-native';
-import type { ColorPalette } from '../../../../../../components/hooks/useTheme';
+import type { ColorPalette } from '../../../components/hooks/useTheme';
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({

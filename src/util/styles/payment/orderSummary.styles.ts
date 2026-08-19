@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import type { ColorPalette } from '../../../../../../components/hooks/useTheme';
-import { shadow } from '../../../../../../util/shadow';
+import type { ColorPalette } from '../../../components/hooks/useTheme';
+import { shadow } from '../../shadow';
 
 export function createStyles(Colors: ColorPalette, width = 390) {
   const IMG_H = Math.round((width - 32) * 0.56);

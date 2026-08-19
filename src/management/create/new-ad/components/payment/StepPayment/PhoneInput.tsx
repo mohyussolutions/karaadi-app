@@ -5,7 +5,7 @@ import { useThemeColors, useThemedStyles } from '../../../../../../components/ho
 import { useAppTranslation } from '../../../../../../components/hooks/useAppTranslation';
 import type { PhoneInputProps } from '../../../../../../util/types';
 import { PAYMENT_METHODS } from '../payment.constants';
-import { createStyles } from '../styles/phoneInput.styles';
+import { createStyles } from '../../../../../../util/styles/payment/phoneInput.styles';
 
 export function PhoneInput({ method, value, onChange, error }: PhoneInputProps) {
   const Colors = useThemeColors();

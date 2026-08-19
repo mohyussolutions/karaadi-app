@@ -26,7 +26,7 @@ import { setListingType, setStep, setCategoryKey, setBusinessId } from '../../st
 import {
   fetchBusinessPlans, selectBusinessPlan, extendBusinessPlan,
 } from '../../actions/categories/businessPlan.actions';
-import { createStyles } from '../../management/create/business/styles/businessCreate.styles';
+import { createStyles } from '../../util/styles/business/businessCreate.styles';
 
 const APPROVAL_POLL_INTERVAL_MS = 5000;
 

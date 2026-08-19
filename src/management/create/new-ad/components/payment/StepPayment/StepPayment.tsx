@@ -14,7 +14,7 @@ import { PhoneInput } from './PhoneInput';
 import { PollingOverlay } from './PollingOverlay';
 import { SuccessScreen } from './SuccessScreen';
 import { usePaymentFlow } from './usePaymentFlow';
-import { createStyles } from '../styles/stepPayment.styles';
+import { createStyles } from '../../../../../../util/styles/payment/stepPayment.styles';
 
 function ActivatingScreen() {
   const s = useThemedStyles(createStyles);

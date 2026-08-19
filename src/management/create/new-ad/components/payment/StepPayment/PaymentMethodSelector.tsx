@@ -5,7 +5,7 @@ import { useThemedStyles } from '../../../../../../components/hooks/useTheme';
 import { useAppTranslation } from '../../../../../../components/hooks/useAppTranslation';
 import type { PaymentMethodSelectorProps } from '../../../../../../util/types';
 import { PAYMENT_METHODS } from '../payment.constants';
-import { createStyles } from '../styles/paymentMethodSelector.styles';
+import { createStyles } from '../../../../../../util/styles/payment/paymentMethodSelector.styles';
 
 export function PaymentMethodSelector({ selected, onChange }: PaymentMethodSelectorProps) {
   const s = useThemedStyles(createStyles);

@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ActivityIndicator, Modal, Animated } from
 import { useThemeColors, useThemedStyles } from '../../../../../../components/hooks/useTheme';
 import { useAppTranslation } from '../../../../../../components/hooks/useAppTranslation';
 import type { PollingOverlayProps } from '../../../../../../util/types';
-import { createStyles } from '../styles/pollingOverlay.styles';
+import { createStyles } from '../../../../../../util/styles/payment/pollingOverlay.styles';
 import { NATIVE_DRIVER } from '../../../../../../util/animation';
 
 export function PollingOverlay({ visible, attempt, maxAttempts, onCancel }: PollingOverlayProps) {

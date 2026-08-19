@@ -6,7 +6,7 @@ import { useThemeColors, useThemedStyles } from '../../../../../../components/ho
 import { useAppTranslation } from '../../../../../../components/hooks/useAppTranslation';
 import { planStyle } from '../../../constants/config';
 import type { Plan, OrderSummaryProps, CreatedItemSummary } from '../../../../../../util/types';
-import { createStyles } from '../styles/orderSummary.styles';
+import { createStyles } from '../../../../../../util/styles/payment/orderSummary.styles';
 
 function SummaryHeader() {
   const { width } = useGlobal();

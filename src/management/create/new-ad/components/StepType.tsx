@@ -5,7 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles, type ColorPalette } from '../../../../components/hooks/useTheme';
 import { useAppTranslation } from '../../../../components/hooks/useAppTranslation';
 import { useTabBarClearance } from '../../../../components/hooks/useTabBarClearance';
-import { createStyles } from '../styles/stepType.styles';
+import { createStyles } from '../../../../util/styles/new-ad/stepType.styles';
 
 function getOptions(Colors: ColorPalette) {
   return [

@@ -7,7 +7,7 @@ import { useTabBarClearance } from '../../../../../../components/hooks/useTabBar
 import { useAppSelector } from '../../../../../../store/store';
 import type { StepSummaryProps } from '../../../../../../util/types';
 import { OrderSummary } from '../StepPayment/OrderSummary';
-import { createStyles } from '../styles/stepSummary.styles';
+import { createStyles } from '../../../../../../util/styles/payment/stepSummary.styles';
 
 export function StepSummary({ plan, categoryName, onNext, onBack }: StepSummaryProps) {
   const Colors = useThemeColors();

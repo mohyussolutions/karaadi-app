@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
-import { SPACING, RADII, TYPOGRAPHY } from "../../../../util/colors/theme";
-import type { ColorPalette } from "../../../../components/hooks/useTheme";
-import { createCommonStyles } from "../../../../util/styles/common/common.style";
+import { SPACING, RADII, TYPOGRAPHY } from "../../colors/theme";
+import type { ColorPalette } from "../../../components/hooks/useTheme";
+import { createCommonStyles } from "../common/common.style";
 
 export function createStyles(Colors: ColorPalette) {
   const common = createCommonStyles(Colors);

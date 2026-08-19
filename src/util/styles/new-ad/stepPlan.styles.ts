@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
-import type { ColorPalette } from '../../../../components/hooks/useTheme';
-import { shadow } from '../../../../util/shadow';
-import { createCommonStyles } from '../../../../util/styles/common/common.style';
+import type { ColorPalette } from '../../../components/hooks/useTheme';
+import { shadow } from '../../shadow';
+import { createCommonStyles } from '../common/common.style';
 
 export function createPlanCardStyles(Colors: ColorPalette) {
   return StyleSheet.create({
