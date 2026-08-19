@@ -1,9 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
 import {
   View, Text, FlatList, TextInput, TouchableOpacity,
-  KeyboardAvoidingView, Platform, ActivityIndicator,
+  KeyboardAvoidingView, ActivityIndicator,
 } from 'react-native';
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
+import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../common/common-for-ios-andriod';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
@@ -240,7 +241,7 @@ export default function ChatScreen() {
 
       <KeyboardAvoidingView
         style={styles.flexFull}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        behavior={KEYBOARD_AVOIDING_BEHAVIOR}
       >
         <FlatList
           ref={listRef}

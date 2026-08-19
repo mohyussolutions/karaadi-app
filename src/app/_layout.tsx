@@ -9,6 +9,7 @@ import * as SystemUI from "expo-system-ui";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import SplashScreen from "../components/loading/SplashScreen";
 import GlobalHeader from "../components/layout/GlobalHeader";
 import BottomTabBar from "../navigation/BottomTabBar";
 import { EulaModal } from "../components/modals/EulaModal";
@@ -29,6 +30,7 @@ import { useSocketNotifications } from "../components/hooks/useSocketNotificatio
 import { useNotificationTap } from "../components/hooks/useNotificationTap";
 
 export default function RootLayout() {
+  const [showSplash, setShowSplash] = useState(true);
   const [showEula, setShowEula] = useState(false);
 
   useEffect(() => {
@@ -183,6 +185,8 @@ export default function RootLayout() {
           onDismiss={dismissBanner}
         />
       )}
+
+      {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
     </View>
   );
 }

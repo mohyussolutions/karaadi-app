@@ -8,7 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
 import { useResponsive } from '../hooks/useResponsive';
-import { getModalHeaderPaddingTop } from '../common/common-for-ios-andriod';
+import { getModalHeaderPaddingTop } from '../../common/common-for-ios-andriod';
 import { tabletModalStyles, TABLET_MODAL_ICON_SIZES } from '../../util/styles/shared/ipad.styles';
 import { createStyles } from '../../util/styles/detail/ZoomModal.styles';
 

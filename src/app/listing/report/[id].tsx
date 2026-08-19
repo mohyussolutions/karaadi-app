@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
-  KeyboardAvoidingView, Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../common/common-for-ios-andriod';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
@@ -88,7 +89,7 @@ export default function ReportScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={KEYBOARD_AVOIDING_BEHAVIOR}>
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
           <View style={styles.header}>
             <TouchableOpacity onPress={() => router.back()} hitSlop={10} style={styles.backBtn}>

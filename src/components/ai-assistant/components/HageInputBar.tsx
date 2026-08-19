@@ -1,16 +1,17 @@
 import React from 'react';
-import { View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../../util/styles/layout/hage.styles';
 import type { HageInputBarProps } from '../../../util/types';
+import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../common/common-for-ios-andriod';
 
 export function HageInputBar({ value, onChangeText, onSend, loading, placeholder, insets }: HageInputBarProps) {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoidingView behavior={KEYBOARD_AVOIDING_BEHAVIOR}>
       <View style={[styles.inputRow, { paddingBottom: Math.max(insets.bottom, 12) }]}>
         <TextInput
           style={styles.input}

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import {
   View, Image, TouchableOpacity, Text, Modal, Pressable,
-  TextInput, Switch, Platform,
+  TextInput, Switch,
 } from 'react-native';
-import { useGlobal, WEB_MAX_WIDTH } from '../hooks/useGlobal';
+import { useGlobal } from '../hooks/useGlobal';
+import { IS_WEB, WEB_CENTER_STYLE } from '../../common/web-layout';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, usePathname } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -26,8 +27,8 @@ const LANGS: { code: Lang; label: string }[] = [
   { code: 'so', label: 'Soomaali' },
 ];
 
-const WEB_CENTER = Platform.OS === 'web'
-  ? ({ maxWidth: WEB_MAX_WIDTH, alignSelf: 'center' as const, width: '100%' as const })
+const WEB_CENTER = IS_WEB
+  ? ({ ...WEB_CENTER_STYLE, alignSelf: 'center' as const })
   : null;
 
 export default function GlobalHeader() {

@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
-  KeyboardAvoidingView, Platform, ActivityIndicator, Alert,
+  KeyboardAvoidingView, ActivityIndicator, Alert,
   Image, Pressable,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../common/common-for-ios-andriod';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { z } from 'zod';
@@ -315,7 +316,7 @@ function ApplyStep({
   }
 
   return (
-    <KeyboardAvoidingView style={s.flexFull} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoidingView style={s.flexFull} behavior={KEYBOARD_AVOIDING_BEHAVIOR}>
       <ScrollView
         contentContainerStyle={[s.scroll, { paddingBottom: insets.bottom + 84 }]}
         showsVerticalScrollIndicator={false}

@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
-  Platform,
   ActivityIndicator,
   Alert,
   Pressable,
@@ -14,6 +13,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useThemeColors, useThemedStyles } from "../hooks/useTheme";
+import { KEYBOARD_AVOIDING_BEHAVIOR } from "../../common/common-for-ios-andriod";
 import { useTabBarClearance } from "../hooks/useTabBarClearance";
 import RegionCityPicker from "../geo/RegionCityPicker";
 import { MAIN_CATEGORIES } from "../../constants";
@@ -353,7 +353,7 @@ export function StepForm({
       </View>
       <KeyboardAvoidingView
         style={s.flexFull}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        behavior={KEYBOARD_AVOIDING_BEHAVIOR}
       >
         <ScrollView
           ref={scrollRef}

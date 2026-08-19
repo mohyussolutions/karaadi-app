@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import {
-  View, Text, TouchableOpacity, RefreshControl, ScrollView, Platform, ActivityIndicator,
+  View, Text, TouchableOpacity, RefreshControl, ScrollView, ActivityIndicator,
 } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -9,7 +9,7 @@ import { CategoryGrid, HowToUseVideo } from '../../components/shared';
 import ListingCard from '../../components/cards/ListingCard';
 import { useAppTranslation } from '../../components/hooks/useAppTranslation';
 import { useResponsive } from '../../components/hooks/useResponsive';
-import { WEB_MAX_WIDTH } from '../../components/hooks/useGlobal';
+import { IS_WEB, WEB_CENTER_STYLE } from '../../common/web-layout';
 import { useHomeFeed } from '../../components/hooks/useHomeFeed';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { useAppSelector } from '../../store/store';
@@ -142,8 +142,8 @@ export default function HomeScreen() {
 
   if (isTabletLandscape) {
     return (
-      <View style={[styles.safe, Platform.OS === 'web' && styles.webCenterWrap]}>
-        <View style={[styles.outerRow, Platform.OS === 'web' && { maxWidth: WEB_MAX_WIDTH, width: '100%' }]}>
+      <View style={[styles.safe, IS_WEB && styles.webCenterWrap]}>
+        <View style={[styles.outerRow, WEB_CENTER_STYLE]}>
           <View style={[styles.sidebar, { width: sidebarWidth }]}>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.sidebarContent}>
               <View style={styles.videoSection}>
@@ -162,8 +162,8 @@ export default function HomeScreen() {
   }
 
   return (
-    <View style={[styles.safe, Platform.OS === 'web' && styles.webCenterWrap]}>
-      <View style={[styles.mainFlex, Platform.OS === 'web' && { maxWidth: WEB_MAX_WIDTH, width: '100%' }]}>
+    <View style={[styles.safe, IS_WEB && styles.webCenterWrap]}>
+      <View style={[styles.mainFlex, WEB_CENTER_STYLE]}>
         {feedList}
       </View>
     </View>

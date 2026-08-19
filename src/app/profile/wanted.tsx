@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import {
   View, Text, FlatList, TouchableOpacity, Modal,
-  TextInput, Alert, KeyboardAvoidingView, Platform, ScrollView, Image,
+  TextInput, Alert, KeyboardAvoidingView, ScrollView, Image,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../common/common-for-ios-andriod';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
@@ -241,7 +242,7 @@ export default function WantedScreen() {
       >
         <KeyboardAvoidingView
           style={styles.modalOverlay}
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          behavior={KEYBOARD_AVOIDING_BEHAVIOR}
         >
           <TouchableOpacity
             style={styles.flexFull}
