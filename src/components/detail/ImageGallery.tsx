@@ -11,7 +11,7 @@ import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
 import { createStyles, createSheetStyles } from '../../util/styles/detail/ImageGallery.styles';
 import RemoteImage from '../shared/RemoteImage';
 
-export const IMG_H = 320; // fallback; component uses live width
+export const IMG_H = 320;
 
 export default function ImageGallery({
   images, activeIndex, onActiveChange, onImagePress,
@@ -64,7 +64,7 @@ export default function ImageGallery({
             <RemoteImage
               source={{ uri: img }}
               style={styles.image}
-              resizeMode="cover"
+              contentFit="cover"
             />
           </Pressable>
         ))}
@@ -138,7 +138,7 @@ export default function ImageGallery({
               <RemoteImage
                 source={{ uri: img }}
                 style={[styles.thumb, i === activeIndex && styles.thumbActive]}
-                resizeMode="cover"
+                contentFit="cover"
                 iconSize={14}
               />
             </Pressable>

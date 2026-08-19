@@ -16,7 +16,8 @@
         "UIViewControllerBasedStatusBarAppearance": false,
         "NSCameraUsageDescription": "Allow Karaadi to access your camera to take photos for your listings.",
         "NSPhotoLibraryUsageDescription": "Allow Karaadi to access your photos to add images to your listings.",
-        "NSPhotoLibraryAddUsageDescription": "Allow Karaadi to save photos to your library."
+        "NSPhotoLibraryAddUsageDescription": "Allow Karaadi to save photos to your library.",
+        "LSApplicationQueriesSchemes": ["itms-apps"]
       }
     },
     "android": {

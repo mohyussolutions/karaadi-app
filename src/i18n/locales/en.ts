@@ -2,7 +2,7 @@ export const marketplaceCategories = {
   categories: {
     antiques: "Antiques & Art",
     electronics: "Electronics",
-    animalAndSupplies: "Animal & Supplies",
+    animalAndSupplies: "Animals & Supplies",
     sportsAndOutdoors: "Sports & Outdoors",
     furniture: "Furniture",
     fashion: "Fashion",
@@ -67,7 +67,7 @@ export const realEstateCategories = {
     forRent: "For Rent",
     forSale: "For Sale",
     landForSale: "Land For Sale",
-    farmForSale: "Farm For Sale",
+    farmForSale: "Farms For Sale",
     commercial: "Commercial",
   },
   subcategories: {
@@ -109,7 +109,7 @@ export const carsCategories = {
     leaseCars: "Lease Cars",
     trailers: "Trailers",
     carParts: "Car Parts",
-    truck: "Truck",
+    truck: "Trucks",
     electricCars: "Electric Cars",
     buses: "Buses",
   },
@@ -228,12 +228,12 @@ export const boatsCategories = {
 
 export const farmEquipmentCategories = {
   categories: {
-    tractor: "Tractor",
+    tractor: "Tractors",
     tools: "Farm Tools",
-    fertilizerSpreader: "Fertilizer Spreader",
-    harvester: "Grain Harvester",
-    plow: "Plow",
-    irrigation: "Irrigation System",
+    fertilizerSpreader: "Fertilizer Spreaders",
+    harvester: "Grain Harvesters",
+    plow: "Plows",
+    irrigation: "Irrigation Systems",
   },
   subcategories: {
     tractor: {
@@ -595,7 +595,7 @@ export const categories = {
   RealEstate: "Real Estate",
   Cars: "Cars",
   Boats: "Boats",
-  farmequipment: "Farm Equipment",
+  farmequipment: "Farm Equipments",
   Motorcycles: "Motorcycles",
   Smartsuuq: "Smartsuuq",
 } as const;
@@ -725,7 +725,7 @@ export const createRealEstate = {
     forRent: "For Rent",
     forSale: "For Sale",
     landForSale: "Land For Sale",
-    farmForSale: "Farm For Sale",
+    farmForSale: "Farms For Sale",
     commercial: "Commercial",
   },
   propertyTypes: {
@@ -935,12 +935,12 @@ export const createFarmequipment = {
     refurbished: "Refurbished",
   },
   categories: {
-    tractorForSale: "Tractor For Sale",
+    tractorForSale: "Tractors For Sale",
     farmTools: "Farm Tools",
-    fertilizerSpreader: "Fertilizer Spreader",
-    grainHarvester: "Grain Harvester",
-    plow: "Plow",
-    irrigationSystem: "Irrigation System",
+    fertilizerSpreader: "Fertilizer Spreaders",
+    grainHarvester: "Grain Harvesters",
+    plow: "Plows",
+    irrigationSystem: "Irrigation Systems",
   },
 } as const;
 
@@ -995,25 +995,25 @@ export const subcategories = {
   marketplace: {
     antiques: "Antiques & Art",
     electronics: "Electronics",
-    animalAndSupplies: "Animal & Supplies",
+    animalAndSupplies: "Animals & Supplies",
     sportsAndOutdoors: "Sports & Outdoors",
     furniture: "Furniture",
     fashion: "Fashion",
   },
   farmEquipment: {
-    tractor: "Tractor",
-    tractorForSale: "Tractor For Sale",
+    tractor: "Tractors",
+    tractorForSale: "Tractors For Sale",
     tools: "Farm Tools",
-    fertilizerSpreader: "Fertilizer Spreader",
-    harvester: "Grain Harvester",
-    plow: "Plow",
-    irrigation: "Irrigation System",
+    fertilizerSpreader: "Fertilizer Spreaders",
+    harvester: "Grain Harvesters",
+    plow: "Plows",
+    irrigation: "Irrigation Systems",
   },
   realEstate: {
     forRent: "For Rent",
     forSale: "For Sale",
     landForSale: "Land for Sale",
-    farmForSale: "Farm for Sale",
+    farmForSale: "Farms for Sale",
     commercial: "Commercial",
     resultsFound: "Results found:",
     resultsCount: "{{count}} properties",
@@ -1024,7 +1024,7 @@ export const subcategories = {
     leaseCars: "Lease Cars",
     trailers: "Trailers",
     carParts: "Car Parts",
-    truck: "Truck",
+    truck: "Trucks",
     electricCars: "Electric Cars",
     buses: "Buses",
   },
@@ -1063,12 +1063,12 @@ export const subcategories = {
     },
   },
   traktor: {
-    tractorForSale: "Tractor for Sale",
+    tractorForSale: "Tractors for Sale",
     farmTools: "Farm Tools",
-    fertilizerSpreader: "Fertilizer Spreader",
-    grainHarvester: "Grain Harvester",
-    plow: "Plow",
-    irrigationSystem: "Irrigation System",
+    fertilizerSpreader: "Fertilizer Spreaders",
+    grainHarvester: "Grain Harvesters",
+    plow: "Plows",
+    irrigationSystem: "Irrigation Systems",
   },
   carsNested: {
     carsForSale: {
@@ -1116,12 +1116,12 @@ export const subcategories = {
   },
   traktorNested: {
     top: {
-      tractorForSale: "Tractor for Sale",
+      tractorForSale: "Tractors for Sale",
       farmTools: "Farm Tools",
-      fertilizerSpreader: "Fertilizer Spreader",
-      grainHarvester: "Grain Harvester",
-      plow: "Plow",
-      irrigation: "Irrigation System",
+      fertilizerSpreader: "Fertilizer Spreaders",
+      grainHarvester: "Grain Harvesters",
+      plow: "Plows",
+      irrigation: "Irrigation Systems",
     },
     tractorForSale: {
       newTractor: "New Tractor",
@@ -1351,6 +1351,8 @@ export const common = {
   forceUpdateTitle: "Update Required",
   forceUpdateMessage: "A new version of Karaadi is available. Please update to continue using the app.",
   updateNow: "Update Now",
+  storeUpdateTitle: "New Version Available",
+  storeUpdateMessage: "A new version of Karaadi is available on the store. Please update to get the latest features.",
 } as const;
 
 export const mine = {
@@ -2061,10 +2063,10 @@ export const subscription = {
   boatCargo: "Cargo Boat",
   equipmentType: "Equipment Type",
   equipmentTypeAny: "Any Equipment",
-  equipmentTractor: "Tractor",
+  equipmentTractor: "Tractors",
   equipmentTools: "Farm Tools",
-  equipmentHarvester: "Grain Harvester",
-  equipmentIrrigation: "Irrigation System",
+  equipmentHarvester: "Grain Harvesters",
+  equipmentIrrigation: "Irrigation Systems",
   brand: "Brand",
   brandPlaceholder: "e.g. John Deere",
   allCategories: "All",

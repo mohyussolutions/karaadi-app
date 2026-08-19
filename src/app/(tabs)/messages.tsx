@@ -107,7 +107,7 @@ export default function MessagesScreen() {
               <RemoteImage
                 source={{ uri: other?.profileImage || AVATAR }}
                 style={styles.avatar}
-                resizeMode="cover"
+                contentFit="cover"
                 recyclingKey={String(item.id)}
               />
               <View style={styles.convoInfo}>

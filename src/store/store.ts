@@ -12,6 +12,7 @@ import feedReducer from './slices/feedSlice';
 import chatsReducer from '../components/features/chat/store/chatsSlice';
 import newAdReducer from './slices/newAdSlice';
 import browseSearchReducer from './slices/browseSearchSlice';
+import geoReducer from './slices/geoSlice';
 import notificationSettingsReducer from '../components/features/notifications/store/notificationSettingsSlice';
 import { storeRef } from './storeRef';
 import type { RootState, AppDispatch } from '../util/types/store.types';
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   newAd: newAdReducer,
   browseSearch: browseSearchReducer,
   notificationSettings: notificationSettingsReducer,
+  geo: geoReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

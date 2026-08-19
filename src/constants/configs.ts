@@ -197,7 +197,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       },
       {
         key: "animalAndSupplies",
-        name: "Animal & Supplies",
+        name: "Animals & Supplies",
         icon: "paw-outline",
         nested: [
           {
@@ -456,7 +456,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       },
       {
         key: "farmForSale",
-        name: "Farm For Sale",
+        name: "Farms For Sale",
         icon: "barn",
         nested: [
           {
@@ -633,7 +633,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       },
       {
         key: "truck",
-        name: "Truck",
+        name: "Trucks",
         icon: "truck",
         nested: [
           {
@@ -949,14 +949,14 @@ export const MAIN_CATEGORIES: MainCategory[] = [
   },
   {
     key: "farmequipment",
-    name: "Farm Equipment",
+    name: "Farm Equipments",
     icon: "tractor",
     color: CAT_COLORS.farmEquipment,
     apiPath: CAT_PATHS.farmEquipment,
     subCategories: [
       {
         key: "tractor",
-        name: "Tractor",
+        name: "Tractors",
         icon: "tractor",
         nested: [
           {
@@ -999,7 +999,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       },
       {
         key: "fertilizerSpreader",
-        name: "Fertilizer Spreader",
+        name: "Fertilizer Spreaders",
         icon: "spray-bottle",
         nested: [
           {
@@ -1019,7 +1019,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       },
       {
         key: "harvester",
-        name: "Grain Harvester",
+        name: "Grain Harvesters",
         icon: "grain",
         nested: [
           {
@@ -1039,7 +1039,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       },
       {
         key: "plow",
-        name: "Plow",
+        name: "Plows",
         icon: "tools",
         nested: [
           {
@@ -1062,7 +1062,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       },
       {
         key: "irrigation",
-        name: "Irrigation System",
+        name: "Irrigation Systems",
         icon: "water-outline",
         nested: [
           {

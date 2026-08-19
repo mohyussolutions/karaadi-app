@@ -48,4 +48,5 @@ export interface NavIcons {
   messages: NavIconEntry;
   profile: NavIconEntry;
   business: NavIconEntry;
+  login: NavIconEntry;
 }

@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { RegionPickerItem, RegionCityPickerProps } from '../../../util/types';
-import { clientGetAllRegions, clientAddCity } from '../../../api/categories/geo.actions';
+import { clientAddCity } from '../../../api/categories/geo.actions';
+import { toRegionPickerItems } from '../../../util/helpers';
+import { fetchGeoRegions, invalidateGeoCache, GEO_CACHE_TTL } from '../../../store/slices/geoSlice';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
 
 export function useRegionCityPicker({
   selectedRegion,
@@ -8,8 +11,9 @@ export function useRegionCityPicker({
   onRegionChange,
   onCityChange,
 }: RegionCityPickerProps) {
-  const [regions, setRegions] = useState<RegionPickerItem[]>([]);
-  const [loadingRegions, setLoadingRegions] = useState(true);
+  const dispatch = useAppDispatch();
+  const geo = useAppSelector((s) => s.geo);
+  const [regionsOverride, setRegionsOverride] = useState<RegionPickerItem[] | null>(null);
   const [selectedRegionObj, setSelectedRegionObj] = useState<RegionPickerItem | null>(null);
 
   const [regionExpanded, setRegionExpanded] = useState(false);
@@ -20,27 +24,19 @@ export function useRegionCityPicker({
   const [savingCity, setSavingCity] = useState(false);
 
   useEffect(() => {
-    clientGetAllRegions()
-      .then((data) => {
-        const list: RegionPickerItem[] = Array.isArray(data)
-          ? data.map((r: any) => ({
-              id: r.id || r._id || String(Math.random()),
-              name: r.name,
-              cities: (r.cities || []).map((c: any) => ({
-                id: c.id || c._id || String(Math.random()),
-                name: c.name,
-              })),
-            }))
-          : [];
-        setRegions(list);
-        if (selectedRegion) {
-          const match = list.find((r) => r.name === selectedRegion);
-          if (match) setSelectedRegionObj(match);
-        }
-      })
-      .catch(() => {})
-      .finally(() => setLoadingRegions(false));
-  }, []);
+    const isStale = !geo.fetchedAt || Date.now() - geo.fetchedAt >= GEO_CACHE_TTL;
+    if (isStale && geo.status !== 'loading') dispatch(fetchGeoRegions());
+  }, [dispatch, geo.fetchedAt, geo.status]);
+
+  const regions = regionsOverride ?? toRegionPickerItems(geo.regions);
+  const loadingRegions = geo.status === 'loading' && geo.regions.length === 0;
+
+  useEffect(() => {
+    if (selectedRegion && !selectedRegionObj) {
+      const match = regions.find((r) => r.name === selectedRegion);
+      if (match) setSelectedRegionObj(match);
+    }
+  }, [selectedRegion, regions, selectedRegionObj]);
 
   useEffect(() => { setCityText(selectedCity || ''); }, [selectedCity]);
 
@@ -95,7 +91,7 @@ export function useRegionCityPicker({
       if (res.success && res.data?.name) {
         const savedName = String(res.data.name);
         const savedId = String(res.data._id || res.data.id || trimmed);
-        setRegions(prev => prev.map(r =>
+        setRegionsOverride(regions.map(r =>
           r.id === selectedRegionObj.id
             ? { ...r, cities: [...(r.cities ?? []), { id: savedId, name: savedName }] }
             : r
@@ -103,6 +99,7 @@ export function useRegionCityPicker({
         setSelectedRegionObj(prev =>
           prev ? { ...prev, cities: [...(prev.cities ?? []), { id: savedId, name: savedName }] } : prev
         );
+        dispatch(invalidateGeoCache());
         handleSelectCity(savedName);
       } else {
         handleSelectCity(trimmed);

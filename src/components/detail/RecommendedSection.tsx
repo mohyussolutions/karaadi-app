@@ -57,7 +57,7 @@ function RecommendedSection({ endpoint, excludeId, title, categoryKey }: Recomme
             <RemoteImage
               source={{ uri: getImageUrl(item.images?.[0]) || PLACEHOLDER_IMAGE }}
               style={styles.img}
-              resizeMode="cover"
+              contentFit="cover"
               recyclingKey={item._id || item.id}
             />
             <View style={styles.info}>

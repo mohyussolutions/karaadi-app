@@ -6,6 +6,7 @@ import type { ThemeMode } from './theme.types';
 import type { User } from './user.types';
 import type { Chat } from './chat.types';
 import type { Notification } from './notification.types';
+import type { GeoRegion } from './geo.types';
 
 export interface ChatsState {
   items: Chat[];
@@ -41,6 +42,12 @@ export interface FavoritesState {
 export interface FeedState {
   listings: ListingBase[];
   recommendations: ListingBase[];
+}
+
+export interface GeoState {
+  regions: GeoRegion[];
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  fetchedAt: number | null;
 }
 
 export interface HageState {

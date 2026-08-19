@@ -1,4 +1,5 @@
 import type { RawItem } from '../types/normalize.types';
+import type { GeoRegion, RegionPickerItem } from '../types/geo.types';
 
 function toStr(val: unknown): string {
   if (!val) return '';
@@ -50,4 +51,15 @@ export function matchesSubcategoryKey(item: { subcategory?: string }, key: strin
   const raw = item as any;
   if (raw.subcategoryArr?.includes(key)) return true;
   return item.subcategory === key;
+}
+
+export function toRegionPickerItems(regions: GeoRegion[]): RegionPickerItem[] {
+  return regions.map((r: any) => ({
+    id: r.id || r._id || String(Math.random()),
+    name: r.name,
+    cities: (r.cities || []).map((c: any) => ({
+      id: c.id || c._id || String(Math.random()),
+      name: c.name,
+    })),
+  }));
 }

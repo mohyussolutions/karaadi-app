@@ -366,6 +366,8 @@ export const common = {
   forceUpdateTitle: "Waa Inaad Cusboonaysiisaa",
   forceUpdateMessage: "Nooc cusub oo Karaadi ah ayaa la heli karaa. Fadlan cusboonaysii si aad u sii isticmaasho appka.",
   updateNow: "Hadda Cusboonaysii",
+  storeUpdateTitle: "Nooc Cusub Ayaa La Heli Karaa",
+  storeUpdateMessage: "Nooc cusub oo Karaadi ah ayaa laga heli karaa bakhaarka. Fadlan cusboonaysii si aad u hesho astaamaha ugu dambeeyay.",
 } as const;
 
 export const summary = {
@@ -754,7 +756,7 @@ export const categories = {
   RealEstate: "hantida maguurtada ah",
   Cars: "Gawaarida",
   Boats: "Doomaha",
-  farmequipment: "Qalabka Beeraha",
+  farmequipment: "Qalabyada Beeraha",
   Motorcycles: "Mootooyin",
   Smartsuuq: "Smartsuuq",
 } as const;

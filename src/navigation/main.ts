@@ -50,8 +50,8 @@ export const TAB_ITEMS: TabItem[] = [
 export const LOGIN_TAB_ITEM: TabItem = {
   name: "login",
   labelKey: "nav.login",
-  icon: NAV_ICONS.profile.filled,
-  iconOutline: NAV_ICONS.profile.outline,
+  icon: NAV_ICONS.login.filled,
+  iconOutline: NAV_ICONS.login.outline,
 };
 
 export const PROFILE_MENU_ITEMS: MenuItem[] = [

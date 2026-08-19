@@ -21,6 +21,19 @@ export function createStyles(Colors: ColorPalette) {
       backgroundColor: Colors.slate100,
     },
     img: { width: "100%", height: "100%" },
+    wantedPlaceholder: {
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: Colors.primaryGhost,
+      paddingHorizontal: 12,
+    },
+    wantedPlaceholderText: {
+      color: Colors.primary,
+      fontSize: 13,
+      fontWeight: "700",
+      textAlign: "center",
+      lineHeight: 18,
+    },
     badge: {
       position: "absolute",
       top: 8,

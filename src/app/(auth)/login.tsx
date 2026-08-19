@@ -38,6 +38,9 @@ export default function LoginScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={[styles.card, isTablet && styles.cardTablet]}>
+          <View style={styles.iconWrap}>
+            <MaterialCommunityIcons name="account-circle-outline" size={64} color={Colors.primary} />
+          </View>
           <Text style={styles.title}>{t('auth.login.title')}</Text>
           <Text style={styles.subtitle}>{t('auth.login.subtitle')}</Text>
 

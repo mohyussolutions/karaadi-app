@@ -47,6 +47,7 @@ export const NAV_ICONS: NavIcons = {
   messages: { filled: "message", outline: "message-outline" },
   profile: { filled: "account-circle", outline: "account-circle-outline" },
   business: { filled: "office-building", outline: "office-building-outline" },
+  login: { filled: "account", outline: "account-outline" },
 };
 
 export const AMENITY_ICONS: Record<string, string> = {

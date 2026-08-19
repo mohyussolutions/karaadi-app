@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { formatPrice, getImageUrl, truncate } from '../../util/helpers';
+import { formatPrice, getImageUrl, truncate, truncateWords } from '../../util/helpers';
 import { PLACEHOLDER_IMAGE } from '../../constants';
 import { getListingDetailRoute } from '../../util/helpers';
 import { cacheListing } from '../../util/cache/listingCache';
@@ -32,6 +32,10 @@ const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey
 
   function handlePress() {
     if (onPress) { onPress(); return; }
+    if (isWanted) {
+      router.push({ pathname: '/listing/subscription/[id]', params: { id: listingId } } as any);
+      return;
+    }
     cacheListing(listingId, item);
     router.push(getListingDetailRoute(item, categoryKey) as any);
   }
@@ -55,12 +59,20 @@ const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey
   return (
     <TouchableOpacity style={styles.card} onPress={handlePress} activeOpacity={0.88}>
       <View style={[styles.imgWrap, imageAspectRatio ? { aspectRatio: imageAspectRatio } : null]}>
-        <RemoteImage
-          source={{ uri: image }}
-          style={styles.img}
-          resizeMode="cover"
-          recyclingKey={listingId}
-        />
+        {isWanted ? (
+          <View style={[styles.img, styles.wantedPlaceholder]}>
+            <Text style={styles.wantedPlaceholderText} numberOfLines={3}>
+              {truncateWords(item.title || t('subscription.wanted'), 6)}
+            </Text>
+          </View>
+        ) : (
+          <RemoteImage
+            source={{ uri: image }}
+            style={styles.img}
+            contentFit="cover"
+            recyclingKey={listingId}
+          />
+        )}
 
         {item.maGaday ? (
           <View style={[styles.badge, styles.badgeSold]}>

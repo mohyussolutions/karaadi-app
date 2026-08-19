@@ -30,5 +30,17 @@ export function createStyles(Colors: ColorPalette) {
       justifyContent: 'center',
       backgroundColor: 'rgba(0,0,0,0.6)',
     },
+    muteBtn: {
+      position: 'absolute',
+      top: 8,
+      left: 8,
+      zIndex: 1,
+      width: 36,
+      height: 36,
+      borderRadius: 18,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'rgba(0,0,0,0.6)',
+    },
   });
 }

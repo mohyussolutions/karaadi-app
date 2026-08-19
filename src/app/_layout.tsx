@@ -13,6 +13,7 @@ import GlobalHeader from "../components/layout/GlobalHeader";
 import BottomTabBar from "../navigation/BottomTabBar";
 import { EulaModal } from "../components/modals/EulaModal";
 import ForceUpdateModal from "../components/modals/ForceUpdateModal";
+import StoreUpdateModal from "../components/modals/StoreUpdateModal";
 import { IdentityGate } from "../components/features/identification/components/IdentityGate";
 import { useIdentityGate } from "../components/features/identification/hooks/useIdentityGate";
 import { SaveToast } from "../components/shared";
@@ -157,6 +158,7 @@ export default function RootLayout() {
       <Hage />
       <SaveToast />
       <ForceUpdateModal />
+      <StoreUpdateModal />
 
       <EulaModal
         visible={showEula}

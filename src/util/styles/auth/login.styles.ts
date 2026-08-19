@@ -16,6 +16,7 @@ export function createStyles(Colors: ColorPalette) {
       ...shadow({ color: Colors.black, offset: { width: 0, height: 4 }, opacity: 0.1, radius: 16, elevation: 6 }),
     },
     cardTablet: { alignSelf: 'center', width: '100%', maxWidth: 460 },
+    iconWrap: { alignItems: 'center', marginBottom: 12 },
     title: { fontSize: 26, fontWeight: '800', color: Colors.textPrimary, textAlign: 'center', marginBottom: 4 },
     subtitle: { fontSize: 14, color: Colors.textMuted, textAlign: 'center', marginBottom: 28 },
     inputGroup: { marginBottom: 16 },

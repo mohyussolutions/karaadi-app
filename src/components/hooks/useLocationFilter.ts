@@ -1,29 +1,22 @@
 import { useEffect, useMemo, useState } from 'react';
-import { clientGetAllRegions } from '../../api/categories/geo.actions';
-import { matchesCategoryKey } from '../../util/helpers';
+import { matchesCategoryKey, toRegionPickerItems } from '../../util/helpers';
+import { fetchGeoRegions, GEO_CACHE_TTL } from '../../store/slices/geoSlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 import type { ListingBase } from '../../util/types/listing.types';
-import type { RegionPickerItem } from '../../util/types/geo.types';
 
 export function useLocationFilter(allListings: ListingBase[], subcategoryKey: string) {
-  const [regions, setRegions] = useState<RegionPickerItem[]>([]);
+  const dispatch = useAppDispatch();
+  const geo = useAppSelector((s) => s.geo);
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [filterOpen, setFilterOpen] = useState(false);
 
   useEffect(() => {
-    clientGetAllRegions()
-      .then((data) => {
-        const list: RegionPickerItem[] = Array.isArray(data)
-          ? data.map((r: any) => ({
-              id: r.id || r._id || String(Math.random()),
-              name: r.name,
-              cities: (r.cities || []).map((c: any) => ({ id: c.id || c._id || String(Math.random()), name: c.name })),
-            }))
-          : [];
-        setRegions(list);
-      })
-      .catch(() => {});
-  }, []);
+    const isStale = !geo.fetchedAt || Date.now() - geo.fetchedAt >= GEO_CACHE_TTL;
+    if (isStale && geo.status !== 'loading') dispatch(fetchGeoRegions());
+  }, [dispatch, geo.fetchedAt, geo.status]);
+
+  const regions = useMemo(() => toRegionPickerItems(geo.regions), [geo.regions]);
 
   function toggleRegion(name: string) {
     setSelectedRegions((prev) => {

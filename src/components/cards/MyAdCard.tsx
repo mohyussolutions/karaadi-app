@@ -57,7 +57,7 @@ function MyAdCard({ item, deleting, onDelete, onPayNow }: MyAdCardProps) {
   return (
     <TouchableOpacity style={s.card} onPress={handlePress} activeOpacity={0.9}>
       <View style={s.imgWrap}>
-        <RemoteImage source={{ uri: image }} style={s.img} resizeMode="cover" />
+        <RemoteImage source={{ uri: image }} style={s.img} contentFit="cover" />
         <View style={s.badgeRow}>
           {item.maGaday && (
             <View style={[s.badge, s.badgeSold]}>

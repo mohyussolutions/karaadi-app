@@ -155,7 +155,7 @@ const FavCard = React.memo(
       >
         <View style={s.imgWrap}>
           {!!imageUri && (
-            <RemoteImage source={{ uri: imageUri }} style={s.img} resizeMode="cover" recyclingKey={fav.itemId} />
+            <RemoteImage source={{ uri: imageUri }} style={s.img} contentFit="cover" recyclingKey={fav.itemId} />
           )}
 
           {!!catLabel && (

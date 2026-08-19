@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
-import { addNotification } from '../store/notificationsSlice';
+import { addNotification, markOneRead, markAllRead, removeNotification, clearNotifications } from '../store/notificationsSlice';
 import { getSocket } from '../../../../api/sockets/socket.actions';
 import { playNotificationSound } from '../services/soundService';
 
@@ -57,6 +57,10 @@ export function useSocketNotifications() {
         ['wanted_match', handleOne('wanted_match')],
         ['i_have_this', handleOne('i_have_this')],
         ['notification', handleOne('notification')],
+        ['notificationRead', (payload) => { if (payload?.notificationId) dispatch(markOneRead(payload.notificationId)); }],
+        ['allNotificationsRead', () => dispatch(markAllRead())],
+        ['notificationDeleted', (payload) => { if (payload?.notificationId) dispatch(removeNotification(payload.notificationId)); }],
+        ['allNotificationsDeleted', () => dispatch(clearNotifications())],
       ];
 
       function bind() {

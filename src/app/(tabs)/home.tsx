@@ -96,6 +96,7 @@ export default function HomeScreen() {
       data={displayListings}
       numColumns={numColumns}
       keyExtractor={(item) => item.id || item._id}
+      maintainVisibleContentPosition={{ disabled: true }}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />
       }
