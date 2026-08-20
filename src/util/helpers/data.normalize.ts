@@ -1,5 +1,31 @@
 import type { RawItem } from '../types/normalize.types';
 import type { GeoRegion, RegionPickerItem } from '../types/geo.types';
+import type { Subscription, ListingBase } from '../types/listing.types';
+import { formatPrice } from './ui.format';
+
+export function subscriptionToListingItem(item: Subscription): ListingBase {
+  return {
+    _id: item._id || item.id,
+    id: item.id || item._id || '',
+    userId: item.userId,
+    title: item.title,
+    description: item.description || '',
+    price: 0,
+    region: item.region || '',
+    city: item.cities?.[0] || '',
+    images: [],
+    mainCategory: 'subscription',
+    createdAt: item.createdAt || '',
+    updatedAt: item.createdAt || '',
+  };
+}
+
+export function subscriptionPriceLabel(item: Subscription, priceOnRequestLabel: string): string {
+  if (item.priceMin && item.priceMax) return `${formatPrice(item.priceMin)} – ${formatPrice(item.priceMax)}`;
+  if (item.priceMax) return formatPrice(item.priceMax);
+  if (item.priceMin) return formatPrice(item.priceMin);
+  return priceOnRequestLabel;
+}
 
 function toStr(val: unknown): string {
   if (!val) return '';

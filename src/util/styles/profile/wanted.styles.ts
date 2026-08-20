@@ -15,30 +15,7 @@ export function createStyles(Colors: ColorPalette) {
     },
     createBtnText: { color: Colors.white, fontWeight: '700', fontSize: 15 },
 
-    card: {
-      backgroundColor: Colors.card, borderRadius: 14,
-      borderWidth: 1, borderColor: Colors.border, padding: 14,
-      flexDirection: 'row', alignItems: 'center', gap: 12,
-    },
-    iconWrap: {
-      width: 44, height: 44, borderRadius: 22,
-      backgroundColor: Colors.primaryGhost, alignItems: 'center', justifyContent: 'center',
-    },
-    cardBody: { flex: 1, gap: 4 },
-    keyword: { fontSize: 15, fontWeight: '700', color: Colors.text },
-    meta: { fontSize: 12, color: Colors.textSecondary },
-    categoryBadge: {
-      alignSelf: 'flex-start',
-      backgroundColor: Colors.primary + '18', borderRadius: 6,
-      paddingHorizontal: 8, paddingVertical: 2,
-    },
-    categoryText: { fontSize: 11, color: Colors.primary, fontWeight: '700' },
-    deleteBtn: {
-      width: 34, height: 34, borderRadius: 17,
-      backgroundColor: Colors.errorGhost, alignItems: 'center', justifyContent: 'center',
-    },
-
-    modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end' },
+    modalOverlay: { flex: 1, backgroundColor: Colors.shadow40, justifyContent: 'flex-end' },
     sheet: {
       backgroundColor: Colors.card, borderTopLeftRadius: 20, borderTopRightRadius: 20,
       padding: 20, gap: 14,

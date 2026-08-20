@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../components/hooks/useTheme';
-import { shadow } from '../../shadow';
 import { createCommonStyles } from '../common/common.style';
 
 export function createSubscriptionListStyles(Colors: ColorPalette) {
@@ -9,86 +8,6 @@ export function createSubscriptionListStyles(Colors: ColorPalette) {
     safe: common.safeBase,
     content: { padding: 12, paddingBottom: 36 },
     row: { gap: 12, marginBottom: 12 },
-
-    card: {
-      backgroundColor: Colors.card,
-      borderRadius: 20,
-      padding: 18,
-      borderWidth: 1,
-      borderColor: Colors.border,
-      gap: 12,
-      ...shadow({ color: '#000', offset: { width: 0, height: 3 }, opacity: 0.09, radius: 8, elevation: 4 }),
-    },
-
-    cardTop: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      marginBottom: 2,
-    },
-    iconCircle: {
-      width: 48,
-      height: 48,
-      borderRadius: 24,
-      backgroundColor: Colors.primary + '14',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    deleteBtn: {
-      width: 36,
-      height: 36,
-      borderRadius: 18,
-      backgroundColor: Colors.error + '12',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-
-    cardTitle: {
-      fontSize: 16,
-      fontWeight: '700',
-      color: Colors.text,
-      lineHeight: 23,
-    },
-
-    metaRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 5,
-    },
-    metaText: {
-      fontSize: 13,
-      color: Colors.textMuted,
-      flex: 1,
-    },
-
-    cardFooter: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      borderTopWidth: 1,
-      borderTopColor: Colors.border,
-      paddingTop: 12,
-      marginTop: 2,
-      gap: 4,
-    },
-    badge: {
-      paddingHorizontal: 9,
-      paddingVertical: 4,
-      borderRadius: 8,
-    },
-    badgeActive: { backgroundColor: Colors.success + '18' },
-    badgeInactive: { backgroundColor: Colors.border },
-    badgeText: {
-      fontSize: 11,
-      fontWeight: '800',
-      letterSpacing: 0.4,
-    },
-    badgeTextActive: { color: Colors.success },
-    badgeTextInactive: { color: Colors.textMuted },
-    dateText: {
-      fontSize: 12,
-      color: Colors.textMuted,
-    },
   });
 }
 

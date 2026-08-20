@@ -105,6 +105,8 @@ export interface ListingCardProps {
   onPress?: () => void;
   categoryKey?: string;
   imageAspectRatio?: number;
+  priceLabel?: string;
+  onDelete?: (item: ListingBase) => void;
 }
 
 export interface MyAdCardProps {

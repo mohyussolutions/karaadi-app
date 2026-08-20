@@ -15,7 +15,7 @@ import RemoteImage from '../shared/RemoteImage';
 import type { ListingCardProps } from '../../util/types';
 import { createStyles } from '../../util/styles/shared/listingCard.styles';
 
-const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey, imageAspectRatio }: ListingCardProps) {
+const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey, imageAspectRatio, priceLabel, onDelete }: ListingCardProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -84,18 +84,29 @@ const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey
           </View>
         ) : null}
 
-        <TouchableOpacity
-          style={[styles.heartBtn, isFav && styles.heartBtnActive]}
-          onPress={handleHeart}
-          hitSlop={6}
-          activeOpacity={0.8}
-        >
-          <MaterialCommunityIcons
-            name={isFav ? 'heart' : 'heart-outline'}
-            size={16}
-            color={isFav ? Colors.favorite : Colors.white}
-          />
-        </TouchableOpacity>
+        {onDelete ? (
+          <TouchableOpacity
+            style={styles.heartBtn}
+            onPress={(e) => { e.stopPropagation(); onDelete(item); }}
+            hitSlop={6}
+            activeOpacity={0.8}
+          >
+            <MaterialCommunityIcons name="delete-outline" size={16} color={Colors.white} />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={[styles.heartBtn, isFav && styles.heartBtnActive]}
+            onPress={handleHeart}
+            hitSlop={6}
+            activeOpacity={0.8}
+          >
+            <MaterialCommunityIcons
+              name={isFav ? 'heart' : 'heart-outline'}
+              size={16}
+              color={isFav ? Colors.favorite : Colors.white}
+            />
+          </TouchableOpacity>
+        )}
       </View>
 
       <View style={styles.body}>
@@ -107,7 +118,7 @@ const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey
 
         <View style={styles.footer}>
           <Text style={styles.price} numberOfLines={1}>
-            {item.price > 0 ? formatPrice(item.price) : t('priceOnRequest')}
+            {priceLabel ?? (item.price > 0 ? formatPrice(item.price) : t('priceOnRequest'))}
           </Text>
 
           {(item.city || item.region) && (
