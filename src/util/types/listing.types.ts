@@ -207,14 +207,6 @@ export interface CategoryTypeConfig {
   fields: CategorySpecField[];
 }
 
-export interface PaginatedResponse<T> {
-  data: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-  hasMore: boolean;
-}
-
 export interface Favorite {
   id: string;
   userId?: string;

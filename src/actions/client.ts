@@ -1,6 +1,6 @@
-import * as SecureStore from "../util/secureStorage";
+import * as SecureStore from "../util/helpers/secureStorage";
 import { API_BASE_URL } from "../api/urls";
-import { storeRef } from "../store/storeRef";
+import { storeRef } from "../store/internal/storeRef";
 import { clearCredentials } from "../store/slices/authSlice";
 import { disconnectSocket } from "./sockets/socket.actions";
 import {
@@ -15,12 +15,12 @@ import {
 import type {
   ExtraHeaders,
   Params,
-  ApiData,
-  ApiResponse,
   RequestOptions,
-} from "../util/types/api.types";
+} from "../util/types/common.types";
+import type { ApiData, ApiResponse } from "../util/types/generic.types";
 
-export type { ApiResponse, RequestOptions } from "../util/types/api.types";
+export type { ApiResponse } from "../util/types/generic.types";
+export type { RequestOptions } from "../util/types/common.types";
 
 function buildUrl(path: string, params?: Params): string {
   const base = `${API_BASE_URL}${path}`;
