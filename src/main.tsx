@@ -13,6 +13,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { store, persistor } from './store/store';
 import i18n from './i18n/i18n';
 import { LoadingSpinner } from './components/loading';
+import { rootStyles } from './util/styles/root.styles';
 
 function App() {
   const [fontsLoaded] = useFonts({ ...MaterialCommunityIcons.font });
@@ -22,7 +23,7 @@ function App() {
       <PersistGate loading={<LoadingSpinner fullScreen />} persistor={persistor}>
         {fontsLoaded ? (
           <I18nextProvider i18n={i18n}>
-            <GestureHandlerRootView style={{ flex: 1 }}>
+            <GestureHandlerRootView style={rootStyles.gestureRoot}>
               <SafeAreaProvider>
                 <ExpoRoot context={ctx} />
               </SafeAreaProvider>
