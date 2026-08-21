@@ -11,6 +11,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { z } from 'zod';
 import { isSomaliPhone, isValidWebsite } from '../../../../util/validation/schemas';
+import { REGEX_PHONE_INPUT_FILTER } from '../../../../constants';
 import { useThemeColors, useThemedStyles } from '../../../../components/hooks/useTheme';
 import { useAppTranslation } from '../../../../components/hooks/useAppTranslation';
 import { getBusinessById, getMyBusinesses, createBusiness, updateBusiness } from '../../../../actions/core/business.actions';
@@ -36,10 +37,6 @@ const EMPTY: BusinessApplyFormState = {
   contactName: '', website: '', address: '', description: '',
 };
 
-// Flow order mirrors the website: Plan -> Apply -> Approval -> Categories -> Post.
-// "Plan" appears twice in practice: once pre-apply (no business yet, just
-// carries the choice into the application) and once post-approval as a
-// fallback for businesses that reach approval without a plan on file.
 type Screen = 'plan' | 'apply' | 'approval' | 'categories' | 'post';
 const CHECKUP_INDEX: Record<Screen, number> = {
   plan: 0, apply: 1, approval: 2, categories: 3, post: 4,
@@ -123,7 +120,6 @@ export default function BusinessCreateScreen() {
             setScreen('approval');
           }
         } else {
-          // No business yet — send them to pick a plan before applying.
           setScreen('plan');
         }
       })
@@ -397,7 +393,7 @@ function ApplyStep({
               <TextInput
                 style={[s.input, errors.phone && s.inputError]}
                 value={form.phone}
-                onChangeText={v => set('phone', v.replace(/[^0-9+\-()\s]/g, ''))}
+                onChangeText={v => set('phone', v.replace(REGEX_PHONE_INPUT_FILTER, ''))}
                 placeholder={t('mine.businesses.phonePlaceholder')}
                 placeholderTextColor={Colors.placeholder}
                 keyboardType="phone-pad"

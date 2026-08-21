@@ -20,7 +20,7 @@ import type { RootState, AppDispatch } from '../util/types/common.types';
 const persistConfig = {
   key: 'karaadi-mobile-v1',
   storage: AsyncStorage,
-  whitelist: ['auth', 'language', 'theme', 'favorites', 'notificationSettings'],
+  whitelist: ['language', 'theme', 'favorites', 'notificationSettings'],
 };
 
 const rootReducer = combineReducers({

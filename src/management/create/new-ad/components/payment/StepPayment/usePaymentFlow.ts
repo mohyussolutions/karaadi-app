@@ -47,7 +47,7 @@ export function usePaymentFlow({ plan, listingId, categoryKey }: UsePaymentFlowP
         if (status === 'success') {
           stopPolling();
           try {
-            await activateListing(catPath, listingId, { isPaid: true, planId: plan._id, planAmount: plan.price, planType: plan.key });
+            await activateListing(catPath, listingId, { isPaid: true, planId: plan._id, planAmount: plan.price, planType: plan.key, paymentRef });
           } catch {}
           setPayStatus('success');
           return;

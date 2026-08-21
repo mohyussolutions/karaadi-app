@@ -27,7 +27,6 @@ export interface ChatMessage {
   sender?: ChatUser;
   senderName?: string;
   senderAvatar?: string | null;
-  /** Set on an optimistically-added message before the server confirms it. */
   tempId?: string;
 }
 

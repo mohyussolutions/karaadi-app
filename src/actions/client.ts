@@ -113,15 +113,48 @@ async function request<T>(
   return { data: await parseBody<T>(res) };
 }
 
+export function apiGet<T = ApiData>(
+  path: string,
+  options?: RequestOptions,
+): Promise<ApiResponse<T>> {
+  return request<T>("GET", path, undefined, options);
+}
+
+export function apiPost<T = ApiData>(
+  path: string,
+  body?: unknown,
+  options?: RequestOptions,
+): Promise<ApiResponse<T>> {
+  return request<T>("POST", path, body, options);
+}
+
+export function apiPut<T = ApiData>(
+  path: string,
+  body?: unknown,
+  options?: RequestOptions,
+): Promise<ApiResponse<T>> {
+  return request<T>("PUT", path, body, options);
+}
+
+export function apiPatch<T = ApiData>(
+  path: string,
+  body?: unknown,
+  options?: RequestOptions,
+): Promise<ApiResponse<T>> {
+  return request<T>("PATCH", path, body, options);
+}
+
+export function apiDelete<T = ApiData>(
+  path: string,
+  options?: RequestOptions,
+): Promise<ApiResponse<T>> {
+  return request<T>("DELETE", path, undefined, options);
+}
+
 export const apiClient = {
-  get: <T = ApiData>(path: string, options?: RequestOptions) =>
-    request<T>("GET", path, undefined, options),
-  post: <T = ApiData>(path: string, body?: unknown, options?: RequestOptions) =>
-    request<T>("POST", path, body, options),
-  put: <T = ApiData>(path: string, body?: unknown, options?: RequestOptions) =>
-    request<T>("PUT", path, body, options),
-  patch: <T = ApiData>(path: string, body?: unknown, options?: RequestOptions) =>
-    request<T>("PATCH", path, body, options),
-  delete: <T = ApiData>(path: string, options?: RequestOptions) =>
-    request<T>("DELETE", path, undefined, options),
+  get: apiGet,
+  post: apiPost,
+  put: apiPut,
+  patch: apiPatch,
+  delete: apiDelete,
 };

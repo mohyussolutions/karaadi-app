@@ -1,20 +1,32 @@
 import React, { memo, useCallback } from "react";
-import type { StepCategoryProps, CategoryCardProps } from "../../../../util/types";
+import type {
+  StepCategoryProps,
+  CategoryCardProps,
+} from "../../../../util/types";
 import { View, Text, TouchableOpacity } from "react-native";
 import { FlashList, type ListRenderItemInfo } from "@shopify/flash-list";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useThemeColors, useThemedStyles } from "../../../../components/hooks/useTheme";
+import {
+  useThemeColors,
+  useThemedStyles,
+} from "../../../../components/hooks/useTheme";
 import { useAppTranslation } from "../../../../components/hooks/useAppTranslation";
 import { useTabBarClearance } from "../../../../components/hooks/useTabBarClearance";
 import { MAIN_CATEGORIES, type MainCategory } from "../../../../constants";
 import { createStyles } from "../../../../util/styles/new-ad/stepCategory.styles";
-
 const NUM_COLUMNS = 3;
 
-const CategoryCard = memo(function CategoryCard({ category, selected, onPress }: CategoryCardProps) {
+const CategoryCard = memo(function CategoryCard({
+  category,
+  selected,
+  onPress,
+}: CategoryCardProps) {
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
-  const handlePress = useCallback(() => onPress(category.key), [onPress, category.key]);
+  const handlePress = useCallback(
+    () => onPress(category.key),
+    [onPress, category.key],
+  );
   return (
     <View style={s.cell}>
       <TouchableOpacity
@@ -30,27 +42,48 @@ const CategoryCard = memo(function CategoryCard({ category, selected, onPress }:
         activeOpacity={0.85}
       >
         <View style={s.icon}>
-          <MaterialCommunityIcons name={category.icon as any} size={26} color={category.color} />
+          <MaterialCommunityIcons
+            name={category.icon as any}
+            size={26}
+            color={category.color}
+          />
         </View>
-        <Text style={[s.label, selected && { color: category.color }]} numberOfLines={2}>
+        <Text
+          style={[s.label, selected && { color: category.color }]}
+          numberOfLines={2}
+        >
           {t(`categories.${category.key}`, { defaultValue: category.name })}
         </Text>
         {selected && (
-          <MaterialCommunityIcons name="check-circle" size={16} color={category.color} style={s.check} />
+          <MaterialCommunityIcons
+            name="check-circle"
+            size={16}
+            color={category.color}
+            style={s.check}
+          />
         )}
       </TouchableOpacity>
     </View>
   );
 });
 
-export function StepCategory({ selected, onSelect, onNext, onBack }: StepCategoryProps) {
+export function StepCategory({
+  selected,
+  onSelect,
+  onNext,
+  onBack,
+}: StepCategoryProps) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
   const clearance = useTabBarClearance();
   const renderItem = useCallback(
     ({ item }: ListRenderItemInfo<MainCategory>) => (
-      <CategoryCard category={item} selected={selected === item.key} onPress={onSelect} />
+      <CategoryCard
+        category={item}
+        selected={selected === item.key}
+        onPress={onSelect}
+      />
     ),
     [selected, onSelect],
   );
@@ -59,8 +92,12 @@ export function StepCategory({ selected, onSelect, onNext, onBack }: StepCategor
     <View>
       {selected && (
         <TouchableOpacity style={s.btn} onPress={onNext}>
-          <Text style={s.btnText}>{t('common.continue')}</Text>
-          <MaterialCommunityIcons name="arrow-right" size={18} color={Colors.white} />
+          <Text style={s.btnText}>{t("common.continue")}</Text>
+          <MaterialCommunityIcons
+            name="arrow-right"
+            size={18}
+            color={Colors.white}
+          />
         </TouchableOpacity>
       )}
       <View style={{ height: clearance }} />
@@ -71,7 +108,11 @@ export function StepCategory({ selected, onSelect, onNext, onBack }: StepCategor
     <View style={s.root}>
       <View style={s.topBar}>
         <TouchableOpacity style={s.backBtn} onPress={onBack} hitSlop={8}>
-          <MaterialCommunityIcons name="arrow-left" size={20} color={Colors.textPrimary} />
+          <MaterialCommunityIcons
+            name="arrow-left"
+            size={20}
+            color={Colors.textPrimary}
+          />
         </TouchableOpacity>
       </View>
       <FlashList

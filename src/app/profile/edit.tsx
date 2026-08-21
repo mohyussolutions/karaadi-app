@@ -7,7 +7,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { placeholderAvatar } from '../../constants';
+import { placeholderAvatar, REGEX_PHONE_INPUT_FILTER } from '../../constants';
 import { updateUsername, updatePhone, updateProfileImage, deleteAccount } from '../../actions/core/auth.actions';
 import { useAuthStore } from '../../store/hooks/authStore';
 import { getImageUrl } from '../../util/helpers';
@@ -165,7 +165,7 @@ export default function EditProfileScreen() {
           <TextInput
             style={styles.input}
             value={phone}
-            onChangeText={(v) => setPhone(v.replace(/[^0-9+\-()\s]/g, ''))}
+            onChangeText={(v) => setPhone(v.replace(REGEX_PHONE_INPUT_FILTER, ''))}
             placeholder={t('phonePlaceholder')}
             placeholderTextColor={Colors.placeholder}
             keyboardType="phone-pad"

@@ -4,6 +4,7 @@ import { View, Text, TextInput, Animated } from 'react-native';
 import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
 import { Dropdown } from './Dropdown';
 import { createStyles } from '../../util/styles/new-ad/formField.styles';
+import { REGEX_NUMBER_INPUT_FILTER, REGEX_PHONE_INPUT_FILTER } from '../../constants';
 
 export function FormField({ field, value, onChange, error }: FormFieldProps) {
   const Colors = useThemeColors();
@@ -38,8 +39,8 @@ export function FormField({ field, value, onChange, error }: FormFieldProps) {
   const isPhone = field.type === 'phone';
 
   function handleChange(v: string) {
-    if (isNumber) return onChange(v.replace(/[^0-9.]/g, ''));
-    if (isPhone) return onChange(v.replace(/[^0-9+\-()\s]/g, ''));
+    if (isNumber) return onChange(v.replace(REGEX_NUMBER_INPUT_FILTER, ''));
+    if (isPhone) return onChange(v.replace(REGEX_PHONE_INPUT_FILTER, ''));
     onChange(v);
   }
 

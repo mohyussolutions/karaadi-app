@@ -1,10 +1,11 @@
 import { Platform } from 'react-native';
+import { REGEX_TRAILING_SLASH } from '../constants/regex';
 
 const isWebDev = __DEV__ && Platform.OS === 'web';
 
 export const API_BASE_URL = isWebDev
   ? 'http://localhost:8090'
-  : (process.env.EXPO_PUBLIC_API_URL || 'https://api.karaadi.com').replace(/\/$/, '');
+  : (process.env.EXPO_PUBLIC_API_URL || 'https://api.karaadi.com').replace(REGEX_TRAILING_SLASH, '');
 
 export const CAT_PATHS = {
   marketplace: "/api/marketplace",

@@ -4,6 +4,7 @@ import { CAT_COLORS } from '../util/colors/colors';
 import { formatDate } from '../util/helpers';
 import { SITE_URL } from './constants';
 import { CAT_PATHS, MARKETPLACE_ENDPOINTS, REAL_ESTATE_ENDPOINTS, JOBS_ENDPOINTS } from '../api/urls';
+import { REGEX_NON_DIGITS } from './regex';
 
 export type { NestedSubCategory, SubCategory, MainCategory };
 export { CAT_COLORS };
@@ -88,7 +89,7 @@ export const SOCIAL_LINKS = {
 } as const;
 
 export const SOCIAL_LINK_BUILDERS = {
-  whatsapp: (value: string) => `https://wa.me/${value.replace(/\D/g, '')}`,
+  whatsapp: (value: string) => `https://wa.me/${value.replace(REGEX_NON_DIGITS, '')}`,
   facebook: (value: string) => (value.startsWith('http') ? value : `https://facebook.com/${value}`),
   instagram: (value: string) => (value.startsWith('http') ? value : `https://instagram.com/${value}`),
   website: (value: string) => (value.startsWith('http') ? value : `https://${value}`),

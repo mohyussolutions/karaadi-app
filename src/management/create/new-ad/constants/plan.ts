@@ -1,4 +1,5 @@
 import type { ColorPalette } from '../../../../components/hooks/useTheme';
+import { REGEX_DIGITS } from '../../../../constants';
 
 export function getPlanCardColors(Colors: ColorPalette) {
   return {
@@ -17,7 +18,7 @@ export function getPlanStyle(Colors: ColorPalette): Record<string, { color: stri
 
 export function planStyle(plan: { key?: string }, Colors: ColorPalette) {
   const raw = plan.key || '';
-  const k = raw.replace(/\d+/g, '').toLowerCase();
+  const k = raw.replace(REGEX_DIGITS, '').toLowerCase();
   const styles = getPlanStyle(Colors);
   return styles[k] || styles.basic;
 }

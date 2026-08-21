@@ -5,6 +5,7 @@ import { useThemeColors, useThemedStyles } from '../../../../../../components/ho
 import { useAppTranslation } from '../../../../../../components/hooks/useAppTranslation';
 import type { PhoneInputProps } from '../../../../../../util/types';
 import { PAYMENT_METHODS } from '../payment.constants';
+import { REGEX_PHONE_INPUT_FILTER } from '../../../../../../constants';
 import { createStyles } from '../../../../../../util/styles/payment/phoneInput.styles';
 
 export function PhoneInput({ method, value, onChange, error }: PhoneInputProps) {
@@ -26,7 +27,7 @@ export function PhoneInput({ method, value, onChange, error }: PhoneInputProps) 
       <TextInput
         style={[s.input, error ? s.inputErr : null]}
         value={value}
-        onChangeText={(v) => onChange(v.replace(/[^0-9+\s\-()]/g, ''))}
+        onChangeText={(v) => onChange(v.replace(REGEX_PHONE_INPUT_FILTER, ''))}
         placeholder={`0${m.prefix}XXXXXXX  or  +252 ${m.prefix}XXXXXXX`}
         placeholderTextColor={Colors.placeholder}
         keyboardType="phone-pad"

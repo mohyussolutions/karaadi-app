@@ -6,6 +6,7 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { Dropdown } from '../../../../components/forms';
+import { REGEX_NON_DIGITS } from '../../../../constants';
 import RegionCityPicker from '../../../../components/geo/RegionCityPicker';
 import { useAuthStore } from '../../../../store/hooks/authStore';
 import { useAppTranslation } from '../../../../components/hooks/useAppTranslation';
@@ -245,7 +246,7 @@ export function WantedAlertForm({ visible, onClose, onCreated }: WantedAlertForm
                   placeholder="0"
                   placeholderTextColor={Colors.placeholder}
                   value={form.priceMin}
-                  onChangeText={(v) => set('priceMin')(v.replace(/[^0-9]/g, ''))}
+                  onChangeText={(v) => set('priceMin')(v.replace(REGEX_NON_DIGITS, ''))}
                   keyboardType="number-pad"
                 />
               </View>
@@ -256,7 +257,7 @@ export function WantedAlertForm({ visible, onClose, onCreated }: WantedAlertForm
                   placeholder="7000"
                   placeholderTextColor={Colors.placeholder}
                   value={form.priceMax}
-                  onChangeText={(v) => set('priceMax')(v.replace(/[^0-9]/g, ''))}
+                  onChangeText={(v) => set('priceMax')(v.replace(REGEX_NON_DIGITS, ''))}
                   keyboardType="number-pad"
                 />
               </View>
