@@ -7,6 +7,8 @@ export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
     safe: common.safeBase,
     content: { padding: 16, paddingBottom: 40, flexGrow: 1 },
+    flexFull: { flex: 1 },
+    spacer32: { height: 32 },
 
     header: { flexDirection: 'row', alignItems: 'center', marginBottom: 16 },
     backBtn: { marginRight: 8, padding: 4 },

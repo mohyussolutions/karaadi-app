@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 import { View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useRouter, type Href } from 'expo-router';
 import { useThemeColors, useThemedStyles } from '../../../../../../components/hooks/useTheme';
 import { useAppTranslation } from '../../../../../../components/hooks/useAppTranslation';
 import { useTabBarClearance } from '../../../../../../components/hooks/useTabBarClearance';
@@ -76,20 +76,20 @@ function IOSPaymentScreen() {
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
   return (
-    <View style={[s.root, { justifyContent: 'center', alignItems: 'center', padding: 32 }]}>
+    <View style={[s.root, s.iosPaymentRoot]}>
       <MaterialCommunityIcons name="web" size={56} color={Colors.primary} />
-      <Text style={[s.activatingText, { marginTop: 16, textAlign: 'center', fontSize: 18, fontWeight: '700' }]}>
+      <Text style={s.iosPaymentTitle}>
         {t('postAd.iosPaymentTitle')}
       </Text>
-      <Text style={{ color: Colors.textSecondary, textAlign: 'center', marginTop: 8, lineHeight: 22 }}>
+      <Text style={s.iosPaymentBody}>
         {t('postAd.iosPaymentBody')}
       </Text>
       <TouchableOpacity
-        style={{ marginTop: 24, backgroundColor: Colors.primary, borderRadius: 12, paddingVertical: 14, paddingHorizontal: 32 }}
+        style={s.iosPaymentBtn}
         onPress={() => Linking.openURL('https://karaadi.com')}
         activeOpacity={0.85}
       >
-        <Text style={{ color: Colors.white, fontWeight: '700', fontSize: 16 }}>{t('postAd.iosPaymentBtn')}</Text>
+        <Text style={s.iosPaymentBtnText}>{t('postAd.iosPaymentBtn')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -117,7 +117,7 @@ export function StepPayment({
         listingTitle={listingTitle}
         listingId={listingId}
         createdItem={createdItem}
-        onDone={() => router.replace(successRoute as any)}
+        onDone={() => router.replace(successRoute as Href)}
       />
     );
   }

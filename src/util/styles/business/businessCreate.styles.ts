@@ -1,12 +1,13 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../components/hooks/useTheme';
-import { shadow } from '../../shadow';
+import { shadow } from '../../helpers/shadow';
 import { createCommonStyles } from '../common/common.style';
 
 export function createStyles(Colors: ColorPalette) {
   const common = createCommonStyles(Colors);
   return StyleSheet.create({
     safe: common.safeBase,
+    spacer40: { height: 40 },
     scroll: { padding: 16, flexGrow: 1 },
     flexFull: { flex: 1 },
     bottomSpacer: { height: 40 },

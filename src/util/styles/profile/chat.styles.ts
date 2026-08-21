@@ -1,11 +1,12 @@
 import { Platform, StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../components/hooks/useTheme';
-import { shadow } from '../../shadow';
+import { shadow } from '../../helpers/shadow';
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
     safe: { flex: 1, backgroundColor: Colors.slate50 },
     flexFull: { flex: 1 },
+    blockBtn: { paddingHorizontal: 8 },
 
     header: {
       flexDirection: 'row', alignItems: 'center', gap: 10,
@@ -44,7 +45,7 @@ export function createStyles(Colors: ColorPalette) {
     bubbleTextThem: { color: Colors.text },
 
     time: { fontSize: 10, marginTop: 4 },
-    timeMe: { color: 'rgba(255,255,255,0.6)', textAlign: 'left' },
+    timeMe: { color: Colors.whiteAlpha60, textAlign: 'left' },
     timeThem: { color: Colors.slate500, textAlign: 'right' },
 
     inputRow: {

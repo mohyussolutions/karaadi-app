@@ -3,6 +3,7 @@ import type { ColorPalette } from '../../../components/hooks/useTheme';
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
+    confirmBtnIcon: { marginRight: 8 },
     shareSection: {
       width: '100%', backgroundColor: Colors.card, borderRadius: 18,
       padding: 16, borderWidth: 1, borderColor: Colors.border, marginBottom: 16,

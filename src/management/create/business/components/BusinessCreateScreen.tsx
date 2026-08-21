@@ -17,8 +17,9 @@ import { getBusinessById, getMyBusinesses, createBusiness, updateBusiness } from
 import { getImageUrl } from '../../../../util/helpers';
 import { CheckoutBar } from '../../../../components/features/subscription/components/checklist';
 import { BIZ_STEPS, MAIN_CATEGORIES } from '../../../../navigation/config/navConfig';
-import type { StepItem, BusinessPlan, BusinessApplyFormState } from '../../../../util/types';
-import { BUSINESS_CATEGORY_KEY_MAP } from '../../../../util/types';
+import type { StepItem } from '../../../../util/types';
+import type { BusinessPlan, BusinessApplyFormState, Business } from '../../../../util/types/business.types';
+import { BUSINESS_CATEGORY_KEY_MAP } from '../../../../util/types/business.types';
 import { LoadingSpinner } from '../../../../components/loading';
 import { useAuthStore } from '../../../../store/hooks/authStore';
 import { useAppDispatch } from '../../../../store/store';
@@ -44,15 +45,15 @@ const CHECKUP_INDEX: Record<Screen, number> = {
   plan: 0, apply: 1, approval: 2, categories: 3, post: 4,
 };
 
-function isExpired(business: any): boolean {
+function isExpired(business: Business | null | undefined): boolean {
   return !!business?.expiryDate && new Date(business.expiryDate) < new Date();
 }
 
-function needsCategories(business: any): boolean {
+function needsCategories(business: Business | null | undefined): boolean {
   return (business?.categories?.length ?? 0) === 0;
 }
 
-function nextScreenAfterApproval(business: any): Screen {
+function nextScreenAfterApproval(business: Business): Screen {
   if (needsCategories(business)) return 'categories';
   if (!business.planId || isExpired(business)) return 'plan';
   return 'post';
@@ -69,7 +70,7 @@ export default function BusinessCreateScreen() {
   const s = useThemedStyles(createStyles);
 
   const [screen, setScreen] = useState<Screen>('apply');
-  const [business, setBusinessRecord] = useState<any>(null);
+  const [business, setBusinessRecord] = useState<Business | null>(null);
   const [chosenPlan, setChosenPlan] = useState<BusinessPlan | null>(null);
 
   const [initialValues, setInitialValues] = useState<BusinessApplyFormState | null>(null);
@@ -141,7 +142,7 @@ export default function BusinessCreateScreen() {
           business={business}
           onSelected={(result) => {
             if (!business) {
-              setChosenPlan(result);
+              setChosenPlan(result as BusinessPlan);
               setScreen('apply');
               return;
             }
@@ -195,7 +196,7 @@ export default function BusinessCreateScreen() {
           onSelectCategory={(category) => {
             dispatch(setListingType('public'));
             dispatch(setCategoryKey(category));
-            dispatch(setBusinessId(business._id || business.id));
+            dispatch(setBusinessId(business._id || business.id || null));
             dispatch(setStep('form'));
             router.replace('/(tabs)/new-ad');
           }}
@@ -221,7 +222,7 @@ function ApplyStep({
   editId?: string;
   accountEmail: string;
   plan: BusinessPlan | null;
-  onSuccess: (business: any) => void;
+  onSuccess: (business: Business) => void;
   onCancel: () => void;
 }) {
   const Colors = useThemeColors();
@@ -287,8 +288,8 @@ function ApplyStep({
     if (!validate()) return;
     setSubmitting(true);
     try {
-      const planId = plan ? ((plan as any)._id || plan.id) : undefined;
-      const payload: Record<string, any> = {
+      const planId = plan ? (plan._id || plan.id) : undefined;
+      const payload: Record<string, unknown> = {
         name: form.name.trim(),
         email: form.email.trim(),
         phone: form.phone.trim(),
@@ -303,7 +304,7 @@ function ApplyStep({
 
       if (isEditing && editId) {
         await updateBusiness(editId, payload);
-        onSuccess({ _id: editId, ...payload });
+        onSuccess({ _id: editId, ...payload } as Business);
       } else {
         const data = await createBusiness(payload);
         onSuccess(data?.business || data);
@@ -502,8 +503,8 @@ function ApprovalStep({
   business,
   onApproved,
 }: {
-  business: any;
-  onApproved: (biz: any) => void;
+  business: Business;
+  onApproved: (biz: Business) => void;
 }) {
   const router = useRouter();
   const Colors = useThemeColors();
@@ -536,7 +537,7 @@ function ApprovalStep({
     setChecking(true);
     try {
       const list = await getMyBusinesses();
-      const updated = list.find((b: any) => (b._id || b.id) === id) || list[0];
+      const updated = list.find((b) => (b._id || b.id) === id) || list[0];
       if (updated) {
         setBiz(updated);
         if (updated.status === 'active' && updated.isVerified) {
@@ -607,8 +608,8 @@ function CategoriesStep({
   business,
   onSaved,
 }: {
-  business: any;
-  onSaved: (biz: any) => void;
+  business: Business;
+  onSaved: (biz: Business) => void;
 }) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
@@ -638,7 +639,7 @@ function CategoriesStep({
     setSaving(true);
     try {
       const backendCategories = selected.map((k) => BUSINESS_CATEGORY_KEY_MAP[k]).filter(Boolean);
-      const id = business._id || business.id;
+      const id = business._id || business.id || '';
       await updateBusiness(id, { categories: backendCategories });
       onSaved({ ...business, categories: backendCategories });
     } catch (err: any) {
@@ -688,7 +689,7 @@ function CategoriesStep({
         )}
       </TouchableOpacity>
 
-      <View style={{ height: 40 }} />
+      <View style={s.spacer40} />
     </ScrollView>
   );
 }
@@ -697,8 +698,8 @@ function PlanStep({
   business,
   onSelected,
 }: {
-  business: any | null;
-  onSelected: (result: any) => void;
+  business: Business | null;
+  onSelected: (result: BusinessPlan | Business) => void;
 }) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
@@ -727,8 +728,8 @@ function PlanStep({
     }
     setSubmitting(true);
     try {
-      const id = business._id || business.id;
-      const planId = (selected as any)._id || selected.id;
+      const id = business._id || business.id || '';
+      const planId = selected._id || selected.id;
       const action = business.planId ? extendBusinessPlan : selectBusinessPlan;
       const updated = await action(id, planId);
       onSelected(updated?._id || updated?.id ? updated : { ...business, planId });
@@ -756,8 +757,8 @@ function PlanStep({
 
       {plans.map((plan) => {
         const tier = tierFor(plan);
-        const planId = (plan as any)._id || plan.id;
-        const selectedId = selected ? ((selected as any)._id || selected.id) : null;
+        const planId = plan._id || plan.id;
+        const selectedId = selected ? (selected._id || selected.id) : null;
         const active = selectedId === planId;
         return (
           <TouchableOpacity
@@ -804,7 +805,7 @@ function PlanStep({
         )}
       </TouchableOpacity>
 
-      <View style={{ height: 40 }} />
+      <View style={s.spacer40} />
     </ScrollView>
   );
 }
@@ -813,7 +814,7 @@ function PostStep({
   business,
   onSelectCategory,
 }: {
-  business: any;
+  business: Business;
   onSelectCategory: (category: string) => void;
 }) {
   const Colors = useThemeColors();

@@ -33,7 +33,7 @@ export function IdentityGate({ visible, idCardRequired, selfieRequired, onVerifi
         <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
           <View style={[s.banner, s.bannerRequired]}>
             <MaterialCommunityIcons name="shield-lock-outline" size={22} color={Colors.warning} />
-            <View style={{ flex: 1 }}>
+            <View style={s.flexFull}>
               <Text style={s.bannerTitle}>{t('mine.identification.gateTitle')}</Text>
               <Text style={s.bannerSub}>{t('mine.identification.gateSub')}</Text>
             </View>

@@ -77,6 +77,7 @@ export function createDetailStyles(Colors: ColorPalette) {
     safe: common.safeBase,
     content: { padding: 16, paddingBottom: 32 },
     title: { fontSize: 22, fontWeight: '800', color: Colors.text, marginBottom: 8 },
+    submittingRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
     lead: { fontSize: 15, color: Colors.textSecondary, lineHeight: 22, marginBottom: 16 },
     sectionHeading: {
       fontSize: 16, fontWeight: '700', color: Colors.text,
@@ -137,7 +138,7 @@ export function createDetailStyles(Colors: ColorPalette) {
       justifyContent: 'center',
       marginBottom: 8,
     },
-    loginButtonText: { fontSize: 15, fontWeight: '700', color: '#fff' },
+    loginButtonText: { fontSize: 15, fontWeight: '700', color: Colors.white },
     input: {
       backgroundColor: Colors.card,
       borderRadius: 12,
@@ -165,6 +166,6 @@ export function createDetailStyles(Colors: ColorPalette) {
     submitButtonDisabled: {
       opacity: 0.6,
     },
-    submitButtonText: { fontSize: 15, fontWeight: '700', color: '#fff' },
+    submitButtonText: { fontSize: 15, fontWeight: '700', color: Colors.white },
   });
 }

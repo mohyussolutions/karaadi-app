@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import type { ColorPalette } from "../../../components/hooks/useTheme";
-import { RADII } from "../../colors/theme";
+import { RADII } from "../../colors/colors";
 import { createCommonStyles } from "../common/common.style";
 
 export function createStyles(Colors: ColorPalette) {
@@ -8,6 +8,7 @@ export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
     safe: common.safeBase,
     scroll: { padding: 16, paddingBottom: 48, gap: 16 },
+    flexFull: { flex: 1 },
     guestWrap: {
       flex: 1,
       backgroundColor: Colors.background,
@@ -52,8 +53,8 @@ export function createStyles(Colors: ColorPalette) {
       borderRadius: RADII.lg,
       backgroundColor: Colors.gray100,
     },
-    bannerRequired: { backgroundColor: "#FEF3C7" },
-    bannerSubmitted: { backgroundColor: "#DCFCE7" },
+    bannerRequired: { backgroundColor: Colors.warningGhost },
+    bannerSubmitted: { backgroundColor: Colors.successGhost },
     bannerTitle: { fontSize: 14, fontWeight: "700", color: Colors.textPrimary },
     bannerSub: { fontSize: 13, color: Colors.textMuted, marginTop: 2, lineHeight: 18 },
 
@@ -145,7 +146,7 @@ export function createStyles(Colors: ColorPalette) {
       gap: 8,
       paddingVertical: 14,
       borderRadius: 14,
-      backgroundColor: "rgba(255,255,255,0.15)",
+      backgroundColor: Colors.whiteAlpha15,
     },
     previewBtnSecondaryText: { color: Colors.white, fontWeight: "600", fontSize: 15 },
     previewBtnPrimary: {

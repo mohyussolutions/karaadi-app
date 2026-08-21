@@ -9,7 +9,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
-import { useAuthStore } from '../../../store/authStore';
+import { useAuthStore } from '../../../store/hooks/authStore';
 import { createReport } from '../../../actions/core/report.actions';
 import { createStyles } from '../../../util/styles/listing/report.styles';
 import { maxLenSchema } from '../../../util/validation/schemas';
@@ -89,7 +89,7 @@ export default function ReportScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={KEYBOARD_AVOIDING_BEHAVIOR}>
+      <KeyboardAvoidingView style={styles.flexFull} behavior={KEYBOARD_AVOIDING_BEHAVIOR}>
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
           <View style={styles.header}>
             <TouchableOpacity onPress={() => router.back()} hitSlop={10} style={styles.backBtn}>
@@ -149,7 +149,7 @@ export default function ReportScreen() {
               {submitting ? t('report.submitting') : t('report.submit')}
             </Text>
           </TouchableOpacity>
-          <View style={{ height: 32 }} />
+          <View style={styles.spacer32} />
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

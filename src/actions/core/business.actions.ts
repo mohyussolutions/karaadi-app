@@ -1,26 +1,27 @@
 import { apiClient } from '../client';
 import { BUSINESSES_ENDPOINTS } from '../../api/urls';
+import type { Business } from '../../util/types/business.types';
 
-export async function getBusinessById(id: string): Promise<any> {
+export async function getBusinessById(id: string): Promise<Business> {
   const { data } = await apiClient.get(BUSINESSES_ENDPOINTS.BY_ID(id));
   return data;
 }
 
-export async function getMyBusinesses(): Promise<any[]> {
+export async function getMyBusinesses(): Promise<Business[]> {
   const { data } = await apiClient.get(BUSINESSES_ENDPOINTS.MY);
   return data;
 }
 
-export async function createBusiness(payload: Record<string, any>): Promise<any> {
+export async function createBusiness(payload: Record<string, unknown>): Promise<Business & { business?: Business }> {
   const { data } = await apiClient.post(BUSINESSES_ENDPOINTS.CREATE, payload);
   return data;
 }
 
-export async function updateBusiness(id: string, payload: Record<string, any>): Promise<void> {
+export async function updateBusiness(id: string, payload: Record<string, unknown>): Promise<void> {
   await apiClient.patch(BUSINESSES_ENDPOINTS.UPDATE(id), payload);
 }
 
-export async function getBusinessList(): Promise<any[]> {
+export async function getBusinessList(): Promise<Business[]> {
   const { data } = await apiClient.get(BUSINESSES_ENDPOINTS.LIST);
   return Array.isArray(data) ? data : data?.businesses || [];
 }

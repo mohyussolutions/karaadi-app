@@ -12,6 +12,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTranslation } from '../hooks/useAppTranslation';
 import { useThemeColors } from '../hooks/useTheme';
+import { COLORS } from '../../util/colors/colors';
 import type { CameraCaptureProps } from '../../util/types';
 
 export function CameraCapture({ visible, onCapture, onClose, initialFacing = 'back' }: CameraCaptureProps) {
@@ -170,16 +171,16 @@ export function CameraCapture({ visible, onCapture, onClose, initialFacing = 'ba
 
           <View style={[s.topBar, { paddingTop: insets.top + 8 }]}>
             <TouchableOpacity style={s.iconBtn} onPress={onClose} hitSlop={8}>
-              <MaterialCommunityIcons name="close" size={24} color="#fff" />
+              <MaterialCommunityIcons name="close" size={24} color={Colors.white} />
             </TouchableOpacity>
             <TouchableOpacity style={s.iconBtn} onPress={cycleFlash} hitSlop={8}>
-              <MaterialCommunityIcons name={flashIcon as any} size={24} color="#fff" />
+              <MaterialCommunityIcons name={flashIcon as any} size={24} color={Colors.white} />
             </TouchableOpacity>
           </View>
 
           <View style={[s.bottomBar, { paddingBottom: insets.bottom + 16 }]}>
             <TouchableOpacity style={s.flipBtn} onPress={toggleFacing} hitSlop={8}>
-              <MaterialCommunityIcons name="camera-flip-outline" size={28} color="#fff" />
+              <MaterialCommunityIcons name="camera-flip-outline" size={28} color={Colors.white} />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -191,7 +192,7 @@ export function CameraCapture({ visible, onCapture, onClose, initialFacing = 'ba
               <View style={s.shutterInner} />
             </TouchableOpacity>
 
-            <View style={{ width: 52 }} />
+            <View style={s.flipBtnSpacer} />
           </View>
         </View>
       )}
@@ -200,7 +201,8 @@ export function CameraCapture({ visible, onCapture, onClose, initialFacing = 'ba
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#000' },
+  root: { flex: 1, backgroundColor: COLORS.black },
+  flipBtnSpacer: { width: 52 },
   topBar: {
     position: 'absolute', top: 0, left: 0, right: 0,
     flexDirection: 'row', justifyContent: 'space-between',
@@ -208,7 +210,7 @@ const s = StyleSheet.create({
   },
   iconBtn: {
     width: 44, height: 44, borderRadius: 22,
-    backgroundColor: 'rgba(0,0,0,0.42)',
+    backgroundColor: COLORS.shadow42,
     alignItems: 'center', justifyContent: 'center',
   },
   bottomBar: {
@@ -218,22 +220,22 @@ const s = StyleSheet.create({
   },
   flipBtn: {
     width: 52, height: 52, borderRadius: 26,
-    backgroundColor: 'rgba(0,0,0,0.42)',
+    backgroundColor: COLORS.shadow42,
     alignItems: 'center', justifyContent: 'center',
   },
   shutterOuter: {
     width: 76, height: 76, borderRadius: 38,
-    borderWidth: 4, borderColor: '#fff',
+    borderWidth: 4, borderColor: COLORS.white,
     alignItems: 'center', justifyContent: 'center',
   },
   shutterCapturing: { opacity: 0.5 },
   loadingOverlay: {
-    backgroundColor: '#000', alignItems: 'center', justifyContent: 'center',
+    backgroundColor: COLORS.black, alignItems: 'center', justifyContent: 'center',
   },
-  loadingText: { color: '#fff', fontSize: 14, fontWeight: '600' },
+  loadingText: { color: COLORS.white, fontSize: 14, fontWeight: '600' },
   shutterInner: {
     width: 60, height: 60, borderRadius: 30,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.white,
   },
   permWrap: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32 },
   permTitle: { fontSize: 20, fontWeight: '800', marginTop: 20, textAlign: 'center' },
@@ -242,7 +244,7 @@ const s = StyleSheet.create({
     marginTop: 28, paddingVertical: 14, paddingHorizontal: 36,
     borderRadius: 14, width: '100%', alignItems: 'center',
   },
-  permBtnText: { color: '#fff', fontWeight: '700', fontSize: 16 },
+  permBtnText: { color: COLORS.white, fontWeight: '700', fontSize: 16 },
   permCancel: { marginTop: 14, paddingVertical: 8 },
   permCancelText: { fontSize: 14, fontWeight: '600' },
 });

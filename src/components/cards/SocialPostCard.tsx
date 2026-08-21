@@ -77,7 +77,7 @@ export default function SocialPostCard({ title, description, price, images, list
         </View>
       ) : (
         <TouchableOpacity style={s.confirmBtn} onPress={handlePost} disabled={!avail} activeOpacity={0.88}>
-          <MaterialCommunityIcons name={SOCIAL_ICONS.facebook as never} size={18} color={Colors.white} style={{ marginRight: 8 }} />
+          <MaterialCommunityIcons name={SOCIAL_ICONS.facebook as never} size={18} color={Colors.white} style={s.confirmBtnIcon} />
           <Text style={s.confirmBtnText}>
             {outcome === 'error' ? t('postAd.socialFbError') : t('postAd.socialPostToFacebook', 'Post to Facebook')}
           </Text>

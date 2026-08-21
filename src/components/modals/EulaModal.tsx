@@ -1,17 +1,17 @@
 import { Modal, View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
-import { useThemeColors } from '../hooks/useTheme';
-import { styles } from '../../util/styles/modals/eulaModal.styles';
-import type { EulaModalProps } from '../../util/types/modal.types';
+import { useThemedStyles } from '../hooks/useTheme';
+import { createStyles } from '../../util/styles/modals/eulaModal.styles';
+import type { EulaModalProps } from '../../util/types/common.types';
 
 export function EulaModal({ visible, onAccept }: EulaModalProps) {
-  const Colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
 
   return (
     <Modal visible={visible} transparent={false} animationType="slide">
-      <View style={[styles.root, { backgroundColor: Colors.background }]}>
-        <View style={[styles.header, { borderBottomColor: Colors.border }]}>
-          <Text style={[styles.title, { color: Colors.text }]}>Terms of Service & Privacy Policy</Text>
-          <Text style={[styles.subtitle, { color: Colors.textSecondary }]}>
+      <View style={styles.root}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Terms of Service & Privacy Policy</Text>
+          <Text style={styles.subtitle}>
             You must read and agree before using Karaadi.
           </Text>
         </View>
@@ -20,56 +20,56 @@ export function EulaModal({ visible, onAccept }: EulaModalProps) {
           style={styles.scroll}
           contentContainerStyle={styles.scrollContent}
         >
-          <Text style={[styles.heading, { color: Colors.text }]}>Welcome to Karaadi</Text>
-          <Text style={[styles.body, { color: Colors.textSecondary }]}>
+          <Text style={styles.heading}>Welcome to Karaadi</Text>
+          <Text style={styles.body}>
             By tapping "I Agree — Continue" you confirm that you have read, understood, and agreed to these Terms of Service and Privacy Policy.
           </Text>
 
-          <Text style={[styles.sectionTitle, { color: Colors.text }]}>1. Zero Tolerance for Objectionable Content</Text>
-          <Text style={[styles.body, { color: Colors.textSecondary }]}>
+          <Text style={styles.sectionTitle}>1. Zero Tolerance for Objectionable Content</Text>
+          <Text style={styles.body}>
             Karaadi has a strict zero-tolerance policy for objectionable, offensive, unlawful, harmful, or abusive content and behaviour. This includes — but is not limited to — hate speech, harassment, explicit material, fraud, spam, and illegal listings. Any such content will be removed immediately and the responsible account will be permanently banned without warning.
           </Text>
 
-          <Text style={[styles.sectionTitle, { color: Colors.text }]}>2. Zero Tolerance for Abusive Users</Text>
-          <Text style={[styles.body, { color: Colors.textSecondary }]}>
+          <Text style={styles.sectionTitle}>2. Zero Tolerance for Abusive Users</Text>
+          <Text style={styles.body}>
             Abusive, threatening, or harassing behaviour toward other users is strictly prohibited. Users found to engage in abusive behaviour will be permanently removed from the platform. We reserve the right to report such behaviour to the relevant authorities.
           </Text>
 
-          <Text style={[styles.sectionTitle, { color: Colors.text }]}>3. How to Report Objectionable Content</Text>
-          <Text style={[styles.body, { color: Colors.textSecondary }]}>
+          <Text style={styles.sectionTitle}>3. How to Report Objectionable Content</Text>
+          <Text style={styles.body}>
             Every listing has a "Report this item" button at the bottom of the listing page. Tap it, choose a reason, and submit your report. Our team reviews all reports within 24 hours. Confirmed violations result in immediate content removal and account action.
           </Text>
 
-          <Text style={[styles.sectionTitle, { color: Colors.text }]}>4. How to Block an Abusive User</Text>
-          <Text style={[styles.body, { color: Colors.textSecondary }]}>
+          <Text style={styles.sectionTitle}>4. How to Block an Abusive User</Text>
+          <Text style={styles.body}>
             Inside any chat conversation, tap the block icon (⊘) in the top-right corner. This immediately stops all messages from that user and removes them from your contacts. You can also report the user at the same time. Blocked users cannot contact you in any way.
           </Text>
 
-          <Text style={[styles.sectionTitle, { color: Colors.text }]}>5. User-Generated Content</Text>
-          <Text style={[styles.body, { color: Colors.textSecondary }]}>
+          <Text style={styles.sectionTitle}>5. User-Generated Content</Text>
+          <Text style={styles.body}>
             All listings and messages are user-generated. You are solely responsible for content you post. Karaadi reserves the right to remove any content and suspend or permanently ban users who violate these terms.
           </Text>
 
-          <Text style={[styles.sectionTitle, { color: Colors.text }]}>6. Privacy</Text>
-          <Text style={[styles.body, { color: Colors.textSecondary }]}>
+          <Text style={styles.sectionTitle}>6. Privacy</Text>
+          <Text style={styles.body}>
             Your personal data is used only to provide and improve the Karaadi service. We do not sell your data to third parties. You can delete your account and all associated data at any time from Profile → Edit Profile.
           </Text>
 
           <TouchableOpacity onPress={() => Linking.openURL('https://karaadi.com/terms')} style={styles.linkRow}>
-            <Text style={[styles.link, { color: Colors.primary }]}>Read full Terms of Service →</Text>
+            <Text style={styles.link}>Read full Terms of Service →</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => Linking.openURL('https://karaadi.com/privacy')} style={styles.linkRow}>
-            <Text style={[styles.link, { color: Colors.primary }]}>Read full Privacy Policy →</Text>
+            <Text style={styles.link}>Read full Privacy Policy →</Text>
           </TouchableOpacity>
         </ScrollView>
 
-        <View style={[styles.footer, { borderTopColor: Colors.border, backgroundColor: Colors.background }]}>
+        <View style={styles.footer}>
           <TouchableOpacity
-            style={[styles.acceptBtn, { backgroundColor: Colors.primary }]}
+            style={styles.acceptBtn}
             onPress={onAccept}
             activeOpacity={0.85}
           >
-            <Text style={[styles.acceptText, { color: Colors.white }]}>
+            <Text style={styles.acceptText}>
               I Agree — Continue
             </Text>
           </TouchableOpacity>

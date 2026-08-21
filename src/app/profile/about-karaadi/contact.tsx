@@ -5,7 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useAppTranslation } from '../../../components/hooks/useAppTranslation';
 import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
-import { useAuthStore } from '../../../store/authStore';
+import { useAuthStore } from '../../../store/hooks/authStore';
 import { createTicket } from '../../../actions/core/support.actions';
 import { createDetailStyles } from '../../../util/styles/profile/aboutKaraadi.styles';
 import { maxLenSchema } from '../../../util/validation/schemas';
@@ -110,8 +110,8 @@ export default function ContactScreen() {
               disabled={submitting}
             >
               {submitting ? (
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  <ActivityIndicator color="#fff" />
+                <View style={styles.submittingRow}>
+                  <ActivityIndicator color={Colors.white} />
                   <Text style={styles.submitButtonText}>{t('supportModule.form.submitting')}</Text>
                 </View>
               ) : (

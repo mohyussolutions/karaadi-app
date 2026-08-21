@@ -1,6 +1,6 @@
 import { apiClient } from '../client';
 import { BUSINESS_PLAN_ENDPOINTS } from '../../api/urls';
-import type { BusinessPlan } from '../../util/types';
+import type { Business, BusinessPlan } from '../../util/types/business.types';
 
 export async function fetchBusinessPlans(): Promise<BusinessPlan[]> {
   const { data } = await apiClient.get(BUSINESS_PLAN_ENDPOINTS.PLANS);
@@ -8,12 +8,12 @@ export async function fetchBusinessPlans(): Promise<BusinessPlan[]> {
   return plans.filter((p) => p.isActive);
 }
 
-export async function selectBusinessPlan(businessId: string, planId: string) {
+export async function selectBusinessPlan(businessId: string, planId: string): Promise<Business> {
   const { data } = await apiClient.post(BUSINESS_PLAN_ENDPOINTS.SELECT_PLAN(businessId), { planId });
   return data?.business || data;
 }
 
-export async function extendBusinessPlan(businessId: string, planId: string) {
+export async function extendBusinessPlan(businessId: string, planId: string): Promise<Business> {
   const { data } = await apiClient.post(BUSINESS_PLAN_ENDPOINTS.EXTEND_PLAN(businessId), { planId });
   return data?.business || data;
 }

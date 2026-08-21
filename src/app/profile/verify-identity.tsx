@@ -66,7 +66,7 @@ export default function VerifyIdentityScreen() {
             size={22}
             color={status.submitted ? Colors.success : status.required ? Colors.warning : Colors.textMuted}
           />
-          <View style={{ flex: 1 }}>
+          <View style={s.flexFull}>
             <Text style={s.bannerTitle}>
               {status.submitted
                 ? t('mine.identification.statusSubmitted')

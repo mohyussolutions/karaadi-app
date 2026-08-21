@@ -1,13 +1,13 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, type DimensionValue } from 'react-native';
 import { useGlobal } from '../hooks/useGlobal';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
 import { createStyles } from '../../util/styles/loading/detailSkeleton.styles';
 
-function Bone({ w, h, r = 8 }: { w: number | string; h: number; r?: number }) {
+function Bone({ w, h, r = 8 }: { w: DimensionValue; h: number; r?: number }) {
   const Colors = useThemeColors();
-  return <View style={{ width: w as any, height: h, borderRadius: r, backgroundColor: Colors.border }} />;
+  return <View style={{ width: w, height: h, borderRadius: r, backgroundColor: Colors.border }} />;
 }
 
 export default function DetailSkeleton() {

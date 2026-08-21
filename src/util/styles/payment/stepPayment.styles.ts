@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../components/hooks/useTheme';
-import { shadow } from '../../shadow';
+import { shadow } from '../../helpers/shadow';
 import { createCommonStyles } from '../common/common.style';
 
 export function createStyles(Colors: ColorPalette) {
@@ -9,6 +9,11 @@ export function createStyles(Colors: ColorPalette) {
     root: common.safeBase,
     activatingWrap: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 14 },
     activatingText: { fontSize: 14, color: Colors.textMuted },
+    iosPaymentRoot: { justifyContent: 'center', alignItems: 'center', padding: 32 },
+    iosPaymentTitle: { marginTop: 16, textAlign: 'center', fontSize: 18, fontWeight: '700', color: Colors.textMuted },
+    iosPaymentBody: { color: Colors.textSecondary, textAlign: 'center', marginTop: 8, lineHeight: 22 },
+    iosPaymentBtn: { marginTop: 24, backgroundColor: Colors.primary, borderRadius: 12, paddingVertical: 14, paddingHorizontal: 32 },
+    iosPaymentBtnText: { color: Colors.white, fontWeight: '700', fontSize: 16 },
     topBar: {
       flexDirection: 'row', alignItems: 'center',
       paddingHorizontal: 16, paddingVertical: 8,
