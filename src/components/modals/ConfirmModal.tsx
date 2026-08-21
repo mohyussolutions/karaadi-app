@@ -1,7 +1,7 @@
 import { Modal, View, Text, TouchableOpacity } from 'react-native';
 import { useThemeColors } from '../hooks/useTheme';
 import { styles } from '../../util/styles/modals/confirmModal.styles';
-import type { ConfirmModalProps } from '../../util/types/modal.types';
+import type { ConfirmModalProps } from '../../util/types/common.types';
 
 export function ConfirmModal({ visible, title, message, actions, onDismiss }: ConfirmModalProps) {
   const Colors = useThemeColors();

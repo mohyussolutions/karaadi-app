@@ -1,12 +1,12 @@
 import { memo, useCallback } from "react";
 import { View } from "react-native";
-import { useGlobal } from "../components/hooks/useGlobal";
+import { useGlobal } from "../../components/hooks/useGlobal";
 import { useRouter, usePathname } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useAuthStore } from "../store/authStore";
-import { useThemedStyles, useThemeMode } from "../components/hooks/useTheme";
-import { createLayoutStyles, GLASS_DARK, GLASS_LIGHT } from "../util/styles/tabs/layout.styles";
-import { TAB_ITEMS, LOGIN_TAB_ITEM } from "./main";
+import { useAuthStore } from "../../store/hooks/authStore";
+import { useThemedStyles, useThemeMode } from "../../components/hooks/useTheme";
+import { createLayoutStyles, GLASS_DARK, GLASS_LIGHT } from "../../util/styles/tabs/layout.styles";
+import { TAB_ITEMS, LOGIN_TAB_ITEM } from "../config/navConfig";
 import { BottomTabItem } from "./BottomTabItem";
 import { getActiveTab } from "./getActiveTab";
 

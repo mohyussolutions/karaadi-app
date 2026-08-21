@@ -16,7 +16,7 @@ import { getCategoryByKey, SUB_I18N_GROUP } from "../../../constants";
 import { EmptyState, AppIcon } from "../../../components/shared";
 import ListingCard from "../../../components/cards/ListingCard";
 import { ListingCardSkeleton } from "../../../components/loading";
-import BottomTabBar from "../../../navigation/BottomTabBar";
+import BottomTabBar from "../../../navigation/tab-bar/BottomTabBar";
 import { useAppTranslation } from "../../../components/hooks/useAppTranslation";
 import { useResponsive } from "../../../components/hooks/useResponsive";
 import { useCategoryFeed } from "../../../components/hooks/useCategoryFeed";

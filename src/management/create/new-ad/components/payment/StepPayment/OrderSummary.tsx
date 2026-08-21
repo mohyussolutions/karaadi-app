@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 import { useGlobal } from '../../../../../../components/hooks/useGlobal';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../../../../components/hooks/useTheme';
 import { useAppTranslation } from '../../../../../../components/hooks/useAppTranslation';
-import { planStyle } from '../../../constants/config';
+import { planStyle } from '../../../constants/plan';
 import type { Plan, OrderSummaryProps, CreatedItemSummary } from '../../../../../../util/types';
 import { createStyles } from '../../../../../../util/styles/payment/orderSummary.styles';
 
@@ -35,7 +36,7 @@ function ImageCarousel({ images, index, onChangeIndex }: {
   const s = useThemedStyles((c) => createStyles(c, width));
   return (
     <View style={s.imgBox}>
-      <Image source={{ uri: images[index] }} style={s.img} resizeMode="cover" />
+      <Image source={{ uri: images[index] }} style={s.img} contentFit="cover" cachePolicy="memory-disk" />
       {images.length > 1 && (
         <>
           {index > 0 && (

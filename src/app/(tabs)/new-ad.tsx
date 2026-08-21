@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useThemedStyles } from "../../components/hooks/useTheme";
 import { createStyles } from "../../util/styles/tabs/newAd.styles";
 import { LoadingSpinner } from "../../components/loading";
-import { useAuthStore } from "../../store/authStore";
+import { useAuthStore } from "../../store/hooks/authStore";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import {
   setListingType,
@@ -20,7 +20,7 @@ import { CheckoutBar } from "../../components/features/subscription/components/c
 import { StepType, StepCategory, StepForm, StepPlan, StepSummary, StepPayment } from "../../management/create/new-ad/main";
 
 import type { ListingType, Step, StepItem } from "../../util/types/new-ad.types";
-import { MAIN_CATEGORIES } from "../../navigation/main";
+import { MAIN_CATEGORIES } from "../../navigation/config/navConfig";
 
 const STEP_INDEX: Record<Step, number> = {
   login: 0,

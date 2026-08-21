@@ -7,13 +7,13 @@ import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
-import { useAuthStore } from '../../../store/authStore';
+import { useAuthStore } from '../../../store/hooks/authStore';
 import { toggleSound } from '../../../components/features/notifications/store/notificationSettingsSlice';
 import { playNotificationSound } from '../../../components/features/notifications/services/soundService';
 import { updatePhoneVisibility } from '../../../actions/core/auth.actions';
 import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
 import { createStyles } from '../../../util/styles/settings/settings.styles';
-import { SETTINGS_ROWS } from '../../../navigation/main';
+import { SETTINGS_ROWS } from '../../../navigation/config/navConfig';
 
 export default function SettingsIndex() {
   const router = useRouter();

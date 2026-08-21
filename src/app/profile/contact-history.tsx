@@ -5,7 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useAppTranslation } from '../../components/hooks/useAppTranslation';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
-import { useAuthStore } from '../../store/authStore';
+import { useAuthStore } from '../../store/hooks/authStore';
 import { getTicketHistory, getTicketDetails, addTicketMessage } from '../../actions/core/support.actions';
 import { EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
@@ -196,9 +196,9 @@ export default function ContactHistoryScreen() {
                         onPress={() => handleSendMessage(ticket.id)}
                       >
                         {sending ? (
-                          <ActivityIndicator size="small" color="#fff" />
+                          <ActivityIndicator size="small" color={Colors.white} />
                         ) : (
-                          <MaterialCommunityIcons name="send" size={16} color="#fff" />
+                          <MaterialCommunityIcons name="send" size={16} color={Colors.white} />
                         )}
                       </TouchableOpacity>
                     </View>

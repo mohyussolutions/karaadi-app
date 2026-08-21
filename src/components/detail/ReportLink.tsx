@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useAuthStore } from '../../store/authStore';
+import { useAuthStore } from '../../store/hooks/authStore';
 import { useThemeColors } from '../hooks/useTheme';
 import { styles } from '../../util/styles/detail/reportLink.styles';
 

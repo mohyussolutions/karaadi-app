@@ -7,7 +7,7 @@ import { useThemeColors, useThemedStyles } from '../../../../components/hooks/us
 import { useAppTranslation } from '../../../../components/hooks/useAppTranslation';
 import { useTabBarClearance } from '../../../../components/hooks/useTabBarClearance';
 import { LoadingSpinner } from '../../../../components/loading';
-import { planStyle, getPlanCardColors } from '../constants/config';
+import { planStyle, getPlanCardColors } from '../constants/plan';
 import type { Plan, StepPlanProps } from '../../../../util/types';
 import { createStyles, createPlanCardStyles } from '../../../../util/styles/new-ad/stepPlan.styles';
 

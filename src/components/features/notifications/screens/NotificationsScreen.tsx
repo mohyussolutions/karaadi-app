@@ -9,7 +9,7 @@ import { LoadingSpinner } from '../../../loading';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { createStyles } from '../../../../util/styles/profile/notifications.styles';
 import { useNotificationsData } from '../../../hooks/useNotificationsData';
-import { useAuthStore } from '../../../../store/authStore';
+import { useAuthStore } from '../../../../store/hooks/authStore';
 
 export default function NotificationsScreen() {
   const router = useRouter();

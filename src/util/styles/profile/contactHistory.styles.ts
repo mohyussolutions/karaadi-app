@@ -37,7 +37,7 @@ export function createStyles(Colors: ColorPalette) {
       paddingVertical: 4,
       borderRadius: 6,
     },
-    statusBadgeText: { fontSize: 9, fontWeight: '800', color: '#fff', textTransform: 'uppercase' },
+    statusBadgeText: { fontSize: 9, fontWeight: '800', color: Colors.white, textTransform: 'uppercase' },
     cardBodyPreview: { fontSize: 12, color: Colors.textMuted, fontStyle: 'italic' },
     cardFooter: {
       flexDirection: 'row',
@@ -78,7 +78,7 @@ export function createStyles(Colors: ColorPalette) {
     },
     bubbleText: { fontSize: 12 },
     bubbleTextUser: { color: Colors.text },
-    bubbleTextSupport: { color: '#fff' },
+    bubbleTextSupport: { color: Colors.white },
     bubbleMeta: {
       fontSize: 9,
       fontWeight: '700',

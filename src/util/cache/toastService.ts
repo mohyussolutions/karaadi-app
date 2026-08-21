@@ -1,5 +1,5 @@
 import { DeviceEventEmitter } from 'react-native';
-import type { ToastPayload } from '../types/toast.types';
+import type { ToastPayload } from '../types/common.types';
 
 export type { ToastPayload };
 

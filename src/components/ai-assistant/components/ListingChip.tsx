@@ -5,7 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { getImageUrl, formatPrice } from '../../../util/helpers';
 import { createStyles } from '../../../util/styles/layout/hage.styles';
-import type { ListingRef } from '../../../util/types/hage.types';
+import type { ListingRef } from '../../../util/types/chat.types';
 
 export function ListingChip({ item, onPress }: { item: ListingRef; onPress: () => void }) {
   const Colors = useThemeColors();

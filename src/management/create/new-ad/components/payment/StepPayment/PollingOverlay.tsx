@@ -4,7 +4,7 @@ import { useThemeColors, useThemedStyles } from '../../../../../../components/ho
 import { useAppTranslation } from '../../../../../../components/hooks/useAppTranslation';
 import type { PollingOverlayProps } from '../../../../../../util/types';
 import { createStyles } from '../../../../../../util/styles/payment/pollingOverlay.styles';
-import { NATIVE_DRIVER } from '../../../../../../util/animation';
+import { NATIVE_DRIVER } from '../../../../../../util/helpers/animation';
 
 export function PollingOverlay({ visible, attempt, maxAttempts, onCancel }: PollingOverlayProps) {
   const Colors = useThemeColors();

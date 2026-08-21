@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import type { ColorPalette } from "../../../components/hooks/useTheme";
-import { shadow } from "../../shadow";
+import { shadow } from "../../helpers/shadow";
 import { createCommonStyles } from "../common/common.style";
 
 export const H_PAD = 12;

@@ -1,6 +1,5 @@
 import type { ListingType, Step, Plan } from '../../../../util/types/new-ad.types';
 export type { ListingType, Step, Plan };
-import type { ColorPalette } from '../../../../components/hooks/useTheme';
 import { CAT_PATHS } from '../../../../api/urls';
 
 export const CATEGORY_ENDPOINTS: Record<string, string> = {
@@ -32,28 +31,6 @@ export const CATEGORY_MAIN_LABEL: Record<string, string> = {
   farmequipment: 'Farm Equipment',
   Jobs: 'Jobs',
 };
-
-export function getPlanCardColors(Colors: ColorPalette) {
-  return {
-    popularBadge: Colors.gray700,
-    unselectedBtn: Colors.gray900,
-  } as const;
-}
-
-export function getPlanStyle(Colors: ColorPalette): Record<string, { color: string; icon: string; bg: string }> {
-  return {
-    basic:    { color: Colors.gray500, icon: 'shield-outline',  bg: Colors.gray100 },
-    standard: { color: Colors.primary, icon: 'lightning-bolt', bg: Colors.primaryGhost },
-    premium:  { color: Colors.premium, icon: 'star',           bg: Colors.premium + '15' },
-  };
-}
-
-export function planStyle(plan: { key?: string }, Colors: ColorPalette) {
-  const raw = plan.key || '';
-  const k = raw.replace(/\d+/g, '').toLowerCase();
-  const styles = getPlanStyle(Colors);
-  return styles[k] || styles.basic;
-}
 
 export const BASE_PLANS = [
   {

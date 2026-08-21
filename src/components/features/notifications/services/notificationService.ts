@@ -2,6 +2,7 @@ import { Platform, Vibration } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { updatePushToken } from '../../../../actions/core/auth.actions';
 import { isSoundEnabled } from './soundService';
+import { COLORS } from '../../../../util/colors/colors';
 
 const PUSH_TOKEN_CACHE_KEY = 'karaadi_push_token_v1';
 
@@ -34,7 +35,7 @@ async function setupAndroidChannels() {
       name: 'Messages',
       importance: Notifications.AndroidImportance.HIGH,
       vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#2563EB',
+      lightColor: COLORS.blue600,
       sound: 'default',
       enableVibrate: true,
     });

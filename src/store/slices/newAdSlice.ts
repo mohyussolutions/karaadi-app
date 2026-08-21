@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { fetchPlansFromAPI } from '../../actions/categories/plan.actions';
 import { createListing } from '../../actions/categories/listing.actions';
 import type { ListingType, Step, Plan, CreatedItemSummary, NewAdState } from '../../util/types/new-ad.types';
-import type { RootState } from '../../util/types/store.types';
+import type { RootState } from '../../util/types/common.types';
 
 const initialState: NewAdState = {
   step: 'type',

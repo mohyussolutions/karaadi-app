@@ -1,9 +1,9 @@
 import { StyleSheet, Platform } from "react-native";
-import { RADII } from "../../colors/theme";
+import { RADII } from "../../colors/colors";
 import type { ColorPalette } from "../../../components/hooks/useTheme";
-import { shadow } from "../../shadow";
+import { shadow } from "../../helpers/shadow";
 
-export const IMG_H = 320; // static fallback — ImageGallery component uses useWindowDimensions
+export const IMG_H = 320;
 
 export function createStyles(Colors: ColorPalette, width = 390, imgH = 320) {
   return StyleSheet.create({

@@ -1,4 +1,4 @@
-import type { COLORS, SPACING, RADII, TYPOGRAPHY, THEME } from '../colors/theme';
+import type { COLORS, SPACING, RADII, TYPOGRAPHY, THEME } from '../colors/colors';
 
 export type ColorKey = keyof typeof COLORS;
 export type ColorPalette = { [K in keyof typeof COLORS]: string };

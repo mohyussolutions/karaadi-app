@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { ThemeMode } from '../../util/colors';
+import type { ThemeMode } from '../../util/colors/colors';
 import type { ThemeState } from '../../util/types/redux.types';
 
 const initialState: ThemeState = { mode: 'light' };

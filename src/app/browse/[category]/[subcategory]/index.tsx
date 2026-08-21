@@ -7,7 +7,7 @@ import { useThemeColors, useThemedStyles } from "../../../../components/hooks/us
 import { EmptyState } from "../../../../components/shared";
 import ListingCard from "../../../../components/cards/ListingCard";
 import { ListingCardSkeleton } from "../../../../components/loading";
-import BottomTabBar from "../../../../navigation/BottomTabBar";
+import BottomTabBar from "../../../../navigation/tab-bar/BottomTabBar";
 import { useAppSelector } from "../../../../store/store";
 import { useAppTranslation } from "../../../../components/hooks/useAppTranslation";
 import { useResponsive } from "../../../../components/hooks/useResponsive";

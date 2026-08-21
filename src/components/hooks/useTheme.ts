@@ -7,7 +7,7 @@ import {
   DARK_COLORS,
   type ColorPalette,
   type ThemeMode,
-} from "../../util/colors";
+} from "../../util/colors/colors";
 
 export type { ThemeMode, ColorPalette };
 

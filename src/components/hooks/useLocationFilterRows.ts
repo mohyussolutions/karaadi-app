@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { FilterRow } from '../../util/types';
-import type { RegionPickerItem, UseLocationFilterRowsArgs } from '../../util/types/geo.types';
+import type { RegionPickerItem, UseLocationFilterRowsArgs } from '../../util/types/browse.types';
 
 function filterRegionsBySearch(regions: RegionPickerItem[], search: string): RegionPickerItem[] {
   const q = search.trim().toLowerCase();

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { AppState } from "react-native";
-import { useAuth } from "./useAuth";
+import { useAuthStore } from "../../store/hooks/authStore";
 import { loadFavorites, clearFavorites } from "../../store/slices/favoritesSlice";
 import { clearChats } from "../features/chat/store/chatsSlice";
 import { setUnreadCount } from "../features/notifications/store/notificationsSlice";
@@ -10,7 +10,7 @@ import { checkAlertsForMatches } from "../../actions/categories/subscription.act
 import { getUnreadNotificationCount } from "../../actions/core/notifications.actions";
 
 export function useAppInit() {
-  const { loadFromStorage } = useAuth();
+  const { loadFromStorage } = useAuthStore();
   const dispatch = useAppDispatch();
   const user = useAppSelector((s) => s.auth.user);
 

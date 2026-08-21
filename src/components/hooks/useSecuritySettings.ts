@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { useAuthStore } from '../../store/authStore';
+import { useAuthStore } from '../../store/hooks/authStore';
 import {
   getSessions, getLoginHistory, logoutSession,
   logoutAllSessions, deleteLoginHistoryEntry, clearLoginHistory,

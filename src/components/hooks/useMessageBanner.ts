@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { Animated } from "react-native";
 import { useRouter } from "expo-router";
-import { NATIVE_DRIVER } from "../../util/animation";
+import { NATIVE_DRIVER } from "../../util/helpers/animation";
 import type { MessageBanner } from "../../util/types";
 
 export function useMessageBanner() {

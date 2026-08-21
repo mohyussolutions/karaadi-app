@@ -1,6 +1,6 @@
 import { Platform, StyleSheet } from "react-native";
 import type { ColorPalette } from "../../../components/hooks/useTheme";
-import { shadow } from "../../shadow";
+import { shadow } from "../../helpers/shadow";
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({

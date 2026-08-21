@@ -4,7 +4,16 @@ export type ListingType = 'private' | 'public';
 
 export type Step = 'login' | 'type' | 'category' | 'form' | 'plan' | 'summary' | 'payment';
 
-export type PayMethod = 'evc' | 'zaad' | 'sahal' | 'waaafi';
+export type PaymentMethod = 'evc' | 'zaad' | 'sahal' | 'waaafi';
+export type PaymentStatus = 'idle' | 'polling' | 'success' | 'failed';
+
+export interface PaymentMethodOption {
+  key: PaymentMethod;
+  label: string;
+  sublabel: string;
+  prefix: string;
+  color: string;
+}
 
 export interface Plan {
   _id: string;
@@ -96,7 +105,7 @@ export interface StepCategoryProps {
 }
 
 export interface CategoryCardProps {
-  category: import('./category.types').MainCategory;
+  category: import('./browse.types').MainCategory;
   selected: boolean;
   onPress: (key: string) => void;
 }
@@ -109,6 +118,31 @@ export interface StepPaymentProps {
   entityModel?: string;
   successRoute?: string;
   onBack: () => void;
+}
+
+export interface UsePaymentFlowParams {
+  plan: Plan;
+  listingId: string;
+  categoryKey: string;
+}
+
+export interface PaymentItem {
+  id: string;
+  totalAmount?: number;
+  status?: string;
+  paymentMethod?: string;
+  transactionId?: string;
+  paidAt?: string;
+  createdAt?: string;
+  boatId?: string;
+  carId?: string;
+  realEstateId?: string;
+  motorcycleId?: string;
+  farmequipmentId?: string;
+  marketplaceId?: string;
+  jobId?: string;
+  subscriptionId?: string;
+  businessId?: string;
 }
 
 export interface StepSummaryProps {
@@ -148,15 +182,15 @@ export interface SuccessScreenProps {
 }
 
 export interface PhoneInputProps {
-  method: PayMethod;
+  method: PaymentMethod;
   value: string;
   onChange: (v: string) => void;
   error: string;
 }
 
 export interface PaymentMethodSelectorProps {
-  selected: PayMethod;
-  onChange: (m: PayMethod) => void;
+  selected: PaymentMethod;
+  onChange: (m: PaymentMethod) => void;
 }
 
 export interface PollingOverlayProps {

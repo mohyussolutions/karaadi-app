@@ -7,7 +7,7 @@ import type {
   HageChatResult,
   HageChatApiResponse,
   RawListingRef,
-} from '../../util/types/hage.types';
+} from '../../util/types/chat.types';
 
 function toListingRef(listing: RawListingRef): ListingRef {
   return { ...listing, id: listing.id || listing._id || '' };

@@ -1,5 +1,5 @@
 import type { Language, CategorySpecField, CategoryTypeConfig } from '../util/types';
-import type { NestedSubCategory, SubCategory, MainCategory } from '../util/types/category.types';
+import type { NestedSubCategory, SubCategory, MainCategory } from '../util/types/browse.types';
 import { CAT_COLORS } from '../util/colors/colors';
 import { formatDate } from '../util/helpers';
 import { SITE_URL } from './constants';

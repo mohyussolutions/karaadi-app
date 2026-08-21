@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../components/hooks/useTheme';
-import { shadow } from '../../shadow';
+import { shadow } from '../../helpers/shadow';
 
 export const FAB_SIZE = 56;
 

@@ -5,7 +5,7 @@ export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
     backdrop: {
       flex: 1,
-      backgroundColor: 'rgba(0,0,0,0.85)',
+      backgroundColor: Colors.shadow85,
       alignItems: 'center',
       justifyContent: 'center',
       padding: 16,
@@ -28,7 +28,7 @@ export function createStyles(Colors: ColorPalette) {
       borderRadius: 18,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: 'rgba(0,0,0,0.6)',
+      backgroundColor: Colors.shadow60,
     },
     muteBtn: {
       position: 'absolute',
@@ -40,7 +40,7 @@ export function createStyles(Colors: ColorPalette) {
       borderRadius: 18,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: 'rgba(0,0,0,0.6)',
+      backgroundColor: Colors.shadow60,
     },
   });
 }

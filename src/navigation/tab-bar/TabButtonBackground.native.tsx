@@ -1,7 +1,7 @@
 import React from "react";
 import { ImageBackground, View } from "react-native";
-import { styles } from "../util/styles/tabs/tabButtonBackground.styles";
-import type { TabButtonBackgroundProps } from "../util/types/navigation.types";
+import { styles } from "../../util/styles/tabs/tabButtonBackground.styles";
+import type { TabButtonBackgroundProps } from "../../util/types/navigation.types";
 
 export function TabButtonBackground({ image, focused, pressed, children }: TabButtonBackgroundProps) {
   if (image) {

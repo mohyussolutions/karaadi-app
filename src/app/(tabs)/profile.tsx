@@ -7,12 +7,12 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../../components/hooks/useAuth';
+import { useAuthStore } from '../../store/hooks/authStore';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { useResponsive } from '../../components/hooks/useResponsive';
 import { getImageUrl } from '../../util/helpers';
 import { placeholderAvatar } from '../../constants';
-import { PROFILE_MENU_ITEMS } from '../../navigation/main';
+import { PROFILE_MENU_ITEMS } from '../../navigation/config/navConfig';
 import type { MenuItem } from '../../util/types';
 import { createStyles } from '../../util/styles/tabs/profile.styles';
 
@@ -36,7 +36,7 @@ const MenuCard = memo(function MenuCard({ item, onPress }: { item: MenuItem; onP
 export default function ProfileScreen() {
   const router = useRouter();
   const { t } = useTranslation();
-  const { user, logout } = useAuth();
+  const { user, logout } = useAuthStore();
   const { isTablet } = useResponsive();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);

@@ -11,7 +11,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { LoadingSpinner } from "../../components/loading";
-import BottomTabBar from "../../navigation/BottomTabBar";
+import BottomTabBar from "../../navigation/tab-bar/BottomTabBar";
 import { useTranslation } from "react-i18next";
 import { useThemeColors, useThemedStyles } from "../../components/hooks/useTheme";
 import { SOCIAL_LINK_BUILDERS, placeholderAvatar } from "../../constants";

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { matchesCategoryKey, matchesSubcategoryKey } from '../../util/helpers';
 import type { ListingBase } from '../../util/types/listing.types';
-import type { NestedSubCategory } from '../../util/types/category.types';
+import type { NestedSubCategory } from '../../util/types/browse.types';
 
 function includesLocation(selected: string[], value: string): boolean {
   const v = (value ?? '').trim().toLowerCase();

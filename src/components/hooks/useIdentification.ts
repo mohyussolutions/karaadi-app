@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useAuthStore } from '../../store/authStore';
+import { useAuthStore } from '../../store/hooks/authStore';
 import { getIdentificationStatus, submitIdentification } from '../../actions/categories/identification.actions';
 import type { IdentificationStatus } from '../../util/types';
 

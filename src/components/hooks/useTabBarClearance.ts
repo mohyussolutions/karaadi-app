@@ -1,6 +1,6 @@
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { usePathname } from 'expo-router';
-import { SPACING } from '../../util/colors/theme';
+import { SPACING } from '../../util/colors/colors';
 
 export const TAB_BAR_ITEM_HEIGHT = 54;
 export const TAB_BAR_GLASS_VERTICAL_PADDING = SPACING.xs * 2;

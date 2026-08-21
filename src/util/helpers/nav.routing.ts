@@ -1,4 +1,4 @@
-import type { ListingRoute } from '../types/routing.types';
+import type { ListingRoute } from '../types/common.types';
 
 export type { ListingRoute };
 

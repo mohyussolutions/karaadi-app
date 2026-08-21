@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
 import type { ToastPayload } from '../../util/cache/toastService';
 import { createStyles } from '../../util/styles/shared/saveToast.styles';
-import { NATIVE_DRIVER } from '../../util/animation';
+import { NATIVE_DRIVER } from '../../util/helpers/animation';
 
 export default function SaveToast() {
   const [payload, setPayload] = useState<ToastPayload | null>(null);
@@ -52,7 +52,7 @@ export default function SaveToast() {
   const isSaved = payload.type !== 'removed';
   const iconName = isSaved ? 'heart' : 'heart-outline';
   const iconColor = isSaved ? Colors.error : Colors.textMuted;
-  const iconBg = isSaved ? 'rgba(239,68,68,0.18)' : Colors.whiteAlpha15;
+  const iconBg = isSaved ? Colors.errorTint : Colors.whiteAlpha15;
 
   return (
     <Animated.View

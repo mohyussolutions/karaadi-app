@@ -1,6 +1,5 @@
 export { useGlobal } from './useGlobal';
 export { useAppTranslation } from './useAppTranslation';
-export { useAuth } from './useAuth';
 export { useConfirm } from './useConfirm';
 export { useForgotPassword } from './useForgotPassword';
 export { useFormat } from './useFormat';

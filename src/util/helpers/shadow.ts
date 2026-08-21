@@ -1,5 +1,5 @@
 import { Platform, type ViewStyle } from 'react-native';
-import type { ShadowParams } from './types/shadow.types';
+import type { ShadowParams } from '../types/common.types';
 
 function hexToRgba(hex: string, alpha: number): string {
   let c = hex.replace('#', '');

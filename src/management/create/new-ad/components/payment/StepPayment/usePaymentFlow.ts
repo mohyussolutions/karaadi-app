@@ -2,22 +2,19 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { initiatePayment, getPaymentStatus, activateListing } from '../../../../../../actions/core/payment.actions';
 import { CATEGORY_ENDPOINTS } from '../../../constants/config';
 import { useAppSelector } from '../../../../../../store/store';
-import type { PayMethod, Plan } from '../../../../../../util/types';
+import type { PaymentMethod, PaymentStatus, Plan, UsePaymentFlowParams } from '../../../../../../util/types';
 import { MAX_POLL_ATTEMPTS, PAYMENT_METHODS, POLL_INTERVAL_MS } from '../payment.constants';
 import { getPhoneError, normalizePhone } from './phone.utils';
-import type { PayStatus, UsePaymentFlowParams } from '../../../../../../util/types/payment.types';
-
-export type { PayStatus };
 
 export function usePaymentFlow({ plan, listingId, categoryKey }: UsePaymentFlowParams) {
   const feeAmount = useAppSelector((s) => s.newAd.feeAmount);
   const feeId = useAppSelector((s) => s.newAd.feeId);
   const catPath = (CATEGORY_ENDPOINTS[categoryKey] || '/api/marketplace').replace('/api/', '');
 
-  const [method, setMethod] = useState<PayMethod>('evc');
+  const [method, setMethod] = useState<PaymentMethod>('evc');
   const [phone, setPhone] = useState('');
   const [phoneError, setPhoneError] = useState('');
-  const [payStatus, setPayStatus] = useState<PayStatus>('idle');
+  const [payStatus, setPayStatus] = useState<PaymentStatus>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const [pollAttempt, setPollAttempt] = useState(0);
 
@@ -102,7 +99,7 @@ export function usePaymentFlow({ plan, listingId, categoryKey }: UsePaymentFlowP
     setErrorMsg('');
   }, [stopPolling]);
 
-  const selectMethod = useCallback((m: PayMethod) => {
+  const selectMethod = useCallback((m: PaymentMethod) => {
     setMethod(m);
     setPhoneError('');
   }, []);

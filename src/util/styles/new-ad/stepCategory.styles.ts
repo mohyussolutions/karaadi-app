@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { SPACING, RADII, TYPOGRAPHY } from "../../colors/theme";
+import { SPACING, RADII, TYPOGRAPHY } from "../../colors/colors";
 import type { ColorPalette } from "../../../components/hooks/useTheme";
 import { createCommonStyles } from "../common/common.style";
 

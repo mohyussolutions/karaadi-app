@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useAuthStore } from '../../store/authStore';
+import { useAuthStore } from '../../store/hooks/authStore';
 import { getSearchHistory, deleteSearchHistory } from '../../actions/search/searchHistory';
 
 

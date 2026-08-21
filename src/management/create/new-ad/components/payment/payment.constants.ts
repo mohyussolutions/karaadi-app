@@ -1,4 +1,4 @@
-import type { PaymentMethod, PaymentStatus, PaymentMethodOption } from '../../../../../util/types/payment.types';
+import type { PaymentMethod, PaymentStatus, PaymentMethodOption } from '../../../../../util/types/new-ad.types';
 
 export type { PaymentMethod, PaymentStatus, PaymentMethodOption };
 

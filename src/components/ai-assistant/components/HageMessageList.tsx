@@ -3,7 +3,7 @@ import { View, Text, FlatList } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../../util/styles/layout/hage.styles';
-import type { HageMessageListProps } from '../../../util/types/hage.types';
+import type { HageMessageListProps } from '../../../util/types/chat.types';
 import { ListingChip } from './ListingChip';
 import { parseHageReply } from '../utils/parseHageLinks';
 

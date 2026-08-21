@@ -1,6 +1,6 @@
 import { StyleSheet, type ViewStyle } from "react-native";
-import { RADII, SPACING, type ColorPalette } from "../../colors/theme";
-import { shadow } from "../../shadow";
+import { RADII, SPACING, type ColorPalette } from "../../colors/colors";
+import { shadow } from "../../helpers/shadow";
 
 export const GLASS_LIGHT: ViewStyle = {
   backgroundColor: "rgba(255,255,255,0.82)",

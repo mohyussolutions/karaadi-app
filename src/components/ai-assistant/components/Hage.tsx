@@ -5,13 +5,13 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { toggleHage, closeHage, addUserMessage, sendHageMessage, clearHage } from '../../../store/slices/hageSlice';
-import { useAuthStore } from '../../../store/authStore';
+import { useAuthStore } from '../../../store/hooks/authStore';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { getListingDetailRoute, type ListingRoute } from '../../../util/helpers/nav.routing';
 import { createStyles } from '../../../util/styles/layout/hage.styles';
-import { NATIVE_DRIVER } from '../../../util/animation';
-import type { HageMessage, ListingRef } from '../../../util/types/hage.types';
+import { NATIVE_DRIVER } from '../../../util/helpers/animation';
+import type { HageMessage, ListingRef } from '../../../util/types/chat.types';
 import { SHEET_TOP, H } from '../constants';
 import { useFabDrag } from '../../hooks/useFabDrag';
 import { useSheetDrag } from '../../hooks/useSheetDrag';
@@ -110,7 +110,7 @@ export default function Hage() {
             </View>
             <View style={styles.sheetActions}>
               <TouchableOpacity onPress={() => dispatch(clearHage())} style={styles.headerBtn} hitSlop={8}>
-                <MaterialCommunityIcons name="refresh" size={20} color="rgba(255,255,255,0.8)" />
+                <MaterialCommunityIcons name="refresh" size={20} color={Colors.whiteAlpha80} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => dispatch(closeHage())} style={styles.headerBtn} hitSlop={8}>
                 <MaterialCommunityIcons name="close" size={22} color={Colors.white} />

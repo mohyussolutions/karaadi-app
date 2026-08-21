@@ -1,4 +1,4 @@
-import './util/suppressWarnings';
+import './util/helpers/suppressWarnings';
 
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';

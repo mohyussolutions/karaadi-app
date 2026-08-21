@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../components/hooks/useTheme';
-import { shadow } from '../../shadow';
+import { shadow } from '../../helpers/shadow';
 
 export function createStyles(Colors: ColorPalette, width = 390) {
   const CARD_W = width * 0.46;

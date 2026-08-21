@@ -3,7 +3,7 @@ import { Linking } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { toggleFavorite } from '../../store/slices/favoritesSlice';
-import { useAuthStore } from '../../store/authStore';
+import { useAuthStore } from '../../store/hooks/authStore';
 import { getMarketplaceItemById } from '../../actions/categories/marketplace.actions';
 
 import { getCachedListing } from '../../util/cache/listingCache';

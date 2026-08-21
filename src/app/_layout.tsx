@@ -10,7 +10,7 @@ import * as SystemUI from "expo-system-ui";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import GlobalHeader from "../components/layout/GlobalHeader";
-import BottomTabBar from "../navigation/BottomTabBar";
+import BottomTabBar from "../navigation/tab-bar/BottomTabBar";
 import { EulaModal } from "../components/modals/EulaModal";
 import ForceUpdateModal from "../components/modals/ForceUpdateModal";
 import StoreUpdateModal from "../components/modals/StoreUpdateModal";
@@ -22,7 +22,7 @@ import NotificationBanner from "../components/features/notifications/components/
 import LanguageSync from "../i18n/LanguageSync";
 import { useAppInit } from "../components/hooks/useAppInit";
 import { useThemeColors, useThemeMode } from "../components/hooks/useTheme";
-import { useTabBarVisibility } from "../navigation/useTabBarVisibility";
+import { useTabBarVisibility } from "../navigation/tab-bar/useTabBarVisibility";
 import { useMessageBanner } from "../components/hooks/useMessageBanner";
 import { useSocketMessages } from "../components/hooks/useSocketMessages";
 import { useSocketNotifications } from "../components/hooks/useSocketNotifications";

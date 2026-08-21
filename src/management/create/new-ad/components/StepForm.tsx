@@ -21,7 +21,7 @@ import { FormField } from "../../../../components/forms/FormField";
 import { ImagePickerRow } from "../../../../components/forms/ImagePickerRow";
 import { CollapsibleSection } from "../../../../components/forms/CollapsibleSection";
 import { getFields, NUMERIC_KEYS, BOOLEAN_KEYS } from "../constants/fields";
-import { useAuthStore } from "../../../../store/authStore";
+import { useAuthStore } from "../../../../store/hooks/authStore";
 import { useAppDispatch, useAppSelector } from "../../../../store/store";
 import { submitListing, setFeeInfo } from "../../../../store/slices/newAdSlice";
 import { getFeeForCategory } from "../../../../actions/categories/fee.actions";

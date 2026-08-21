@@ -17,7 +17,7 @@ export function createStyles(Colors: ColorPalette) {
     triggerPlaceholder: { fontSize: 15, color: Colors.placeholder, flex: 1 },
     errorText: { fontSize: 12, color: Colors.error, marginTop: 4 },
     overlay: { flex: 1, justifyContent: 'flex-end' },
-    backdrop: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(0,0,0,0.4)' },
+    backdrop: { ...StyleSheet.absoluteFill, backgroundColor: Colors.shadow40 },
     sheet: {
       backgroundColor: Colors.card, borderTopLeftRadius: 20, borderTopRightRadius: 20,
       maxHeight: '75%', paddingBottom: 32,

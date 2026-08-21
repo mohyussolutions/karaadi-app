@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useRouter } from 'expo-router';
-import { useAuth } from './useAuth';
+import { useAuthStore } from '../../store/hooks/authStore';
 import {
   REGEX_PASSWORD_LOWERCASE,
   REGEX_PASSWORD_UPPERCASE,
@@ -19,7 +19,7 @@ export const PASSWORD_RULES = [
 
 export function useRegister() {
   const router = useRouter();
-  const { register } = useAuth();
+  const { register } = useAuthStore();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

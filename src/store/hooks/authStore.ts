@@ -1,16 +1,21 @@
-import { useAuth } from '../components/hooks/useAuth';
-import { useAppSelector, useAppDispatch } from './store';
-import { clearCredentials, setCredentials } from './slices/authSlice';
-import * as SecureStore from '../util/secureStorage';
-import { disconnectSocket, connectSocket } from '../actions/sockets/socket.actions';
-import type { User } from '../util/types/user.types';
+import { useAppSelector, useAppDispatch } from '../store';
+import {
+  clearCredentials,
+  setCredentials,
+  login,
+  register,
+  logout,
+  loadFromStorage,
+} from '../slices/authSlice';
+import * as SecureStore from '../../util/helpers/secureStorage';
+import { disconnectSocket, connectSocket } from '../../actions/sockets/socket.actions';
+import type { User } from '../../util/types/user.types';
 
 export function useAuthStore() {
   const user = useAppSelector((s) => s.auth.user);
   const token = useAppSelector((s) => s.auth.token);
   const loading = useAppSelector((s) => s.auth.loading);
   const dispatch = useAppDispatch();
-  const { login, register, logout, loadFromStorage } = useAuth();
 
   async function setUser(newUser: User | null, newToken?: string) {
     if (newUser && newToken) {
@@ -37,9 +42,10 @@ export function useAuthStore() {
     isAuthenticated: !!user,
     setUser,
     clearAuth,
-    login,
-    register,
-    logout,
-    loadFromStorage,
+    login: (email: string, password: string) => dispatch(login({ email, password })).unwrap(),
+    register: (payload: { username: string; email: string; password: string; phone?: string }) =>
+      dispatch(register(payload)).unwrap(),
+    logout: () => dispatch(logout()).unwrap(),
+    loadFromStorage: () => dispatch(loadFromStorage()),
   };
 }

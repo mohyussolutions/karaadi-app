@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../components/hooks/useTheme';
-import { shadow } from '../../shadow';
+import { shadow } from '../../helpers/shadow';
 
 export function createStyles(Colors: ColorPalette, width = 390) {
   const IMG_H = Math.round((width - 32) * 0.56);
@@ -45,7 +45,7 @@ export function createStyles(Colors: ColorPalette, width = 390) {
     },
     arrowL: { left: 8 }, arrowR: { right: 8 },
     dots: { position: 'absolute', bottom: 8, left: 0, right: 0, flexDirection: 'row', justifyContent: 'center', gap: 5 },
-    dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: 'rgba(255,255,255,0.5)' },
+    dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: Colors.whiteAlpha50 },
     dotActive: { backgroundColor: Colors.white, width: 16 },
     emptyImage: {
       height: IMG_H,

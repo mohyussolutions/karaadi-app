@@ -1,4 +1,4 @@
-import * as SecureStore from '../../util/secureStorage';
+import * as SecureStore from '../../util/helpers/secureStorage';
 import { io, Socket } from 'socket.io-client';
 import { API_BASE_URL } from '../../api/urls';
 import { AUTH_TOKEN_KEY } from '../client.constants';

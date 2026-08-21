@@ -14,8 +14,8 @@ import newAdReducer from './slices/newAdSlice';
 import browseSearchReducer from './slices/browseSearchSlice';
 import geoReducer from './slices/geoSlice';
 import notificationSettingsReducer from '../components/features/notifications/store/notificationSettingsSlice';
-import { storeRef } from './storeRef';
-import type { RootState, AppDispatch } from '../util/types/store.types';
+import { storeRef } from './internal/storeRef';
+import type { RootState, AppDispatch } from '../util/types/common.types';
 
 const persistConfig = {
   key: 'karaadi-mobile-v1',

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import { sendHageChat } from '../../actions/sockets/hage.actions';
-import type { HageMessage } from '../../util/types/hage.types';
+import type { HageMessage } from '../../util/types/chat.types';
 import type { HageState } from '../../util/types/redux.types';
 
 const initialState: HageState = {

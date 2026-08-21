@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import { useFocusEffect } from 'expo-router';
-import { useAuthStore } from '../../store/authStore';
+import { useAuthStore } from '../../store/hooks/authStore';
 import { useAppSelector, useAppDispatch } from '../../store/store';
 import { setChats } from '../features/chat/store/chatsSlice';
 import { getMyChats } from '../../actions/core/message.actions';

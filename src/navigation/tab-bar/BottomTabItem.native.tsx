@@ -1,11 +1,11 @@
 import { memo } from "react";
 import { Text, Pressable } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useThemeColors, useThemedStyles, useThemeMode } from "../components/hooks/useTheme";
-import { useAppTranslation } from "../components/hooks/useAppTranslation";
-import { createLayoutStyles } from "../util/styles/tabs/layout.styles";
+import { useThemeColors, useThemedStyles, useThemeMode } from "../../components/hooks/useTheme";
+import { useAppTranslation } from "../../components/hooks/useAppTranslation";
+import { createLayoutStyles } from "../../util/styles/tabs/layout.styles";
 import { TabButtonBackground } from "./TabButtonBackground";
-import type { BottomTabItemProps } from "../util/types/navigation.types";
+import type { BottomTabItemProps } from "../../util/types/navigation.types";
 
 export const BottomTabItem = memo(function BottomTabItem({ item, focused, onPress }: BottomTabItemProps) {
   const Colors = useThemeColors();

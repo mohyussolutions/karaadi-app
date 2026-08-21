@@ -1,5 +1,5 @@
-import type { RawItem } from '../types/normalize.types';
-import type { GeoRegion, RegionPickerItem } from '../types/geo.types';
+import type { RawItem } from '../types/common.types';
+import type { GeoRegion, RegionPickerItem } from '../types/browse.types';
 import type { Subscription, ListingBase } from '../types/listing.types';
 import { formatPrice } from './ui.format';
 

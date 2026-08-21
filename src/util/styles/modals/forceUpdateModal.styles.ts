@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native';
+import { COLORS } from '../../colors/colors';
 
 export const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.55)',
+    backgroundColor: COLORS.shadow55,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 32,

@@ -1,12 +1,11 @@
 import type { Favorite } from './listing.types';
 import type { ListingBase } from './listing.types';
-import type { HageMessage } from './hage.types';
-import type { Lang } from './i18n.types';
+import type { HageMessage, Chat } from './chat.types';
+import type { Lang } from './common.types';
 import type { ThemeMode } from './theme.types';
 import type { User } from './user.types';
-import type { Chat } from './chat.types';
 import type { Notification } from './notification.types';
-import type { GeoRegion } from './geo.types';
+import type { GeoRegion } from './browse.types';
 
 export interface ChatsState {
   items: Chat[];

@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import type { ColorPalette } from "../../colors/theme";
+import type { ColorPalette } from "../../colors/colors";
 
 export const BP_SMALL = 400;
 export const BP_TABLET = 768;

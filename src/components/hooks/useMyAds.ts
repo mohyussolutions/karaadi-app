@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { getMyAds, deleteMyAd } from '../../actions/core';
-import { useAuthStore } from '../../store/authStore';
+import { useAuthStore } from '../../store/hooks/authStore';
 import type { ListingBase } from '../../util/types';
 
 export function useMyAds() {
