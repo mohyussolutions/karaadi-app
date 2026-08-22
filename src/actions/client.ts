@@ -1,7 +1,6 @@
 import * as SecureStore from "../util/helpers/secureStorage";
 import { API_BASE_URL } from "../api/urls";
 import { storeRef } from "../store/internal/storeRef";
-import { clearCredentials } from "../store/slices/authSlice";
 import { disconnectSocket } from "./sockets/socket.actions";
 import {
   AUTH_TOKEN_KEY,
@@ -76,7 +75,7 @@ async function handle401() {
   await SecureStore.deleteItemAsync(AUTH_TOKEN_KEY);
   await SecureStore.deleteItemAsync(AUTH_USER_KEY);
   disconnectSocket();
-  storeRef.dispatch?.(clearCredentials());
+  storeRef.dispatch?.({ type: "auth/clearCredentials" });
 }
 
 async function ensureOk(res: Response): Promise<void> {

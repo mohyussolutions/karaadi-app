@@ -55,7 +55,8 @@
     "typescript": "~6.0.3"
   },
   "overrides": {
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "react-native-device-info": "^15.0.2"
   },
   "scripts": {
     "prestart": "xcrun simctl boot 7832DFBA-8B9F-4EF3-A066-192F2D0A0EA7 2>/dev/null; xcrun simctl boot D26B9490-2B8D-4E66-988F-1A73D1BEF39A 2>/dev/null; open -a Simulator; true",

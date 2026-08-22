@@ -7,7 +7,7 @@ import { useThemeColors } from '../hooks/useTheme';
 import { useAppTranslation } from '../hooks/useAppTranslation';
 import { styles } from '../../util/styles/modals/forceUpdateModal.styles';
 
-const inAppUpdates = new InAppUpdates(__DEV__);
+const inAppUpdates = new InAppUpdates(false);
 
 export default function StoreUpdateModal() {
   const [visible, setVisible] = useState(false);
