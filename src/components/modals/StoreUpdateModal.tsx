@@ -7,7 +7,16 @@ import { useThemeColors } from '../hooks/useTheme';
 import { useAppTranslation } from '../hooks/useAppTranslation';
 import { styles } from '../../util/styles/modals/forceUpdateModal.styles';
 
-const inAppUpdates = new InAppUpdates(false);
+const inAppUpdates = new InAppUpdates(__DEV__);
+
+function isValidStoreUrl(value: string): boolean {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === 'https:' || parsed.protocol === 'http:';
+  } catch {
+    return false;
+  }
+}
 
 export default function StoreUpdateModal() {
   const [visible, setVisible] = useState(false);
@@ -26,8 +35,9 @@ export default function StoreUpdateModal() {
         if (!result.shouldUpdate) return;
         if (Platform.OS === 'ios') {
           const trackViewUrl = (result as IosNeedsUpdateResponse).other?.trackViewUrl;
-          if (!trackViewUrl) return;
-          setStoreUrl(trackViewUrl.split('?')[0]);
+          const cleanUrl = trackViewUrl?.split('?')[0];
+          if (!cleanUrl || !isValidStoreUrl(cleanUrl)) return;
+          setStoreUrl(cleanUrl);
         }
         setVisible(true);
       } catch {
@@ -48,7 +58,7 @@ export default function StoreUpdateModal() {
     try {
       if (Platform.OS === 'android') {
         await inAppUpdates.startUpdate({ updateType: IAUUpdateKind.IMMEDIATE });
-      } else if (storeUrl) {
+      } else if (storeUrl && isValidStoreUrl(storeUrl)) {
         await Linking.openURL(storeUrl);
       }
     } catch (err) {
