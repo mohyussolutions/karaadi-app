@@ -9,6 +9,11 @@ import { styles } from '../../util/styles/modals/forceUpdateModal.styles';
 
 const inAppUpdates = new InAppUpdates(__DEV__);
 
+// Known App Store listing for Karaadi (com.karaadi.app, Apple ID 6780579199).
+// Used whenever the dynamic store lookup doesn't return a usable URL, so "Update Now"
+// always lands somewhere real instead of failing with an invalid-address error.
+const IOS_APP_STORE_FALLBACK_URL = 'https://apps.apple.com/app/id6780579199';
+
 function isValidStoreUrl(value: string): boolean {
   try {
     const parsed = new URL(value);
@@ -36,8 +41,7 @@ export default function StoreUpdateModal() {
         if (Platform.OS === 'ios') {
           const trackViewUrl = (result as IosNeedsUpdateResponse).other?.trackViewUrl;
           const cleanUrl = trackViewUrl?.split('?')[0];
-          if (!cleanUrl || !isValidStoreUrl(cleanUrl)) return;
-          setStoreUrl(cleanUrl);
+          setStoreUrl(cleanUrl && isValidStoreUrl(cleanUrl) ? cleanUrl : IOS_APP_STORE_FALLBACK_URL);
         }
         setVisible(true);
       } catch {
@@ -60,6 +64,8 @@ export default function StoreUpdateModal() {
         await inAppUpdates.startUpdate({ updateType: IAUUpdateKind.IMMEDIATE });
       } else if (storeUrl && isValidStoreUrl(storeUrl)) {
         await Linking.openURL(storeUrl);
+      } else {
+        await Linking.openURL(IOS_APP_STORE_FALLBACK_URL);
       }
     } catch (err) {
       console.warn('StoreUpdateModal: failed to open store URL', err);
