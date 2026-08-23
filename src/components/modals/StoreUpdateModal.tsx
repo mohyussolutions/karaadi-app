@@ -57,7 +57,13 @@ export default function StoreUpdateModal() {
     setUpdating(true);
     try {
       if (Platform.OS === 'android') {
-        await inAppUpdates.startUpdate({ updateType: IAUUpdateKind.IMMEDIATE });
+        try {
+          await inAppUpdates.startUpdate({ updateType: IAUUpdateKind.IMMEDIATE });
+        } catch (err) {
+          console.warn('StoreUpdateModal: Play Core update failed, falling back to Play Store', err);
+          const packageName = Application.applicationId ?? 'com.karaadi.app';
+          await Linking.openURL(`https://play.google.com/store/apps/details?id=${packageName}`);
+        }
       } else if (storeUrl && isValidStoreUrl(storeUrl)) {
         await Linking.openURL(storeUrl);
       }
