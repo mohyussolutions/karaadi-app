@@ -3,7 +3,7 @@ import { PAYMENT_ENDPOINTS } from '../../api/urls';
 
 export async function getPaymentHistory(): Promise<any[]> {
   const { data } = await apiClient.get(PAYMENT_ENDPOINTS.ME);
-  return Array.isArray(data) ? data : data?.payments || [];
+  return Array.isArray(data) ? data : data?.data || [];
 }
 
 export async function initiatePayment(payload: Record<string, any>): Promise<string> {
