@@ -35,7 +35,7 @@ export function PollingOverlay({ visible, attempt, maxAttempts, onCancel }: Poll
           <Text style={s.sub}>{t('postAd.approveOnApp')}</Text>
           <View style={s.progressRow}>
             <View style={s.bar}>
-              <View style={[s.fill, { width: `${Math.min((attempt / maxAttempts) * 100, 100)}%` as any }]} />
+              <View style={[s.fill, { width: `${Math.min((attempt / maxAttempts) * 100, 100)}%` as `${number}%` }]} />
             </View>
             <Text style={s.prog}>{attempt}/{maxAttempts}</Text>
           </View>

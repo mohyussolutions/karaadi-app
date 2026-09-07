@@ -20,6 +20,7 @@ import { CollapsibleSection } from "../../../../../components/forms/CollapsibleS
 import { getFields } from "../../constants/fields";
 import { useAuthStore } from "../../../../../store/hooks/authStore";
 import type { FieldDef, StepFormProps } from "../../../../../util/types";
+import type { MCIcon } from "../../../../../util/icons/icons";
 import { createStyles } from "../../../../../util/styles/new-ad/stepForm.styles";
 import { validateStepForm } from "../../../../../util/validation/schemas";
 import { useSubmitListing } from "./useSubmitListing";
@@ -152,7 +153,7 @@ export function StepForm({
             <View style={s.mainCatBadge}>
               {categoryMeta && (
                 <MaterialCommunityIcons
-                  name={categoryMeta.icon as any}
+                  name={categoryMeta.icon as MCIcon}
                   size={16}
                   color={Colors.primary}
                 />

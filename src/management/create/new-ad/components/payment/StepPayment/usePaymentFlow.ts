@@ -87,9 +87,12 @@ export function usePaymentFlow({ plan, listingId, categoryKey }: UsePaymentFlowP
         return;
       }
       startPolling(paymentRef);
-    } catch (err: any) {
+    } catch (err) {
       setPayStatus('failed');
-      setErrorMsg(err?.response?.data?.message || err?.response?.data?.error || 'Payment initiation failed. Please try again.');
+      const data = err instanceof Error && 'response' in err
+        ? (err as { response?: { data?: { message?: string; error?: string } } }).response?.data
+        : undefined;
+      setErrorMsg(data?.message || data?.error || 'Payment initiation failed. Please try again.');
     }
   }, [phone, method, methodMeta, total, plan, listingId, feeId, catPath, startPolling, stopPolling]);
 

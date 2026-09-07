@@ -10,6 +10,7 @@ import { CameraCapture } from '../../../forms/CameraCapture';
 import { compressToDataUri } from '../util/compressImage';
 import { createStyles } from '../../../../util/styles/profile/verifyIdentity.styles';
 import type { SlotKey, IdentityCaptureFormProps, SlotProps } from '../../../../util/types';
+import type { IconName } from '../../../../util/icons/icons';
 
 function rawDataUri(base64: string, mime: string) {
   return `data:${mime};base64,${base64}`;
@@ -37,7 +38,7 @@ function Slot({
           </>
         ) : (
           <View style={s.slotEmpty}>
-            <MaterialCommunityIcons name={icon as any} size={32} color={Colors.gray400} />
+            <MaterialCommunityIcons name={icon as IconName} size={32} color={Colors.gray400} />
             <Text style={s.slotLabel}>{label}</Text>
             <View style={s.slotActionRow}>
               <TouchableOpacity style={s.slotActionBtn} onPress={onTakePhoto}>

@@ -15,6 +15,21 @@ export interface Notification {
   createdAt: string;
 }
 
+export interface SocketNotificationPayload {
+  id?: string | number;
+  title?: string;
+  message?: string;
+  body?: string;
+  category?: string;
+  link?: string;
+  createdAt?: string;
+  userId?: string;
+  targetUserId?: string;
+  ownerId?: string;
+  recipientId?: string;
+  notificationId?: string;
+}
+
 export interface MessageBanner {
   senderName: string;
   content: string;

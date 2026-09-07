@@ -13,7 +13,7 @@ export function useNormalize() {
   );
 
   const extract = useCallback(
-    <T>(result: any): T[] => extractList<T>(result),
+    <T>(result: unknown): T[] => extractList<T>(result),
     [],
   );
 

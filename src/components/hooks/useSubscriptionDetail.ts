@@ -21,7 +21,7 @@ export function useSubscriptionDetail(id: string) {
       try {
         const data = await getSubscriptionById(id, ctrl.signal);
         const sub = data?.subscription ?? data?.data ?? data;
-        setItem({ ...sub, id: sub.id || sub._id });
+        setItem({ ...sub, id: sub.id || sub._id || '' });
       } catch {}
       setLoading(false);
     }

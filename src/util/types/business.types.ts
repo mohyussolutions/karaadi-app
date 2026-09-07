@@ -1,8 +1,9 @@
 import { MAIN_CATEGORIES } from '../../constants';
+import type { MCIcon } from '../icons/icons';
 
-export const BUSINESS_TYPE_ICON: Record<string, string> = Object.fromEntries(
+export const BUSINESS_TYPE_ICON: Record<string, MCIcon> = Object.fromEntries(
   MAIN_CATEGORIES.map((c) => [c.key, c.icon]),
-);
+) as Record<string, MCIcon>;
 
 export const BUSINESS_TYPE_LABEL: Record<string, string> = Object.fromEntries(
   MAIN_CATEGORIES.map((c) => [c.key, c.name]),
@@ -51,6 +52,10 @@ export interface Business {
   orgNumber?: string;
   email?: string;
   phone?: string;
+  whatsapp?: string;
+  facebook?: string;
+  instagram?: string;
+  tiktok?: string;
   contactName?: string;
   website?: string;
   address?: string;

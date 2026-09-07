@@ -1,17 +1,67 @@
-import React from 'react';
+import React, { memo, useCallback, useMemo } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../../util/styles/layout/hage.styles';
-import type { HageMessageListProps } from '../../../util/types/chat.types';
+import type { HageMessage, HageMessageListProps, ListingRef } from '../../../util/types/chat.types';
+import type { ListingRoute } from '../../../util/types/common.types';
 import { ListingChip } from './ListingChip';
 import { parseHageReply } from '../utils/parseHageLinks';
+
+const HageMessageRow = memo(function HageMessageRow({
+  item, onListingPress, onLinkPress,
+}: {
+  item: HageMessage;
+  onListingPress: (listing: ListingRef) => void;
+  onLinkPress: (route: ListingRoute) => void;
+}) {
+  const styles = useThemedStyles(createStyles);
+  const segments = useMemo(
+    () => (item.fromAI ? parseHageReply(item.content) : null),
+    [item.fromAI, item.content],
+  );
+
+  return (
+    <View>
+      <View style={[styles.bubble, item.fromAI ? styles.bubbleAI : styles.bubbleUser]}>
+        <Text style={[styles.bubbleText, !item.fromAI && styles.bubbleTextUser]}>
+          {segments
+            ? segments.map((seg, i) => (
+                seg.route ? (
+                  <Text key={i} style={styles.bubbleLink} onPress={() => onLinkPress(seg.route!)}>
+                    {seg.text}
+                  </Text>
+                ) : (
+                  <Text key={i}>{seg.text}</Text>
+                )
+              ))
+            : item.content}
+        </Text>
+      </View>
+      {item.fromAI && item.listings && item.listings.length > 0 && (
+        <View style={styles.listingsWrap}>
+          {item.listings.map((listing) => (
+            <ListingChip
+              key={listing.id || listing._id}
+              item={listing}
+              onPress={() => onListingPress(listing)}
+            />
+          ))}
+        </View>
+      )}
+    </View>
+  );
+});
 
 export function HageMessageList({
   listRef, messages, loading, insets, emptyText, thinkingText, onListingPress, onLinkPress,
 }: HageMessageListProps) {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+
+  const renderMessage = useCallback(({ item }: { item: HageMessage }) => (
+    <HageMessageRow item={item} onListingPress={onListingPress} onLinkPress={onLinkPress} />
+  ), [onListingPress, onLinkPress]);
 
   return (
     <View style={styles.messageListWrap}>
@@ -28,36 +78,7 @@ export function HageMessageList({
             <Text style={styles.emptyText}>{emptyText}</Text>
           </View>
         }
-        renderItem={({ item }) => (
-          <View>
-            <View style={[styles.bubble, item.fromAI ? styles.bubbleAI : styles.bubbleUser]}>
-              <Text style={[styles.bubbleText, !item.fromAI && styles.bubbleTextUser]}>
-                {item.fromAI
-                  ? parseHageReply(item.content).map((seg, i) => (
-                      seg.route ? (
-                        <Text key={i} style={styles.bubbleLink} onPress={() => onLinkPress(seg.route!)}>
-                          {seg.text}
-                        </Text>
-                      ) : (
-                        <Text key={i}>{seg.text}</Text>
-                      )
-                    ))
-                  : item.content}
-              </Text>
-            </View>
-            {item.fromAI && item.listings && item.listings.length > 0 && (
-              <View style={styles.listingsWrap}>
-                {item.listings.map((listing) => (
-                  <ListingChip
-                    key={listing.id || listing._id}
-                    item={listing}
-                    onPress={() => onListingPress(listing)}
-                  />
-                ))}
-              </View>
-            )}
-          </View>
-        )}
+        renderItem={renderMessage}
       />
       {loading && (
         <View style={styles.thinkingRow}>

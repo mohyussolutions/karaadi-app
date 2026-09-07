@@ -1,18 +1,11 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, Text, TextInput, TouchableOpacity, Pressable } from "react-native";
 import { useTranslation } from "react-i18next";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useThemeColors, useThemedStyles } from "../../../../../components/hooks/useTheme";
-import type { NestedSubCategory } from "../../../../../constants";
+import type { MCIcon } from "../../../../../util/icons/icons";
+import type { NestedSubcategoryPickerProps } from "../../../../../util/types/new-ad.types";
 import { createStyles } from "../../../../../util/styles/new-ad/stepForm.styles";
-
-interface NestedSubcategoryPickerProps {
-  options: NestedSubCategory[];
-  search: string;
-  onSearchChange: (value: string) => void;
-  selectedKey: string;
-  onSelect: (key: string) => void;
-}
 
 export function NestedSubcategoryPicker({
   options,
@@ -26,9 +19,10 @@ export function NestedSubcategoryPicker({
   const s = useThemedStyles(createStyles);
 
   const query = search.trim().toLowerCase();
-  const filtered = query
-    ? options.filter((n) => t(n.labelKey).toLowerCase().includes(query))
-    : options;
+  const filtered = useMemo(
+    () => (query ? options.filter((n) => t(n.labelKey).toLowerCase().includes(query)) : options),
+    [options, query, t],
+  );
 
   return (
     <View style={s.nestedWrap}>
@@ -61,7 +55,7 @@ export function NestedSubcategoryPicker({
                 hitSlop={4}
               >
                 <MaterialCommunityIcons
-                  name={n.icon as any}
+                  name={n.icon as MCIcon}
                   size={13}
                   color={active ? Colors.white : Colors.textSecondary}
                 />

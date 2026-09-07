@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '../../store/store';
 import { fetchFeedGroup, getHomeFeedRecommendations } from '../../actions/categories/feed.actions';
 import { mergeListings } from '../../util/cache/feedCacheService';
@@ -39,9 +39,9 @@ export function sortByTierRandom(listings: ListingBase[]): ListingBase[] {
   return [...top90, ...standard, ...basic, ...rest];
 }
 
-async function fetchRecommendations(signal?: AbortSignal): Promise<ListingBase[]> {
+async function fetchRecommendations(userId: string, signal?: AbortSignal): Promise<ListingBase[]> {
   try {
-    return await getHomeFeedRecommendations(signal);
+    return await getHomeFeedRecommendations(userId, signal);
   } catch {
     return [];
   }
@@ -56,6 +56,9 @@ export function useHomeFeed() {
   const [refreshing, setRefreshing] = useState(false);
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
   const [revealing, setRevealing] = useState(false);
+
+  const listingsRef = useRef(listings);
+  useEffect(() => { listingsRef.current = listings; }, [listings]);
 
   useEffect(() => {
     const ctrl = new AbortController();
@@ -80,7 +83,7 @@ export function useHomeFeed() {
   useEffect(() => {
     if (!user) return;
     const ctrl = new AbortController();
-    fetchRecommendations(ctrl.signal).then((recs) => {
+    fetchRecommendations(user.id, ctrl.signal).then((recs) => {
       if (ctrl.signal.aborted) return;
       dispatch(setRecommendations(recs));
       if (recs.length > 0) prefetchImages(recs).catch(() => {});
@@ -88,13 +91,15 @@ export function useHomeFeed() {
     return () => ctrl.abort();
   }, [user?.id, dispatch]);
 
+  const userId = user?.id;
+
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     setVisibleCount(INITIAL_VISIBLE);
 
     const [fast, recs] = await Promise.allSettled([
       fetchFeedGroup('fast'),
-      user ? fetchRecommendations() : Promise.resolve([]),
+      userId ? fetchRecommendations(userId) : Promise.resolve([]),
     ]);
     const fastValue = fast.status === 'fulfilled' ? fast.value : [];
     const recsValue = recs.status === 'fulfilled' ? (recs.value as ListingBase[]) : [];
@@ -106,19 +111,19 @@ export function useHomeFeed() {
 
     fetchFeedGroup('slow').then((slow) => {
       if (slow.length === 0) return;
-      const fastItems = fast.status === 'fulfilled' ? fast.value : listings;
+      const fastItems = fast.status === 'fulfilled' ? fast.value : listingsRef.current;
       const merged = mergeListings(fastItems, slow);
       dispatch(setFeed(sortByTierRandom(merged)));
     });
-  }, [user, dispatch, listings]);
+  }, [userId, dispatch]);
 
   const showMore = useCallback(() => {
-    const nextBatch = listings.slice(visibleCount, visibleCount + READ_MORE_STEP);
+    const nextBatch = listingsRef.current.slice(visibleCount, visibleCount + READ_MORE_STEP);
     setVisibleCount((n) => n + READ_MORE_STEP);
     prefetchImages(nextBatch).catch(() => {});
-  }, [listings, visibleCount]);
+  }, [visibleCount]);
 
-  const visibleListings = listings.slice(0, visibleCount);
+  const visibleListings = useMemo(() => listings.slice(0, visibleCount), [listings, visibleCount]);
   const hasMore = visibleCount < listings.length;
 
   return { user, listings, recommendations, refreshing, visibleListings, hasMore, onRefresh, showMore, revealing };

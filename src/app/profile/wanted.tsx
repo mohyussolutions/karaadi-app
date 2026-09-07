@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -41,7 +41,7 @@ export default function WantedScreen() {
 
   useEffect(() => { load(); }, [load]);
 
-  function handleDelete(id: string) {
+  const handleDelete = useCallback((id: string) => {
     Alert.alert(
       t('subscription.deleteAlertTitle'),
       t('subscription.deleteAlertMessage'),
@@ -57,7 +57,26 @@ export default function WantedScreen() {
         },
       ],
     );
-  }
+  }, [t]);
+
+  const rows = useMemo(() => subs.map((sub) => ({
+    sub,
+    listingItem: subscriptionToListingItem(sub),
+    priceLabel: subscriptionPriceLabel(sub, t('priceOnRequest')),
+  })), [subs, t]);
+
+  const keyExtractor = useCallback((row: (typeof rows)[number]) => row.sub.id, []);
+
+  const renderItem = useCallback(({ item }: { item: (typeof rows)[number] }) => (
+    <View style={{ width: CARD_WIDTH }}>
+      <ListingCard
+        item={item.listingItem}
+        priceLabel={item.priceLabel}
+        onDelete={() => handleDelete(item.sub.id)}
+        onPress={() => router.push({ pathname: '/listing/subscription/[id]', params: { id: item.sub.id || item.sub._id || '' } })}
+      />
+    </View>
+  ), [CARD_WIDTH, handleDelete, router]);
 
   if (!user) {
     return (
@@ -87,8 +106,8 @@ export default function WantedScreen() {
       <Text style={sheetInline.hint}>{t('subscription.notifyHint')}</Text>
 
       <FlatList
-        data={subs}
-        keyExtractor={(item) => item.id}
+        data={rows}
+        keyExtractor={keyExtractor}
         numColumns={2}
         columnWrapperStyle={styles.row}
         contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 84 }, subs.length === 0 && styles.flexFull]}
@@ -99,16 +118,7 @@ export default function WantedScreen() {
             message={t('subscription.myAlertsEmpty')}
           />
         }
-        renderItem={({ item }) => (
-          <View style={{ width: CARD_WIDTH }}>
-            <ListingCard
-              item={subscriptionToListingItem(item)}
-              priceLabel={subscriptionPriceLabel(item, t('priceOnRequest'))}
-              onDelete={() => handleDelete(item.id)}
-              onPress={() => router.push({ pathname: '/listing/subscription/[id]', params: { id: item.id || item._id || '' } })}
-            />
-          </View>
-        )}
+        renderItem={renderItem}
       />
 
       <WantedAlertForm

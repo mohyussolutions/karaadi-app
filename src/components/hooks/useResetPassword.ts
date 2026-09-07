@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { resetPassword, forgotPassword } from '../../actions/core/auth.actions';
 import { passwordSchema, confirmationCodeSchema } from '../../util/validation/schemas';
+import type { ApiError } from '../../util/types/generic.types';
 
 export function useResetPassword(email: string) {
   const router = useRouter();
@@ -31,8 +32,8 @@ export function useResetPassword(email: string) {
       await resetPassword({ email, code: code.trim(), password });
       router.replace('/(auth)/login');
       return { success: true };
-    } catch (err: any) {
-      const msg = err?.response?.data?.message || '';
+    } catch (err) {
+      const msg = (err as ApiError)?.response?.data?.message || '';
       setError(msg);
       return { success: false, key: 'errorMessage' };
     } finally {

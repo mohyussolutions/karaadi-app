@@ -3,11 +3,12 @@ import { Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/hooks/authStore';
 import { getMyBusinesses, deleteBusiness } from '../../actions/core/business.actions';
+import type { Business } from '../../util/types/business.types';
 
 export function useMyBusinesses() {
   const { t } = useTranslation();
   const { user } = useAuthStore();
-  const [businesses, setBusinesses] = useState<any[]>([]);
+  const [businesses, setBusinesses] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -30,9 +31,9 @@ export function useMyBusinesses() {
     return () => ctrl.abort();
   }, [load]);
 
-  function onRefresh() { setRefreshing(true); load(); }
+  const onRefresh = useCallback(() => { setRefreshing(true); load(); }, [load]);
 
-  function handleDelete(item: any) {
+  const handleDelete = useCallback((item: Business) => {
     Alert.alert(
       t('mine.businesses.delete'),
       `${t('mine.businesses.delete')} "${item.name}"?`,
@@ -43,7 +44,7 @@ export function useMyBusinesses() {
           style: 'destructive',
           onPress: async () => {
             try {
-              await deleteBusiness(item._id || item.id);
+              await deleteBusiness(item._id || item.id || '');
               setBusinesses((prev) => prev.filter((b) => (b._id || b.id) !== (item._id || item.id)));
             } catch {
               Alert.alert('Error', 'Failed to delete. Please try again.');
@@ -52,7 +53,7 @@ export function useMyBusinesses() {
         },
       ],
     );
-  }
+  }, [t]);
 
   return { user, businesses, loading, refreshing, onRefresh, handleDelete };
 }

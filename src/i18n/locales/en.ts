@@ -329,7 +329,7 @@ export const about = {
     services:
       "Services: Find or offer services like construction, repairs, and consulting.",
   },
-  contactHeading: "Contact Karaadi",
+  contactHeading: "Contact Us",
   contactIntro:
     "Have questions, feedback, or concerns? Please contact us — we're here to help.",
   contact: {
@@ -355,7 +355,7 @@ export const terms = {
 } as const;
 
 export const contact = {
-  title: "Contact Karaadi",
+  title: "Contact Us",
   heading: "Contact Karaadi",
   description: "Get in touch with the Karaadi team for support or inquiries.",
   supportEmailSubject: "Karaadi Support Request",
@@ -385,7 +385,7 @@ export const nav = {
 
 export const welcome = "Welcome to Karaadi" as const;
 
-export const search = "Search Hamar, house, car, 45 000..." as const;
+export const search = "Search Xamar, house, car, 45 000..." as const;
 
 export const filters = {
   location: {
@@ -999,6 +999,7 @@ export const subcategories = {
     sportsAndOutdoors: "Sports & Outdoors",
     furniture: "Furniture",
     fashion: "Fashion",
+    education: "Education",
   },
   farmEquipment: {
     tractor: "Tractors",
@@ -1091,10 +1092,10 @@ export const subcategories = {
       bodyParts: "Body Parts",
     },
     trucks: {
-      pickupTruck: "Pickup Truck",
-      heavyTruck: "Heavy Truck",
+      pickupTruck: "Pickup Trucks",
+      heavyTruck: "Heavy Trucks",
       truckSpareParts: "Truck Spare Parts",
-      flatbedTankTruck: "Flatbed/Tank Truck",
+      flatbedTankTruck: "Flatbed/Tank Trucks",
       otherTrucks: "Other Trucks",
     },
     electric: {
@@ -1124,11 +1125,11 @@ export const subcategories = {
       irrigation: "Irrigation Systems",
     },
     tractorForSale: {
-      newTractor: "New Tractor",
-      usedTractor: "Used Tractor",
+      newTractor: "New Tractors",
+      usedTractor: "Used Tractors",
     },
     farmTools: {
-      plowTillageEquipment: "Plow/Tillage Equipment",
+      plowTillageEquipment: "Plows/Tillage Equipment",
       seedingEquipment: "Seeding Equipment",
       harvestingEquipment: "Harvesting Equipment",
     },
@@ -1141,9 +1142,9 @@ export const subcategories = {
       pullTypeHarvester: "Pull-Type Harvester",
     },
     plow: {
-      moldboardPlow: "Moldboard Plow",
-      discPlow: "Disc Plow",
-      subsoilPlow: "Subsoil Plow",
+      moldboardPlow: "Moldboard Plows",
+      discPlow: "Disc Plows",
+      subsoilPlow: "Subsoil Plows",
     },
     irrigation: {
       dripIrrigation: "Drip Irrigation",

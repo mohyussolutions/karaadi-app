@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  View, Text, FlatList, TouchableOpacity, Image, RefreshControl,
+  View, Text, FlatList, TouchableOpacity, RefreshControl,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
+import RemoteImage from '../../components/shared/RemoteImage';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { useMyBusinesses } from '../../components/hooks/useMyBusinesses';
 import { placeholderAvatar } from '../../constants';
@@ -30,7 +31,7 @@ export default function BusinessesScreen() {
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <FlatList
         data={businesses}
-        keyExtractor={item => item._id || item.id}
+        keyExtractor={item => item._id || item.id || ''}
         contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 84 }, businesses.length === 0 && styles.listEmpty]}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}
@@ -64,11 +65,11 @@ export default function BusinessesScreen() {
                 activeOpacity={0.85}
                 onPress={() => router.push(`/profile/business-create?id=${item._id || item.id}`)}
               >
-                <Image source={{ uri: item.logo || PLACEHOLDER }} style={styles.logo} />
+                <RemoteImage source={{ uri: item.logo || PLACEHOLDER }} style={styles.logo} />
                 <View style={styles.info}>
                   <Text style={styles.name}>{item.name}</Text>
                   <View style={styles.typeBadge}>
-                    <MaterialCommunityIcons name={typeIcon as any} size={11} color={Colors.primary} />
+                    <MaterialCommunityIcons name={typeIcon} size={11} color={Colors.primary} />
                     <Text style={styles.typeText}>{typeLabel}</Text>
                   </View>
                   {(item.city || item.region) && (

@@ -34,19 +34,21 @@ export function useSecuritySettings() {
     }
   }, []);
 
-  useEffect(() => {
-    if (!user) { router.replace('/(auth)/login'); return; }
-    fetchData();
-  }, [user, fetchData, router]);
+  const hasUser = !!user;
 
-  async function removeSession(id: string) {
+  useEffect(() => {
+    if (!hasUser) { router.replace('/(auth)/login'); return; }
+    fetchData();
+  }, [hasUser, fetchData, router]);
+
+  const removeSession = useCallback(async (id: string) => {
     try {
       await logoutSession(id);
       setSessions((prev) => prev.filter((s) => s.id !== id));
     } catch {}
-  }
+  }, []);
 
-  function confirmLogoutAll() {
+  const confirmLogoutAll = useCallback(() => {
     Alert.alert(t('mine.security.signOutAllTitle'), t('mine.security.signOutAllConfirm'), [
       { text: t('mine.businesses.cancel'), style: 'cancel' },
       {
@@ -63,17 +65,17 @@ export function useSecuritySettings() {
         },
       },
     ]);
-  }
+  }, [t, clearAuth, router]);
 
-  function deleteHistoryEntry(id: number) {
+  const deleteHistoryEntry = useCallback((id: number) => {
     setHistory((prev) => prev.filter((h) => h.id !== id));
     deleteLoginHistoryEntry(id).catch(() => {});
-  }
+  }, []);
 
-  function clearAllHistory() {
+  const clearAllHistory = useCallback(() => {
     setHistory([]);
     clearLoginHistory().catch(() => {});
-  }
+  }, []);
 
   return { user, clearAuth, sessions, history, loading, loggingOut, removeSession, confirmLogoutAll, deleteHistoryEntry, clearAllHistory };
 }

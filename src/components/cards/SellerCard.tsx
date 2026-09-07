@@ -6,6 +6,7 @@ import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
 import { getReviewsByUser } from '../../actions/core/reviews.actions';
 import { placeholderAvatar } from '../../constants';
 import type { SellerCardProps } from '../../util/types';
+import type { IconName } from '../../util/icons/icons';
 import { createStyles } from '../../util/styles/detail/SellerCard.styles';
 import RemoteImage from '../shared/RemoteImage';
 import VerifiedBadge from '../shared/VerifiedBadge';
@@ -47,7 +48,7 @@ export default function SellerCard({
     getReviewsByUser(userId)
       .then((list) => {
         if (list.length === 0) return;
-        const avg = list.reduce((sum: number, r: any) => sum + (r.rating || 0), 0) / list.length;
+        const avg = list.reduce((sum: number, r: { rating?: number }) => sum + (r.rating || 0), 0) / list.length;
         setRating(avg);
         setReviewCount(list.length);
       })
@@ -80,7 +81,7 @@ export default function SellerCard({
           onPress={onMessage}
           disabled={disabled}
         >
-          <MaterialCommunityIcons name={messageBtnIcon as any} size={18} color={Colors.white} />
+          <MaterialCommunityIcons name={messageBtnIcon as IconName} size={18} color={Colors.white} />
           <Text style={s.msgText}>{messageBtnLabel || t('realEstateDetail.sendMessage')}</Text>
         </TouchableOpacity>
       )}

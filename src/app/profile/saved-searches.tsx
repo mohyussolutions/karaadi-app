@@ -22,7 +22,7 @@ export default function SavedSearchesScreen() {
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <FlatList
         data={searches}
-        keyExtractor={(item) => item._id || item.id}
+        keyExtractor={(item) => item._id || item.id || ''}
         contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 84 }, searches.length === 0 && { flex: 1 }]}
         ListEmptyComponent={
           <EmptyState
@@ -35,7 +35,7 @@ export default function SavedSearchesScreen() {
           <View style={styles.row}>
             <MaterialCommunityIcons name="history" size={18} color={Colors.textMuted} />
             <Text style={styles.query} numberOfLines={1}>{item.query || item.search || item.text}</Text>
-            <TouchableOpacity onPress={() => deleteSearch(item._id || item.id)} hitSlop={8}>
+            <TouchableOpacity onPress={() => deleteSearch(item._id || item.id || '')} hitSlop={8}>
               <MaterialCommunityIcons name="close" size={16} color={Colors.textMuted} />
             </TouchableOpacity>
           </View>

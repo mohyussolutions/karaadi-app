@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -7,7 +7,7 @@ import { getImageUrl, formatPrice } from '../../../util/helpers';
 import { createStyles } from '../../../util/styles/layout/hage.styles';
 import type { ListingRef } from '../../../util/types/chat.types';
 
-export function ListingChip({ item, onPress }: { item: ListingRef; onPress: () => void }) {
+export const ListingChip = memo(function ListingChip({ item, onPress }: { item: ListingRef; onPress: () => void }) {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const image = item.images?.[0] ? getImageUrl(item.images[0]) : null;
@@ -29,4 +29,4 @@ export function ListingChip({ item, onPress }: { item: ListingRef; onPress: () =
       <MaterialCommunityIcons name="chevron-right" size={16} color={Colors.textMuted} />
     </TouchableOpacity>
   );
-}
+});

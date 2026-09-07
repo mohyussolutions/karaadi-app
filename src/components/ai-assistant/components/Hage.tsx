@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Animated, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -75,16 +75,16 @@ export default function Hage() {
     dispatch(sendHageMessage({ content: text, lang, history: messages }));
   }
 
-  function navigateToRoute(route: ListingRoute) {
+  const navigateToRoute = useCallback((route: ListingRoute) => {
     dispatch(closeHage());
-    router.push(route as any);
-  }
+    router.push(route as never);
+  }, [dispatch, router]);
 
-  function handleListingPress(item: ListingRef) {
+  const handleListingPress = useCallback((item: ListingRef) => {
     navigateToRoute(getListingDetailRoute(
       { id: item.id || item._id, mainCategory: item.mainCategory, category: item.category },
     ));
-  }
+  }, [navigateToRoute]);
 
   const sheetTranslateY = Animated.add(slideY, dragY);
 

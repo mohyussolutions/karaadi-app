@@ -96,7 +96,7 @@ export const AUTH_ENDPOINTS = {
   RESET_PASSWORD: '/api/users/reset-password',
   VERIFY_SESSION: '/api/users/verify-session',
   REFRESH_TOKEN: '/api/users/refreshtoken',
-  PROFILE: '/api/users/profile',
+  PROFILE: '/api/users/me',
   UPDATE_PROFILE_IMAGE: '/api/users/profile/image',
   UPDATE_USERNAME: '/api/users/profile/username',
   UPDATE_PHONE: '/api/users/profile/phone',
@@ -203,6 +203,7 @@ export const FEED_ENDPOINTS = {
   GROUP: (group: 'fast' | 'slow', page = 1, pageSize = 100) =>
     `/api/feed?group=${group}&page=${page}&pageSize=${pageSize}`,
   RECOMMENDATIONS: '/api/recommendations',
+  TRACK_VIEW: '/api/recommendations/track-view',
 };
 
 export const HAGE_ENDPOINTS = {

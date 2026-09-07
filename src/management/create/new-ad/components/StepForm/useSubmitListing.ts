@@ -8,6 +8,8 @@ import { NUMERIC_KEYS, BOOLEAN_KEYS } from "../../constants/fields";
 import { REGEX_NON_DIGITS } from "../../../../../constants";
 import type { FieldDef, ListingType, User } from "../../../../../util/types";
 
+type ListingBody = Record<string, string | number | boolean | string[] | undefined>;
+
 interface UseSubmitListingArgs {
   categoryKey: string;
   listingType: ListingType | null;
@@ -53,7 +55,7 @@ export function useSubmitListing({
         ...rest
       } = formData;
 
-      const body: Record<string, any> = {
+      const body: ListingBody = {
         ...rest,
         userId: user?.id || user?._id || "",
         name: formData.title || "",
@@ -92,12 +94,16 @@ export function useSubmitListing({
         if (subVal) body.employmentType = subVal;
         const salaryDigits = String(body.salaryRange || "").replace(REGEX_NON_DIGITS, "");
         body.salary = salaryDigits ? Number(salaryDigits) : 0;
+        if (body.companyName !== undefined) body.company = body.companyName;
+        if (body.applicationDeadline !== undefined) body.expiryDate = body.applicationDeadline;
         delete body.salaryRange;
         delete body.educationLevel;
         delete body.name;
         delete body.categoryTag;
         delete body.listingType;
         delete body.contactPhone;
+        delete body.companyName;
+        delete body.applicationDeadline;
       }
 
       if (categoryKey === "farmequipment") {
@@ -143,7 +149,7 @@ export function useSubmitListing({
         title: String(body.title || ""),
         price: Number(body.price || 0),
         images,
-        categoryTag: String(body.categoryTag || body.category?.[0] || ""),
+        categoryTag: String(body.categoryTag || (body.category as string[] | undefined)?.[0] || ""),
         mainCategory: categoryKey,
         region: formData.region || undefined,
         city: formData.city || undefined,
@@ -162,11 +168,11 @@ export function useSubmitListing({
 
       await dispatch(submitListing({ categoryKey, body, summary })).unwrap();
       onSuccess();
-    } catch (err: any) {
+    } catch (err) {
       Alert.alert(
         t("auth.common.error"),
         submitError ||
-          err?.message ||
+          (err instanceof Error ? err.message : undefined) ||
           t("postAd.createListingError"),
       );
     }

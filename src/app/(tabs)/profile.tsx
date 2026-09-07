@@ -1,6 +1,6 @@
 import { memo, useCallback, useState } from 'react';
 import {
-  View, Text, ScrollView, TouchableOpacity, Image,
+  View, Text, ScrollView, TouchableOpacity,
 } from 'react-native';
 import { ConfirmModal } from '../../components/modals/ConfirmModal';
 import { useRouter } from 'expo-router';
@@ -11,6 +11,7 @@ import { useAuthStore } from '../../store/hooks/authStore';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { useResponsive } from '../../components/hooks/useResponsive';
 import { getImageUrl } from '../../util/helpers';
+import RemoteImage from '../../components/shared/RemoteImage';
 import { placeholderAvatar } from '../../constants';
 import { PROFILE_MENU_ITEMS } from '../../navigation/config/navConfig';
 import type { MenuItem } from '../../util/types';
@@ -25,7 +26,7 @@ const MenuCard = memo(function MenuCard({ item, onPress }: { item: MenuItem; onP
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.75}>
       <View style={styles.cardIconBg}>
-        <MaterialCommunityIcons name={item.icon as any} size={20} color={Colors.primary} />
+        <MaterialCommunityIcons name={item.icon} size={20} color={Colors.primary} />
       </View>
       <Text style={styles.cardLabel}>{t(item.labelKey)}</Text>
       <MaterialCommunityIcons name="chevron-right" size={20} color={Colors.text} style={styles.cardChevron} />
@@ -72,7 +73,7 @@ export default function ProfileScreen() {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
         <View style={isTablet && styles.tabletInner}>
         <View style={styles.profileCard}>
-          <Image source={{ uri: getImageUrl(user.profileImage) || AVATAR }} style={styles.avatar} />
+          <RemoteImage source={{ uri: getImageUrl(user.profileImage) || AVATAR }} style={styles.avatar} />
           <Text style={styles.username}>{user.username}</Text>
           <Text style={styles.email}>{user.email}</Text>
           {user.phone && <Text style={styles.phone}>{user.phone}</Text>}

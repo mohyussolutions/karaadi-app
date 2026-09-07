@@ -7,10 +7,10 @@ import { useAppTranslation } from '../../../components/hooks/useAppTranslation';
 import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
 import { createStyles } from '../../../util/styles/profile/aboutKaraadi.styles';
 import { SOCIAL_LINKS } from '../../../constants';
-import { SOCIAL_ICONS } from '../../../util/icons/icons';
+import { SOCIAL_ICONS, type MCIcon } from '../../../util/icons/icons';
 import { SOCIAL_BRAND_COLORS } from '../../../constants';
 
-const PAGES: { id: string; icon: string; titleKey: string; route: string }[] = [
+const PAGES: { id: string; icon: MCIcon; titleKey: string; route: string }[] = [
   { id: 'about', icon: 'information-outline', titleKey: 'about.heading', route: '/profile/about-karaadi/about' },
   { id: 'terms', icon: 'file-document-outline', titleKey: 'terms.heading', route: '/profile/about-karaadi/terms' },
   { id: 'contact', icon: 'email-outline', titleKey: 'contact.heading', route: '/profile/about-karaadi/contact' },
@@ -42,7 +42,7 @@ export default function AboutKaraadiScreen() {
             activeOpacity={0.85}
           >
             <View style={styles.iconBg}>
-              <MaterialCommunityIcons name={item.icon as any} size={24} color={Colors.primary} />
+              <MaterialCommunityIcons name={item.icon} size={24} color={Colors.primary} />
             </View>
             <View style={styles.cardBody}>
               <Text style={styles.cardTitle}>{t(item.titleKey)}</Text>

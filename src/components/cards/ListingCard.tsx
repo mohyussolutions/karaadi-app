@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, type GestureResponderEvent } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -33,14 +33,14 @@ const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey
   function handlePress() {
     if (onPress) { onPress(); return; }
     if (isWanted) {
-      router.push({ pathname: '/listing/subscription/[id]', params: { id: listingId } } as any);
+      router.push({ pathname: '/listing/subscription/[id]', params: { id: listingId } } as never);
       return;
     }
     cacheListing(listingId, item);
-    router.push(getListingDetailRoute(item, categoryKey) as any);
+    router.push(getListingDetailRoute(item, categoryKey) as never);
   }
 
-  async function handleHeart(e: any) {
+  async function handleHeart(e: GestureResponderEvent) {
     e.stopPropagation();
     if (!user) { router.push('/(auth)/login'); return; }
     const willSave = !isFav;

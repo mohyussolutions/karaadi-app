@@ -1,7 +1,7 @@
 import { apiClient } from '../client';
 import { extractList, getImageUrl } from '../../util/helpers';
 import { FAVORITES_ENDPOINTS } from '../../api/urls';
-import type { Favorite } from '../../util/types';
+import type { Favorite, ListingBase } from '../../util/types';
 
 export async function getFavorites(): Promise<Favorite[]> {
   const { data } = await apiClient.get(`${FAVORITES_ENDPOINTS.LIST}?limit=200`);
@@ -9,7 +9,7 @@ export async function getFavorites(): Promise<Favorite[]> {
   return extractList<Favorite>(data);
 }
 
-export async function addFavorite(listing: any, categoryHint?: string): Promise<Favorite> {
+export async function addFavorite(listing: ListingBase | null | undefined, categoryHint?: string): Promise<Favorite> {
   const category = Array.isArray(listing?.category)
     ? listing.category[0]
     : (listing?.mainCategory || listing?.category || categoryHint || '');

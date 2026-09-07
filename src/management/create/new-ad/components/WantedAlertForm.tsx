@@ -17,7 +17,8 @@ import {
   createStyles, createSheetInlineStyles, createImagePickerStyles,
 } from '../../../../util/styles/profile/wanted.styles';
 import { MAIN_CATEGORIES, getCategoryByKey, SUB_I18N_GROUP } from '../../../../constants';
-import type { Subscription, SubscriptionPayload, WantedFormState } from '../../../../util/types';
+import type { SubscriptionPayload, WantedFormState } from '../../../../util/types';
+import type { WantedAlertFormProps } from '../../../../util/types/new-ad.types';
 import { maxLenSchema } from '../../../../util/validation/schemas';
 
 const MAX_IMAGES = 3;
@@ -44,12 +45,6 @@ function SectionTitle({ label }: { label: string }) {
       <View style={sheetInline.sectionLine} />
     </View>
   );
-}
-
-export interface WantedAlertFormProps {
-  visible: boolean;
-  onClose: () => void;
-  onCreated: (sub: Subscription) => void;
 }
 
 export function WantedAlertForm({ visible, onClose, onCreated }: WantedAlertFormProps) {

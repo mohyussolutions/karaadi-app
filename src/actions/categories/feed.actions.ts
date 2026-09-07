@@ -6,8 +6,9 @@ import {
   JOBS_ENDPOINTS, FEED_ENDPOINTS,
 } from '../../api/urls';
 import type { Car, RealEstate, Motorcycle, Boat, MarketplaceItem, FarmEquipment, ListingBase } from '../../util/types/listing.types';
+import type { Params } from '../../util/types/common.types';
 
-export async function fetchCars(params?: Record<string, any>, signal?: AbortSignal): Promise<Car[]> {
+export async function fetchCars(params?: Params, signal?: AbortSignal): Promise<Car[]> {
   const { data } = await apiClient.get(CARS_ENDPOINTS.LIST, { params, signal });
   return extractList<Car>(data);
 }
@@ -17,7 +18,7 @@ export async function fetchCarById(id: string): Promise<Car> {
   return normalizeItem(data);
 }
 
-export async function fetchRealEstate(params?: Record<string, any>, signal?: AbortSignal): Promise<RealEstate[]> {
+export async function fetchRealEstate(params?: Params, signal?: AbortSignal): Promise<RealEstate[]> {
   const { data } = await apiClient.get(REAL_ESTATE_ENDPOINTS.LIST, { params, signal });
   return extractList<RealEstate>(data);
 }
@@ -27,7 +28,7 @@ export async function fetchRealEstateById(id: string): Promise<RealEstate> {
   return normalizeItem(data);
 }
 
-export async function fetchMotorcycles(params?: Record<string, any>, signal?: AbortSignal): Promise<Motorcycle[]> {
+export async function fetchMotorcycles(params?: Params, signal?: AbortSignal): Promise<Motorcycle[]> {
   const { data } = await apiClient.get(MOTORCYCLES_ENDPOINTS.LIST, { params, signal });
   return extractList<Motorcycle>(data);
 }
@@ -37,7 +38,7 @@ export async function fetchMotorcycleById(id: string): Promise<Motorcycle> {
   return normalizeItem(data);
 }
 
-export async function fetchBoats(params?: Record<string, any>, signal?: AbortSignal): Promise<Boat[]> {
+export async function fetchBoats(params?: Params, signal?: AbortSignal): Promise<Boat[]> {
   const { data } = await apiClient.get(BOATS_ENDPOINTS.LIST, { params, signal });
   return extractList<Boat>(data);
 }
@@ -47,7 +48,7 @@ export async function fetchBoatById(id: string): Promise<Boat> {
   return normalizeItem(data);
 }
 
-export async function fetchMarketplace(params?: Record<string, any>, signal?: AbortSignal): Promise<MarketplaceItem[]> {
+export async function fetchMarketplace(params?: Params, signal?: AbortSignal): Promise<MarketplaceItem[]> {
   const { data } = await apiClient.get(MARKETPLACE_ENDPOINTS.LIST, { params, signal });
   return extractList<MarketplaceItem>(data);
 }
@@ -57,7 +58,7 @@ export async function fetchMarketplaceById(id: string): Promise<MarketplaceItem>
   return normalizeItem(data);
 }
 
-export async function fetchFarmEquipment(params?: Record<string, any>, signal?: AbortSignal): Promise<FarmEquipment[]> {
+export async function fetchFarmEquipment(params?: Params, signal?: AbortSignal): Promise<FarmEquipment[]> {
   const { data } = await apiClient.get(FARM_EQUIPMENT_ENDPOINTS.LIST, { params, signal });
   return extractList<FarmEquipment>(data);
 }
@@ -67,12 +68,12 @@ export async function fetchFarmEquipmentById(id: string): Promise<FarmEquipment>
   return normalizeItem(data);
 }
 
-export async function fetchJobs(params?: Record<string, any>, signal?: AbortSignal): Promise<ListingBase[]> {
+export async function fetchJobs(params?: Params, signal?: AbortSignal): Promise<ListingBase[]> {
   const { data } = await apiClient.get(JOBS_ENDPOINTS.LIST, { params, signal });
   return extractList<ListingBase>(data);
 }
 
-export async function fetchByCategory(categoryKey: string, params?: Record<string, any>, signal?: AbortSignal): Promise<ListingBase[]> {
+export async function fetchByCategory(categoryKey: string, params?: Params, signal?: AbortSignal): Promise<ListingBase[]> {
   switch (categoryKey) {
     case 'Cars':          return fetchCars(params, signal);
     case 'RealEstate':    return fetchRealEstate(params, signal);
@@ -107,12 +108,17 @@ export async function fetchFeed(signal?: AbortSignal): Promise<ListingBase[]> {
   return fetchFeedGroup('fast', signal);
 }
 
-export async function getRecommendedByEndpoint(endpoint: string, signal?: AbortSignal): Promise<any[]> {
-  const { data } = await apiClient.get(endpoint, { params: { limit: 10 }, signal });
+export async function getRecommendedByEndpoint(endpoint: string, signal?: AbortSignal): Promise<ListingBase[]> {
+  const { data } = await apiClient.get<ListingBase[] | { listings?: ListingBase[]; items?: ListingBase[] }>(endpoint, { params: { limit: 10 }, signal });
   return Array.isArray(data) ? data : data?.listings || data?.items || [];
 }
 
-export async function getHomeFeedRecommendations(signal?: AbortSignal): Promise<any[]> {
-  const { data } = await apiClient.get(FEED_ENDPOINTS.RECOMMENDATIONS, { signal });
+export async function getHomeFeedRecommendations(userId: string, signal?: AbortSignal): Promise<ListingBase[]> {
+  const { data } = await apiClient.get<ListingBase[] | { listings?: ListingBase[] }>(FEED_ENDPOINTS.RECOMMENDATIONS, { params: { userId }, signal });
   return Array.isArray(data) ? data : data?.listings || [];
+}
+
+export async function trackItemView(externalId: string, category: string, userId?: string | null): Promise<void> {
+  if (!userId) return;
+  await apiClient.post(FEED_ENDPOINTS.TRACK_VIEW, { externalId, category, userId }).catch(() => {});
 }

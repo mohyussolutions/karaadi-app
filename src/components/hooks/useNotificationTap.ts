@@ -3,6 +3,7 @@ import { LogBox, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import { getListingDetailRoute } from "../../util/helpers/nav.routing";
 import type { NotificationTapRouter as Router, NotificationData } from "../../util/types/notification.types";
+import type { NotificationResponse } from "expo-notifications";
 
 LogBox.ignoreLogs([
   "expo-notifications: Android Push notifications",
@@ -40,7 +41,7 @@ function navigateToChat(router: Router, data: NotificationData, chatId: string) 
 function navigateToAlertMatch(router: Router, data: NotificationData) {
   if (data?.listingId && data?.category) {
     router.push(
-      getListingDetailRoute({ id: data.listingId, category: data.category }) as any,
+      getListingDetailRoute({ id: data.listingId, category: data.category }) as Parameters<typeof router.push>[0],
     );
   } else {
     router.push(ROUTES.wanted);
@@ -80,13 +81,13 @@ export function useNotificationTap() {
   useEffect(() => {
     if (!Notifications?.addNotificationResponseReceivedListener) return;
 
-    const handleResponse = (response: any) => {
+    const handleResponse = (response: NotificationResponse) => {
       const data = response.notification.request.content.data as NotificationData;
       handleNotificationData(router, data);
     };
 
     if (Platform.OS !== "web") {
-      Notifications.getLastNotificationResponseAsync?.().then((response: any) => {
+      Notifications.getLastNotificationResponseAsync?.().then((response) => {
         if (response) handleResponse(response);
       });
     }

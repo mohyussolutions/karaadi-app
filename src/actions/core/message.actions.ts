@@ -17,10 +17,10 @@ export async function createOrFindChat(payload: {
   return data;
 }
 
-export async function findConversation(senderId: string, receiverId: string): Promise<Chat | null> {
+export async function findConversation(userId: string, otherUserId: string): Promise<Chat | null> {
   try {
     const { data } = await apiClient.get(CHATS_ENDPOINTS.FIND, {
-      params: { senderId, receiverId },
+      params: { userId, otherUserId },
     });
     return data;
   } catch {
@@ -44,7 +44,10 @@ export async function sendMessage(payload: {
   content: string;
   imageUrl?: string;
 }): Promise<ChatMessage> {
-  const { data } = await apiClient.post(MESSAGES_ENDPOINTS.SEND, payload);
+  const { data } = await apiClient.post(MESSAGES_ENDPOINTS.SEND, {
+    ...payload,
+    chatId: String(payload.chatId),
+  });
   return data;
 }
 

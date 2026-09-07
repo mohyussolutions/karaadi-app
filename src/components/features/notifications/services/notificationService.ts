@@ -83,7 +83,7 @@ export async function registerForPushNotifications(): Promise<string | null> {
 export async function scheduleLocalNotification(
   title: string,
   body: string,
-  data?: Record<string, any>,
+  data?: Record<string, unknown>,
 ): Promise<void> {
   Vibration.vibrate(Platform.OS === 'android' ? [0, 250, 100, 250] : 400);
 

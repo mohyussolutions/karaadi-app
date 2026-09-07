@@ -28,7 +28,7 @@ function RecommendedSection({ endpoint, excludeId, title, categoryKey }: Recomme
     getRecommendedByEndpoint(endpoint).then((list) => {
       if (cancelled) return;
       const filtered = list
-        .filter((i: any) => i._id !== excludeId && i.id !== excludeId)
+        .filter((i: ListingBase) => i._id !== excludeId && i.id !== excludeId)
         .slice(0, 8) as ListingBase[];
       setItems(filtered);
       prefetchImages(filtered).catch(() => {});

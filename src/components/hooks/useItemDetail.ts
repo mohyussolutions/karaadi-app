@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { toggleFavorite } from '../../store/slices/favoritesSlice';
 import { useAuthStore } from '../../store/hooks/authStore';
 import { getMarketplaceItemById } from '../../actions/categories/marketplace.actions';
+import { trackItemView } from '../../actions/categories/feed.actions';
 
 import { getCachedListing } from '../../util/cache/listingCache';
 import { showToast } from '../../util/cache/toastService';
@@ -28,13 +29,18 @@ export function useItemDetail(id: string) {
     async function load() {
       try {
         const data = await getMarketplaceItemById(id);
-        setItem({ ...data, id: data.id || data._id, _id: data._id || data.id });
+        if (data) setItem({ ...data, id: data.id || data._id, _id: data._id || data.id });
       } catch {}
       setLoading(false);
     }
     load();
     return () => ctrl.abort();
   }, [id]);
+
+  useEffect(() => {
+    if (!item?.id) return;
+    trackItemView(item.id, item.mainCategory || 'marketplace', user?.id ?? null);
+  }, [item?.id]);
 
   async function toggleFav() {
     if (!user) { router.push('/(auth)/login'); return; }

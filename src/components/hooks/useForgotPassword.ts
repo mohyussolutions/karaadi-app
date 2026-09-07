@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { forgotPassword } from '../../actions/core/auth.actions';
 import { REGEX_EMAIL } from '../../constants';
+import type { ApiError } from '../../util/types/generic.types';
 
 export function useForgotPassword() {
   const router = useRouter();
@@ -19,8 +20,8 @@ export function useForgotPassword() {
       await forgotPassword(email.trim().toLowerCase());
       router.push({ pathname: '/(auth)/reset-password', params: { email: email.trim().toLowerCase() } });
       return { success: true };
-    } catch (err: any) {
-      const msg = err?.response?.data?.message || '';
+    } catch (err) {
+      const msg = (err as ApiError)?.response?.data?.message || '';
       setError(msg);
       return { success: false, message: msg };
     } finally {

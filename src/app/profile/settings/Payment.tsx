@@ -88,7 +88,7 @@ export default function PaymentSettings() {
               return (
                 <View key={p.id} style={[s.row, i < payments.length - 1 && s.rowDivider]}>
                   <View style={[s.catIcon, { backgroundColor: cat.color + '18' }]}>
-                    <MaterialCommunityIcons name={cat.icon as any} size={20} color={cat.color} />
+                    <MaterialCommunityIcons name={cat.icon} size={20} color={cat.color} />
                   </View>
                   <View style={s.flexFull}>
                     <Text style={s.rowLabel}>{cat.label}</Text>
@@ -103,7 +103,7 @@ export default function PaymentSettings() {
                   <View style={s.amountCol}>
                     <Text style={s.amount}>${(p.totalAmount ?? 0).toLocaleString()}</Text>
                     <View style={[s.badge, { backgroundColor: status.bg }]}>
-                      <MaterialCommunityIcons name={status.icon as any} size={11} color={status.color} />
+                      <MaterialCommunityIcons name={status.icon} size={11} color={status.color} />
                       <Text style={[s.badgeText, { color: status.color }]}>{status.label}</Text>
                     </View>
                   </View>

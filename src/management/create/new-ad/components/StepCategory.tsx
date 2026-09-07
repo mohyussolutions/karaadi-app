@@ -13,6 +13,7 @@ import {
 import { useAppTranslation } from "../../../../components/hooks/useAppTranslation";
 import { useTabBarClearance } from "../../../../components/hooks/useTabBarClearance";
 import { MAIN_CATEGORIES, type MainCategory } from "../../../../constants";
+import type { MCIcon } from "../../../../util/icons/icons";
 import { createStyles } from "../../../../util/styles/new-ad/stepCategory.styles";
 const NUM_COLUMNS = 3;
 
@@ -43,7 +44,7 @@ const CategoryCard = memo(function CategoryCard({
       >
         <View style={s.icon}>
           <MaterialCommunityIcons
-            name={category.icon as any}
+            name={category.icon as MCIcon}
             size={26}
             color={category.color}
           />

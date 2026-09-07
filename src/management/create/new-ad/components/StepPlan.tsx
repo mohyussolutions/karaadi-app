@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   View, Text, TouchableOpacity, ScrollView,
 } from 'react-native';
@@ -8,16 +8,15 @@ import { useAppTranslation } from '../../../../components/hooks/useAppTranslatio
 import { useTabBarClearance } from '../../../../components/hooks/useTabBarClearance';
 import { LoadingSpinner } from '../../../../components/loading';
 import { planStyle, getPlanCardColors } from '../constants/plan';
-import type { Plan, StepPlanProps } from '../../../../util/types';
+import type { StepPlanProps } from '../../../../util/types';
+import type { PlanCardProps } from '../../../../util/types/new-ad.types';
 import { createStyles, createPlanCardStyles } from '../../../../util/styles/new-ad/stepPlan.styles';
 
 const FOOTER_HEIGHT = 108;
 
 function PlanCard({
   plan, selected, isBestValue, onSelect,
-}: {
-  plan: Plan; selected: boolean; isBestValue: boolean; onSelect: (p: Plan) => void;
-}) {
+}: PlanCardProps) {
   const Colors = useThemeColors();
   const { t } = useAppTranslation();
   const ps = planStyle(plan, Colors);
@@ -54,7 +53,7 @@ function PlanCard({
       <View style={pc.inner}>
         <View style={pc.topRow}>
           <View style={[pc.iconBox, { backgroundColor: selected ? ps.color : ps.bg }]}>
-            <MaterialCommunityIcons name={ps.icon as any} size={22} color={selected ? Colors.white : ps.color} />
+            <MaterialCommunityIcons name={ps.icon} size={22} color={selected ? Colors.white : ps.color} />
           </View>
           <View style={pc.meta}>
             <Text style={[pc.name, { color: ps.color }]}>{plan.label}</Text>
@@ -100,7 +99,10 @@ export function StepPlan({ plans, loading, selected, onSelect, onNext, onBack }:
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
   const clearance = useTabBarClearance();
-  const maxPrice = plans.length > 0 ? Math.max(...plans.map((p) => p.price)) : 0;
+  const maxPrice = useMemo(
+    () => (plans.length > 0 ? Math.max(...plans.map((p) => p.price)) : 0),
+    [plans],
+  );
 
   return (
     <View style={s.root}>

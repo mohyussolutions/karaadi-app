@@ -38,10 +38,10 @@ export function useCategoryFeed(categoryKey: string, subcategoryKey?: string) {
     return () => ctrl.abort();
   }, [categoryKey, subcategoryKey]);
 
-  function onRefresh() {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     fetchData();
-  }
+  }, [fetchData]);
 
   return { listings, loading, refreshing, onRefresh };
 }

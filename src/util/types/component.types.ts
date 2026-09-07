@@ -2,6 +2,8 @@ import type { ReactNode } from 'react';
 import type { StyleProp, ImageStyle, ViewStyle } from 'react-native';
 import type { ImageProps as ExpoImageProps } from 'expo-image';
 import type { ListingBase } from './listing.types';
+import type { MCIcon } from '../icons/icons';
+import type { Business, BusinessApplyFormState, BusinessPlan } from './business.types';
 
 export interface AppIconProps {
   name: string;
@@ -167,11 +169,54 @@ export interface PaymentStatusConfig {
   label: string;
   color: string;
   bg: string;
-  icon: string;
+  icon: MCIcon;
 }
 
 export interface PaymentCategoryInfo {
   label: string;
-  icon: string;
+  icon: MCIcon;
   color: string;
+}
+
+export interface BusinessApplyStepProps {
+  initialValues: BusinessApplyFormState;
+  initialLogo?: string;
+  isEditing: boolean;
+  editId?: string;
+  accountEmail: string;
+  plan: BusinessPlan | null;
+  onSuccess: (business: Business) => void;
+  onCancel: () => void;
+}
+
+export interface BusinessApprovalStepProps {
+  business: Business;
+  onApproved: (biz: Business) => void;
+}
+
+export interface BusinessCategoriesStepProps {
+  business: Business;
+  onSaved: (biz: Business) => void;
+}
+
+export interface BusinessPlanStepProps {
+  business: Business | null;
+  onSelected: (result: BusinessPlan | Business) => void;
+}
+
+export interface BusinessPostStepProps {
+  business: Business;
+  onSelectCategory: (category: string) => void;
+}
+
+export interface BusinessSectionHeaderProps {
+  title: string;
+  icon: MCIcon;
+}
+
+export interface BusinessFieldProps {
+  label: string;
+  required?: boolean;
+  error?: string;
+  children: ReactNode;
 }

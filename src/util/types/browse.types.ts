@@ -174,6 +174,15 @@ export type FilterRow =
   | { key: string; kind: 'region'; name: string; count: number }
   | { key: string; kind: 'city'; name: string; count: number };
 
+export interface SearchHistoryItem {
+  _id?: string;
+  id?: string;
+  query?: string;
+  search?: string;
+  text?: string;
+  createdAt?: string;
+}
+
 export interface SubcategoryHeaderProps {
   subIcon: string;
   subLabel: string;

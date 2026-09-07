@@ -5,8 +5,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { createStyles } from '../../util/styles/profile/badge.styles';
+import type { MCIcon } from '../../util/icons/icons';
 
-const STATS = [
+const STATS: { icon: MCIcon; labelKey: string }[] = [
   { icon: 'eye-outline', labelKey: 'mine.account.badgeVisits' },
   { icon: 'account-multiple-outline', labelKey: 'mine.account.badgeContacts' },
   { icon: 'message-reply-outline', labelKey: 'mine.account.badgeResponses' },
@@ -28,7 +29,7 @@ export default function BadgeScreen() {
           <View key={stat.labelKey} style={s.statRow}>
             <View style={s.statLeft}>
               <View style={s.statIconBg}>
-                <MaterialCommunityIcons name={stat.icon as any} size={20} color={Colors.primary} />
+                <MaterialCommunityIcons name={stat.icon} size={20} color={Colors.primary} />
               </View>
               <Text style={s.statLabel}>{t(stat.labelKey)}</Text>
             </View>

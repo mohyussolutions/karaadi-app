@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, memo } from 'react';
 import { View, Text, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -10,6 +10,38 @@ import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { createStyles } from '../../../../util/styles/profile/notifications.styles';
 import { useNotificationsData } from '../../../hooks/useNotificationsData';
 import { useAuthStore } from '../../../../store/hooks/authStore';
+import type { Notification } from '../../../../util/types';
+
+const NotificationRow = memo(function NotificationRow({
+  item, onPress,
+}: {
+  item: Notification;
+  onPress: (item: Notification) => void;
+}) {
+  const Colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
+  return (
+    <TouchableOpacity
+      style={[styles.item, !item.read && styles.unread]}
+      onPress={() => onPress(item)}
+      activeOpacity={0.85}
+    >
+      <View style={[styles.iconBg, !item.read && styles.iconBgUnread]}>
+        <MaterialCommunityIcons
+          name="bell"
+          size={20}
+          color={!item.read ? Colors.primary : Colors.textMuted}
+        />
+      </View>
+      <View style={styles.itemContent}>
+        <Text style={[styles.itemTitle, !item.read && styles.itemTitleBold]}>{item.title}</Text>
+        <Text style={styles.itemBody} numberOfLines={2}>{item.body}</Text>
+        <Text style={styles.itemDate}>{new Date(item.createdAt).toLocaleDateString()}</Text>
+      </View>
+      {!item.read && <View style={styles.dot} />}
+    </TouchableOpacity>
+  );
+});
 
 export default function NotificationsScreen() {
   const router = useRouter();
@@ -26,9 +58,13 @@ export default function NotificationsScreen() {
     }
   }, [authLoading, user]);
 
-  if (!user || loading) return <LoadingSpinner fullScreen />;
+  const handleItemPress = useCallback((item: Notification) => {
+    if (!item.read) markOneRead(item._id);
+  }, [markOneRead]);
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const unreadCount = useMemo(() => notifications.filter((n) => !n.read).length, [notifications]);
+
+  if (!user || loading) return <LoadingSpinner fullScreen />;
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
@@ -51,25 +87,7 @@ export default function NotificationsScreen() {
           />
         }
         renderItem={({ item }) => (
-          <TouchableOpacity
-            style={[styles.item, !item.read && styles.unread]}
-            onPress={() => { if (!item.read) markOneRead(item._id); }}
-            activeOpacity={0.85}
-          >
-            <View style={[styles.iconBg, !item.read && styles.iconBgUnread]}>
-              <MaterialCommunityIcons
-                name="bell"
-                size={20}
-                color={!item.read ? Colors.primary : Colors.textMuted}
-              />
-            </View>
-            <View style={styles.itemContent}>
-              <Text style={[styles.itemTitle, !item.read && styles.itemTitleBold]}>{item.title}</Text>
-              <Text style={styles.itemBody} numberOfLines={2}>{item.body}</Text>
-              <Text style={styles.itemDate}>{new Date(item.createdAt).toLocaleDateString()}</Text>
-            </View>
-            {!item.read && <View style={styles.dot} />}
-          </TouchableOpacity>
+          <NotificationRow item={item} onPress={handleItemPress} />
         )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />

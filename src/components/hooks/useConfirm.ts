@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { confirmAccount, resendCode } from '../../actions/core/auth.actions';
 import { confirmationCodeSchema } from '../../util/validation/schemas';
+import type { ApiError } from '../../util/types/generic.types';
 
 export function useConfirm(email: string) {
   const router = useRouter();
@@ -23,8 +24,8 @@ export function useConfirm(email: string) {
       await confirmAccount(email, code.trim());
       router.replace({ pathname: '/(auth)/login', params: { email } });
       return { success: true };
-    } catch (err: any) {
-      const msg = err?.response?.data?.message || 'Invalid or expired code.';
+    } catch (err) {
+      const msg = (err as ApiError)?.response?.data?.message || 'Invalid or expired code.';
       setError(msg);
       return { success: false, message: msg };
     } finally {

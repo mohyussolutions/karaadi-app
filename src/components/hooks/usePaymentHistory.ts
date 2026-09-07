@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useRouter } from 'expo-router';
 import { useAuthStore } from '../../store/hooks/authStore';
 import { getPaymentHistory } from '../../actions/core/payment.actions';
@@ -23,14 +23,19 @@ export function usePaymentHistory() {
     }
   }, []);
 
-  useEffect(() => {
-    if (!user) { router.replace('/(auth)/login'); return; }
-    load();
-  }, [user, load, router]);
+  const hasUser = !!user;
 
-  const totalPaid = payments
-    .filter((p) => ['completed', 'success'].includes((p.status ?? '').toLowerCase()))
-    .reduce((sum, p) => sum + (p.totalAmount ?? 0), 0);
+  useEffect(() => {
+    if (!hasUser) { router.replace('/(auth)/login'); return; }
+    load();
+  }, [hasUser, load, router]);
+
+  const totalPaid = useMemo(
+    () => payments
+      .filter((p) => ['completed', 'success'].includes((p.status ?? '').toLowerCase()))
+      .reduce((sum, p) => sum + (p.totalAmount ?? 0), 0),
+    [payments],
+  );
 
   return { user, payments, loading, totalPaid };
 }

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useAuthStore } from '../../store/hooks/authStore';
 import { emailSchema } from '../../util/validation/schemas';
+import type { ApiError } from '../../util/types/generic.types';
 
 export function useLogin() {
   const router = useRouter();
@@ -26,8 +27,9 @@ export function useLogin() {
     try {
       await login(parsedEmail.data.toLowerCase(), password);
       router.replace('/(tabs)/home');
-    } catch (err: any) {
-      setError(err?.response?.data?.message || err?.message || 'Login failed. Please try again.');
+    } catch (err) {
+      const apiErr = err as ApiError;
+      setError(apiErr?.response?.data?.message || apiErr?.message || 'Login failed. Please try again.');
     } finally {
       setIsLoading(false);
     }

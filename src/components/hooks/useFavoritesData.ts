@@ -74,12 +74,12 @@ export function useFavoritesData() {
     }, [load]),
   );
 
-  function onRefresh() {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     load();
-  }
+  }, [load]);
 
-  async function handleRemove(fav: Favorite) {
+  const handleRemove = useCallback(async (fav: Favorite) => {
     setRemoving((prev) => new Set(prev).add(fav.itemId));
     try {
       await dispatch(toggleFavorite({ itemId: fav.itemId, wasFav: true })).unwrap();
@@ -91,11 +91,11 @@ export function useFavoritesData() {
         return s;
       });
     }
-  }
+  }, [dispatch]);
 
-  function handleCardPress(fav: Favorite) {
-    router.push(getListingDetailRoute({ id: fav.itemId, category: fav.category }) as any);
-  }
+  const handleCardPress = useCallback((fav: Favorite) => {
+    router.push(getListingDetailRoute({ id: fav.itemId, category: fav.category }) as Parameters<typeof router.push>[0]);
+  }, [router]);
 
   return {
     user,

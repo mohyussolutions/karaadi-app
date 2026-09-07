@@ -6,6 +6,7 @@ import { scheduleLocalNotification } from "../features/notifications/services/no
 import { playNotificationSound } from "../features/notifications/services/soundService";
 import { isViewingChat, getCachedUserName } from "../features/chat/services/chatState";
 import type { MessageBanner } from "../../util/types";
+import type { ChatMessage } from "../../util/types/chat.types";
 
 export function useSocketMessages(showBanner: (data: MessageBanner) => void) {
   const dispatch = useAppDispatch();
@@ -23,11 +24,11 @@ export function useSocketMessages(showBanner: (data: MessageBanner) => void) {
       const socket = getSocket();
       if (!socket) return;
 
-      function handleNewMessage(msg: any) {
+      function handleNewMessage(msg: ChatMessage) {
         const me = userRef.current;
         if (!msg || !me || msg.senderId === me.id) return;
 
-        const chatId: number = msg.chatId;
+        const chatId = msg.chatId;
         const alreadyViewing = chatId && isViewingChat(chatId);
 
         const senderName =

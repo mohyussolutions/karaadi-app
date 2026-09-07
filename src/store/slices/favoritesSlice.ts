@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getFavorites, addFavorite, removeFavorite } from '../../actions/categories/favorite.actions';
-import type { Favorite } from '../../util/types';
+import type { Favorite, ListingBase } from '../../util/types';
 import type { FavoritesState } from '../../util/types/redux.types';
 
 const initialState: FavoritesState = {
@@ -27,7 +27,7 @@ export const loadFavorites = createAsyncThunk('favorites/load', async () => {
 export const toggleFavorite = createAsyncThunk(
   'favorites/toggle',
   async (
-    { itemId, wasFav, listing, categoryHint }: { itemId: string; wasFav: boolean; listing?: any; categoryHint?: string },
+    { itemId, wasFav, listing, categoryHint }: { itemId: string; wasFav: boolean; listing?: ListingBase | null; categoryHint?: string },
     { getState },
   ) => {
     if (wasFav) {
@@ -60,8 +60,10 @@ const favoritesSlice = createSlice({
       .addCase(toggleFavorite.pending, (state, action) => {
         const { itemId, wasFav, listing } = action.meta.arg;
         if (wasFav) {
-          state.ids = state.ids.filter((id) => id !== itemId);
-          state.items = state.items.filter((f) => f.itemId !== itemId);
+          if (state.ids.includes(itemId)) state.ids = state.ids.filter((id) => id !== itemId);
+          if (state.items.some((f) => f.itemId === itemId)) {
+            state.items = state.items.filter((f) => f.itemId !== itemId);
+          }
         } else {
           if (!state.ids.includes(itemId)) {
             state.ids = [...state.ids, itemId];
@@ -84,12 +86,14 @@ const favoritesSlice = createSlice({
         }
       })
       .addCase(toggleFavorite.fulfilled, (state, action) => {
-        const { action: act, itemId } = action.payload;
-        if (act === 'remove') {
+        const { itemId } = action.payload;
+        if (action.payload.action === 'remove') {
           delete state.idMap[itemId];
-          state.items = state.items.filter((f) => f.itemId !== itemId);
+          if (state.items.some((f) => f.itemId === itemId)) {
+            state.items = state.items.filter((f) => f.itemId !== itemId);
+          }
         } else {
-          const { favorite } = action.payload as any;
+          const { favorite } = action.payload;
           if (favorite?.id) {
             state.idMap[itemId] = favorite.id;
             state.items = state.items.map((f) => (f.itemId === itemId ? { ...favorite, itemId } : f));
@@ -101,8 +105,10 @@ const favoritesSlice = createSlice({
         if (wasFav) {
           if (!state.ids.includes(itemId)) state.ids = [...state.ids, itemId];
         } else {
-          state.ids = state.ids.filter((id) => id !== itemId);
-          state.items = state.items.filter((f) => f.itemId !== itemId);
+          if (state.ids.includes(itemId)) state.ids = state.ids.filter((id) => id !== itemId);
+          if (state.items.some((f) => f.itemId === itemId)) {
+            state.items = state.items.filter((f) => f.itemId !== itemId);
+          }
         }
       });
   },

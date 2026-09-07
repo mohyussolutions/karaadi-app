@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { isAxiosError } from 'axios';
 import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../common/common-for-ios-andriod';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -65,8 +66,9 @@ export default function ReportScreen() {
         description: details,
       });
       setSuccess(true);
-    } catch (err: any) {
-      setError(err?.response?.data?.error || t('report.errorFailed'));
+    } catch (err) {
+      const message = isAxiosError(err) ? err.response?.data?.error : undefined;
+      setError(message || t('report.errorFailed'));
     } finally {
       setSubmitting(false);
     }

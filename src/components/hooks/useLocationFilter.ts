@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { matchesCategoryKey, toRegionPickerItems } from '../../util/helpers';
 import { fetchGeoRegions, GEO_CACHE_TTL } from '../../store/slices/geoSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
@@ -18,7 +18,7 @@ export function useLocationFilter(allListings: ListingBase[], subcategoryKey: st
 
   const regions = useMemo(() => toRegionPickerItems(geo.regions), [geo.regions]);
 
-  function toggleRegion(name: string) {
+  const toggleRegion = useCallback((name: string) => {
     setSelectedRegions((prev) => {
       if (prev.includes(name)) {
         const cityNames = new Set((regions.find((r) => r.name === name)?.cities ?? []).map((c) => c.name));
@@ -27,16 +27,16 @@ export function useLocationFilter(allListings: ListingBase[], subcategoryKey: st
       }
       return [...prev, name];
     });
-  }
+  }, [regions]);
 
-  function toggleCity(name: string) {
+  const toggleCity = useCallback((name: string) => {
     setSelectedCities((prev) => (prev.includes(name) ? prev.filter((c) => c !== name) : [...prev, name]));
-  }
+  }, []);
 
-  function clearLocationFilter() {
+  const clearLocationFilter = useCallback(() => {
     setSelectedRegions([]);
     setSelectedCities([]);
-  }
+  }, []);
 
   const locationCounts = useMemo(() => {
     const base = allListings.filter((item) => matchesCategoryKey(item, subcategoryKey));

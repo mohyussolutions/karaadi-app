@@ -4,13 +4,13 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Image,
   Linking,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { LoadingSpinner } from "../../components/loading";
+import RemoteImage from "../../components/shared/RemoteImage";
 import BottomTabBar from "../../navigation/tab-bar/BottomTabBar";
 import { useTranslation } from "react-i18next";
 import { useThemeColors, useThemedStyles } from "../../components/hooks/useTheme";
@@ -83,7 +83,7 @@ export default function BusinessDetailScreen() {
       >
       <View style={isTablet ? tabletPortrait.inner : undefined}>
         <View style={s.hero}>
-          <Image
+          <RemoteImage
             source={{
               uri:
                 business.images?.[0] ||
@@ -104,14 +104,14 @@ export default function BusinessDetailScreen() {
           <View style={s.typeBadge}>
             <MaterialCommunityIcons
               name={
-                (BUSINESS_TYPE_ICON[BUSINESS_CATEGORY_KEY_REVERSE[business.categories?.[0]]] ||
-                  "office-building-outline") as any
+                BUSINESS_TYPE_ICON[BUSINESS_CATEGORY_KEY_REVERSE[business.categories?.[0] ?? '']] ||
+                  "office-building-outline"
               }
               size={13}
               color={Colors.primary}
             />
             <Text style={s.typeText}>
-              {BUSINESS_TYPE_LABEL[BUSINESS_CATEGORY_KEY_REVERSE[business.categories?.[0]]] || "Business"}
+              {BUSINESS_TYPE_LABEL[BUSINESS_CATEGORY_KEY_REVERSE[business.categories?.[0] ?? '']] || "Business"}
             </Text>
           </View>
           {business.address && (
@@ -126,7 +126,7 @@ export default function BusinessDetailScreen() {
           )}
         </View>
 
-        {business.categories?.length > 0 && (
+        {business.categories && business.categories.length > 0 && (
           <View style={s.section}>
             <Text style={s.sectionTitle}>Categories</Text>
             <View style={s.categoryGrid}>
@@ -135,7 +135,7 @@ export default function BusinessDetailScreen() {
                 return (
                   <View key={cat} style={s.categoryItem}>
                     <MaterialCommunityIcons
-                      name={(BUSINESS_TYPE_ICON[mainKey] || "office-building-outline") as any}
+                      name={BUSINESS_TYPE_ICON[mainKey] || "office-building-outline"}
                       size={16}
                       color={Colors.primary}
                     />
@@ -149,7 +149,7 @@ export default function BusinessDetailScreen() {
           </View>
         )}
 
-        {business.images?.length > 0 && (
+        {business.images && business.images.length > 0 && (
           <View style={s.section}>
             <Text style={s.sectionTitle}>Photos</Text>
             <ScrollView
@@ -158,7 +158,7 @@ export default function BusinessDetailScreen() {
               contentContainerStyle={s.photoRow}
             >
               {business.images.map((uri: string, i: number) => (
-                <Image key={i} source={{ uri }} style={s.photo} />
+                <RemoteImage key={i} source={{ uri }} style={s.photo} />
               ))}
             </ScrollView>
           </View>
@@ -179,11 +179,11 @@ export default function BusinessDetailScreen() {
                 <TouchableOpacity
                   key={field}
                   style={s.socialBtn}
-                  onPress={() => openLink(field, business[field])}
+                  onPress={() => openLink(field, business[field] || '')}
                   activeOpacity={0.8}
                 >
                   <MaterialCommunityIcons
-                    name={SOCIAL_ICONS[field] as any}
+                    name={SOCIAL_ICONS[field]}
                     size={20}
                     color={Colors.primary}
                   />

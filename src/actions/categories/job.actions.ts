@@ -1,10 +1,12 @@
 import { apiClient } from '../client';
 import { JOBS_ENDPOINTS } from '../../api/urls';
-import type { CreateJobData } from '../../util/types/listing.types';
+import type { RawItem, Params } from '../../util/types/common.types';
+import type { ApiError } from '../../util/types/generic.types';
+import type { CreateJobData, Job } from '../../util/types/listing.types';
 
 export type { CreateJobData };
 
-function normJob(item: any) {
+function normJob<T>(item: RawItem): T {
   const id = String(item._id ?? item.id ?? '');
   return {
     ...item,
@@ -16,41 +18,41 @@ function normJob(item: any) {
     location:  item.location || [item.city, item.region].filter(Boolean).join(', '),
     type:      item.type || item.employmentType || 'Full-time',
     isPaid:    item.isPaid ?? true,
-  };
+  } as T;
 }
 
-export async function getJobs(params?: Record<string, any>) {
+export async function getJobs(params?: Params, signal?: AbortSignal): Promise<Job[]> {
   try {
-    const { data } = await apiClient.get(JOBS_ENDPOINTS.LIST, { params });
+    const { data } = await apiClient.get<RawItem[] | { jobs?: RawItem[]; data?: RawItem[] }>(JOBS_ENDPOINTS.LIST, { params, signal });
     const list = Array.isArray(data) ? data : data?.jobs ?? data?.data ?? [];
-    return list.map(normJob);
+    return list.map((item) => normJob<Job>(item));
   } catch { return []; }
 }
 
-export async function getJobById(id: string) {
+export async function getJobById(id: string, signal?: AbortSignal): Promise<Job | null> {
   try {
-    const { data } = await apiClient.get(JOBS_ENDPOINTS.BY_ID(id));
+    const { data } = await apiClient.get<RawItem | RawItem[]>(JOBS_ENDPOINTS.BY_ID(id), { signal });
     if (!data) return null;
     const item = Array.isArray(data) ? data[0] : data;
-    return item ? normJob(item) : null;
+    return item ? normJob<Job>(item) : null;
   } catch { return null; }
 }
 
 export async function createJob(body: CreateJobData) {
   try {
-    const { data } = await apiClient.post(JOBS_ENDPOINTS.CREATE, body);
+    const { data } = await apiClient.post<{ _id?: string; id?: string }>(JOBS_ENDPOINTS.CREATE, body);
     return { success: true, id: data?._id || data?.id, data };
-  } catch (e: any) {
-    return { success: false, message: e?.response?.data?.message || 'Failed to create job listing' };
+  } catch (e) {
+    return { success: false, message: (e as ApiError)?.response?.data?.message || 'Failed to create job listing' };
   }
 }
 
 export async function updateJob(id: string, body: Partial<CreateJobData>) {
   try {
-    const { data } = await apiClient.put(JOBS_ENDPOINTS.UPDATE(id), body);
+    const { data } = await apiClient.put<{ _id?: string; id?: string }>(JOBS_ENDPOINTS.UPDATE(id), body);
     return { success: true, id: data?._id || data?.id || id, data };
-  } catch (e: any) {
-    return { success: false, message: e?.response?.data?.message || 'Failed to update job listing' };
+  } catch (e) {
+    return { success: false, message: (e as ApiError)?.response?.data?.message || 'Failed to update job listing' };
   }
 }
 

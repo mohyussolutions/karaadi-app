@@ -10,6 +10,7 @@ import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTh
 import { LoadingSpinner } from '../../../components/loading';
 import { useSecuritySettings } from '../../../components/hooks/useSecuritySettings';
 import { createStyles } from '../../../util/styles/settings/security.styles';
+import type { MCIcon } from '../../../util/icons/icons';
 
 function fmtDate(iso: string) {
   try {
@@ -21,11 +22,11 @@ function fmtDate(iso: string) {
   }
 }
 
-function deviceIcon(device?: string | null): string {
-  if (!device) return 'monitor-outline';
+function deviceIcon(device?: string | null): MCIcon {
+  if (!device) return 'monitor';
   if (/iPhone|Android/i.test(device)) return 'cellphone';
   if (/iPad/i.test(device)) return 'tablet';
-  return 'monitor-outline';
+  return 'monitor';
 }
 
 export default function SecuritySettings() {
@@ -74,7 +75,7 @@ export default function SecuritySettings() {
             sessions.map((session, i) => (
               <View key={session.id} style={[s.row, i < sessions.length - 1 && s.rowDivider]}>
                 <View style={s.iconWrap}>
-                  <MaterialCommunityIcons name={deviceIcon(session.device) as any} size={20} color={Colors.primary} />
+                  <MaterialCommunityIcons name={deviceIcon(session.device)} size={20} color={Colors.primary} />
                 </View>
                 <View style={s.flexFull}>
                   <Text style={s.rowTitle} numberOfLines={1}>
@@ -116,7 +117,7 @@ export default function SecuritySettings() {
             history.map((entry, i) => (
               <View key={entry.id} style={[s.row, i < history.length - 1 && s.rowDivider]}>
                 <View style={s.iconWrap}>
-                  <MaterialCommunityIcons name={deviceIcon(entry.device) as any} size={20} color={Colors.gray400} />
+                  <MaterialCommunityIcons name={deviceIcon(entry.device)} size={20} color={Colors.gray400} />
                 </View>
                 <View style={s.flexFull}>
                   <Text style={s.rowTitle} numberOfLines={1}>

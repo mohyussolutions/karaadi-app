@@ -1,10 +1,14 @@
 import { apiClient } from '../client';
 import { PAYMENT_ENDPOINTS, FEE_ENDPOINTS } from '../../api/urls';
+import type { ApiError } from '../../util/types/generic.types';
+import type { AllFeeConfigs, FeeRecord, SubPlanConfig, SystemFeeConfig } from '../../util/types/fee.types';
 
 const feeUrl = (sub: string) => `${FEE_ENDPOINTS.BASE}/${sub}`;
 const feeById = (sub: string, id: string) => `${FEE_ENDPOINTS.BASE}/${sub}/${id}`;
 
-const CATEGORY_FEE_KEY: Record<string, string> = {
+type FeeArrayKey = 'marketplace' | 'realEstate' | 'cars' | 'motorcycles' | 'boats' | 'equipment';
+
+const CATEGORY_FEE_KEY: Record<string, FeeArrayKey> = {
   Cars: 'cars',
   Marketplace: 'marketplace',
   RealEstate: 'realEstate',
@@ -69,9 +73,9 @@ export async function getFeeForCategory(
   try {
     const fees = await getAllFees();
     const key = CATEGORY_FEE_KEY[categoryKey] || 'marketplace';
-    const arr = (fees as any)[key];
+    const arr = fees[key];
     if (!Array.isArray(arr) || arr.length === 0) return { feeId: '', feeAmount: 0 };
-    const config = arr.find((f: any) => f?.isActive !== false) || arr[0];
+    const config = arr.find((f) => f?.isActive !== false) || arr[0];
     const fieldKey = subType ? SUBCATEGORY_FEE_FIELD[categoryKey]?.[subType] : undefined;
     return {
       feeId: String(config?.id || config?._id || ''),
@@ -82,9 +86,9 @@ export async function getFeeForCategory(
   }
 }
 
-export async function getAllFees() {
+export async function getAllFees(): Promise<AllFeeConfigs> {
   try {
-    const { data } = await apiClient.get(feeUrl('all'));
+    const { data } = await apiClient.get<Partial<AllFeeConfigs>>(feeUrl('all'));
     return {
       marketplace:     data.marketplace     ?? [],
       realEstate:      data.realEstate      ?? [],
@@ -102,15 +106,15 @@ export async function getAllFees() {
   }
 }
 
-let _subPlansCache: { data: any; at: number } | null = null;
+let _subPlansCache: { data: SubPlanConfig[]; at: number } | null = null;
 const SUB_PLANS_TTL = 60_000;
 
-export async function getSubPlans() {
+export async function getSubPlans(): Promise<SubPlanConfig[]> {
   if (_subPlansCache && Date.now() - _subPlansCache.at < SUB_PLANS_TTL) {
     return _subPlansCache.data;
   }
   try {
-    const { data } = await apiClient.get(feeUrl('sub-plans'));
+    const { data } = await apiClient.get<SubPlanConfig[]>(feeUrl('sub-plans'));
     _subPlansCache = { data, at: Date.now() };
     return data;
   } catch {
@@ -118,35 +122,38 @@ export async function getSubPlans() {
   }
 }
 
-export async function getSubPlanById(id: string) {
+export async function getSubPlanById(id: string): Promise<SubPlanConfig | null> {
   try {
-    const { data } = await apiClient.get(feeById('sub-plans', id));
+    const { data } = await apiClient.get<SubPlanConfig>(feeById('sub-plans', id));
     return data ?? null;
   } catch {
     return null;
   }
 }
 
-export async function getSystemConfig() {
+export async function getSystemConfig(): Promise<SystemFeeConfig | null> {
   try {
-    const { data } = await apiClient.get(feeUrl('system-config'));
+    const { data } = await apiClient.get<SystemFeeConfig>(feeUrl('system-config'));
     return data ?? null;
   } catch {
     return null;
   }
 }
 
-async function getCategoryFees(cat: string) {
-  try { const { data } = await apiClient.get(feeUrl(cat)); return Array.isArray(data) ? data : data ?? []; } catch { return []; }
+async function getCategoryFees(cat: string): Promise<FeeRecord[]> {
+  try {
+    const { data } = await apiClient.get<FeeRecord[] | FeeRecord>(feeUrl(cat));
+    return Array.isArray(data) ? data : (data ? [data] : []);
+  } catch { return []; }
 }
-async function getCategoryFeeById(cat: string, id: string) {
-  try { const { data } = await apiClient.get(feeById(cat, id)); return data ?? null; } catch { return null; }
+async function getCategoryFeeById(cat: string, id: string): Promise<FeeRecord | null> {
+  try { const { data } = await apiClient.get<FeeRecord>(feeById(cat, id)); return data ?? null; } catch { return null; }
 }
 async function createCategoryFee(cat: string, body: Record<string, unknown>) {
-  try { const { data } = await apiClient.post(feeUrl(cat), body); return data; } catch (e: any) { return { error: e?.response?.data?.message || 'Failed' }; }
+  try { const { data } = await apiClient.post<FeeRecord>(feeUrl(cat), body); return data; } catch (e) { return { error: (e as ApiError)?.response?.data?.message || 'Failed' }; }
 }
 async function updateCategoryFee(cat: string, id: string, body: Record<string, unknown>) {
-  try { const { data } = await apiClient.patch(feeById(cat, id), body); return data; } catch (e: any) { return { error: e?.response?.data?.message || 'Failed' }; }
+  try { const { data } = await apiClient.patch<FeeRecord>(feeById(cat, id), body); return data; } catch (e) { return { error: (e as ApiError)?.response?.data?.message || 'Failed' }; }
 }
 async function deleteCategoryFee(cat: string, id: string) {
   try { await apiClient.delete(feeById(cat, id)); return { success: true }; } catch { return { success: false }; }

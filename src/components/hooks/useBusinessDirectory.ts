@@ -1,11 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAppSelector } from '../../store/store';
 import { getBusinessList } from '../../actions/core/business.actions';
+import type { Business } from '../../util/types/business.types';
 
 
 export function useBusinessDirectory() {
   const user = useAppSelector((s) => s.auth.user);
-  const [businesses, setBusinesses] = useState<any[]>([]);
+  const [businesses, setBusinesses] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -23,7 +24,7 @@ export function useBusinessDirectory() {
 
   useEffect(() => { load(); }, [load]);
 
-  function onRefresh() { setRefreshing(true); load(); }
+  const onRefresh = useCallback(() => { setRefreshing(true); load(); }, [load]);
 
   return { user, businesses, loading, refreshing, onRefresh };
 }

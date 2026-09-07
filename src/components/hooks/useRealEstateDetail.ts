@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { toggleFavorite } from '../../store/slices/favoritesSlice';
 import { useAuthStore } from '../../store/hooks/authStore';
 import { getRealEstateById } from '../../actions/categories/realEstate.actions';
+import { trackItemView } from '../../actions/categories/feed.actions';
 
 import { getCachedListing } from '../../util/cache/listingCache';
 import { showToast } from '../../util/cache/toastService';
@@ -28,13 +29,18 @@ export function useRealEstateDetail(id: string) {
     async function load() {
       try {
         const data = await getRealEstateById(id);
-        setItem({ ...data, id: data.id || data._id });
+        if (data) setItem({ ...data, id: data.id || data._id });
       } catch {}
       setLoading(false);
     }
     load();
     return () => ctrl.abort();
   }, [id]);
+
+  useEffect(() => {
+    if (!item?.id) return;
+    trackItemView(item.id, item.mainCategory || 'realestate', user?.id ?? null);
+  }, [item?.id]);
 
   async function toggleFav() {
     if (!user) { router.push('/(auth)/login'); return; }

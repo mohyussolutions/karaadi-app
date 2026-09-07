@@ -7,6 +7,8 @@ export function useSheetDrag(onDismiss: () => void) {
   const dragY = useRef(new Animated.Value(0)).current;
   const dragRef = useRef(0);
   const isDraggingDown = useRef(false);
+  const onDismissRef = useRef(onDismiss);
+  onDismissRef.current = onDismiss;
 
   const sheetDragResponder = useRef(
     PanResponder.create({
@@ -27,7 +29,7 @@ export function useSheetDrag(onDismiss: () => void) {
       onPanResponderRelease: () => {
         if (isDraggingDown.current && dragRef.current > DRAG_THRESHOLD) {
           Animated.timing(dragY, { toValue: 0, duration: 0, useNativeDriver: NATIVE_DRIVER }).start();
-          onDismiss();
+          onDismissRef.current();
         } else {
           Animated.spring(dragY, {
             toValue: 0, useNativeDriver: NATIVE_DRIVER, tension: 80, friction: 14,

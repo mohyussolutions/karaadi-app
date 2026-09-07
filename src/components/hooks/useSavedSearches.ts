@@ -1,27 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/hooks/authStore';
 import { getSearchHistory, deleteSearchHistory } from '../../actions/search/searchHistory';
+import type { SearchHistoryItem } from '../../util/types/browse.types';
 
 
 export function useSavedSearches() {
   const { t } = useTranslation();
   const { user } = useAuthStore();
-  const [searches, setSearches] = useState<any[]>([]);
+  const uid = user?._id || user?.id;
+  const [searches, setSearches] = useState<SearchHistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) { setLoading(false); return; }
+    if (!uid) { setLoading(false); return; }
     const ctrl = new AbortController();
     getSearchHistory(ctrl.signal)
       .then((data) => setSearches(data))
       .catch(() => {})
       .finally(() => setLoading(false));
     return () => ctrl.abort();
-  }, [user]);
+  }, [uid]);
 
-  function deleteSearch(id: string) {
+  const deleteSearch = useCallback((id: string) => {
     Alert.alert(t('auth.common.error'), `${t('common.back')}?`, [
       { text: t('auth.common.ok'), style: 'cancel' },
       {
@@ -32,7 +34,7 @@ export function useSavedSearches() {
         },
       },
     ]);
-  }
+  }, [t]);
 
   return { searches, loading, deleteSearch };
 }

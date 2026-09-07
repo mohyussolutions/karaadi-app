@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import {
-  View, Text, Image, TouchableOpacity,
+  View, Text, TouchableOpacity,
   ScrollView, Alert, TextInput, ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
+import { isAxiosError } from 'axios';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { placeholderAvatar, REGEX_PHONE_INPUT_FILTER } from '../../constants';
 import { updateUsername, updatePhone, updateProfileImage, deleteAccount } from '../../actions/core/auth.actions';
 import { useAuthStore } from '../../store/hooks/authStore';
 import { getImageUrl } from '../../util/helpers';
+import RemoteImage from '../../components/shared/RemoteImage';
 import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
 import { createStyles } from '../../util/styles/profile/edit.styles';
 import { useTranslation } from 'react-i18next';
@@ -49,7 +51,7 @@ export default function EditProfileScreen() {
       const mime = asset.mimeType === 'image/png' ? 'image/png' : 'image/jpeg';
       const ext = mime === 'image/png' ? 'png' : 'jpg';
       const formData = new FormData();
-      formData.append('image', { uri: asset.uri, type: mime, name: `profile.${ext}` } as any);
+      formData.append('image', { uri: asset.uri, type: mime, name: `profile.${ext}` } as unknown as Blob);
       const updated = await updateProfileImage(formData);
       if (user) await setUser({ ...user, ...updated }, user.token);
       Alert.alert(t('success'), t('mine.editProfile.photoUpdated'));
@@ -69,8 +71,9 @@ export default function EditProfileScreen() {
       const updated = await updateUsername(parsedUsername.data);
       if (user) await setUser({ ...user, ...updated }, user.token);
       Alert.alert(t('success'), t('mine.editProfile.usernameUpdated'));
-    } catch (err: any) {
-      Alert.alert(t('error'), err?.response?.data?.message || t('mine.editProfile.usernameUpdateFailed'));
+    } catch (err) {
+      const message = isAxiosError(err) ? err.response?.data?.message : undefined;
+      Alert.alert(t('error'), message || t('mine.editProfile.usernameUpdateFailed'));
     } finally {
       setSavingUsername(false);
     }
@@ -85,8 +88,9 @@ export default function EditProfileScreen() {
       const updated = await updatePhone(parsedPhone.data);
       if (user) await setUser({ ...user, ...updated }, user.token);
       Alert.alert(t('success'), t('mine.editProfile.phoneUpdated'));
-    } catch (err: any) {
-      Alert.alert(t('error'), err?.response?.data?.message || t('mine.editProfile.phoneUpdateFailed'));
+    } catch (err) {
+      const message = isAxiosError(err) ? err.response?.data?.message : undefined;
+      Alert.alert(t('error'), message || t('mine.editProfile.phoneUpdateFailed'));
     } finally {
       setSavingPhone(false);
     }
@@ -122,7 +126,7 @@ export default function EditProfileScreen() {
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }]} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
 
         <View style={styles.avatarSection}>
-          <Image
+          <RemoteImage
             source={{ uri: getImageUrl(user?.profileImage) || AVATAR }}
             style={styles.avatar}
           />

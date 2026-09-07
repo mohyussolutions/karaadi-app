@@ -1,4 +1,5 @@
 import type { ColorPalette } from '../../../../components/hooks/useTheme';
+import type { PlanStyle } from '../../../../util/types/new-ad.types';
 import { REGEX_DIGITS } from '../../../../constants';
 
 export function getPlanCardColors(Colors: ColorPalette) {
@@ -8,7 +9,7 @@ export function getPlanCardColors(Colors: ColorPalette) {
   } as const;
 }
 
-export function getPlanStyle(Colors: ColorPalette): Record<string, { color: string; icon: string; bg: string }> {
+export function getPlanStyle(Colors: ColorPalette): Record<string, PlanStyle> {
   return {
     basic:    { color: Colors.gray500, icon: 'shield-outline',  bg: Colors.gray100 },
     standard: { color: Colors.primary, icon: 'lightning-bolt', bg: Colors.primaryGhost },

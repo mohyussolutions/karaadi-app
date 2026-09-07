@@ -2,14 +2,14 @@ import { apiClient } from '../client';
 import { BUSINESSES_ENDPOINTS } from '../../api/urls';
 import type { Business } from '../../util/types/business.types';
 
-export async function getBusinessById(id: string): Promise<Business> {
-  const { data } = await apiClient.get(BUSINESSES_ENDPOINTS.BY_ID(id));
-  return data;
+export async function getBusinessById(id: string, signal?: AbortSignal): Promise<Business> {
+  const { data } = await apiClient.get(BUSINESSES_ENDPOINTS.BY_ID(id), { signal });
+  return data?.business ?? data;
 }
 
-export async function getMyBusinesses(): Promise<Business[]> {
-  const { data } = await apiClient.get(BUSINESSES_ENDPOINTS.MY);
-  return data;
+export async function getMyBusinesses(signal?: AbortSignal): Promise<Business[]> {
+  const { data } = await apiClient.get(BUSINESSES_ENDPOINTS.MY, { signal });
+  return Array.isArray(data) ? data : data?.businesses ?? [];
 }
 
 export async function createBusiness(payload: Record<string, unknown>): Promise<Business & { business?: Business }> {

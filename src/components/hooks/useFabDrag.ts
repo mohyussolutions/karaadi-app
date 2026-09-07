@@ -7,6 +7,8 @@ import { W, H, SHEET_TOP, FAB_INIT_X, FAB_INIT_Y } from '../ai-assistant/constan
 export function useFabDrag(insets: EdgeInsets) {
   const fabPosRef = useRef({ x: FAB_INIT_X, y: FAB_INIT_Y });
   const fabPan = useRef(new Animated.ValueXY({ x: FAB_INIT_X, y: FAB_INIT_Y })).current;
+  const insetsRef = useRef(insets);
+  insetsRef.current = insets;
 
   const fabResponder = useRef(
     PanResponder.create({
@@ -23,7 +25,7 @@ export function useFabDrag(insets: EdgeInsets) {
       onPanResponderRelease: (_, g) => {
         fabPan.flattenOffset();
         const nx = Math.max(0, Math.min(fabPosRef.current.x + g.dx, W - FAB_SIZE));
-        const ny = Math.max(SHEET_TOP, Math.min(fabPosRef.current.y + g.dy, H - FAB_SIZE - insets.bottom));
+        const ny = Math.max(SHEET_TOP, Math.min(fabPosRef.current.y + g.dy, H - FAB_SIZE - insetsRef.current.bottom));
         fabPosRef.current = { x: nx, y: ny };
         Animated.spring(fabPan, {
           toValue: { x: nx, y: ny },

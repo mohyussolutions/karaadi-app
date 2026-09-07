@@ -1,10 +1,29 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, ScrollView, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import type { CityAccordionPanelProps } from '../../../util/types';
 import { createStyles } from '../../../util/styles/geo/regionCityPicker.styles';
+
+const CityRow = memo(function CityRow({
+  name, active, onSelect,
+}: {
+  name: string;
+  active: boolean;
+  onSelect: (name: string) => void;
+}) {
+  const Colors = useThemeColors();
+  const s = useThemedStyles(createStyles);
+  return (
+    <TouchableOpacity style={[s.option, active && s.optionActive]} onPress={() => onSelect(name)} activeOpacity={0.75}>
+      <Text style={[s.optionText, active && s.optionTextActive]}>{name}</Text>
+      {active && (
+        <MaterialCommunityIcons name="check" size={18} color={Colors.primary} />
+      )}
+    </TouchableOpacity>
+  );
+});
 
 export function CityAccordionPanel({
   search, onSearchChange, cities, selectedCity, savingCity,
@@ -61,17 +80,14 @@ export function CityAccordionPanel({
             <Text style={s.emptyText}>{t('citySelect.noResults')}</Text>
           </View>
         ) : (
-          cities.map((c) => {
-            const active = selectedCity === c.name;
-            return (
-              <TouchableOpacity key={c.id} style={[s.option, active && s.optionActive]} onPress={() => onSelectCity(c.name)} activeOpacity={0.75}>
-                <Text style={[s.optionText, active && s.optionTextActive]}>{c.name}</Text>
-                {active && (
-                  <MaterialCommunityIcons name="check" size={18} color={Colors.primary} />
-                )}
-              </TouchableOpacity>
-            );
-          })
+          cities.map((c) => (
+            <CityRow
+              key={c.id}
+              name={c.name}
+              active={selectedCity === c.name}
+              onSelect={onSelectCity}
+            />
+          ))
         )}
       </ScrollView>
 

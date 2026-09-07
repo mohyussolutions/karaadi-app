@@ -14,6 +14,7 @@ import { useAppTranslation } from '../hooks/useAppTranslation';
 import { useThemeColors } from '../hooks/useTheme';
 import { COLORS } from '../../util/colors/colors';
 import type { CameraCaptureProps } from '../../util/types';
+import type { IconName } from '../../util/icons/icons';
 
 export function CameraCapture({ visible, onCapture, onClose, initialFacing = 'back' }: CameraCaptureProps) {
   const [permission, requestPermission] = useCameraPermissions();
@@ -153,7 +154,7 @@ export function CameraCapture({ visible, onCapture, onClose, initialFacing = 'ba
       ) : (
         <View style={s.root}>
           <CameraView
-            ref={cameraRef as any}
+            ref={cameraRef as unknown as React.Ref<CameraView>}
             style={StyleSheet.absoluteFill}
             facing={facing}
             flash={flash}
@@ -174,7 +175,7 @@ export function CameraCapture({ visible, onCapture, onClose, initialFacing = 'ba
               <MaterialCommunityIcons name="close" size={24} color={Colors.white} />
             </TouchableOpacity>
             <TouchableOpacity style={s.iconBtn} onPress={cycleFlash} hitSlop={8}>
-              <MaterialCommunityIcons name={flashIcon as any} size={24} color={Colors.white} />
+              <MaterialCommunityIcons name={flashIcon as IconName} size={24} color={Colors.white} />
             </TouchableOpacity>
           </View>
 

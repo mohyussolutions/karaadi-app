@@ -37,7 +37,11 @@ export async function resetPassword(payload: {
   code: string;
   password: string;
 }): Promise<{ message: string }> {
-  const { data } = await apiClient.post(AUTH_ENDPOINTS.RESET_PASSWORD, payload);
+  const { data } = await apiClient.post(AUTH_ENDPOINTS.RESET_PASSWORD, {
+    email: payload.email,
+    resetCode: payload.code,
+    newPassword: payload.password,
+  });
   return data;
 }
 
@@ -47,7 +51,7 @@ export async function logout(): Promise<void> {
 
 export async function getProfile(): Promise<User | null> {
   try {
-    const { data } = await apiClient.post(AUTH_ENDPOINTS.PROFILE);
+    const { data } = await apiClient.get(AUTH_ENDPOINTS.PROFILE);
     return data;
   } catch {
     return null;

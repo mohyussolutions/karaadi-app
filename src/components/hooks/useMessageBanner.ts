@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Animated } from "react-native";
 import { useRouter } from "expo-router";
 import { NATIVE_DRIVER } from "../../util/helpers/animation";
@@ -10,7 +10,15 @@ export function useMessageBanner() {
   const bannerY = useRef(new Animated.Value(-140)).current;
   const bannerTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  function showBanner(data: MessageBanner) {
+  const dismissBanner = useCallback(() => {
+    Animated.timing(bannerY, {
+      toValue: -140,
+      duration: 260,
+      useNativeDriver: NATIVE_DRIVER,
+    }).start(() => setMessageBanner(null));
+  }, [bannerY]);
+
+  const showBanner = useCallback((data: MessageBanner) => {
     setMessageBanner(data);
     bannerY.setValue(-140);
     Animated.spring(bannerY, {
@@ -21,17 +29,9 @@ export function useMessageBanner() {
     }).start();
     if (bannerTimer.current) clearTimeout(bannerTimer.current);
     bannerTimer.current = setTimeout(() => dismissBanner(), 5000);
-  }
+  }, [bannerY, dismissBanner]);
 
-  function dismissBanner() {
-    Animated.timing(bannerY, {
-      toValue: -140,
-      duration: 260,
-      useNativeDriver: NATIVE_DRIVER,
-    }).start(() => setMessageBanner(null));
-  }
-
-  function handleBannerPress() {
+  const handleBannerPress = useCallback(() => {
     const banner = messageBanner;
     dismissBanner();
     setTimeout(() => {
@@ -48,7 +48,7 @@ export function useMessageBanner() {
         router.push("/(tabs)/messages");
       }
     }, 100);
-  }
+  }, [messageBanner, dismissBanner, router]);
 
   return { messageBanner, bannerY, showBanner, dismissBanner, handleBannerPress };
 }

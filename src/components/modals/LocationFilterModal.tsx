@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import {
   View, Text, TextInput, Pressable, TouchableOpacity,
   FlatList, Modal, KeyboardAvoidingView,
@@ -14,12 +14,13 @@ import { KEYBOARD_AVOIDING_BEHAVIOR } from "../../common/common-for-ios-andriod"
 import { tabletModalStyles, TABLET_MODAL_ICON_SIZES } from "../../util/styles/shared/ipad.styles";
 import { createStyles } from "../../util/styles/browse/subcategory.styles";
 
-function FilterRowItem({
-  item, active, onPress,
+const FilterRowItem = memo(function FilterRowItem({
+  item, active, onToggleRegion, onToggleCity,
 }: {
   item: FilterRow;
   active: boolean;
-  onPress: () => void;
+  onToggleRegion: (name: string) => void;
+  onToggleCity: (name: string) => void;
 }) {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
@@ -29,7 +30,7 @@ function FilterRowItem({
   return (
     <Pressable
       style={[styles.filterOption, isTablet && tabletModalStyles.filterOption, isCity && styles.filterOptionCity, active && styles.filterOptionActive]}
-      onPress={onPress}
+      onPress={() => (isCity ? onToggleCity(item.name) : onToggleRegion(item.name))}
     >
       <MaterialCommunityIcons
         name={active ? "checkbox-marked" : "checkbox-blank-outline"}
@@ -49,7 +50,7 @@ function FilterRowItem({
       </Text>
     </Pressable>
   );
-}
+});
 
 export function LocationFilterModal({
   visible,
@@ -74,6 +75,19 @@ export function LocationFilterModal({
   });
 
   const totalSelected = selectedRegions.length + selectedCities.length;
+
+  const renderRow = useCallback(({ item }: { item: FilterRow }) => {
+    const isCity = item.kind === "city";
+    const active = isCity ? selectedCities.includes(item.name) : selectedRegions.includes(item.name);
+    return (
+      <FilterRowItem
+        item={item}
+        active={active}
+        onToggleRegion={onToggleRegion}
+        onToggleCity={onToggleCity}
+      />
+    );
+  }, [selectedCities, selectedRegions, onToggleRegion, onToggleCity]);
 
   return (
     <Modal visible={visible} animationType="slide" transparent statusBarTranslucent onRequestClose={onClose}>
@@ -116,17 +130,7 @@ export function LocationFilterModal({
               <Text style={styles.filterEmptyText}>{t("common.noResults")}</Text>
             </View>
           }
-          renderItem={({ item }) => {
-            const isCity = item.kind === "city";
-            const active = isCity ? selectedCities.includes(item.name) : selectedRegions.includes(item.name);
-            return (
-              <FilterRowItem
-                item={item}
-                active={active}
-                onPress={() => (isCity ? onToggleCity(item.name) : onToggleRegion(item.name))}
-              />
-            );
-          }}
+          renderItem={renderRow}
         />
 
         <View style={[styles.filterFooter, { paddingBottom: insets.bottom + 12 }]}>

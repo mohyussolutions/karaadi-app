@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo, memo } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { useGlobal } from '../../../../../../components/hooks/useGlobal';
@@ -6,10 +6,14 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../../../../components/hooks/useTheme';
 import { useAppTranslation } from '../../../../../../components/hooks/useAppTranslation';
 import { planStyle } from '../../../constants/plan';
-import type { Plan, OrderSummaryProps, CreatedItemSummary } from '../../../../../../util/types';
+import type { OrderSummaryProps } from '../../../../../../util/types';
+import type {
+  ImageCarouselProps, TitleSectionProps, AllFieldsGridProps,
+  DescriptionBoxProps, PriceBreakdownProps, TotalDueProps,
+} from '../../../../../../util/types/new-ad.types';
 import { createStyles } from '../../../../../../util/styles/payment/orderSummary.styles';
 
-function SummaryHeader() {
+const SummaryHeader = memo(function SummaryHeader() {
   const { width } = useGlobal();
   const s = useThemedStyles((c) => createStyles(c, width));
   const Colors = useThemeColors();
@@ -26,11 +30,9 @@ function SummaryHeader() {
       </View>
     </View>
   );
-}
+});
 
-function ImageCarousel({ images, index, onChangeIndex }: {
-  images: string[]; index: number; onChangeIndex: (i: number) => void;
-}) {
+function ImageCarousel({ images, index, onChangeIndex }: ImageCarouselProps) {
   const Colors = useThemeColors();
   const { width } = useGlobal();
   const s = useThemedStyles((c) => createStyles(c, width));
@@ -58,7 +60,7 @@ function ImageCarousel({ images, index, onChangeIndex }: {
   );
 }
 
-function EmptyImageState() {
+const EmptyImageState = memo(function EmptyImageState() {
   const { width } = useGlobal();
   const s = useThemedStyles((c) => createStyles(c, width));
   const Colors = useThemeColors();
@@ -71,9 +73,9 @@ function EmptyImageState() {
       <Text style={s.emptyImageText}>{t('postAd.noImagesUploaded', { defaultValue: 'No images uploaded' })}</Text>
     </View>
   );
-}
+});
 
-function TitleSection({ item, categoryName }: { item: CreatedItemSummary | null; categoryName?: string }) {
+const TitleSection = memo(function TitleSection({ item, categoryName }: TitleSectionProps) {
   const Colors = useThemeColors();
   const { width } = useGlobal();
   const s = useThemedStyles((c) => createStyles(c, width));
@@ -98,9 +100,9 @@ function TitleSection({ item, categoryName }: { item: CreatedItemSummary | null;
       </View>
     </View>
   );
-}
+});
 
-function AllFieldsGrid({ attrs }: { attrs: Array<{ label: string; value: string }> }) {
+const AllFieldsGrid = memo(function AllFieldsGrid({ attrs }: AllFieldsGridProps) {
   const { width } = useGlobal();
   const s = useThemedStyles((c) => createStyles(c, width));
   return (
@@ -113,9 +115,9 @@ function AllFieldsGrid({ attrs }: { attrs: Array<{ label: string; value: string 
       ))}
     </View>
   );
-}
+});
 
-function DescriptionBox({ text }: { text: string }) {
+const DescriptionBox = memo(function DescriptionBox({ text }: DescriptionBoxProps) {
   const { width } = useGlobal();
   const s = useThemedStyles((c) => createStyles(c, width));
   const { t } = useAppTranslation();
@@ -125,9 +127,9 @@ function DescriptionBox({ text }: { text: string }) {
       <Text style={s.descText} numberOfLines={3}>{text}</Text>
     </View>
   );
-}
+});
 
-function PriceBreakdown({ plan, ps, feeAmount }: { plan: Plan; ps: ReturnType<typeof planStyle>; feeAmount: number }) {
+const PriceBreakdown = memo(function PriceBreakdown({ plan, ps, feeAmount }: PriceBreakdownProps) {
   const { width } = useGlobal();
   const s = useThemedStyles((c) => createStyles(c, width));
   const { t } = useAppTranslation();
@@ -142,7 +144,7 @@ function PriceBreakdown({ plan, ps, feeAmount }: { plan: Plan; ps: ReturnType<ty
       </View>
       <View style={s.bRow}>
         <View style={[s.planBadge, { backgroundColor: ps.bg }]}>
-          <MaterialCommunityIcons name={ps.icon as any} size={12} color={ps.color} />
+          <MaterialCommunityIcons name={ps.icon} size={12} color={ps.color} />
           <Text style={[s.bKey, { color: ps.color }]}>{plan.label}</Text>
           <Text style={s.bDays}>· {plan.days} {t('plan.days')}</Text>
         </View>
@@ -152,9 +154,9 @@ function PriceBreakdown({ plan, ps, feeAmount }: { plan: Plan; ps: ReturnType<ty
       </View>
     </View>
   );
-}
+});
 
-function TotalDue({ total }: { total: number }) {
+const TotalDue = memo(function TotalDue({ total }: TotalDueProps) {
   const Colors = useThemeColors();
   const { width } = useGlobal();
   const s = useThemedStyles((c) => createStyles(c, width));
@@ -171,7 +173,7 @@ function TotalDue({ total }: { total: number }) {
       </Text>
     </View>
   );
-}
+});
 
 export function OrderSummary({ plan, item, categoryName, feeAmount }: OrderSummaryProps) {
   const { width } = useGlobal();
@@ -181,9 +183,12 @@ export function OrderSummary({ plan, item, categoryName, feeAmount }: OrderSumma
   const total = feeAmount + plan.price;
   const images = item?.images || [];
 
-  const displayAttrs = item?.allAttrs && item.allAttrs.length > 0
-    ? item.allAttrs.filter((a) => a.value && String(a.value).trim())
-    : [];
+  const displayAttrs = useMemo(
+    () => (item?.allAttrs && item.allAttrs.length > 0
+      ? item.allAttrs.filter((a) => a.value && String(a.value).trim())
+      : []),
+    [item?.allAttrs],
+  );
 
   return (
     <View style={s.wrap}>

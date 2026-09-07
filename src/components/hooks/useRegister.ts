@@ -8,6 +8,7 @@ import {
   REGEX_PASSWORD_SPECIAL,
 } from '../../constants';
 import { emailSchema, usernameSchema } from '../../util/validation/schemas';
+import type { ApiError } from '../../util/types/generic.types';
 
 export const PASSWORD_RULES = [
   { id: 'length',  labelKey: 'auth.passwordRules.length',    test: (p: string) => p.length >= 8 },
@@ -56,8 +57,9 @@ export function useRegister() {
         password,
       });
       router.push({ pathname: '/(auth)/confirm', params: { email: parsedEmail.data.toLowerCase() } });
-    } catch (err: any) {
-      setErrorMessage(err?.response?.data?.message || err?.message || '');
+    } catch (err) {
+      const apiErr = err as ApiError;
+      setErrorMessage(apiErr?.response?.data?.message || apiErr?.message || '');
     } finally {
       setIsLoading(false);
     }

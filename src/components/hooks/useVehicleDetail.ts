@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { toggleFavorite } from '../../store/slices/favoritesSlice';
 import { useAuthStore } from '../../store/hooks/authStore';
 import { getVehicleDetailById } from '../../actions/categories/listing.actions';
+import { trackItemView } from '../../actions/categories/feed.actions';
 import { VEHICLE_ENDPOINTS } from '../../api/urls';
 import { getCachedListing } from '../../util/cache/listingCache';
 import { showToast } from '../../util/cache/toastService';
@@ -36,6 +37,11 @@ export function useVehicleDetail(id: string, category: string) {
     load();
     return () => ctrl.abort();
   }, [id, category]);
+
+  useEffect(() => {
+    if (!item?.id) return;
+    trackItemView(item.id, item.mainCategory || category, user?.id ?? null);
+  }, [item?.id]);
 
   async function toggleFav() {
     if (!user) { router.push('/(auth)/login'); return; }

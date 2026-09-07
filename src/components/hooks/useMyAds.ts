@@ -9,6 +9,7 @@ import type { ListingBase } from '../../util/types';
 export function useMyAds() {
   const { t } = useTranslation();
   const { user } = useAuthStore();
+  const hasUser = !!user;
   const [ads, setAds] = useState<ListingBase[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -16,7 +17,7 @@ export function useMyAds() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const load = useCallback(async (signal?: AbortSignal) => {
-    if (!user) { setLoading(false); return; }
+    if (!hasUser) { setLoading(false); return; }
     setError(false);
     try {
       const data = await getMyAds(signal);
@@ -26,7 +27,7 @@ export function useMyAds() {
     } finally {
       if (!signal?.aborted) { setLoading(false); setRefreshing(false); }
     }
-  }, [user]);
+  }, [hasUser]);
 
   useFocusEffect(useCallback(() => {
     const ctrl = new AbortController();
@@ -35,17 +36,17 @@ export function useMyAds() {
     return () => ctrl.abort();
   }, [load]));
 
-  function onRefresh() {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     load();
-  }
+  }, [load]);
 
-  function retry() {
+  const retry = useCallback(() => {
     setLoading(true);
     load();
-  }
+  }, [load]);
 
-  function handleDelete(item: ListingBase) {
+  const handleDelete = useCallback((item: ListingBase) => {
     const id = item._id || item.id;
     Alert.alert(
       t('mine.myAds.delete'),
@@ -69,7 +70,7 @@ export function useMyAds() {
         },
       ],
     );
-  }
+  }, [t]);
 
   return { user, ads, loading, refreshing, error, deletingId, onRefresh, retry, handleDelete };
 }

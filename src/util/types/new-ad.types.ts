@@ -1,10 +1,13 @@
+import type { MCIcon } from '../icons/icons';
+import type { NestedSubCategory } from './browse.types';
+
 export type TFn = (key: string, opts?: Record<string, unknown>) => string;
 
 export type ListingType = 'private' | 'public';
 
 export type Step = 'login' | 'type' | 'category' | 'form' | 'plan' | 'summary' | 'payment';
 
-export type PaymentMethod = 'evc' | 'zaad' | 'sahal' | 'waaafi';
+export type PaymentMethod = 'evc' | 'zaad' | 'sahal' | 'waafi';
 export type PaymentStatus = 'idle' | 'polling' | 'success' | 'failed';
 
 export interface PaymentMethodOption {
@@ -25,6 +28,11 @@ export interface Plan {
   popular?: boolean;
 }
 
+export interface AttrItem {
+  label: string;
+  value: string;
+}
+
 export interface CreatedItemSummary {
   title: string;
   price: number;
@@ -40,7 +48,13 @@ export interface CreatedItemSummary {
   type?: string;
   color?: string;
   description?: string;
-  allAttrs?: Array<{ label: string; value: string }>;
+  allAttrs?: AttrItem[];
+}
+
+export interface PlanStyle {
+  color: string;
+  icon: MCIcon;
+  bg: string;
 }
 
 export interface NewAdState {
@@ -145,6 +159,26 @@ export interface PaymentItem {
   businessId?: string;
 }
 
+export interface InitiatePaymentPayload {
+  provider: PaymentMethod;
+  phone: string;
+  amount: number;
+  planAmount: number;
+  adId: string;
+  planId: string;
+  planType: string;
+  feeId?: string;
+  categoryType: string;
+}
+
+export interface ActivateListingPayload {
+  isPaid: boolean;
+  planId: string;
+  planAmount: number;
+  planType: string;
+  paymentRef?: string;
+}
+
 export interface StepSummaryProps {
   plan: Plan;
   categoryName?: string;
@@ -215,4 +249,68 @@ export interface StepItem {
 export interface CheckoutBarProps {
   steps: StepItem[];
   currentIndex: number;
+}
+
+export interface PlanCardProps {
+  plan: Plan;
+  selected: boolean;
+  isBestValue: boolean;
+  onSelect: (p: Plan) => void;
+}
+
+export interface NestedSubcategoryPickerProps {
+  options: NestedSubCategory[];
+  search: string;
+  onSearchChange: (value: string) => void;
+  selectedKey: string;
+  onSelect: (key: string) => void;
+}
+
+export interface TopBarProps {
+  onBack: () => void;
+}
+
+export interface ErrorBannerProps {
+  message: string;
+}
+
+export interface PayFooterProps {
+  total: number;
+  methodMeta: PaymentMethodOption;
+  onPay: () => void;
+}
+
+export interface ImageCarouselProps {
+  images: string[];
+  index: number;
+  onChangeIndex: (i: number) => void;
+}
+
+export interface TitleSectionProps {
+  item: CreatedItemSummary | null;
+  categoryName?: string;
+}
+
+export interface AllFieldsGridProps {
+  attrs: AttrItem[];
+}
+
+export interface DescriptionBoxProps {
+  text: string;
+}
+
+export interface PriceBreakdownProps {
+  plan: Plan;
+  ps: PlanStyle;
+  feeAmount: number;
+}
+
+export interface TotalDueProps {
+  total: number;
+}
+
+export interface WantedAlertFormProps {
+  visible: boolean;
+  onClose: () => void;
+  onCreated: (sub: import('./listing.types').Subscription) => void;
 }

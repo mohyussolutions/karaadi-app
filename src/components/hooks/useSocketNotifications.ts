@@ -3,8 +3,9 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { addNotification, markOneRead, markAllRead, removeNotification, clearNotifications } from '../features/notifications/store/notificationsSlice';
 import { getSocket } from '../../actions/sockets/socket.actions';
 import { playNotificationSound } from '../features/notifications/services/soundService';
+import type { SocketNotificationPayload } from '../../util/types/notification.types';
 
-function toNotification(userId: string, type: string, data: any) {
+function toNotification(userId: string, type: string, data: SocketNotificationPayload) {
   return {
     _id: String(data?.id ?? Date.now()),
     userId,
@@ -17,7 +18,7 @@ function toNotification(userId: string, type: string, data: any) {
   };
 }
 
-function isForCurrentUser(payload: any, userId: string): boolean {
+function isForCurrentUser(payload: SocketNotificationPayload, userId: string): boolean {
   const owner = payload?.userId ?? payload?.targetUserId ?? payload?.ownerId ?? payload?.recipientId;
   return owner == null || String(owner) === String(userId);
 }
@@ -34,7 +35,7 @@ export function useSocketNotifications() {
       if (!socket) return;
 
       function handleOne(type: string) {
-        return (payload: any) => {
+        return (payload: SocketNotificationPayload) => {
           if (!isForCurrentUser(payload, user!.id)) return;
           playNotificationSound();
           dispatch(addNotification(toNotification(user!.id, type, payload)));
@@ -42,7 +43,7 @@ export function useSocketNotifications() {
       }
 
       function handleMany(type: string) {
-        return (payload: any) => {
+        return (payload: SocketNotificationPayload | SocketNotificationPayload[]) => {
           const list = (Array.isArray(payload) ? payload : [payload]).filter((item) => isForCurrentUser(item, user!.id));
           if (list.length === 0) return;
           playNotificationSound();
@@ -50,7 +51,7 @@ export function useSocketNotifications() {
         };
       }
 
-      const events: Array<[string, (payload: any) => void]> = [
+      const events: Array<[string, (payload: SocketNotificationPayload) => void]> = [
         ['newNotification', handleOne('notification')],
         ['newNotifications', handleMany('subscription_alert')],
         ['subscription_match', handleOne('subscription_match')],

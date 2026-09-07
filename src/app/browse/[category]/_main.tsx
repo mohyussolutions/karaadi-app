@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
   View,
   Text,
@@ -122,7 +122,7 @@ export default function CategoryScreen() {
   const subs = category?.subCategories ?? [];
   const categoryLabel = t(`categories.${categoryKey}`, { defaultValue: category?.name ?? categoryKey });
 
-  const filteredListings = listings.filter((l) => {
+  const filteredListings = useMemo(() => listings.filter((l) => {
     const q = searchQuery.trim().toLowerCase();
     if (q) {
       const matchesTitle = (l.title ?? "").toLowerCase().includes(q);
@@ -132,7 +132,7 @@ export default function CategoryScreen() {
       if (!matchesTitle && !matchesCity && !matchesRegion && !matchesPrice) return false;
     }
     return true;
-  });
+  }), [listings, searchQuery]);
 
   function handleSubPress(sub: SubCategory) {
     router.push({ pathname: "/browse/[category]/[subcategory]", params: { category: categoryKey, subcategory: sub.key } });

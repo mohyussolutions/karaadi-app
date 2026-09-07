@@ -1,9 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
 import { getBusinessById } from '../../actions/core/business.actions';
+import type { Business } from '../../util/types/business.types';
 
 
 export function useBusinessDetail(id: string) {
-  const [business, setBusiness] = useState<any>(null);
+  const [business, setBusiness] = useState<Business | null>(null);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {

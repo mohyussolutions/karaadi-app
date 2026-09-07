@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { memo, useCallback, useMemo, useState } from 'react';
 import type { DropdownOption, DropdownProps } from '../../util/types';
 import {
   View, Text, TouchableOpacity, Modal, FlatList,
@@ -11,6 +11,27 @@ import { createStyles } from '../../util/styles/new-ad/dropdown.styles';
 function normalize(opt: string | DropdownOption): DropdownOption {
   return typeof opt === 'string' ? { label: opt, value: opt } : opt;
 }
+
+const DropdownOptionRow = memo(function DropdownOptionRow({
+  option, selected, onSelect,
+}: {
+  option: DropdownOption;
+  selected: boolean;
+  onSelect: (value: string) => void;
+}) {
+  const Colors = useThemeColors();
+  const s = useThemedStyles(createStyles);
+  return (
+    <TouchableOpacity
+      style={[s.option, selected && s.optionActive]}
+      onPress={() => onSelect(option.value)}
+      activeOpacity={0.75}
+    >
+      <Text style={[s.optionText, selected && s.optionTextActive]}>{option.label}</Text>
+      {selected && <MaterialCommunityIcons name="check" size={18} color={Colors.primary} />}
+    </TouchableOpacity>
+  );
+});
 
 export function Dropdown({ label, value, options, onChange, placeholder, required, error }: DropdownProps) {
   const Colors = useThemeColors();
@@ -28,6 +49,12 @@ export function Dropdown({ label, value, options, onChange, placeholder, require
   ), [normalized, search]);
 
   function close() { setOpen(false); setSearch(''); }
+
+  const handleSelect = useCallback((v: string) => {
+    onChange(v);
+    setOpen(false);
+    setSearch('');
+  }, [onChange]);
 
   return (
     <View style={s.wrap}>
@@ -73,19 +100,13 @@ export function Dropdown({ label, value, options, onChange, placeholder, require
               data={filtered}
               keyExtractor={item => item.value}
               keyboardShouldPersistTaps="handled"
-              renderItem={({ item }) => {
-                const selected = item.value === value;
-                return (
-                  <TouchableOpacity
-                    style={[s.option, selected && s.optionActive]}
-                    onPress={() => { onChange(item.value); close(); }}
-                    activeOpacity={0.75}
-                  >
-                    <Text style={[s.optionText, selected && s.optionTextActive]}>{item.label}</Text>
-                    {selected && <MaterialCommunityIcons name="check" size={18} color={Colors.primary} />}
-                  </TouchableOpacity>
-                );
-              }}
+              renderItem={({ item }) => (
+                <DropdownOptionRow
+                  option={item}
+                  selected={item.value === value}
+                  onSelect={handleSelect}
+                />
+              )}
               ItemSeparatorComponent={() => <View style={s.sep} />}
             />
           </View>

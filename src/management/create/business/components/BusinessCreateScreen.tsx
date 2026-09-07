@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
   KeyboardAvoidingView, ActivityIndicator, Alert,
@@ -20,7 +20,12 @@ import { CheckoutBar } from '../../../../components/features/subscription/compon
 import { BIZ_STEPS, MAIN_CATEGORIES } from '../../../../navigation/config/navConfig';
 import type { StepItem } from '../../../../util/types';
 import type { BusinessPlan, BusinessApplyFormState, Business } from '../../../../util/types/business.types';
-import { BUSINESS_CATEGORY_KEY_MAP } from '../../../../util/types/business.types';
+import { BUSINESS_CATEGORY_KEY_MAP, BUSINESS_TYPE_ICON } from '../../../../util/types/business.types';
+import type { MCIcon } from '../../../../util/icons/icons';
+import type {
+  BusinessApplyStepProps, BusinessApprovalStepProps, BusinessCategoriesStepProps,
+  BusinessPlanStepProps, BusinessPostStepProps, BusinessSectionHeaderProps, BusinessFieldProps,
+} from '../../../../util/types/component.types';
 import { LoadingSpinner } from '../../../../components/loading';
 import { useAuthStore } from '../../../../store/hooks/authStore';
 import { useAppDispatch } from '../../../../store/store';
@@ -56,6 +61,13 @@ function nextScreenAfterApproval(business: Business): Screen {
   return 'post';
 }
 
+function getApiErrorMessage(err: unknown): string | undefined {
+  if (err instanceof Error && 'response' in err) {
+    return (err as { response?: { data?: { message?: string } } }).response?.data?.message;
+  }
+  return undefined;
+}
+
 export default function BusinessCreateScreen() {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -74,7 +86,10 @@ export default function BusinessCreateScreen() {
   const [initialLogo, setInitialLogo] = useState<string | undefined>(undefined);
   const [loadingBiz, setLoadingBiz] = useState(true);
 
-  const bizSteps: StepItem[] = BIZ_STEPS.map((step) => ({ key: step.key, label: t(step.labelKey) }));
+  const bizSteps: StepItem[] = useMemo(
+    () => BIZ_STEPS.map((step) => ({ key: step.key, label: t(step.labelKey) })),
+    [t],
+  );
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -211,16 +226,7 @@ function ApplyStep({
   plan,
   onSuccess,
   onCancel,
-}: {
-  initialValues: BusinessApplyFormState;
-  initialLogo?: string;
-  isEditing: boolean;
-  editId?: string;
-  accountEmail: string;
-  plan: BusinessPlan | null;
-  onSuccess: (business: Business) => void;
-  onCancel: () => void;
-}) {
+}: BusinessApplyStepProps) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
@@ -305,8 +311,8 @@ function ApplyStep({
         const data = await createBusiness(payload);
         onSuccess(data?.business || data);
       }
-    } catch (err: any) {
-      Alert.alert(t('auth.common.error'), err?.response?.data?.message || t('mine.businesses.saveError'));
+    } catch (err) {
+      Alert.alert(t('auth.common.error'), getApiErrorMessage(err) || t('mine.businesses.saveError'));
     } finally {
       setSubmitting(false);
     }
@@ -498,10 +504,7 @@ function ApplyStep({
 function ApprovalStep({
   business,
   onApproved,
-}: {
-  business: Business;
-  onApproved: (biz: Business) => void;
-}) {
+}: BusinessApprovalStepProps) {
   const router = useRouter();
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
@@ -511,7 +514,7 @@ function ApprovalStep({
   const [checking, setChecking] = useState(false);
   const id = biz._id || biz.id;
 
-  const STATUS_META: Record<string, { icon: string; colorKey: 'primary' | 'success' | 'error'; title: string; message: string }> = useMemo(() => ({
+  const STATUS_META: Record<string, { icon: MCIcon; colorKey: 'primary' | 'success' | 'error'; title: string; message: string }> = useMemo(() => ({
     pending: {
       icon: 'clock-outline', colorKey: 'primary',
       title: t('mine.businesses.pendingTitle'),
@@ -559,7 +562,7 @@ function ApprovalStep({
   return (
     <ScrollView contentContainerStyle={[s.statusScroll, { paddingBottom: insets.bottom + 84 }]} keyboardShouldPersistTaps="handled">
       <View style={[s.statusIconWrap, { backgroundColor: color + '18' }]}>
-        <MaterialCommunityIcons name={meta.icon as any} size={56} color={color} />
+        <MaterialCommunityIcons name={meta.icon} size={56} color={color} />
       </View>
       <Text style={s.statusTitle}>{meta.title}</Text>
       <Text style={s.statusMessage}>{meta.message}</Text>
@@ -603,10 +606,7 @@ function ApprovalStep({
 function CategoriesStep({
   business,
   onSaved,
-}: {
-  business: Business;
-  onSaved: (biz: Business) => void;
-}) {
+}: BusinessCategoriesStepProps) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
@@ -615,7 +615,7 @@ function CategoriesStep({
   const OPTIONS = useMemo(() => MAIN_CATEGORIES.map(c => ({
     label: t(`categories.${c.key}`, { defaultValue: c.name }),
     value: c.key,
-    icon: c.icon,
+    icon: BUSINESS_TYPE_ICON[c.key],
   })), [t]);
 
   const [selected, setSelected] = useState<string[]>(() => {
@@ -638,8 +638,8 @@ function CategoriesStep({
       const id = business._id || business.id || '';
       await updateBusiness(id, { categories: backendCategories });
       onSaved({ ...business, categories: backendCategories });
-    } catch (err: any) {
-      Alert.alert(t('auth.common.error'), err?.response?.data?.message || t('mine.businesses.saveError'));
+    } catch (err) {
+      Alert.alert(t('auth.common.error'), getApiErrorMessage(err) || t('mine.businesses.saveError'));
     } finally {
       setSaving(false);
     }
@@ -661,7 +661,7 @@ function CategoriesStep({
               activeOpacity={0.85}
             >
               <View style={[s.categoryGridIconWrap, active && s.categoryGridIconWrapActive]}>
-                <MaterialCommunityIcons name={opt.icon as any} size={28} color={active ? Colors.white : Colors.primary} />
+                <MaterialCommunityIcons name={opt.icon} size={28} color={active ? Colors.white : Colors.primary} />
               </View>
               <Text style={s.categoryGridLabel}>{opt.label}</Text>
             </TouchableOpacity>
@@ -693,10 +693,7 @@ function CategoriesStep({
 function PlanStep({
   business,
   onSelected,
-}: {
-  business: Business | null;
-  onSelected: (result: BusinessPlan | Business) => void;
-}) {
+}: BusinessPlanStepProps) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
@@ -729,8 +726,8 @@ function PlanStep({
       const action = business.planId ? extendBusinessPlan : selectBusinessPlan;
       const updated = await action(id, planId);
       onSelected(updated?._id || updated?.id ? updated : { ...business, planId });
-    } catch (err: any) {
-      Alert.alert(t('auth.common.error'), err?.response?.data?.message || t('mine.businesses.planError'));
+    } catch (err) {
+      Alert.alert(t('auth.common.error'), getApiErrorMessage(err) || t('mine.businesses.planError'));
     } finally {
       setSubmitting(false);
     }
@@ -809,10 +806,7 @@ function PlanStep({
 function PostStep({
   business,
   onSelectCategory,
-}: {
-  business: Business;
-  onSelectCategory: (category: string) => void;
-}) {
+}: BusinessPostStepProps) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
@@ -824,7 +818,7 @@ function PostStep({
     const all = MAIN_CATEGORIES.map(c => ({
       label: t(`categories.${c.key}`, { defaultValue: c.name }),
       value: c.key,
-      icon: c.icon,
+      icon: BUSINESS_TYPE_ICON[c.key],
     }));
     if (allowedBackendKeys.length === 0) return all;
     return all.filter((opt) => allowedBackendKeys.includes(BUSINESS_CATEGORY_KEY_MAP[opt.value]));
@@ -844,7 +838,7 @@ function PostStep({
             activeOpacity={0.85}
           >
             <View style={s.categoryGridIconWrap}>
-              <MaterialCommunityIcons name={opt.icon as any} size={28} color={Colors.primary} />
+              <MaterialCommunityIcons name={opt.icon} size={28} color={Colors.primary} />
             </View>
             <Text style={s.categoryGridLabel}>{opt.label}</Text>
           </TouchableOpacity>
@@ -854,20 +848,18 @@ function PostStep({
   );
 }
 
-function SectionHeader({ title, icon }: { title: string; icon: string }) {
+function SectionHeader({ title, icon }: BusinessSectionHeaderProps) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   return (
     <View style={s.sectionHeader}>
-      <MaterialCommunityIcons name={icon as any} size={16} color={Colors.primary} />
+      <MaterialCommunityIcons name={icon} size={16} color={Colors.primary} />
       <Text style={s.sectionTitle}>{title}</Text>
     </View>
   );
 }
 
-function Field({ label, required, error, children }: {
-  label: string; required?: boolean; error?: string; children: React.ReactNode;
-}) {
+function Field({ label, required, error, children }: BusinessFieldProps) {
   const s = useThemedStyles(createStyles);
   return (
     <View style={s.fieldWrap}>

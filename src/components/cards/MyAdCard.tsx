@@ -51,7 +51,7 @@ function MyAdCard({ item, deleting, onDelete, onPayNow }: MyAdCardProps) {
         : '';
 
   function handlePress() {
-    router.push(getListingDetailRoute(item, item.mainCategory) as any);
+    router.push(getListingDetailRoute(item, item.mainCategory) as never);
   }
 
   return (

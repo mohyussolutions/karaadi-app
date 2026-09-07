@@ -7,20 +7,22 @@ export function useSubscriptionPlans() {
   const { user } = useAuthStore();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
-  const [myPlan, setMyPlan] = useState<any>(null);
+  const [myPlan, setMyPlan] = useState<unknown>(null);
+
+  const hasUser = !!user;
 
   useEffect(() => {
     async function load() {
       const [plansData, myPlanData] = await Promise.all([
         fetchSubscriptionPlans(),
-        user ? fetchMyPlan() : Promise.resolve(null),
+        hasUser ? fetchMyPlan() : Promise.resolve(null),
       ]);
       setPlans(plansData);
       setMyPlan(myPlanData);
       setLoading(false);
     }
     load();
-  }, [user]);
+  }, [hasUser]);
 
   return { user, plans, loading, myPlan };
 }

@@ -1,13 +1,14 @@
 import { apiClient } from '../client';
 import { NOTIFICATIONS_ENDPOINTS } from '../../api/urls';
+import type { Notification } from '../../util/types/notification.types';
 
 export async function getUnreadNotificationCount(userId: string): Promise<number> {
-  const { data } = await apiClient.get(NOTIFICATIONS_ENDPOINTS.STATS(userId));
+  const { data } = await apiClient.get<{ stats?: { unread?: number } }>(NOTIFICATIONS_ENDPOINTS.STATS(userId));
   return data?.stats?.unread ?? 0;
 }
 
-export async function getNotifications(userId: string, signal?: AbortSignal): Promise<any[]> {
-  const { data } = await apiClient.get(NOTIFICATIONS_ENDPOINTS.LIST(userId), { signal });
+export async function getNotifications(userId: string, signal?: AbortSignal): Promise<Notification[]> {
+  const { data } = await apiClient.get<Notification[] | { notifications?: Notification[] }>(NOTIFICATIONS_ENDPOINTS.LIST(userId), { signal });
   return Array.isArray(data) ? data : data?.notifications || [];
 }
 

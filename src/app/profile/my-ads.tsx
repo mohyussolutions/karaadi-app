@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, FlatList, TouchableOpacity, Text, RefreshControl } from 'react-native';
 import { useGlobal } from '../../components/hooks/useGlobal';
 import { useRouter } from 'expo-router';
@@ -24,7 +24,7 @@ export default function MyAdsScreen() {
   const styles = useThemedStyles((c) => createStyles(c, width));
   const insets = useSafeAreaInsets();
 
-  function handlePayNow(item: ListingBase) {
+  const handlePayNow = useCallback((item: ListingBase) => {
     dispatch(prefillForPayment({
       categoryKey: item.mainCategory,
       createdId: item._id || item.id,
@@ -41,7 +41,20 @@ export default function MyAdsScreen() {
       },
     }));
     router.push('/(tabs)/new-ad');
-  }
+  }, [dispatch, router]);
+
+  const keyExtractor = useCallback((item: ListingBase) => item._id || item.id, []);
+
+  const renderItem = useCallback(({ item }: { item: ListingBase }) => (
+    <View style={styles.cardWrap}>
+      <MyAdCard
+        item={item}
+        deleting={deletingId === (item._id || item.id)}
+        onDelete={handleDelete}
+        onPayNow={handlePayNow}
+      />
+    </View>
+  ), [styles.cardWrap, deletingId, handleDelete, handlePayNow]);
 
   if (!user) {
     return (
@@ -75,7 +88,7 @@ export default function MyAdsScreen() {
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <FlatList
         data={ads}
-        keyExtractor={(item) => item._id || item.id}
+        keyExtractor={keyExtractor}
         numColumns={2}
         columnWrapperStyle={styles.row}
         contentContainerStyle={[styles.list, ads.length === 0 && { flex: 1 }]}
@@ -99,16 +112,7 @@ export default function MyAdsScreen() {
             message={t('mine.myAds.emptyHint')}
           />
         }
-        renderItem={({ item }) => (
-          <View style={styles.cardWrap}>
-            <MyAdCard
-              item={item}
-              deleting={deletingId === (item._id || item.id)}
-              onDelete={handleDelete}
-              onPayNow={handlePayNow}
-            />
-          </View>
-        )}
+        renderItem={renderItem}
       />
       <TouchableOpacity style={[styles.postBtn, { marginBottom: insets.bottom + 84 }]} onPress={() => router.push('/(tabs)/new-ad')}>
         <Text style={styles.postBtnText}>+ {t('postNewAd')}</Text>

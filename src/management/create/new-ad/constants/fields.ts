@@ -273,7 +273,7 @@ export function getFields(t: TFn): Record<string, FieldDef[]> {
 
 export const NUMERIC_KEYS = [
   'price', 'year', 'mileage', 'bedrooms', 'bathrooms', 'sizeSqm',
-  'hoursUsed', 'floor', 'totalFloors', 'engineCc', 'doors',
+  'hoursUsed', 'floor', 'totalFloors', 'doors',
 ];
 
 export const BOOLEAN_KEYS = ['furnished', 'parking', 'hasGarage', 'hasGarden'];

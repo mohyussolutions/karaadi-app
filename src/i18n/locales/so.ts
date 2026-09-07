@@ -488,7 +488,7 @@ export const about = {
     services:
       "Adeegyada: Hel ama bixi adeegyo sida dhismaha, hagaajinta, iyo la-talinta.",
   },
-  contactHeading: "Nala Soo Xiriir Karaadi",
+  contactHeading: "Nala Soo Xiriir",
   contactIntro:
     "Ma qabtaa su'aal, talo ama cabasho? Fadlan nala soo xiriir — waxaan diyaar u nahay inaan ku caawino.",
   contact: {
@@ -514,7 +514,7 @@ export const terms = {
 } as const;
 
 export const contact = {
-  title: "Nala Soo Xiriir Karaadi",
+  title: "Nala Soo Xiriir",
   heading: "Nala Soo Xiriir Karaadi",
   description: "La xidhiidh kooxda Karaadi wixii taageero ama su'aalo ah.",
   supportEmailSubject: "Codsi Taageero Karaadi",
@@ -545,7 +545,7 @@ export const nav = {
 
 export const welcome = "Ku soo dhawaada Karaadi" as const;
 
-export const search = "Baar Hamar, guri, baabuur, 45 000..." as const;
+export const search = "Baar Xamar, guri, baabuur, 45 000..." as const;
 
 export const filters = {
   location: {
@@ -756,7 +756,7 @@ export const categories = {
   RealEstate: "hantida maguurtada ah",
   Cars: "Gawaarida",
   Boats: "Doomaha",
-  farmequipment: "Qalabyada Beeraha",
+  farmequipment: "Qalabka Beeraha",
   Motorcycles: "Mootooyin",
   Smartsuuq: "Smartsuuq",
 } as const;
@@ -994,7 +994,7 @@ export const createMotorcycle = {
   newCityLabel: "Magaalada Cusub",
   descriptionPlaceholder: "Faahfaahin dheeraad ah...",
   descriptionLabel: "Faahfaahin",
-  regionLabel: "Bari",
+  regionLabel: "Gobolka",
   cityLabel: "Magaalo",
   upload: "Soo geli",
   fillRequired: "Fadlan buuxi banaanada muhiimka ah",
@@ -1163,6 +1163,7 @@ export const subcategories = {
     sportsAndOutdoors: "Ciyaaraha & Dibadda",
     furniture: "Alaabta Guriga",
     fashion: "Dharka & Boorsooyinka",
+    education: "Waxbarashada",
   },
   farmEquipment: {
     tractor: "Cagaf",
@@ -2187,14 +2188,14 @@ export const subscription = {
     active: "Firfircoon",
     inactive: "Aan Firfircoonayn",
   },
-  wanted: "La raadinayo",
-  lookingFor: "Raadinayo",
-  wantedBadge: "LA RAADINAYO",
+  wanted: "La Raadinaa",
+  lookingFor: "La Raadinaa",
+  wantedBadge: "LA RAADINAA",
   myAlertsEmpty: "Weli digniin ma jirto — kor ka samee mid",
   planRequired: "Qorshe ayaa loo baahan yahay si loo firfirciyo",
   planRequiredSub:
     "Kadib markaad sameyso digniinaadda waxa lagugu qaadi doonaa si aad u doorato qorshe si loo firfirciyo.",
-  isYourWantedAlert: "Kani waa feejignaanshahaaga la raadinayo",
+  isYourWantedAlert: "Kani waa feejignaanshahaaga la raadinaa",
   lookingToBuy: "Rabaa inuu iibsado",
   contactBuyer: "Waxaan Hayaa — La Xiriir Gadoodaha",
   contactBuyerOpening: "Furaya…",

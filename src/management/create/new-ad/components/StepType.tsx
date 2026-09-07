@@ -5,12 +5,22 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles, type ColorPalette } from '../../../../components/hooks/useTheme';
 import { useAppTranslation } from '../../../../components/hooks/useAppTranslation';
 import { useTabBarClearance } from '../../../../components/hooks/useTabBarClearance';
+import type { MCIcon } from '../../../../util/icons/icons';
 import { createStyles } from '../../../../util/styles/new-ad/stepType.styles';
 
-function getOptions(Colors: ColorPalette) {
+interface ListingTypeOption {
+  type: ListingType;
+  labelKey: string;
+  subKey: string;
+  icon: MCIcon;
+  bg: string;
+  color: string;
+}
+
+function getOptions(Colors: ColorPalette): ListingTypeOption[] {
   return [
-    { type: 'private' as ListingType, labelKey: 'createAd.private', subKey: 'createAd.privateSub', icon: 'account-outline', bg: Colors.primaryGhost, color: Colors.primary },
-    { type: 'public'  as ListingType, labelKey: 'createAd.public',  subKey: 'createAd.publicSub',  icon: 'store-outline',   bg: Colors.success + '15', color: Colors.success  },
+    { type: 'private', labelKey: 'createAd.private', subKey: 'createAd.privateSub', icon: 'account-outline', bg: Colors.primaryGhost, color: Colors.primary },
+    { type: 'public',  labelKey: 'createAd.public',  subKey: 'createAd.publicSub',  icon: 'store-outline',   bg: Colors.success + '15', color: Colors.success  },
   ];
 }
 
@@ -27,7 +37,7 @@ export function StepType({ onSelect }: StepTypeProps) {
         {OPTIONS.map(opt => (
           <TouchableOpacity key={opt.type} style={s.card} onPress={() => onSelect(opt.type)} activeOpacity={0.85}>
             <View style={[s.icon, { backgroundColor: opt.bg }]}>
-              <MaterialCommunityIcons name={opt.icon as any} size={32} color={opt.color} />
+              <MaterialCommunityIcons name={opt.icon} size={32} color={opt.color} />
             </View>
             <View style={s.info}>
               <Text style={s.cardTitle}>{t(opt.labelKey)}</Text>

@@ -67,7 +67,7 @@ export default function SettingsIndex() {
               activeOpacity={0.75}
             >
               <View style={s.iconWrap}>
-                <MaterialCommunityIcons name={row.icon as any} size={20} color={Colors.primary} />
+                <MaterialCommunityIcons name={row.icon} size={20} color={Colors.primary} />
               </View>
               <Text style={s.rowLabel}>{t(row.labelKey)}</Text>
               <MaterialCommunityIcons name="chevron-right" size={20} color={Colors.textMuted} />

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Platform } from 'react-native';
 import { View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -8,7 +9,8 @@ import { useTabBarClearance } from '../../../../../../components/hooks/useTabBar
 import { LoadingSpinner } from '../../../../../../components/loading';
 import { useAppSelector } from '../../../../../../store/store';
 import type { StepPaymentProps } from '../../../../../../util/types';
-import { MAX_POLL_ATTEMPTS, type PaymentMethodOption } from '../payment.constants';
+import type { TopBarProps, ErrorBannerProps, PayFooterProps } from '../../../../../../util/types/new-ad.types';
+import { MAX_POLL_ATTEMPTS } from '../payment.constants';
 import { PaymentMethodSelector } from './PaymentMethodSelector';
 import { PhoneInput } from './PhoneInput';
 import { PollingOverlay } from './PollingOverlay';
@@ -29,7 +31,7 @@ function ActivatingScreen() {
   );
 }
 
-function TopBar({ onBack }: { onBack: () => void }) {
+const TopBar = memo(function TopBar({ onBack }: TopBarProps) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   return (
@@ -39,9 +41,9 @@ function TopBar({ onBack }: { onBack: () => void }) {
       </TouchableOpacity>
     </View>
   );
-}
+});
 
-function ErrorBanner({ message }: { message: string }) {
+const ErrorBanner = memo(function ErrorBanner({ message }: ErrorBannerProps) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   return (
@@ -50,9 +52,9 @@ function ErrorBanner({ message }: { message: string }) {
       <Text style={s.errBannerText}>{message}</Text>
     </View>
   );
-}
+});
 
-function PayFooter({ total, methodMeta, onPay }: { total: number; methodMeta: PaymentMethodOption; onPay: () => void }) {
+const PayFooter = memo(function PayFooter({ total, methodMeta, onPay }: PayFooterProps) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
@@ -69,7 +71,7 @@ function PayFooter({ total, methodMeta, onPay }: { total: number; methodMeta: Pa
       </View>
     </View>
   );
-}
+});
 
 function IOSPaymentScreen() {
   const Colors = useThemeColors();

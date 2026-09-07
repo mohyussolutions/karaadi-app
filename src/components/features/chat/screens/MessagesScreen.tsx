@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, memo } from 'react';
 import {
   View, Text, FlatList, TouchableOpacity,
 } from 'react-native';
@@ -17,6 +17,56 @@ import { createStyles } from '../../../../util/styles/tabs/messages.styles';
 import type { Chat } from '../../../../util/types';
 
 const AVATAR = placeholderAvatar(48, '9ca3af', '?');
+
+type GroupedChat = Chat & { allIds: number[]; unreadTotal: number };
+
+const ConvoItem = memo(function ConvoItem({
+  item, currentUserId, onPress,
+}: {
+  item: GroupedChat;
+  currentUserId: string;
+  onPress: (item: GroupedChat) => void;
+}) {
+  const { t } = useTranslation();
+  const styles = useThemedStyles(createStyles);
+  const other = item.senderId === currentUserId ? item.receiver : item.sender;
+  const lastMsg = item.messages?.[0]?.content || '';
+  const unreadCount = item.unreadTotal;
+  const unread = unreadCount > 0;
+  const time = item.updatedAt
+    ? new Date(item.updatedAt).toLocaleDateString()
+    : '';
+
+  return (
+    <TouchableOpacity
+      style={[styles.convoItem, unread && styles.convoUnread]}
+      onPress={() => onPress(item)}
+    >
+      <RemoteImage
+        source={{ uri: other?.profileImage || AVATAR }}
+        style={styles.avatar}
+        contentFit="cover"
+        recyclingKey={String(item.id)}
+      />
+      <View style={styles.convoInfo}>
+        <View style={styles.convoHeader}>
+          <Text style={[styles.convoName, unread && styles.bold]}>
+            {other?.username || t('messages.unknownSender')}
+          </Text>
+          <Text style={styles.convoTime}>{time}</Text>
+        </View>
+        <Text style={[styles.convoMsg, unread && styles.bold]} numberOfLines={1}>
+          {lastMsg || t('messages.noMessagesPreview')}
+        </Text>
+      </View>
+      {unread && (
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>{unreadCount}</Text>
+        </View>
+      )}
+    </TouchableOpacity>
+  );
+});
 
 export default function MessagesScreen() {
   const router = useRouter();
@@ -54,6 +104,18 @@ export default function MessagesScreen() {
     return [...byUser.values()];
   }, [chats, user]);
 
+  const handleItemPress = useCallback((item: GroupedChat) => {
+    const other = item.senderId === user?.id ? item.receiver : item.sender;
+    router.push({
+      pathname: '/profile/chat',
+      params: {
+        chatId: item.allIds.join(','),
+        userId: other?.id,
+        username: other?.username || t('messages.unknownSender'),
+      },
+    });
+  }, [router, user, t]);
+
   if (!user) return <LoadingSpinner fullScreen />;
 
   if (!loaded) {
@@ -81,54 +143,9 @@ export default function MessagesScreen() {
         ListEmptyComponent={
           <EmptyState icon="message-off-outline" title={t('messages.noConversationsTitle')} message={t('messages.noConversationsMessage')} />
         }
-        renderItem={({ item }: { item: Chat & { allIds: number[]; unreadTotal: number } }) => {
-          const other = item.senderId === user.id ? item.receiver : item.sender;
-          const lastMsg = item.messages?.[0]?.content || '';
-          const unreadCount = item.unreadTotal;
-          const unread = unreadCount > 0;
-          const time = item.updatedAt
-            ? new Date(item.updatedAt).toLocaleDateString()
-            : '';
-
-          return (
-            <TouchableOpacity
-              style={[styles.convoItem, unread && styles.convoUnread]}
-              onPress={() =>
-                router.push({
-                  pathname: '/profile/chat',
-                  params: {
-                    chatId: item.allIds.join(','),
-                    userId: other?.id,
-                    username: other?.username || t('messages.unknownSender'),
-                  },
-                })
-              }
-            >
-              <RemoteImage
-                source={{ uri: other?.profileImage || AVATAR }}
-                style={styles.avatar}
-                contentFit="cover"
-                recyclingKey={String(item.id)}
-              />
-              <View style={styles.convoInfo}>
-                <View style={styles.convoHeader}>
-                  <Text style={[styles.convoName, unread && styles.bold]}>
-                    {other?.username || t('messages.unknownSender')}
-                  </Text>
-                  <Text style={styles.convoTime}>{time}</Text>
-                </View>
-                <Text style={[styles.convoMsg, unread && styles.bold]} numberOfLines={1}>
-                  {lastMsg || t('messages.noMessagesPreview')}
-                </Text>
-              </View>
-              {unread && (
-                <View style={styles.badge}>
-                  <Text style={styles.badgeText}>{unreadCount}</Text>
-                </View>
-              )}
-            </TouchableOpacity>
-          );
-        }}
+        renderItem={({ item }) => (
+          <ConvoItem item={item} currentUserId={user.id} onPress={handleItemPress} />
+        )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
     </SafeAreaView>

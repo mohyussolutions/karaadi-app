@@ -4,22 +4,28 @@ import { SUBSCRIPTION_ENDPOINTS } from '../../api/urls';
 import { searchCategory } from '../search';
 import { scheduleLocalNotification } from '../../components/features/notifications/services/notificationService';
 import type { Subscription, SubscriptionPayload, Plan } from '../../util/types';
+import type { RawItem } from '../../util/types/common.types';
 
 const LAST_CHECKED_KEY = 'karaadi_alerts_last_checked_v1';
 const MIN_CHECK_INTERVAL_MS = 5 * 60 * 1000;
 
+// The subscription endpoints wrap the record differently depending on the
+// action (`{ subscription }` on fetch-by-id, `{ subscription }` or `{ data }`
+// on create) — this envelope covers every shape the callers below unwrap.
+type SubscriptionEnvelope = Subscription & { subscription?: Subscription; data?: Subscription };
+
 export async function fetchSubscriptionPlans(): Promise<Plan[]> {
   try {
-    const { data } = await apiClient.get(SUBSCRIPTION_ENDPOINTS.PLANS);
+    const { data } = await apiClient.get<Plan[] | { plans?: Plan[] }>(SUBSCRIPTION_ENDPOINTS.PLANS);
     return Array.isArray(data) ? data : data?.plans ?? [];
   } catch {
     return [];
   }
 }
 
-export async function fetchMyPlan(): Promise<any> {
+export async function fetchMyPlan(): Promise<{ success?: boolean; subscriptions?: Subscription[] } | null> {
   try {
-    const { data } = await apiClient.get(SUBSCRIPTION_ENDPOINTS.MY);
+    const { data } = await apiClient.get<{ success?: boolean; subscriptions?: Subscription[] }>(SUBSCRIPTION_ENDPOINTS.MY);
     return data ?? null;
   } catch {
     return null;
@@ -28,12 +34,12 @@ export async function fetchMyPlan(): Promise<any> {
 
 export async function fetchMySubscriptions(): Promise<Subscription[]> {
   try {
-    const { data } = await apiClient.get(SUBSCRIPTION_ENDPOINTS.MY);
-    const list = data?.subscriptions ?? data?.data ?? data ?? [];
-    return (Array.isArray(list) ? list : []).map((item: any) => ({
+    const { data } = await apiClient.get<{ subscriptions?: RawItem[]; data?: RawItem[] } | RawItem[]>(SUBSCRIPTION_ENDPOINTS.MY);
+    const list = (Array.isArray(data) ? data : data?.subscriptions ?? data?.data) ?? [];
+    return (Array.isArray(list) ? list : []).map((item) => ({
       ...item,
       id: item.id || item._id,
-    }));
+    })) as Subscription[];
   } catch {
     return [];
   }
@@ -41,9 +47,9 @@ export async function fetchMySubscriptions(): Promise<Subscription[]> {
 
 export async function createSubscription(payload: SubscriptionPayload): Promise<Subscription | null> {
   try {
-    const { data } = await apiClient.post(SUBSCRIPTION_ENDPOINTS.SUBSCRIBE, payload);
+    const { data } = await apiClient.post<SubscriptionEnvelope>(SUBSCRIPTION_ENDPOINTS.SUBSCRIBE, payload);
     const item = data?.subscription ?? data?.data ?? data;
-    return { ...item, id: item.id || item._id };
+    return { ...item, id: item.id || item._id || '' };
   } catch {
     return null;
   }
@@ -84,13 +90,13 @@ export async function checkAlertsForMatches(): Promise<void> {
       const results = await searchCategory(sub.category, params);
 
       const fresh = results.filter((r) => {
-        const created = (r as any).createdAt ? new Date((r as any).createdAt) : null;
+        const created = r.createdAt ? new Date(r.createdAt) : null;
         return created && created > lastChecked;
       });
 
       if (fresh.length) {
         totalMatches += fresh.length;
-        const first = fresh[0] as any;
+        const first = fresh[0];
         if (first.title) matchTitles.push(first.title);
 
         if (fresh.length === 1) {
@@ -115,7 +121,7 @@ export async function checkAlertsForMatches(): Promise<void> {
   } catch {}
 }
 
-export async function getSubscriptionById(id: string, signal?: AbortSignal): Promise<any> {
-  const { data } = await apiClient.get(SUBSCRIPTION_ENDPOINTS.BY_ID(id), { signal });
+export async function getSubscriptionById(id: string, signal?: AbortSignal): Promise<SubscriptionEnvelope> {
+  const { data } = await apiClient.get<SubscriptionEnvelope>(SUBSCRIPTION_ENDPOINTS.BY_ID(id), { signal });
   return data;
 }

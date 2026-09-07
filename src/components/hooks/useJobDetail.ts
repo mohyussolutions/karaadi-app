@@ -36,7 +36,7 @@ export function useJobDetail(id: string) {
     async function load() {
       try {
         const data = await getJobById(id);
-        setItem({ ...data, id: data.id || data._id });
+        if (data) setItem({ ...data, id: data.id || data._id });
       } catch {}
       setLoading(false);
     }

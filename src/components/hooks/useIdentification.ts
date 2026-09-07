@@ -5,13 +5,14 @@ import type { IdentificationStatus } from '../../util/types';
 
 export function useIdentification() {
   const { user } = useAuthStore();
+  const hasUser = !!user;
   const [status, setStatus] = useState<IdentificationStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const load = useCallback(async (signal?: AbortSignal) => {
-    if (!user) { setLoading(false); return; }
+    if (!hasUser) { setLoading(false); return; }
     setError(false);
     try {
       const data = await getIdentificationStatus();
@@ -21,7 +22,7 @@ export function useIdentification() {
     } finally {
       if (!signal?.aborted) setLoading(false);
     }
-  }, [user]);
+  }, [hasUser]);
 
   useEffect(() => {
     const ctrl = new AbortController();

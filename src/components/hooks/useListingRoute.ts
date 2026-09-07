@@ -8,14 +8,14 @@ export function useListingRoute() {
 
   const navigate = useCallback(
     (item: Partial<ListingBase> & { id?: string; _id?: string }, categoryKey?: string) => {
-      router.push(getListingDetailRoute(item as any, categoryKey) as any);
+      router.push(getListingDetailRoute(item, categoryKey) as Parameters<typeof router.push>[0]);
     },
     [router],
   );
 
   const getRoute = useCallback(
     (item: Partial<ListingBase> & { id?: string; _id?: string }, categoryKey?: string) => {
-      return getListingDetailRoute(item as any, categoryKey);
+      return getListingDetailRoute(item, categoryKey);
     },
     [],
   );

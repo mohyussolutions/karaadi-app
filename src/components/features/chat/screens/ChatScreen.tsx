@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useState, useRef, memo } from 'react';
 import {
   View, Text, FlatList, TextInput, TouchableOpacity,
   KeyboardAvoidingView, ActivityIndicator,
@@ -19,6 +19,25 @@ import type { ChatMessage } from '../../../../util/types';
 import { createStyles } from '../../../../util/styles/profile/chat.styles';
 
 const chatIdCache = new Map<string, number>();
+
+const MessageBubble = memo(function MessageBubble({ item, isMe }: { item: ChatMessage; isMe: boolean }) {
+  const styles = useThemedStyles(createStyles);
+  const ts = item.timestamp || item.createdAt || '';
+  return (
+    <View style={[styles.row, isMe ? styles.rowMe : styles.rowThem]}>
+      <View style={[styles.bubble, isMe ? styles.bubbleMe : styles.bubbleThem]}>
+        <Text style={[styles.bubbleText, isMe ? styles.bubbleTextMe : styles.bubbleTextThem]}>
+          {item.content}
+        </Text>
+        {!!ts && (
+          <Text style={[styles.time, isMe ? styles.timeMe : styles.timeThem]}>
+            {new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          </Text>
+        )}
+      </View>
+    </View>
+  );
+});
 
 function getItemModel(category?: string): string {
   const c = (category || '').toLowerCase();
@@ -200,6 +219,10 @@ export default function ChatScreen() {
     }
   }
 
+  const renderMessage = useCallback(({ item }: { item: ChatMessage }) => (
+    <MessageBubble item={item} isMe={String(item.senderId) === String(user?.id ?? '')} />
+  ), [user?.id]);
+
   async function handleConfirmBlock() {
     if (!userId) return;
     try { await blockUser(userId); } catch {}
@@ -269,24 +292,7 @@ export default function ChatScreen() {
               </View>
             )
           }
-          renderItem={({ item }) => {
-            const isMe = String(item.senderId) === String(user?.id ?? '');
-            const ts = item.timestamp || item.createdAt || '';
-            return (
-              <View style={[styles.row, isMe ? styles.rowMe : styles.rowThem]}>
-                <View style={[styles.bubble, isMe ? styles.bubbleMe : styles.bubbleThem]}>
-                  <Text style={[styles.bubbleText, isMe ? styles.bubbleTextMe : styles.bubbleTextThem]}>
-                    {item.content}
-                  </Text>
-                  {!!ts && (
-                    <Text style={[styles.time, isMe ? styles.timeMe : styles.timeThem]}>
-                      {new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </Text>
-                  )}
-                </View>
-              </View>
-            );
-          }}
+          renderItem={renderMessage}
         />
 
         <View style={styles.inputRow}>
