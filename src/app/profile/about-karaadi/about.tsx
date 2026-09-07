@@ -1,8 +1,7 @@
-import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useAppTranslation } from '../../../components/hooks/useAppTranslation';
-import { useThemedStyles } from '../../../components/hooks/useTheme';
+import { useAppTranslation } from '../../../hooks/useAppTranslation';
+import { useThemedStyles } from '../../../hooks/useTheme';
 import { createDetailStyles } from '../../../util/styles/profile/aboutKaraadi.styles';
 
 const WHAT_ITEM_KEYS = [

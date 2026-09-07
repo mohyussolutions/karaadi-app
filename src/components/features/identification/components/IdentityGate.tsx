@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, Text, Modal, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../../hooks/useTheme';
 import { IdentityCaptureForm } from './IdentityCaptureForm';
 import { submitIdentification } from '../../../../actions/categories/identification.actions';
 import { createStyles } from '../../../../util/styles/profile/verifyIdentity.styles';

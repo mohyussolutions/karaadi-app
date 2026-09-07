@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { REAL_ESTATE_ENDPOINTS } from '../../api/urls';
+import { REAL_ESTATE_ENDPOINTS } from '../../api/endpoints';
 import type { RawItem, Params } from '../../util/types/common.types';
 import type { ApiError } from '../../util/types/generic.types';
 import type { RealEstate } from '../../util/types/listing.types';

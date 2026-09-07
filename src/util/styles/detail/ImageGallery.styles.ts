@@ -1,6 +1,6 @@
 import { StyleSheet, Platform } from "react-native";
 import { RADII } from "../../colors/colors";
-import type { ColorPalette } from "../../../components/hooks/useTheme";
+import type { ColorPalette } from "../../../hooks/useTheme";
 import { shadow } from "../../helpers/shadow";
 
 export const IMG_H = 320;

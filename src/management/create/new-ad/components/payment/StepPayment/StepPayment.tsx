@@ -3,14 +3,15 @@ import { Platform } from 'react-native';
 import { View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter, type Href } from 'expo-router';
-import { useThemeColors, useThemedStyles } from '../../../../../../components/hooks/useTheme';
-import { useAppTranslation } from '../../../../../../components/hooks/useAppTranslation';
-import { useTabBarClearance } from '../../../../../../components/hooks/useTabBarClearance';
+import { useThemeColors, useThemedStyles } from '../../../../../../hooks/useTheme';
+import { useAppTranslation } from '../../../../../../hooks/useAppTranslation';
+import { useTabBarClearance } from '../../../../../../hooks/useTabBarClearance';
 import { LoadingSpinner } from '../../../../../../components/loading';
 import { useAppSelector } from '../../../../../../store/store';
 import type { StepPaymentProps } from '../../../../../../util/types';
 import type { TopBarProps, ErrorBannerProps, PayFooterProps } from '../../../../../../util/types/new-ad.types';
 import { MAX_POLL_ATTEMPTS } from '../payment.constants';
+import { SITE_URL } from '../../../../../../constants';
 import { PaymentMethodSelector } from './PaymentMethodSelector';
 import { PhoneInput } from './PhoneInput';
 import { PollingOverlay } from './PollingOverlay';
@@ -88,7 +89,7 @@ function IOSPaymentScreen() {
       </Text>
       <TouchableOpacity
         style={s.iosPaymentBtn}
-        onPress={() => Linking.openURL('https://karaadi.com')}
+        onPress={() => Linking.openURL(SITE_URL)}
         activeOpacity={0.85}
       >
         <Text style={s.iosPaymentBtnText}>{t('postAd.iosPaymentBtn')}</Text>

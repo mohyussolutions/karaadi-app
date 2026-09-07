@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, memo } from 'react';
+import { useCallback, useEffect, useMemo, memo } from 'react';
 import { View, Text, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -6,9 +6,9 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { EmptyState } from '../../../shared';
 import { LoadingSpinner } from '../../../loading';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../../hooks/useTheme';
 import { createStyles } from '../../../../util/styles/profile/notifications.styles';
-import { useNotificationsData } from '../../../hooks/useNotificationsData';
+import { useNotificationsData } from '../../../../hooks/useNotificationsData';
 import { useAuthStore } from '../../../../store/hooks/authStore';
 import type { Notification } from '../../../../util/types';
 
@@ -64,6 +64,10 @@ export default function NotificationsScreen() {
 
   const unreadCount = useMemo(() => notifications.filter((n) => !n.read).length, [notifications]);
 
+  const renderItem = useCallback(({ item }: { item: Notification }) => (
+    <NotificationRow item={item} onPress={handleItemPress} />
+  ), [handleItemPress]);
+
   if (!user || loading) return <LoadingSpinner fullScreen />;
 
   return (
@@ -78,6 +82,9 @@ export default function NotificationsScreen() {
         keyExtractor={(item) => item._id}
         contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 84 }, notifications.length === 0 && { flex: 1 }]}
         showsVerticalScrollIndicator={false}
+        initialNumToRender={15}
+        maxToRenderPerBatch={15}
+        windowSize={10}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}
         ListEmptyComponent={
           <EmptyState
@@ -86,9 +93,7 @@ export default function NotificationsScreen() {
             message={t('notifications.empty.allSub')}
           />
         }
-        renderItem={({ item }) => (
-          <NotificationRow item={item} onPress={handleItemPress} />
-        )}
+        renderItem={renderItem}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
     </SafeAreaView>

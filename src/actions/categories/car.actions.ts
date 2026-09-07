@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { CARS_ENDPOINTS } from '../../api/urls';
+import { CARS_ENDPOINTS } from '../../api/endpoints';
 import type { RawItem, Params } from '../../util/types/common.types';
 import type { ApiError } from '../../util/types/generic.types';
 import type { Car } from '../../util/types/listing.types';

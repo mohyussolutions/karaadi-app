@@ -11,9 +11,10 @@ import { useAuthStore } from '../../../store/hooks/authStore';
 import { toggleSound } from '../../../components/features/notifications/store/notificationSettingsSlice';
 import { playNotificationSound } from '../../../components/features/notifications/services/soundService';
 import { updatePhoneVisibility } from '../../../actions/core/auth.actions';
-import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { createStyles } from '../../../util/styles/settings/settings.styles';
 import { SETTINGS_ROWS } from '../../../navigation/config/navConfig';
+import { SITE_URL } from '../../../constants';
 
 export default function SettingsIndex() {
   const router = useRouter();
@@ -130,7 +131,7 @@ export default function SettingsIndex() {
         <View style={s.section}>
           <TouchableOpacity
             style={s.row}
-            onPress={() => Linking.openURL('https://karaadi.com/privacy')}
+            onPress={() => Linking.openURL(`${SITE_URL}/privacy`)}
             activeOpacity={0.75}
           >
             <View style={s.iconWrap}>
@@ -141,7 +142,7 @@ export default function SettingsIndex() {
           </TouchableOpacity>
           <TouchableOpacity
             style={s.row}
-            onPress={() => Linking.openURL('https://karaadi.com/terms')}
+            onPress={() => Linking.openURL(`${SITE_URL}/terms`)}
             activeOpacity={0.75}
           >
             <View style={s.iconWrap}>

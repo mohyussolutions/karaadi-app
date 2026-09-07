@@ -1,20 +1,48 @@
-import React, { useEffect, useState, useCallback, memo } from 'react';
+import { useEffect, useState, useCallback, memo } from 'react';
 import {
   View, Text, TouchableOpacity,
 } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import RemoteImage from '../shared/RemoteImage';
-import { useGlobal } from '../hooks/useGlobal';
+import { useGlobal } from '../../hooks/useGlobal';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { getRecommendedByEndpoint } from '../../actions/categories/feed.actions';
-import { extractList } from '../../util/helpers';
 import { getImageUrl, formatPrice, prefetchImages } from '../../util/helpers';
 import { getListingDetailRoute } from '../../util/helpers';
 import { PLACEHOLDER_IMAGE } from '../../constants';
-import { useThemedStyles } from '../hooks/useTheme';
+import { useThemedStyles } from '../../hooks/useTheme';
 import type { ListingBase, RecommendedSectionProps } from '../../util/types';
 import { createStyles } from '../../util/styles/detail/RecommendedSection.styles';
+
+const RecommendedItem = memo(function RecommendedItem({
+  item, styles, onPress, priceOnRequestLabel,
+}: {
+  item: ListingBase;
+  styles: ReturnType<typeof createStyles>;
+  onPress: (item: ListingBase) => void;
+  priceOnRequestLabel: string;
+}) {
+  return (
+    <TouchableOpacity style={styles.card} onPress={() => onPress(item)} activeOpacity={0.85}>
+      <RemoteImage
+        source={{ uri: getImageUrl(item.images?.[0]) || PLACEHOLDER_IMAGE }}
+        style={styles.img}
+        contentFit="cover"
+        recyclingKey={item._id || item.id}
+      />
+      <View style={styles.info}>
+        <Text style={styles.cardTitle} numberOfLines={2}>{item.title}</Text>
+        <Text style={styles.price}>
+          {item.price > 0 ? formatPrice(item.price) : priceOnRequestLabel}
+        </Text>
+        {item.city && (
+          <Text style={styles.loc} numberOfLines={1}>{item.city}</Text>
+        )}
+      </View>
+    </TouchableOpacity>
+  );
+});
 
 function RecommendedSection({ endpoint, excludeId, title, categoryKey }: RecommendedSectionProps) {
   const { t } = useTranslation();
@@ -41,6 +69,11 @@ function RecommendedSection({ endpoint, excludeId, title, categoryKey }: Recomme
     if (route) router.push(route as never);
   }, [router, categoryKey]);
 
+  const priceOnRequestLabel = t('priceOnRequest');
+  const renderItem = useCallback(({ item }: { item: ListingBase }) => (
+    <RecommendedItem item={item} styles={styles} onPress={handlePress} priceOnRequestLabel={priceOnRequestLabel} />
+  ), [styles, handlePress, priceOnRequestLabel]);
+
   if (items.length === 0) return null;
 
   return (
@@ -52,25 +85,7 @@ function RecommendedSection({ endpoint, excludeId, title, categoryKey }: Recomme
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item._id || item.id}
         contentContainerStyle={styles.list}
-        renderItem={({ item }) => (
-          <TouchableOpacity style={styles.card} onPress={() => handlePress(item)} activeOpacity={0.85}>
-            <RemoteImage
-              source={{ uri: getImageUrl(item.images?.[0]) || PLACEHOLDER_IMAGE }}
-              style={styles.img}
-              contentFit="cover"
-              recyclingKey={item._id || item.id}
-            />
-            <View style={styles.info}>
-              <Text style={styles.cardTitle} numberOfLines={2}>{item.title}</Text>
-              <Text style={styles.price}>
-                {item.price > 0 ? formatPrice(item.price) : t('priceOnRequest')}
-              </Text>
-              {item.city && (
-                <Text style={styles.loc} numberOfLines={1}>{item.city}</Text>
-              )}
-            </View>
-          </TouchableOpacity>
-        )}
+        renderItem={renderItem}
       />
     </View>
   );

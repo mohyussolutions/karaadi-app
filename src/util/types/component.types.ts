@@ -158,13 +158,6 @@ export interface EmptyStateProps {
   message?: string;
 }
 
-export interface ResponsiveLayoutProps {
-  sidebar: ReactNode;
-  main: ReactNode;
-  sidebarStyle?: object;
-  mainStyle?: object;
-}
-
 export interface PaymentStatusConfig {
   label: string;
   color: string;

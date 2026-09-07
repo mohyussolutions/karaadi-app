@@ -1,6 +1,5 @@
-import React from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors } from '../hooks/useTheme';
+import { useThemeColors } from '../../hooks/useTheme';
 import type { VerifiedBadgeProps } from '../../util/types';
 
 export default function VerifiedBadge({ visible, size = 16 }: VerifiedBadgeProps) {

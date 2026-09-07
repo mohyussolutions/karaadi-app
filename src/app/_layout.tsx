@@ -15,18 +15,18 @@ import { EulaModal } from "../components/modals/EulaModal";
 import ForceUpdateModal from "../components/modals/ForceUpdateModal";
 import StoreUpdateModal from "../components/modals/StoreUpdateModal";
 import { IdentityGate } from "../components/features/identification/components/IdentityGate";
-import { useIdentityGate } from "../components/hooks/useIdentityGate";
+import { useIdentityGate } from "../hooks/useIdentityGate";
 import { SaveToast } from "../components/shared";
-import Hage from "../components/ai-assistant";
+import Hage from "../components/ai-assistant/components/Hage";
 import NotificationBanner from "../components/features/notifications/components/NotificationBanner";
 import LanguageSync from "../i18n/LanguageSync";
-import { useAppInit } from "../components/hooks/useAppInit";
-import { useThemeColors, useThemeMode } from "../components/hooks/useTheme";
+import { useAppInit } from "../hooks/useAppInit";
+import { useThemeColors, useThemeMode } from "../hooks/useTheme";
 import { useTabBarVisibility } from "../navigation/tab-bar/useTabBarVisibility";
-import { useMessageBanner } from "../components/hooks/useMessageBanner";
-import { useSocketMessages } from "../components/hooks/useSocketMessages";
-import { useSocketNotifications } from "../components/hooks/useSocketNotifications";
-import { useNotificationTap } from "../components/hooks/useNotificationTap";
+import { useMessageBanner } from "../hooks/useMessageBanner";
+import { useSocketMessages } from "../hooks/useSocketMessages";
+import { useSocketNotifications } from "../hooks/useSocketNotifications";
+import { useNotificationTap } from "../hooks/useNotificationTap";
 
 export default function RootLayout() {
   const [showEula, setShowEula] = useState(false);
@@ -155,7 +155,7 @@ export default function RootLayout() {
         />
       </Stack>
       {showTabBar && <BottomTabBar />}
-      <Hage />
+      {showTabBar && <Hage />}
       <SaveToast />
       <ForceUpdateModal />
       <StoreUpdateModal />

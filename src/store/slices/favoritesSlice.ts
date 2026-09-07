@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
 import { getFavorites, addFavorite, removeFavorite } from '../../actions/categories/favorite.actions';
 import type { Favorite, ListingBase } from '../../util/types';
 import type { FavoritesState } from '../../util/types/redux.types';
@@ -116,3 +116,8 @@ const favoritesSlice = createSlice({
 
 export const { clearFavorites } = favoritesSlice.actions;
 export default favoritesSlice.reducer;
+
+export const selectFavoriteIdSet = createSelector(
+  (state: { favorites: FavoritesState }) => state.favorites.ids,
+  (ids) => new Set(ids),
+);

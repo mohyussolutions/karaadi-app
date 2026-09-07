@@ -9,9 +9,9 @@ import {
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useThemeColors, useThemedStyles } from "../../../../../components/hooks/useTheme";
-import { KEYBOARD_AVOIDING_BEHAVIOR } from "../../../../../common/common-for-ios-andriod";
-import { useTabBarClearance } from "../../../../../components/hooks/useTabBarClearance";
+import { useThemeColors, useThemedStyles } from "../../../../../hooks/useTheme";
+import { KEYBOARD_AVOIDING_BEHAVIOR } from "../../../../../platform/common-for-ios-andriod";
+import { useTabBarClearance } from "../../../../../hooks/useTabBarClearance";
 import RegionCityPicker from "../../../../../components/geo/RegionCityPicker";
 import { MAIN_CATEGORIES } from "../../../../../constants";
 import { FormField } from "../../../../../components/forms/FormField";

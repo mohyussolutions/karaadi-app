@@ -1,6 +1,6 @@
 import { apiClient } from '../client';
 import { extractList, getImageUrl } from '../../util/helpers';
-import { FAVORITES_ENDPOINTS } from '../../api/urls';
+import { FAVORITES_ENDPOINTS } from '../../api/endpoints';
 import type { Favorite, ListingBase } from '../../util/types';
 
 export async function getFavorites(): Promise<Favorite[]> {

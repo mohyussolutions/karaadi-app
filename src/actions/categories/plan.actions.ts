@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { PAYMENT_ENDPOINTS } from '../../api/urls';
+import { PAYMENT_ENDPOINTS } from '../../api/endpoints';
 import { BASE_PLANS } from '../../management/create/new-ad/constants/config';
 import type { Plan } from '../../util/types/new-ad.types';
 import type { SubPlanConfig } from '../../util/types/fee.types';

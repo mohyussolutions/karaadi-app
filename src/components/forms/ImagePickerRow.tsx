@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { ImagePickerRowProps } from '../../util/types';
 import { View, Image, TouchableOpacity, Text, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
-import { useAppTranslation } from '../hooks/useAppTranslation';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { createStyles } from '../../util/styles/new-ad/imagePickerRow.styles';
 import { CameraCapture } from './CameraCapture';
 

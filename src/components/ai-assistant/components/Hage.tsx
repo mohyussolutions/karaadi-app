@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Animated, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -6,15 +6,15 @@ import { useRouter } from 'expo-router';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { toggleHage, closeHage, addUserMessage, sendHageMessage, clearHage } from '../../../store/slices/hageSlice';
 import { useAuthStore } from '../../../store/hooks/authStore';
-import { useAppTranslation } from '../../hooks/useAppTranslation';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useAppTranslation } from '../../../hooks/useAppTranslation';
+import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { getListingDetailRoute, type ListingRoute } from '../../../util/helpers/nav.routing';
 import { createStyles } from '../../../util/styles/layout/hage.styles';
 import { NATIVE_DRIVER } from '../../../util/helpers/animation';
 import type { HageMessage, ListingRef } from '../../../util/types/chat.types';
-import { SHEET_TOP, H } from '../constants';
-import { useFabDrag } from '../../hooks/useFabDrag';
-import { useSheetDrag } from '../../hooks/useSheetDrag';
+import { SHEET_TOP } from '../constants';
+import { useFabDrag } from '../../../hooks/useFabDrag';
+import { useSheetDrag } from '../../../hooks/useSheetDrag';
 import { HageMessageList } from './HageMessageList';
 import { HageInputBar } from './HageInputBar';
 
@@ -34,13 +34,13 @@ export default function Hage() {
   const { height: windowHeight } = useWindowDimensions();
   const sheetHeight = Math.max(windowHeight - SHEET_TOP, 0);
 
-  const slideY = useRef(new Animated.Value(H)).current;
+  const slideY = useRef(new Animated.Value(windowHeight)).current;
   const { fabPan, fabResponder } = useFabDrag(insets);
   const { dragY, sheetDragResponder } = useSheetDrag(() => dispatch(closeHage()));
 
   useEffect(() => {
     Animated.spring(slideY, {
-      toValue: open ? SHEET_TOP : H,
+      toValue: open ? SHEET_TOP : windowHeight,
       useNativeDriver: NATIVE_DRIVER,
       tension: 65,
       friction: 12,

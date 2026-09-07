@@ -4,7 +4,7 @@ import {
   CARS_ENDPOINTS, REAL_ESTATE_ENDPOINTS, MOTORCYCLES_ENDPOINTS,
   BOATS_ENDPOINTS, MARKETPLACE_ENDPOINTS, FARM_EQUIPMENT_ENDPOINTS,
   JOBS_ENDPOINTS, FEED_ENDPOINTS,
-} from '../../api/urls';
+} from '../../api/endpoints';
 import type { Car, RealEstate, Motorcycle, Boat, MarketplaceItem, FarmEquipment, ListingBase } from '../../util/types/listing.types';
 import type { Params } from '../../util/types/common.types';
 

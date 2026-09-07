@@ -1,12 +1,12 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import {
   View, Text, TouchableOpacity, Modal, Linking, Share,
   Pressable,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { useResponsive } from '../../../hooks/useResponsive';
+import { useThemeColors, useThemedStyles } from '../../../../hooks/useTheme';
+import { useResponsive } from '../../../../hooks/useResponsive';
 import { tabletModalStyles, TABLET_MODAL_ICON_SIZES } from '../../../../util/styles/shared/ipad.styles';
 import { SOCIAL_SHARE_URLS, SOCIAL_BRAND_COLORS } from '../../../../constants';
 import type { SocialShareSheetProps, SocialAction } from '../../../../util/types';

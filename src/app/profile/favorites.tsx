@@ -13,9 +13,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner } from '../../components/loading';
 import RemoteImage from '../../components/shared/RemoteImage';
-import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { formatPrice, getImageUrl } from '../../util/helpers';
-import { useFavoritesData, CATEGORY_LABELS, CATEGORY_COLOR_KEYS } from '../../components/hooks/useFavoritesData';
+import { useFavoritesData, CATEGORY_LABELS, CATEGORY_COLOR_KEYS } from '../../hooks/useFavoritesData';
 import type { Favorite } from '../../util/types';
 import { createStyles, createCardStyles, H_PAD, COL_GAP } from '../../util/styles/profile/favorites.styles';
 

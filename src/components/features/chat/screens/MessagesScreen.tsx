@@ -8,9 +8,9 @@ import { useTranslation } from 'react-i18next';
 import { EmptyState } from '../../../shared';
 import { LoadingSpinner } from '../../../loading';
 import RemoteImage from '../../../shared/RemoteImage';
-import { useThemedStyles } from '../../../hooks/useTheme';
-import { useResponsive } from '../../../hooks/useResponsive';
-import { useChatsData } from '../../../hooks/useChatsData';
+import { useThemedStyles } from '../../../../hooks/useTheme';
+import { useResponsive } from '../../../../hooks/useResponsive';
+import { useChatsData } from '../../../../hooks/useChatsData';
 import { useAppSelector } from '../../../../store/store';
 import { placeholderAvatar } from '../../../../constants';
 import { createStyles } from '../../../../util/styles/tabs/messages.styles';
@@ -116,6 +116,10 @@ export default function MessagesScreen() {
     });
   }, [router, user, t]);
 
+  const renderItem = useCallback(({ item }: { item: GroupedChat }) => (
+    <ConvoItem item={item} currentUserId={user!.id} onPress={handleItemPress} />
+  ), [user, handleItemPress]);
+
   if (!user) return <LoadingSpinner fullScreen />;
 
   if (!loaded) {
@@ -139,13 +143,14 @@ export default function MessagesScreen() {
         data={groupedChats}
         keyExtractor={(item) => String(item.id)}
         showsVerticalScrollIndicator={false}
+        initialNumToRender={15}
+        maxToRenderPerBatch={15}
+        windowSize={10}
         contentContainerStyle={groupedChats.length === 0 ? styles.listFlex : styles.listPadded}
         ListEmptyComponent={
           <EmptyState icon="message-off-outline" title={t('messages.noConversationsTitle')} message={t('messages.noConversationsMessage')} />
         }
-        renderItem={({ item }) => (
-          <ConvoItem item={item} currentUserId={user.id} onPress={handleItemPress} />
-        )}
+        renderItem={renderItem}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
     </SafeAreaView>

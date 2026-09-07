@@ -9,8 +9,8 @@ import { getListingDetailRoute } from '../../util/helpers';
 import { cacheListing } from '../../util/cache/listingCache';
 import { showToast } from '../../util/cache/toastService';
 import { useAppSelector, useAppDispatch } from '../../store/store';
-import { toggleFavorite } from '../../store/slices/favoritesSlice';
-import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
+import { toggleFavorite, selectFavoriteIdSet } from '../../store/slices/favoritesSlice';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import RemoteImage from '../shared/RemoteImage';
 import type { ListingCardProps } from '../../util/types';
 import { createStyles } from '../../util/styles/shared/listingCard.styles';
@@ -22,7 +22,8 @@ const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey
   const listingId = item.id || item._id;
   const image = getImageUrl(item.images?.[0]) || PLACEHOLDER_IMAGE;
   const user = useAppSelector((s) => s.auth.user);
-  const isFav = useAppSelector((s) => s.favorites.ids.includes(listingId));
+  const favoriteIds = useAppSelector(selectFavoriteIdSet);
+  const isFav = favoriteIds.has(listingId);
 
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);

@@ -1,6 +1,3 @@
-// Admin-configured pricing/fee records. Field names vary per category
-// (e.g. "carSale", "rent", "art") so they're modeled as a loose dictionary
-// rather than one rigid interface per category.
 export interface FeeRecord {
   id?: string;
   _id?: string;

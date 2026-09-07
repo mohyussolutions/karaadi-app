@@ -1,4 +1,3 @@
-import React from "react";
 import { ImageBackground, View } from "react-native";
 import { styles } from "../../util/styles/tabs/tabButtonBackground.styles";
 import type { TabButtonBackgroundProps } from "../../util/types/navigation.types";

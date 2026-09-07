@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { PAYMENT_ENDPOINTS, FEE_ENDPOINTS } from '../../api/urls';
+import { PAYMENT_ENDPOINTS, FEE_ENDPOINTS } from '../../api/endpoints';
 import type { ApiError } from '../../util/types/generic.types';
 import type { AllFeeConfigs, FeeRecord, SubPlanConfig, SystemFeeConfig } from '../../util/types/fee.types';
 

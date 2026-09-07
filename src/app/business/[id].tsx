@@ -1,4 +1,3 @@
-import React from "react";
 import {
   View,
   Text,
@@ -13,14 +12,14 @@ import { LoadingSpinner } from "../../components/loading";
 import RemoteImage from "../../components/shared/RemoteImage";
 import BottomTabBar from "../../navigation/tab-bar/BottomTabBar";
 import { useTranslation } from "react-i18next";
-import { useThemeColors, useThemedStyles } from "../../components/hooks/useTheme";
+import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
 import { SOCIAL_LINK_BUILDERS, placeholderAvatar } from "../../constants";
 import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL, BUSINESS_CATEGORY_KEY_REVERSE } from "../../util/types";
-import { useBusinessDetail } from "../../components/hooks/useBusinessDetail";
+import { useBusinessDetail } from "../../hooks/useBusinessDetail";
 import { SOCIAL_ICONS, type SocialIcons } from "../../util/icons/icons";
 import { createStyles } from "../../util/styles/business/businessDetail.styles";
 import { createTabletPortraitStyles } from "../../util/styles/listing/tabletSplit.styles";
-import { useResponsive } from "../../components/hooks/useResponsive";
+import { useResponsive } from "../../hooks/useResponsive";
 
 export default function BusinessDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -33,16 +32,20 @@ export default function BusinessDetailScreen() {
   const { isTablet } = useResponsive();
   const insets = useSafeAreaInsets();
 
+  const ALLOWED_URL_SCHEMES = ['http://', 'https://', 'tel:', 'mailto:'];
+
   function openLink(type: string, value: string) {
     const map: Record<string, string> = {
       phone: `tel:${value}`,
       whatsapp: SOCIAL_LINK_BUILDERS.whatsapp(value),
       facebook: SOCIAL_LINK_BUILDERS.facebook(value),
       instagram: SOCIAL_LINK_BUILDERS.instagram(value),
+      tiktok: SOCIAL_LINK_BUILDERS.tiktok(value),
       website: SOCIAL_LINK_BUILDERS.website(value),
       email: `mailto:${value}`,
     };
     const url = map[type] || value;
+    if (!ALLOWED_URL_SCHEMES.some((scheme) => url.startsWith(scheme))) return;
     Linking.openURL(url).catch(() => {});
   }
 

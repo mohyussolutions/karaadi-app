@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity,
 } from 'react-native';
@@ -6,12 +5,12 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
 import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, JOBS_CONFIG, buildSpecItems } from '../../../constants';
-import { JOBS_ENDPOINTS } from '../../../api/urls';
-import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
-import { useJobDetail, formatSalary } from '../../../components/hooks/useJobDetail';
+import { JOBS_ENDPOINTS } from '../../../api/endpoints';
+import { getImageUrl, formatDate } from '../../../util/helpers';
+import { useJobDetail, formatSalary } from '../../../hooks/useJobDetail';
 import ImageGallery from '../../../components/detail/ImageGallery';
 import ZoomModal from '../../../components/modals/ZoomModal';
 import { SpecGrid } from '../../../components/cards/DetailCard';
@@ -24,7 +23,7 @@ import DetailActionBar from '../../../components/detail/DetailActionBar';
 import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
 import { createStyles } from '../../../util/styles/listing/job.styles';
 import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplit.styles';
-import { useResponsive } from '../../../components/hooks/useResponsive';
+import { useResponsive } from '../../../hooks/useResponsive';
 
 export default function JobDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

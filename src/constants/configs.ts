@@ -3,7 +3,8 @@ import type { NestedSubCategory, SubCategory, MainCategory } from '../util/types
 import { CAT_COLORS } from '../util/colors/colors';
 import { formatDate } from '../util/helpers';
 import { SITE_URL } from './constants';
-import { CAT_PATHS, MARKETPLACE_ENDPOINTS, REAL_ESTATE_ENDPOINTS, JOBS_ENDPOINTS } from '../api/urls';
+import { CAT_PATHS } from '../api/paths';
+import { MARKETPLACE_ENDPOINTS, REAL_ESTATE_ENDPOINTS, JOBS_ENDPOINTS } from '../api/endpoints';
 import { REGEX_NON_DIGITS } from './regex';
 
 export type { NestedSubCategory, SubCategory, MainCategory };
@@ -92,6 +93,7 @@ export const SOCIAL_LINK_BUILDERS = {
   whatsapp: (value: string) => `https://wa.me/${value.replace(REGEX_NON_DIGITS, '')}`,
   facebook: (value: string) => (value.startsWith('http') ? value : `https://facebook.com/${value}`),
   instagram: (value: string) => (value.startsWith('http') ? value : `https://instagram.com/${value}`),
+  tiktok: (value: string) => (value.startsWith('http') ? value : `https://tiktok.com/@${value}`),
   website: (value: string) => (value.startsWith('http') ? value : `https://${value}`),
 } as const;
 

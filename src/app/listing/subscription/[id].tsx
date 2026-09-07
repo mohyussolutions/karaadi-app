@@ -1,14 +1,13 @@
-import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
-import { SUBSCRIPTION_ENDPOINTS } from '../../../api/urls';
+import { SUBSCRIPTION_ENDPOINTS } from '../../../api/endpoints';
 import { formatPrice, formatDate } from '../../../util/helpers';
-import { useSubscriptionDetail } from '../../../components/hooks/useSubscriptionDetail';
+import { useSubscriptionDetail } from '../../../hooks/useSubscriptionDetail';
 import SellerCard from '../../../components/cards/SellerCard';
 import ReportLink from '../../../components/detail/ReportLink';
 import { styles as reportLinkStyles } from '../../../util/styles/detail/reportLink.styles';
@@ -19,7 +18,7 @@ import DetailActionBar from '../../../components/detail/DetailActionBar';
 import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
 import { createStyles } from '../../../util/styles/listing/subscription.styles';
 import { createTabletSplitNarrowStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplit.styles';
-import { useResponsive } from '../../../components/hooks/useResponsive';
+import { useResponsive } from '../../../hooks/useResponsive';
 import { getCategoryByKey, SUB_I18N_GROUP } from '../../../constants';
 
 export default function SubscriptionDetailScreen() {

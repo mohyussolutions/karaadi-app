@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useThemeColors } from "../hooks/useTheme";
+import { useThemeColors } from "../../hooks/useTheme";
 import type { AppIconProps } from "../../util/types";
 import type { IconName } from "../../util/icons/icons";
 

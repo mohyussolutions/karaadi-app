@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { SECURITY_ENDPOINTS } from '../../api/urls';
+import { SECURITY_ENDPOINTS } from '../../api/endpoints';
 import type { Session, LoginEntry } from '../../util/types/user.types';
 
 export async function getSessions(): Promise<Session[]> {

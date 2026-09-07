@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { SUPPORT_ENDPOINTS } from '../../api/urls';
+import { SUPPORT_ENDPOINTS } from '../../api/endpoints';
 import type { Ticket, CreateTicketPayload, AddTicketMessagePayload } from '../../util/types';
 
 export async function createTicket(payload: CreateTicketPayload): Promise<Ticket> {

@@ -3,8 +3,8 @@ import { AppState, Linking, Modal, Platform, Text, TouchableOpacity, View } from
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Application from 'expo-application';
 import InAppUpdates, { IAUUpdateKind, type IosNeedsUpdateResponse } from 'sp-react-native-in-app-updates';
-import { useThemeColors } from '../hooks/useTheme';
-import { useAppTranslation } from '../hooks/useAppTranslation';
+import { useThemeColors } from '../../hooks/useTheme';
+import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { styles } from '../../util/styles/modals/forceUpdateModal.styles';
 
 const inAppUpdates = new InAppUpdates(__DEV__);

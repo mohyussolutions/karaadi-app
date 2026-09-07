@@ -6,14 +6,13 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
-import { isAxiosError } from 'axios';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { placeholderAvatar, REGEX_PHONE_INPUT_FILTER } from '../../constants';
 import { updateUsername, updatePhone, updateProfileImage, deleteAccount } from '../../actions/core/auth.actions';
 import { useAuthStore } from '../../store/hooks/authStore';
-import { getImageUrl } from '../../util/helpers';
+import { getImageUrl, getApiErrorMessage } from '../../util/helpers';
 import RemoteImage from '../../components/shared/RemoteImage';
-import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/profile/edit.styles';
 import { useTranslation } from 'react-i18next';
 import { usernameSchema, somaliPhoneSchema } from '../../util/validation/schemas';
@@ -72,7 +71,7 @@ export default function EditProfileScreen() {
       if (user) await setUser({ ...user, ...updated }, user.token);
       Alert.alert(t('success'), t('mine.editProfile.usernameUpdated'));
     } catch (err) {
-      const message = isAxiosError(err) ? err.response?.data?.message : undefined;
+      const message = getApiErrorMessage(err);
       Alert.alert(t('error'), message || t('mine.editProfile.usernameUpdateFailed'));
     } finally {
       setSavingUsername(false);
@@ -89,7 +88,7 @@ export default function EditProfileScreen() {
       if (user) await setUser({ ...user, ...updated }, user.token);
       Alert.alert(t('success'), t('mine.editProfile.phoneUpdated'));
     } catch (err) {
-      const message = isAxiosError(err) ? err.response?.data?.message : undefined;
+      const message = getApiErrorMessage(err);
       Alert.alert(t('error'), message || t('mine.editProfile.phoneUpdateFailed'));
     } finally {
       setSavingPhone(false);

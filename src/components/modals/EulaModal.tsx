@@ -1,7 +1,8 @@
 import { Modal, View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
-import { useThemedStyles } from '../hooks/useTheme';
+import { useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/modals/eulaModal.styles';
 import type { EulaModalProps } from '../../util/types/common.types';
+import { SITE_URL } from '../../constants';
 
 export function EulaModal({ visible, onAccept }: EulaModalProps) {
   const styles = useThemedStyles(createStyles);
@@ -55,10 +56,10 @@ export function EulaModal({ visible, onAccept }: EulaModalProps) {
             Your personal data is used only to provide and improve the Karaadi service. We do not sell your data to third parties. You can delete your account and all associated data at any time from Profile → Edit Profile.
           </Text>
 
-          <TouchableOpacity onPress={() => Linking.openURL('https://karaadi.com/terms')} style={styles.linkRow}>
+          <TouchableOpacity onPress={() => Linking.openURL(`${SITE_URL}/terms`)} style={styles.linkRow}>
             <Text style={styles.link}>Read full Terms of Service →</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => Linking.openURL('https://karaadi.com/privacy')} style={styles.linkRow}>
+          <TouchableOpacity onPress={() => Linking.openURL(`${SITE_URL}/privacy`)} style={styles.linkRow}>
             <Text style={styles.link}>Read full Privacy Policy →</Text>
           </TouchableOpacity>
         </ScrollView>

@@ -1,5 +1,12 @@
 import { Image } from 'expo-image';
 import { API_BASE_URL } from '../../api/urls';
+import type { ApiError } from '../types/generic.types';
+
+export function getApiErrorMessage(err: unknown): string | undefined {
+  if (!(err instanceof Error) || !('response' in err)) return undefined;
+  const data = (err as ApiError).response?.data as { message?: string; error?: string } | undefined;
+  return data?.message ?? data?.error;
+}
 
 export function getImageUrl(path: string | undefined | null): string {
   if (!path) return '';

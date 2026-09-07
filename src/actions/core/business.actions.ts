@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { BUSINESSES_ENDPOINTS } from '../../api/urls';
+import { BUSINESSES_ENDPOINTS } from '../../api/endpoints';
 import type { Business } from '../../util/types/business.types';
 
 export async function getBusinessById(id: string, signal?: AbortSignal): Promise<Business> {

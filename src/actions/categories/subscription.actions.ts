@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiClient } from '../client';
-import { SUBSCRIPTION_ENDPOINTS } from '../../api/urls';
-import { searchCategory } from '../search';
+import { SUBSCRIPTION_ENDPOINTS } from '../../api/endpoints';
+import { searchCategory } from '../search/globalSearch';
 import { scheduleLocalNotification } from '../../components/features/notifications/services/notificationService';
 import type { Subscription, SubscriptionPayload, Plan } from '../../util/types';
 import type { RawItem } from '../../util/types/common.types';
@@ -9,9 +9,6 @@ import type { RawItem } from '../../util/types/common.types';
 const LAST_CHECKED_KEY = 'karaadi_alerts_last_checked_v1';
 const MIN_CHECK_INTERVAL_MS = 5 * 60 * 1000;
 
-// The subscription endpoints wrap the record differently depending on the
-// action (`{ subscription }` on fetch-by-id, `{ subscription }` or `{ data }`
-// on create) — this envelope covers every shape the callers below unwrap.
 type SubscriptionEnvelope = Subscription & { subscription?: Subscription; data?: Subscription };
 
 export async function fetchSubscriptionPlans(): Promise<Plan[]> {
@@ -124,4 +121,14 @@ export async function checkAlertsForMatches(): Promise<void> {
 export async function getSubscriptionById(id: string, signal?: AbortSignal): Promise<SubscriptionEnvelope> {
   const { data } = await apiClient.get<SubscriptionEnvelope>(SUBSCRIPTION_ENDPOINTS.BY_ID(id), { signal });
   return data;
+}
+
+export async function fetchAllPaidSubscriptions(signal?: AbortSignal): Promise<Subscription[]> {
+  try {
+    const { data } = await apiClient.get<{ subscriptions?: RawItem[] } | RawItem[]>(SUBSCRIPTION_ENDPOINTS.ALL_PAID, { signal });
+    const list = (Array.isArray(data) ? data : data?.subscriptions) ?? [];
+    return list.map((item) => ({ ...item, id: item.id || item._id })) as Subscription[];
+  } catch {
+    return [];
+  }
 }

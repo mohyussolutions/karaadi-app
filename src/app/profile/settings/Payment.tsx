@@ -1,15 +1,13 @@
-import React from 'react';
 import {
   View, Text, ScrollView,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
-import { useThemeColors, useThemedStyles, type ColorPalette } from '../../../components/hooks/useTheme';
+import { useThemeColors, useThemedStyles, type ColorPalette } from '../../../hooks/useTheme';
 import { LoadingSpinner } from '../../../components/loading';
-import { usePaymentHistory, type PaymentItem } from '../../../components/hooks/usePaymentHistory';
+import { usePaymentHistory, type PaymentItem } from '../../../hooks/usePaymentHistory';
 import { createStyles } from '../../../util/styles/settings/payment.styles';
 import type { PaymentStatusConfig, PaymentCategoryInfo } from '../../../util/types';
 
@@ -37,7 +35,6 @@ function getCategory(t: TFunction, p: PaymentItem, Colors: ColorPalette): Paymen
 }
 
 export default function PaymentSettings() {
-  const router = useRouter();
   const { t } = useTranslation();
   const { user, payments, loading, totalPaid } = usePaymentHistory();
 

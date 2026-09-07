@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { SEARCH_HISTORY_ENDPOINTS } from '../../api/urls';
+import { SEARCH_HISTORY_ENDPOINTS } from '../../api/endpoints';
 import type { SearchHistoryItem } from '../../util/types/browse.types';
 
 export async function saveSearchHistory(query: string): Promise<void> {

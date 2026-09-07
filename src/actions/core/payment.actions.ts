@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { PAYMENT_ENDPOINTS } from '../../api/urls';
+import { PAYMENT_ENDPOINTS } from '../../api/endpoints';
 import type { PaymentItem, InitiatePaymentPayload, ActivateListingPayload } from '../../util/types/new-ad.types';
 
 export async function getPaymentHistory(signal?: AbortSignal): Promise<PaymentItem[]> {

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import type { ColorPalette } from '../../../components/hooks/useTheme';
+import type { ColorPalette } from '../../../hooks/useTheme';
 import { createCommonStyles } from '../common/common.style';
 
 export const H_PAD = 12;
@@ -9,7 +9,6 @@ export function createStyles(Colors: ColorPalette) {
   const common = createCommonStyles(Colors);
   return StyleSheet.create({
     safe: common.safeBase,
-    webCenterWrap: { alignItems: 'center' },
     outerRow: { flexDirection: 'row' },
     sidebar: {
       borderRightWidth: StyleSheet.hairlineWidth,

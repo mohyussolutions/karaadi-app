@@ -1,13 +1,13 @@
-import React, { useRef, useCallback, useState } from 'react';
+import { useRef, useCallback, useState } from 'react';
 import type { ImageGalleryProps } from '../../util/types';
 import {
   View, ScrollView, Pressable, Text, Platform, Modal, TouchableOpacity,
   NativeSyntheticEvent, NativeScrollEvent,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useGlobal } from '../hooks/useGlobal';
+import { useGlobal } from '../../hooks/useGlobal';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles, createSheetStyles } from '../../util/styles/detail/ImageGallery.styles';
 import RemoteImage from '../shared/RemoteImage';
 

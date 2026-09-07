@@ -1,9 +1,8 @@
-import React from "react";
 import { View, Text, TouchableOpacity, Animated } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import type { NotificationBannerProps } from "../../../../util/types/notification.types";
-import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
+import { useThemeColors, useThemedStyles } from "../../../../hooks/useTheme";
 import { createStyles } from "../../../../util/styles/layout/notificationBanner.styles";
 
 export default function NotificationBanner({

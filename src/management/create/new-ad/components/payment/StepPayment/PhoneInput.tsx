@@ -1,8 +1,7 @@
-import React from 'react';
 import { View, Text, TextInput } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../../../../components/hooks/useTheme';
-import { useAppTranslation } from '../../../../../../components/hooks/useAppTranslation';
+import { useThemeColors, useThemedStyles } from '../../../../../../hooks/useTheme';
+import { useAppTranslation } from '../../../../../../hooks/useAppTranslation';
 import type { PhoneInputProps } from '../../../../../../util/types';
 import { PAYMENT_METHODS } from '../payment.constants';
 import { REGEX_PHONE_INPUT_FILTER } from '../../../../../../constants';

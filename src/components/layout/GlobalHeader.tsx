@@ -3,16 +3,15 @@ import {
   View, Image, TouchableOpacity, Text, Modal, Pressable,
   TextInput, Switch,
 } from 'react-native';
-import { useGlobal } from '../hooks/useGlobal';
-import { IS_WEB, WEB_CENTER_STYLE } from '../../common/web-layout';
+import { useGlobal } from '../../hooks/useGlobal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, usePathname } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useAppTranslation } from '../hooks/useAppTranslation';
+import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { useAppSelector, useAppDispatch } from '../../store/store';
 import { setBrowseQuery, clearBrowseQuery } from '../../store/slices/browseSearchSlice';
-import { useThemeColors, useThemedStyles, useThemeMode } from '../hooks/useTheme';
-import { useResponsive } from '../hooks/useResponsive';
+import { useThemeColors, useThemedStyles, useThemeMode } from '../../hooks/useTheme';
+import { useResponsive } from '../../hooks/useResponsive';
 import { tabletHeaderStyles, TABLET_HEADER_ICON_SIZES, TABLET_LANG_DROPDOWN_TOP_OFFSET } from '../../util/styles/shared/ipad.styles';
 import type { Lang } from '../../i18n/translations';
 import { createStyles } from '../../util/styles/layout/globalHeader.styles';
@@ -26,10 +25,6 @@ const LANGS: { code: Lang; label: string }[] = [
   { code: 'en', label: 'English' },
   { code: 'so', label: 'Soomaali' },
 ];
-
-const WEB_CENTER = IS_WEB
-  ? ({ ...WEB_CENTER_STYLE, alignSelf: 'center' as const })
-  : null;
 
 export default function GlobalHeader() {
   const insets = useSafeAreaInsets();
@@ -84,7 +79,7 @@ export default function GlobalHeader() {
   if (isAuth) {
     return (
       <View style={[styles.wrapper, { paddingTop: insets.top }]}>
-        <View style={[styles.inner, isTablet && tabletHeaderStyles.inner, WEB_CENTER]}>
+        <View style={[styles.inner, isTablet && tabletHeaderStyles.inner]}>
           <TouchableOpacity onPress={() => router.push('/(tabs)/home')} activeOpacity={0.8}>
             <Image source={require('../../../assets/logo.jpg')} style={[styles.logo, isTablet && tabletHeaderStyles.logo]} resizeMode="contain" />
           </TouchableOpacity>
@@ -116,7 +111,7 @@ export default function GlobalHeader() {
 
   return (
     <View style={[styles.wrapper, { paddingTop: insets.top }]}>
-      <View style={[styles.inner, isTablet && tabletHeaderStyles.inner, WEB_CENTER]}>
+      <View style={[styles.inner, isTablet && tabletHeaderStyles.inner]}>
         <View style={styles.left}>
           <View style={[styles.backSlot, isTablet && tabletHeaderStyles.backSlot]}>
             {showBack && (
@@ -163,7 +158,7 @@ export default function GlobalHeader() {
       </View>
 
       {showSearchBar && (
-        <View style={[styles.searchBar, isTablet && tabletHeaderStyles.searchBar, WEB_CENTER, searchFocused && { borderColor: Colors.primary }]}>
+        <View style={[styles.searchBar, isTablet && tabletHeaderStyles.searchBar, searchFocused && { borderColor: Colors.primary }]}>
           <MaterialCommunityIcons name="magnify" size={isTablet ? TABLET_HEADER_ICON_SIZES.search : 16} color={searchFocused ? Colors.primary : Colors.textMuted} />
           <TextInput
             style={[styles.searchInput, isTablet && tabletHeaderStyles.searchInput]}

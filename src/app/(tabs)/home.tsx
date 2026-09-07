@@ -1,17 +1,16 @@
 import { useMemo, useCallback } from 'react';
 import {
-  View, Text, TouchableOpacity, RefreshControl, ScrollView, ActivityIndicator,
+  View, Text, TouchableOpacity, RefreshControl, ScrollView,
 } from 'react-native';
 import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { CategoryGrid, HowToUseVideo } from '../../components/shared';
 import ListingCard from '../../components/cards/ListingCard';
-import { useAppTranslation } from '../../components/hooks/useAppTranslation';
-import { useResponsive } from '../../components/hooks/useResponsive';
-import { IS_WEB, WEB_CENTER_STYLE } from '../../common/web-layout';
-import { useHomeFeed } from '../../components/hooks/useHomeFeed';
-import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
+import { useAppTranslation } from '../../hooks/useAppTranslation';
+import { useResponsive } from '../../hooks/useResponsive';
+import { useHomeFeed } from '../../hooks/useHomeFeed';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useAppSelector } from '../../store/store';
 import { createStyles, H_PAD, COL_GAP } from '../../util/styles/tabs/home.styles';
 import type { ListingBase } from '../../util/types/listing.types';
@@ -20,7 +19,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const { t } = useAppTranslation();
   const { isTabletLandscape, sidebarWidth, mainWidth, numColumns, cardWidth } = useResponsive();
-  const { user, listings, recommendations, refreshing, visibleListings, hasMore, onRefresh, showMore, revealing } = useHomeFeed();
+  const { user, listings, recommendations, refreshing, visibleListings, hasMore, onRefresh, showMore } = useHomeFeed();
   const searchQuery = useAppSelector((s) => s.browseSearch.query);
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
@@ -123,16 +122,9 @@ export default function HomeScreen() {
             style={styles.readMoreBtn}
             onPress={showMore}
             activeOpacity={0.8}
-            disabled={revealing}
           >
-            {revealing ? (
-              <ActivityIndicator size="small" color={Colors.primary} />
-            ) : (
-              <>
-                <Text style={styles.readMoreText}>{t('loadMore')}</Text>
-                <MaterialCommunityIcons name="chevron-down" size={16} color={Colors.primary} />
-              </>
-            )}
+            <Text style={styles.readMoreText}>{t('loadMore')}</Text>
+            <MaterialCommunityIcons name="chevron-down" size={16} color={Colors.primary} />
           </TouchableOpacity>
         ) : null
       }
@@ -147,8 +139,8 @@ export default function HomeScreen() {
 
   if (isTabletLandscape) {
     return (
-      <View style={[styles.safe, IS_WEB && styles.webCenterWrap]}>
-        <View style={[styles.outerRow, WEB_CENTER_STYLE]}>
+      <View style={styles.safe}>
+        <View style={styles.outerRow}>
           <View style={[styles.sidebar, { width: sidebarWidth }]}>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.sidebarContent}>
               <View style={styles.videoSection}>
@@ -167,8 +159,8 @@ export default function HomeScreen() {
   }
 
   return (
-    <View style={[styles.safe, IS_WEB && styles.webCenterWrap]}>
-      <View style={[styles.mainFlex, WEB_CENTER_STYLE]}>
+    <View style={styles.safe}>
+      <View style={styles.mainFlex}>
         {feedList}
       </View>
     </View>

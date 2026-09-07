@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { REVIEWS_ENDPOINTS } from '../../api/urls';
+import { REVIEWS_ENDPOINTS } from '../../api/endpoints';
 import type { Review, CreateReviewPayload } from '../../util/types/review.types';
 
 export async function getReviewsByUser(userId: string, signal?: AbortSignal): Promise<Review[]> {

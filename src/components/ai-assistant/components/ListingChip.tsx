@@ -1,8 +1,8 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { getImageUrl, formatPrice } from '../../../util/helpers';
 import { createStyles } from '../../../util/styles/layout/hage.styles';
 import type { ListingRef } from '../../../util/types/chat.types';

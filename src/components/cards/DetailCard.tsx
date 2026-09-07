@@ -1,8 +1,7 @@
-import React from 'react';
 import { View, Text } from 'react-native';
-import { useThemedStyles } from '../hooks/useTheme';
+import { useThemedStyles } from '../../hooks/useTheme';
 
-import type { SpecRow, DetailCardProps } from '../../util/types';
+import type { DetailCardProps } from '../../util/types';
 import { createStyles } from '../../util/styles/detail/DetailCard.styles';
 
 export function DetailCard({ title, rows, children }: DetailCardProps) {

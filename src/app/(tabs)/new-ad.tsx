@@ -3,7 +3,7 @@ import { View, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { useFocusEffect } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { useThemedStyles } from "../../components/hooks/useTheme";
+import { useThemedStyles } from "../../hooks/useTheme";
 import { createStyles } from "../../util/styles/tabs/newAd.styles";
 import { LoadingSpinner } from "../../components/loading";
 import { useAuthStore } from "../../store/hooks/authStore";
@@ -15,7 +15,7 @@ import {
   resetNewAd,
   fetchPlans,
 } from "../../store/slices/newAdSlice";
-import { useNewAdStepNavigation } from "../../components/hooks/useNewAdStepNavigation";
+import { useNewAdStepNavigation } from "../../hooks/useNewAdStepNavigation";
 import { CheckoutBar } from "../../components/features/subscription/components/checklist";
 import { StepType, StepCategory, StepForm, StepPlan, StepSummary, StepPayment } from "../../management/create/new-ad/main";
 

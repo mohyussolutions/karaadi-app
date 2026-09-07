@@ -10,8 +10,8 @@ import {
 } from 'expo-camera';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useAppTranslation } from '../hooks/useAppTranslation';
-import { useThemeColors } from '../hooks/useTheme';
+import { useAppTranslation } from '../../hooks/useAppTranslation';
+import { useThemeColors } from '../../hooks/useTheme';
 import { COLORS } from '../../util/colors/colors';
 import type { CameraCaptureProps } from '../../util/types';
 import type { IconName } from '../../util/icons/icons';

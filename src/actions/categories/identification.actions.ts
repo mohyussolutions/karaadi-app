@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { IDENTIFICATION_ENDPOINTS } from '../../api/urls';
+import { IDENTIFICATION_ENDPOINTS } from '../../api/endpoints';
 import type {
   IdentificationStatus,
   IdentificationSubmitPayload,

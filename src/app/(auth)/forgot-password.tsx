@@ -1,13 +1,12 @@
-import React from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
   KeyboardAvoidingView, Alert, ScrollView,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { useForgotPassword } from '../../components/hooks/useForgotPassword';
-import { useResponsive } from '../../components/hooks/useResponsive';
-import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
+import { useForgotPassword } from '../../hooks/useForgotPassword';
+import { useResponsive } from '../../hooks/useResponsive';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/auth/forgot-password.styles';
 
 export default function ForgotPasswordScreen() {

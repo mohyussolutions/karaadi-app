@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
   ScrollView, KeyboardAvoidingView, Alert,
@@ -7,9 +7,9 @@ import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useLogin } from '../../components/hooks/useLogin';
-import { useResponsive } from '../../components/hooks/useResponsive';
-import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
+import { useLogin } from '../../hooks/useLogin';
+import { useResponsive } from '../../hooks/useResponsive';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/auth/login.styles';
 
 export default function LoginScreen() {

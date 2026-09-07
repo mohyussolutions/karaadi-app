@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { CHATS_ENDPOINTS, MESSAGES_ENDPOINTS } from '../../api/urls';
+import { CHATS_ENDPOINTS, MESSAGES_ENDPOINTS } from '../../api/endpoints';
 import type { Chat, ChatMessage } from '../../util/types';
 
 export async function getMyChats(userId: string): Promise<Chat[]> {

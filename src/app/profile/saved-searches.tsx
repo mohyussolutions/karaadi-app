@@ -1,13 +1,12 @@
-import React from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
-import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/profile/savedSearches.styles';
-import { useSavedSearches } from '../../components/hooks/useSavedSearches';
+import { useSavedSearches } from '../../hooks/useSavedSearches';
 
 export default function SavedSearchesScreen() {
   const { t } = useTranslation();

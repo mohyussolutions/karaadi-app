@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity,
 } from 'react-native';
@@ -6,13 +5,13 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
 import { MARKETPLACE_CONFIG, buildSpecItems } from '../../../constants';
-import { MARKETPLACE_ENDPOINTS } from '../../../api/urls';
+import { MARKETPLACE_ENDPOINTS } from '../../../api/endpoints';
 import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
 import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, CONDITION_COLORS } from '../../../constants';
-import { useItemDetail } from '../../../components/hooks/useItemDetail';
+import { useItemDetail } from '../../../hooks/useItemDetail';
 import ImageGallery from '../../../components/detail/ImageGallery';
 import ZoomModal from '../../../components/modals/ZoomModal';
 import SellerCard from '../../../components/cards/SellerCard';
@@ -23,7 +22,7 @@ import DetailNotFound from '../../../components/detail/DetailNotFound';
 import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
 import { createStyles } from '../../../util/styles/listing/itemDetail.styles';
 import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplit.styles';
-import { useResponsive } from '../../../components/hooks/useResponsive';
+import { useResponsive } from '../../../hooks/useResponsive';
 
 export default function ItemDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -105,6 +104,7 @@ export default function ItemDetailScreen() {
         phone={item.user?.phone}
         isVerified={item.user?.isVerified}
         subtitle={t('realEstateDetail.activeSeller')}
+        onCall={item.user?.phone ? handleCall : undefined}
         onMessage={item.maGaday ? undefined : handleContact}
         disabled={Boolean(item.maGaday)}
       />

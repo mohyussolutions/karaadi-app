@@ -28,6 +28,7 @@ export type {
   Chat, ChatMessage, ChatUser, Chatroom,
   HageMessage, ListingRef, HageChatResult, RawListingRef, HageChatApiResponse,
   HageReplySegment, HageInputBarProps, HageMessageListProps,
+  MessageBubbleProps, ChatHeaderProps, ChatComposerProps,
 } from './chat.types';
 
 export {
@@ -60,7 +61,7 @@ export type {
   DetailActionBarProps, RecommendedSectionProps,
   SellerCardProps, ListingCardProps, MyAdCardProps,
   SocialShareSheetProps, SocialAction, SocialPostCardProps, PostOutcome,
-  LoadingSpinnerProps, EmptyStateProps, ResponsiveLayoutProps,
+  LoadingSpinnerProps, EmptyStateProps,
   PaymentStatusConfig, PaymentCategoryInfo,
 } from './component.types';
 

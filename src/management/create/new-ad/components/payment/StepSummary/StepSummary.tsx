@@ -1,9 +1,8 @@
-import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../../../../components/hooks/useTheme';
-import { useAppTranslation } from '../../../../../../components/hooks/useAppTranslation';
-import { useTabBarClearance } from '../../../../../../components/hooks/useTabBarClearance';
+import { useThemeColors, useThemedStyles } from '../../../../../../hooks/useTheme';
+import { useAppTranslation } from '../../../../../../hooks/useAppTranslation';
+import { useTabBarClearance } from '../../../../../../hooks/useTabBarClearance';
 import { useAppSelector } from '../../../../../../store/store';
 import type { StepSummaryProps } from '../../../../../../util/types';
 import { OrderSummary } from '../StepPayment/OrderSummary';

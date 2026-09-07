@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { SOCIAL_ENDPOINTS } from '../../api/urls';
+import { SOCIAL_ENDPOINTS } from '../../api/endpoints';
 import type { SocialStatus, SocialPostUpdatePayload, SocialPostUpdateResponse } from '../../util/types/social.types';
 
 export async function getSocialStatus(): Promise<SocialStatus> {

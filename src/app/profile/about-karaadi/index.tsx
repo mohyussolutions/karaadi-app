@@ -1,10 +1,9 @@
-import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, Linking } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useAppTranslation } from '../../../components/hooks/useAppTranslation';
-import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
+import { useAppTranslation } from '../../../hooks/useAppTranslation';
+import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { createStyles } from '../../../util/styles/profile/aboutKaraadi.styles';
 import { SOCIAL_LINKS } from '../../../constants';
 import { SOCIAL_ICONS, type MCIcon } from '../../../util/icons/icons';

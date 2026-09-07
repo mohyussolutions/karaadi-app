@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { MY_ADS_ENDPOINTS } from '../../api/urls';
+import { MY_ADS_ENDPOINTS } from '../../api/endpoints';
 import { extractList } from '../../util/helpers';
 import type { ListingBase } from '../../util/types/listing.types';
 

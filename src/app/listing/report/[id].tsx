@@ -4,14 +4,14 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { isAxiosError } from 'axios';
-import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../common/common-for-ios-andriod';
+import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../platform/common-for-ios-andriod';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../components/hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAuthStore } from '../../../store/hooks/authStore';
 import { createReport } from '../../../actions/core/report.actions';
+import { getApiErrorMessage } from '../../../util/helpers';
 import { createStyles } from '../../../util/styles/listing/report.styles';
 import { maxLenSchema } from '../../../util/validation/schemas';
 
@@ -67,7 +67,7 @@ export default function ReportScreen() {
       });
       setSuccess(true);
     } catch (err) {
-      const message = isAxiosError(err) ? err.response?.data?.error : undefined;
+      const message = getApiErrorMessage(err);
       setError(message || t('report.errorFailed'));
     } finally {
       setSubmitting(false);

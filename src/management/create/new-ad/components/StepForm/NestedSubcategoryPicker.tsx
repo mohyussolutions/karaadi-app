@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { View, Text, TextInput, TouchableOpacity, Pressable } from "react-native";
 import { useTranslation } from "react-i18next";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useThemeColors, useThemedStyles } from "../../../../../components/hooks/useTheme";
+import { useThemeColors, useThemedStyles } from "../../../../../hooks/useTheme";
 import type { MCIcon } from "../../../../../util/icons/icons";
 import type { NestedSubcategoryPickerProps } from "../../../../../util/types/new-ad.types";
 import { createStyles } from "../../../../../util/styles/new-ad/stepForm.styles";

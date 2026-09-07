@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { Image } from 'expo-image';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors } from '../hooks/useTheme';
+import { useThemeColors } from '../../hooks/useTheme';
 import type { RemoteImageProps } from '../../util/types';
 
-export default function RemoteImage({ style, source, iconSize = 22, recyclingKey, ...rest }: RemoteImageProps) {
+function RemoteImage({ style, source, iconSize = 22, recyclingKey, ...rest }: RemoteImageProps) {
   const Colors = useThemeColors();
   const [hasError, setHasError] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -55,3 +55,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default memo(RemoteImage);

@@ -1,4 +1,4 @@
-import type { ColorPalette } from '../../../../components/hooks/useTheme';
+import type { ColorPalette } from '../../../../hooks/useTheme';
 import type { PlanStyle } from '../../../../util/types/new-ad.types';
 import { REGEX_DIGITS } from '../../../../constants';
 

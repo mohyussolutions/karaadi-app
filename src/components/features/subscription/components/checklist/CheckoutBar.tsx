@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../../../hooks/useTheme';
 import type { CheckoutBarProps } from '../../../../../util/types';
 import { createStyles } from '../../../../../util/styles/checklist/checkoutBar.styles';
 

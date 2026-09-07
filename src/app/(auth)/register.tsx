@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
   ScrollView, KeyboardAvoidingView, Alert, Linking,
@@ -6,10 +6,11 @@ import {
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useRegister, PASSWORD_RULES } from '../../components/hooks/useRegister';
-import { useResponsive } from '../../components/hooks/useResponsive';
-import { useThemeColors, useThemedStyles } from '../../components/hooks/useTheme';
+import { useRegister } from '../../hooks/useRegister';
+import { useResponsive } from '../../hooks/useResponsive';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/auth/register.styles';
+import { SITE_URL } from '../../constants';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -140,11 +141,11 @@ export default function RegisterScreen() {
             />
             <Text style={styles.termsNoteInline}>
               I agree to the{' '}
-              <Text style={styles.termsLink} onPress={() => Linking.openURL('https://karaadi.com/terms')}>
+              <Text style={styles.termsLink} onPress={() => Linking.openURL(`${SITE_URL}/terms`)}>
                 Terms of Service
               </Text>
               {' '}and{' '}
-              <Text style={styles.termsLink} onPress={() => Linking.openURL('https://karaadi.com/privacy')}>
+              <Text style={styles.termsLink} onPress={() => Linking.openURL(`${SITE_URL}/privacy`)}>
                 Privacy Policy
               </Text>
               , including the zero-tolerance policy for objectionable content and abusive users.

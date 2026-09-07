@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { AppState, Modal, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Updates from 'expo-updates';
-import { useThemeColors } from '../hooks/useTheme';
-import { useAppTranslation } from '../hooks/useAppTranslation';
+import { useThemeColors } from '../../hooks/useTheme';
+import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { styles } from '../../util/styles/modals/forceUpdateModal.styles';
 
 export default function ForceUpdateModal() {

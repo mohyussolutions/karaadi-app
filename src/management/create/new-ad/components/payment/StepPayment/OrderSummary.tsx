@@ -1,10 +1,10 @@
 import { useState, useMemo, memo } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
-import { useGlobal } from '../../../../../../components/hooks/useGlobal';
+import { useGlobal } from '../../../../../../hooks/useGlobal';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../../../../components/hooks/useTheme';
-import { useAppTranslation } from '../../../../../../components/hooks/useAppTranslation';
+import { useThemeColors, useThemedStyles } from '../../../../../../hooks/useTheme';
+import { useAppTranslation } from '../../../../../../hooks/useAppTranslation';
 import { planStyle } from '../../../constants/plan';
 import type { OrderSummaryProps } from '../../../../../../util/types';
 import type {

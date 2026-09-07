@@ -1,7 +1,7 @@
-import React, { memo, useCallback, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { createStyles } from '../../../util/styles/layout/hage.styles';
 import type { HageMessage, HageMessageListProps, ListingRef } from '../../../util/types/chat.types';
 import type { ListingRoute } from '../../../util/types/common.types';

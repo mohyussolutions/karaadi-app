@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import {
   View,
   Text,
@@ -11,15 +11,15 @@ import { FlashList, type ListRenderItemInfo } from "@shopify/flash-list";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useThemeColors, useThemedStyles } from "../../../components/hooks/useTheme";
+import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
 import { getCategoryByKey, SUB_I18N_GROUP } from "../../../constants";
 import { EmptyState, AppIcon } from "../../../components/shared";
 import ListingCard from "../../../components/cards/ListingCard";
 import { ListingCardSkeleton } from "../../../components/loading";
 import BottomTabBar from "../../../navigation/tab-bar/BottomTabBar";
-import { useAppTranslation } from "../../../components/hooks/useAppTranslation";
-import { useResponsive } from "../../../components/hooks/useResponsive";
-import { useCategoryFeed } from "../../../components/hooks/useCategoryFeed";
+import { useAppTranslation } from "../../../hooks/useAppTranslation";
+import { useResponsive } from "../../../hooks/useResponsive";
+import { useCategoryFeed } from "../../../hooks/useCategoryFeed";
 import { useAppSelector } from "../../../store/store";
 import type { SubCategory } from "../../../constants";
 import type { ListingBase } from "../../../util/types/listing.types";

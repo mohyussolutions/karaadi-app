@@ -1,8 +1,7 @@
-import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../../../../components/hooks/useTheme';
-import { useAppTranslation } from '../../../../../../components/hooks/useAppTranslation';
+import { useThemeColors, useThemedStyles } from '../../../../../../hooks/useTheme';
+import { useAppTranslation } from '../../../../../../hooks/useAppTranslation';
 import SocialPostCard from '../../../../../../components/cards/SocialPostCard';
 import { getListingShareUrl } from '../../../../../../constants';
 import type { SuccessScreenProps } from '../../../../../../util/types';

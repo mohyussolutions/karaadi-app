@@ -1,10 +1,9 @@
-import React from 'react';
 import { View, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { createStyles } from '../../../util/styles/layout/hage.styles';
 import type { HageInputBarProps } from '../../../util/types';
-import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../common/common-for-ios-andriod';
+import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../platform/common-for-ios-andriod';
 
 export function HageInputBar({ value, onChangeText, onSend, loading, placeholder, insets }: HageInputBarProps) {
   const Colors = useThemeColors();

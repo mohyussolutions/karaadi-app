@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { AUTH_ENDPOINTS } from '../../api/urls';
+import { AUTH_ENDPOINTS } from '../../api/endpoints';
 import type { User, AuthResponse } from '../../util/types/user.types';
 
 export async function login(email: string, password: string): Promise<AuthResponse> {

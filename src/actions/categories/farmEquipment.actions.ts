@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { FARM_EQUIPMENT_ENDPOINTS } from '../../api/urls';
+import { FARM_EQUIPMENT_ENDPOINTS } from '../../api/endpoints';
 import type { RawItem, Params } from '../../util/types/common.types';
 import type { ApiError } from '../../util/types/generic.types';
 import type { FarmEquipment } from '../../util/types/listing.types';

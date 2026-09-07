@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { GEO_ENDPOINTS } from '../../api/urls';
+import { GEO_ENDPOINTS } from '../../api/endpoints';
 import type { GeoRegion, GeoCity } from '../../util/types/browse.types';
 
 export async function clientGetAllRegions(): Promise<GeoRegion[]> {

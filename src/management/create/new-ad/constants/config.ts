@@ -1,6 +1,6 @@
 import type { ListingType, Step, Plan } from '../../../../util/types/new-ad.types';
 export type { ListingType, Step, Plan };
-import { CAT_PATHS } from '../../../../api/urls';
+import { CAT_PATHS } from '../../../../api/paths';
 
 export const CATEGORY_ENDPOINTS: Record<string, string> = {
   Marketplace: CAT_PATHS.marketplace,

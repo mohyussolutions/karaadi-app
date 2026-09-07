@@ -1,11 +1,11 @@
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import type { DropdownOption, DropdownProps } from '../../util/types';
 import {
   View, Text, TouchableOpacity, Modal, FlatList,
   TextInput,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/new-ad/dropdown.styles';
 
 function normalize(opt: string | DropdownOption): DropdownOption {

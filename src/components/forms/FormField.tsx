@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FormFieldProps } from '../../util/types';
 import { View, Text, TextInput, Animated } from 'react-native';
-import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { Dropdown } from './Dropdown';
 import { createStyles } from '../../util/styles/new-ad/formField.styles';
 import { REGEX_NUMBER_INPUT_FILTER, REGEX_PHONE_INPUT_FILTER } from '../../constants';

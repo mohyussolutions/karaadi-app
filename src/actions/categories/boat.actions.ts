@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { BOATS_ENDPOINTS } from '../../api/urls';
+import { BOATS_ENDPOINTS } from '../../api/endpoints';
 import type { RawItem, Params } from '../../util/types/common.types';
 import type { ApiError } from '../../util/types/generic.types';
 import type { Boat } from '../../util/types/listing.types';

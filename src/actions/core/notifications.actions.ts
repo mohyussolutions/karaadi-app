@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { NOTIFICATIONS_ENDPOINTS } from '../../api/urls';
+import { NOTIFICATIONS_ENDPOINTS } from '../../api/endpoints';
 import type { Notification } from '../../util/types/notification.types';
 
 export async function getUnreadNotificationCount(userId: string): Promise<number> {

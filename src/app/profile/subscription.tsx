@@ -1,13 +1,13 @@
 import { useEffect, useState, useCallback } from 'react';
 import { View, FlatList, Alert } from 'react-native';
-import { useGlobal } from '../../components/hooks/useGlobal';
+import { useGlobal } from '../../hooks/useGlobal';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner } from '../../components/loading';
 import { EmptyState } from '../../components/shared';
 import ListingCard from '../../components/cards/ListingCard';
-import { useThemedStyles } from '../../components/hooks/useTheme';
+import { useThemedStyles } from '../../hooks/useTheme';
 import { createSubscriptionListStyles } from '../../util/styles/profile/profileSubscription.styles';
 import { fetchMySubscriptions, deleteSubscription } from '../../actions/categories/subscription.actions';
 import { subscriptionToListingItem, subscriptionPriceLabel } from '../../util/helpers';

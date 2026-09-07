@@ -54,7 +54,7 @@ export interface SlotProps {
   image: string | null;
   compressing: boolean;
   s: ReturnType<typeof import('../styles/profile/verifyIdentity.styles').createStyles>;
-  Colors: ReturnType<typeof import('../../components/hooks/useTheme').useThemeColors>;
+  Colors: ReturnType<typeof import('../../hooks/useTheme').useThemeColors>;
   t: (key: string) => string;
   onTakePhoto: () => void;
   onUpload: (slot: SlotKey) => void;

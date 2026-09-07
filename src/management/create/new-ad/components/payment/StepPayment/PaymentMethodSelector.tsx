@@ -1,8 +1,7 @@
-import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemedStyles } from '../../../../../../components/hooks/useTheme';
-import { useAppTranslation } from '../../../../../../components/hooks/useAppTranslation';
+import { useThemedStyles } from '../../../../../../hooks/useTheme';
+import { useAppTranslation } from '../../../../../../hooks/useAppTranslation';
 import type { PaymentMethodSelectorProps } from '../../../../../../util/types';
 import { PAYMENT_METHODS } from '../payment.constants';
 import { createStyles } from '../../../../../../util/styles/payment/paymentMethodSelector.styles';

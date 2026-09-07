@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import { memo, useCallback } from "react";
 import type {
   StepCategoryProps,
   CategoryCardProps,
@@ -9,9 +9,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   useThemeColors,
   useThemedStyles,
-} from "../../../../components/hooks/useTheme";
-import { useAppTranslation } from "../../../../components/hooks/useAppTranslation";
-import { useTabBarClearance } from "../../../../components/hooks/useTabBarClearance";
+} from "../../../../hooks/useTheme";
+import { useAppTranslation } from "../../../../hooks/useAppTranslation";
+import { useTabBarClearance } from "../../../../hooks/useTabBarClearance";
 import { MAIN_CATEGORIES, type MainCategory } from "../../../../constants";
 import type { MCIcon } from "../../../../util/icons/icons";
 import { createStyles } from "../../../../util/styles/new-ad/stepCategory.styles";

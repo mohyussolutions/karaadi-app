@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { getReviewsByUser } from '../../actions/core/reviews.actions';
 import { placeholderAvatar } from '../../constants';
 import type { SellerCardProps } from '../../util/types';
@@ -30,7 +30,7 @@ function StarRating({ rating, count }: { rating: number; count: number }) {
   );
 }
 
-export default function SellerCard({
+const SellerCard = React.memo(function SellerCard({
   username, profileImage, phone, subtitle, userId, isVerified,
   onMessage, onCall, messageBtnLabel, messageBtnIcon = 'message-outline', disabled,
 }: SellerCardProps) {
@@ -87,4 +87,6 @@ export default function SellerCard({
       )}
     </View>
   );
-}
+});
+
+export default SellerCard;
