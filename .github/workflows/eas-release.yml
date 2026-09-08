@@ -24,9 +24,48 @@ jobs:
       - run: npm ci
 
       - name: Restore store credentials
+        env:
+          ASC_API_KEY_P8: ${{ secrets.ASC_API_KEY_P8 }}
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          GOOGLE_PLAY_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
         run: |
-          echo "${{ secrets.ASC_API_KEY_P8 }}" > AuthKey_T4K9ZTB9VV.p8
-          echo '${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}' > google-play-service-account.json
+          if [ -z "$ASC_API_KEY_P8" ]; then
+            echo "Missing App Store Connect API key secret ASC_API_KEY_P8." >&2
+            exit 1
+          fi
+
+          printf '%s' "$ASC_API_KEY_P8" > AuthKey_T4K9ZTB9VV.p8
+          if ! grep -q "BEGIN PRIVATE KEY" AuthKey_T4K9ZTB9VV.p8 || ! grep -q "END PRIVATE KEY" AuthKey_T4K9ZTB9VV.p8; then
+            echo "Invalid App Store Connect API key in ASC_API_KEY_P8." >&2
+            exit 1
+          fi
+
+          if [ -n "$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" ]; then
+            PLAY_SERVICE_ACCOUNT_JSON="$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON"
+          else
+            PLAY_SERVICE_ACCOUNT_JSON="$GOOGLE_PLAY_SERVICE_ACCOUNT"
+          fi
+
+          if [ -z "$PLAY_SERVICE_ACCOUNT_JSON" ]; then
+            echo "Missing Google Play service account secret. Set GOOGLE_PLAY_SERVICE_ACCOUNT_JSON or GOOGLE_PLAY_SERVICE_ACCOUNT." >&2
+            exit 1
+          fi
+
+          printf '%s' "$PLAY_SERVICE_ACCOUNT_JSON" > google-play-service-account.json
+          python - <<'PY'
+          import json
+          import sys
+
+          try:
+              with open("google-play-service-account.json", "r", encoding="utf-8") as f:
+                  json.load(f)
+          except json.JSONDecodeError as exc:
+              print(f"Invalid Google Play service account JSON: {exc}", file=sys.stderr)
+              sys.exit(1)
+          except OSError as exc:
+              print(f"Could not read google-play-service-account.json: {exc}", file=sys.stderr)
+              sys.exit(1)
+          PY
 
       - name: Build and submit to both stores
         run: eas build --platform all --profile production --non-interactive --no-wait --auto-submit
