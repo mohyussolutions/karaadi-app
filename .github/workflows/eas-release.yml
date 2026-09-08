@@ -26,7 +26,17 @@ jobs:
       - name: Restore store credentials
         run: |
           echo "${{ secrets.ASC_API_KEY_P8 }}" > AuthKey_T4K9ZTB9VV.p8
-          echo '${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}' > google-play-service-account.json
+          GP_JSON='${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}'
+          if [ -z "$GP_JSON" ]; then
+            GP_JSON='${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}'
+          fi
+          if [ -z "$GP_JSON" ]; then
+            echo "ERROR: Neither GOOGLE_PLAY_SERVICE_ACCOUNT_JSON nor GOOGLE_PLAY_SERVICE_ACCOUNT secret is set." >&2
+            exit 1
+          fi
+          echo "$GP_JSON" > google-play-service-account.json
+          python3 -c "import json,sys; json.load(open('google-play-service-account.json'))" || \
+            { echo "ERROR: google-play-service-account.json is not valid JSON." >&2; exit 1; }
 
       - name: Build and submit to both stores
         run: eas build --platform all --profile production --non-interactive --no-wait --auto-submit
