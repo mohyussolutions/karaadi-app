@@ -1,12 +1,8 @@
-import { ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from '../store/store';
 import { LoadingSpinner } from '../components/loading';
-
-interface AppProvidersProps {
-  children: ReactNode;
-}
+import type { AppProvidersProps } from '../util/types/component.types';
 
 export default function AppProviders({ children }: AppProvidersProps) {
   return (

@@ -1,6 +1,13 @@
 import type { ImageSourcePropType } from 'react-native';
 import type { ReactNode } from 'react';
 import type { MCIcon } from '../icons/icons';
+import type { Lang } from './common.types';
+
+interface RouteItemBase {
+  icon: MCIcon;
+  labelKey: string;
+  route: string;
+}
 
 export interface TabItem {
   name: string;
@@ -23,22 +30,16 @@ export interface TabButtonBackgroundProps {
   children: ReactNode;
 }
 
-export interface MenuItem {
-  icon: MCIcon;
-  labelKey: string;
-  route: string;
+export interface MenuItem extends RouteItemBase {
   descKey?: string;
 }
 
-export interface SettingsRow {
-  icon: MCIcon;
-  labelKey: string;
-  route: string;
+export interface SettingsRow extends RouteItemBase {
   color?: string;
 }
 
 export interface Language {
-  code: 'en' | 'so';
+  code: Lang;
   label: string;
 }
 

@@ -19,6 +19,8 @@ export interface SystemFeeConfig extends FeeRecord {
   companyExpenses?: number;
 }
 
+export type FeeArrayKey = 'marketplace' | 'realEstate' | 'cars' | 'motorcycles' | 'boats' | 'equipment';
+
 export interface AllFeeConfigs {
   marketplace: FeeRecord[];
   realEstate: FeeRecord[];

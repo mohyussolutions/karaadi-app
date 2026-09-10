@@ -5,7 +5,7 @@ import { useAuthStore } from '../../../../store/hooks/authStore';
 import { useAppTranslation } from '../../../../hooks/useAppTranslation';
 import { createSubscription } from '../../../../actions/categories/subscription.actions';
 import { MAIN_CATEGORIES, getCategoryByKey, SUB_I18N_GROUP } from '../../../../constants';
-import type { Subscription, SubscriptionPayload, WantedFormState } from '../../../../util/types';
+import type { SubscriptionPayload, WantedFormState, UseWantedAlertFormArgs } from '../../../../util/types';
 import { maxLenSchema } from '../../../../util/validation/schemas';
 
 const MAX_IMAGES = 3;
@@ -22,11 +22,6 @@ const EMPTY_FORM: WantedFormState = {
   description: '',
   images: [],
 };
-
-interface UseWantedAlertFormArgs {
-  onClose: () => void;
-  onCreated: (sub: Subscription) => void;
-}
 
 export function useWantedAlertForm({ onClose, onCreated }: UseWantedAlertFormArgs) {
   const { t } = useAppTranslation();

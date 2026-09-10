@@ -1,6 +1,6 @@
 import { apiClient } from '../client';
 import { PAYMENT_ENDPOINTS } from '../../api/endpoints';
-import { BASE_PLANS } from '../../management/create/new-ad/constants/config';
+import { PLAN_CATALOG } from '../../policy/planCatalog';
 import type { Plan } from '../../util/types/new-ad.types';
 import type { SubPlanConfig } from '../../util/types/fee.types';
 import { getSubPlans } from './fee.actions';
@@ -9,7 +9,7 @@ export async function fetchPlansFromAPI(): Promise<Plan[]> {
   const data = await getSubPlans();
   const config: SubPlanConfig = Array.isArray(data) ? (data[0] ?? {}) : (data ?? {});
   const configId = String(config._id || config.id || '');
-  const plans = BASE_PLANS.map((p) => ({
+  const plans = PLAN_CATALOG.map((p) => ({
     ...p,
     _id: configId || p.key,
     price: Number(config[p.key]) || 0,

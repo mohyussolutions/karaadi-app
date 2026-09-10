@@ -1,39 +1,40 @@
-export interface GeoCity {
+import type { ModalProps } from './generic.types';
+
+interface GeoEntityBase {
   id?: string;
   _id?: string;
   name: string;
+}
+
+export interface GeoCity extends GeoEntityBase {
   region?: string;
 }
 
-export interface GeoRegion {
-  id?: string;
-  _id?: string;
-  name: string;
+export interface GeoRegion extends GeoEntityBase {
   cities?: GeoCity[];
 }
 
-export interface Region {
+interface NamedEntity {
   _id: string;
   name: string;
+}
+
+export interface Region extends NamedEntity {
   nameEn?: string;
   nameSo?: string;
 }
 
-export interface City {
-  _id: string;
-  name: string;
+export interface City extends NamedEntity {
   region?: string;
-}
-
-export interface RegionPickerItem {
-  id: string;
-  name: string;
-  cities?: CityPickerItem[];
 }
 
 export interface CityPickerItem {
   id: string;
   name: string;
+}
+
+export interface RegionPickerItem extends CityPickerItem {
+  cities?: CityPickerItem[];
 }
 
 export interface RegionCityPickerProps {
@@ -144,22 +145,19 @@ export interface SidebarProps {
   onPost: () => void;
 }
 
-export interface ChipItemProps {
-  item: NestedSubCategory;
+interface SelectableItemProps<T> {
+  item: T;
   active: boolean;
-  onPress: (item: NestedSubCategory | null) => void;
+  onPress: (item: T | null) => void;
 }
 
-export interface NestedItemProps {
-  item: NestedSubCategory;
-  active: boolean;
+export interface ChipItemProps extends SelectableItemProps<NestedSubCategory> {}
+
+export interface NestedItemProps extends SelectableItemProps<NestedSubCategory> {
   count: number;
-  onPress: (item: NestedSubCategory | null) => void;
 }
 
-export interface LocationFilterModalProps {
-  visible: boolean;
-  onClose: () => void;
+export interface LocationFilterModalProps extends ModalProps {
   regions: RegionPickerItem[];
   selectedRegions: string[];
   selectedCities: string[];

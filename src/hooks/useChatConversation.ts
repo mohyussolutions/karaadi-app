@@ -5,7 +5,7 @@ import { getChatMessages, sendMessage, createOrFindChat } from '../actions/core/
 import { joinChat, leaveChat, emitSendMessage, emitMarkAsRead, getSocket } from '../actions/sockets/socket.actions';
 import { setActiveChatId, cacheUserName } from '../components/features/chat/services/chatState';
 import { useAuthStore } from '../store/hooks/authStore';
-import type { ChatMessage } from '../util/types';
+import type { ChatMessage, UseChatConversationArgs } from '../util/types';
 
 const chatIdCache = new Map<string, number>();
 
@@ -19,14 +19,6 @@ function getItemModel(category?: string): string {
   if (c === 'jobs' || c === 'job') return 'Job';
   if (c === 'subscription') return 'Subscription';
   return 'Marketplace';
-}
-
-interface UseChatConversationArgs {
-  chatIdParam?: string;
-  userId?: string;
-  username?: string;
-  listingId?: string;
-  listingType?: string;
 }
 
 export function useChatConversation({ chatIdParam, userId, username, listingId, listingType }: UseChatConversationArgs) {

@@ -17,7 +17,7 @@ import {
 } from "../../store/slices/newAdSlice";
 import { useNewAdStepNavigation } from "../../hooks/useNewAdStepNavigation";
 import { CheckoutBar } from "../../components/features/subscription/components/checklist";
-import { StepType, StepCategory, StepForm, StepPlan, StepSummary, StepPayment } from "../../management/create/new-ad/main";
+import { StepType, StepCategory, StepForm, StepPlan, StepSummary, StepPayment } from "../../management/create/new-ad";
 
 import type { ListingType, Step, StepItem } from "../../util/types/new-ad.types";
 import { MAIN_CATEGORIES } from "../../navigation/config/navConfig";

@@ -368,6 +368,7 @@ export const common = {
   updateNow: "Hadda Cusboonaysii",
   storeUpdateTitle: "Nooc Cusub Ayaa La Heli Karaa",
   storeUpdateMessage: "Nooc cusub oo Karaadi ah ayaa laga heli karaa bakhaarka. Fadlan cusboonaysii si aad u hesho astaamaha ugu dambeeyay.",
+  close: "Xir",
 } as const;
 
 export const summary = {

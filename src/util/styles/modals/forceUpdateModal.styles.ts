@@ -17,6 +17,16 @@ export const styles = StyleSheet.create({
     padding: 24,
     alignItems: 'center',
   },
+  closeBtn: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   iconWrap: {
     width: 64,
     height: 64,

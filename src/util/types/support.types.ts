@@ -1,20 +1,21 @@
 export type SupportRole = 'USER' | 'SUPPORT_MANAGER' | 'ADMIN';
 export type TicketStatus = 'NEW' | 'IN_PROGRESS' | 'DONE' | 'RESOLVED' | 'CLOSED';
 
-export interface TicketMessage {
+interface SenderInfo {
+  senderName: string;
+  senderEmail: string;
+}
+
+export interface TicketMessage extends SenderInfo {
   id: number;
   ticketId: number;
   senderRole: SupportRole;
-  senderName: string;
-  senderEmail: string;
   body: string;
   createdAt: string;
 }
 
-export interface Ticket {
+export interface Ticket extends SenderInfo {
   id: number;
-  senderName: string;
-  senderEmail: string;
   subject: string;
   body: string;
   status: TicketStatus;
@@ -25,16 +26,12 @@ export interface Ticket {
   messages?: TicketMessage[];
 }
 
-export interface CreateTicketPayload {
-  senderName: string;
-  senderEmail: string;
+export interface CreateTicketPayload extends SenderInfo {
   subject: string;
   body: string;
 }
 
-export interface AddTicketMessagePayload {
-  senderName: string;
-  senderEmail: string;
+export interface AddTicketMessagePayload extends SenderInfo {
   body: string;
   senderRole?: SupportRole;
 }

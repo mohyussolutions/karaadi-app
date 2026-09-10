@@ -6,11 +6,9 @@ import type { ThemeMode } from './theme.types';
 import type { User } from './user.types';
 import type { Notification } from './notification.types';
 import type { GeoRegion } from './browse.types';
+import type { LoadedCollection } from './generic.types';
 
-export interface ChatsState {
-  items: Chat[];
-  loaded: boolean;
-}
+export interface ChatsState extends LoadedCollection<Chat> {}
 
 export interface NotificationsState {
   items: Notification[];
@@ -31,11 +29,9 @@ export interface BrowseSearchState {
   query: string;
 }
 
-export interface FavoritesState {
+export interface FavoritesState extends LoadedCollection<Favorite> {
   ids: string[];
   idMap: Record<string, string>;
-  items: Favorite[];
-  loaded: boolean;
 }
 
 export interface FeedState {

@@ -7,6 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { CategoryGrid, HowToUseVideo } from '../../components/shared';
 import ListingCard from '../../components/cards/ListingCard';
+import { ListingCardSkeleton } from '../../components/loading';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useHomeFeed } from '../../hooks/useHomeFeed';
@@ -15,11 +16,13 @@ import { useAppSelector } from '../../store/store';
 import { createStyles, H_PAD, COL_GAP } from '../../util/styles/tabs/home.styles';
 import type { ListingBase } from '../../util/types/listing.types';
 
+const SKELETON_COUNT = 6;
+
 export default function HomeScreen() {
   const router = useRouter();
   const { t } = useAppTranslation();
   const { isTabletLandscape, sidebarWidth, mainWidth, numColumns, cardWidth } = useResponsive();
-  const { user, listings, recommendations, refreshing, visibleListings, hasMore, onRefresh, showMore } = useHomeFeed();
+  const { user, listings, recommendations, refreshing, loading, visibleListings, hasMore, onRefresh, showMore } = useHomeFeed();
   const searchQuery = useAppSelector((s) => s.browseSearch.query);
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
@@ -40,6 +43,11 @@ export default function HomeScreen() {
 
   const displayListings = filteredListings ?? visibleListings;
   const showLoadMore = !filteredListings && hasMore;
+  const showSkeleton = loading && !filteredListings;
+  const skeletonData = useMemo(
+    () => Array.from({ length: SKELETON_COUNT }, (_, i) => ({ _id: `sk-${i}`, id: `sk-${i}` }) as unknown as ListingBase),
+    [],
+  );
 
   const renderFeedItem = useCallback(({ item, index }: ListRenderItemInfo<ListingBase>) => (
     <View
@@ -49,9 +57,9 @@ export default function HomeScreen() {
         paddingBottom: COL_GAP,
       }}
     >
-      <ListingCard item={item} />
+      {showSkeleton ? <ListingCardSkeleton /> : <ListingCard item={item} />}
     </View>
-  ), [numColumns]);
+  ), [numColumns, showSkeleton]);
 
   const renderRecItem = useCallback(({ item }: ListRenderItemInfo<ListingBase>) => (
     <View style={{ width: REC_CARD_W, marginRight: 8 }}>
@@ -107,7 +115,7 @@ export default function HomeScreen() {
   const feedList = (
     <FlashList
       key={`feed-${numColumns}`}
-      data={displayListings}
+      data={showSkeleton ? skeletonData : displayListings}
       numColumns={numColumns}
       keyExtractor={(item) => item.id || item._id}
       maintainVisibleContentPosition={{ disabled: true }}
@@ -129,7 +137,7 @@ export default function HomeScreen() {
         ) : null
       }
       ListEmptyComponent={
-        displayListings.length === 0 ? (
+        !showSkeleton && displayListings.length === 0 ? (
           <Text style={styles.empty}>{filteredListings ? t('noResults') : t('noListings')}</Text>
         ) : null
       }

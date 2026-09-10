@@ -14,11 +14,9 @@ import { useChatsData } from '../../../../hooks/useChatsData';
 import { useAppSelector } from '../../../../store/store';
 import { placeholderAvatar } from '../../../../constants';
 import { createStyles } from '../../../../util/styles/tabs/messages.styles';
-import type { Chat } from '../../../../util/types';
+import type { GroupedChat } from '../../../../util/types';
 
 const AVATAR = placeholderAvatar(48, '9ca3af', '?');
-
-type GroupedChat = Chat & { allIds: number[]; unreadTotal: number };
 
 const ConvoItem = memo(function ConvoItem({
   item, currentUserId, onPress,
@@ -84,7 +82,7 @@ export default function MessagesScreen() {
 
   const groupedChats = useMemo(() => {
     if (!user) return [];
-    const byUser = new Map<string, Chat & { allIds: number[]; unreadTotal: number }>();
+    const byUser = new Map<string, GroupedChat>();
     for (const item of chats) {
       const other = item.senderId === user.id ? item.receiver : item.sender;
       const key = other?.id ? String(other.id) : `chat-${item.id}`;

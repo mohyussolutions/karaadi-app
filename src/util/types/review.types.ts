@@ -1,23 +1,21 @@
+import type { ItemRef } from './generic.types';
+
 export interface ReviewAuthor {
   id: string;
   username: string;
   profileImage?: string | null;
 }
 
-export interface Review {
-  id: string;
-  userId: string;
-  itemId: string;
-  itemType: string;
+interface ReviewCore extends ItemRef {
   rating: number;
   content: string;
+}
+
+export interface Review extends ReviewCore {
+  id: string;
+  userId: string;
   createdAt: string;
   user?: ReviewAuthor;
 }
 
-export interface CreateReviewPayload {
-  itemId: string;
-  itemType: string;
-  rating: number;
-  content: string;
-}
+export interface CreateReviewPayload extends ReviewCore {}

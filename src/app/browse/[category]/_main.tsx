@@ -151,11 +151,6 @@ export default function CategoryScreen() {
           <Text style={styles.postBtnText}>{t("wantSell.title")}</Text>
         </TouchableOpacity>
       )}
-      {!loading && (
-        <View style={styles.countRow}>
-          <Text style={styles.countText}>{filteredListings.length} listings</Text>
-        </View>
-      )}
     </View>
   );
 

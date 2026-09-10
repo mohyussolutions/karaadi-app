@@ -6,6 +6,7 @@ import { Stack, usePathname } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { NavigationBar } from "expo-navigation-bar";
 import * as SystemUI from "expo-system-ui";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -28,8 +29,16 @@ import { useSocketMessages } from "../hooks/useSocketMessages";
 import { useSocketNotifications } from "../hooks/useSocketNotifications";
 import { useNotificationTap } from "../hooks/useNotificationTap";
 
+// Static per-route constants, not measured at runtime: a shared runtime value caused the
+// previous screen's content to jump when navigating to a route with a different header.
+const DEFAULT_HEADER_CONTENT_HEIGHT = 112;
+const AUTH_HEADER_CONTENT_HEIGHT = 60;
+
 export default function RootLayout() {
   const [showEula, setShowEula] = useState(false);
+  const insets = useSafeAreaInsets();
+  const defaultHeaderPadding = insets.top + DEFAULT_HEADER_CONTENT_HEIGHT;
+  const authHeaderPadding = insets.top + AUTH_HEADER_CONTENT_HEIGHT;
 
   useEffect(() => {
     AsyncStorage.getItem("karaadi_eula_accepted_v1").then((val) => {
@@ -77,12 +86,25 @@ export default function RootLayout() {
         screenOptions={{
           headerShown: false,
           title: "",
-          contentStyle: { backgroundColor: Colors.background },
+          contentStyle: { backgroundColor: Colors.background, paddingTop: defaultHeaderPadding },
           animation: Platform.OS === "web" ? "none" : "default",
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="(auth)"
+          options={{
+            headerShown: false,
+            contentStyle: { backgroundColor: Colors.background, paddingTop: authHeaderPadding },
+          }}
+        />
+        <Stack.Screen
+          name="profile/chat"
+          options={{
+            headerShown: false,
+            contentStyle: { backgroundColor: Colors.background, paddingTop: 0 },
+          }}
+        />
         <Stack.Screen
           name="listing/vehicle/[id]"
           options={{
@@ -91,6 +113,7 @@ export default function RootLayout() {
             animation: "slide_from_bottom",
             gestureEnabled: true,
             gestureDirection: "vertical",
+            contentStyle: { backgroundColor: Colors.background, paddingTop: 0 },
           }}
         />
         <Stack.Screen
@@ -101,6 +124,7 @@ export default function RootLayout() {
             animation: "slide_from_bottom",
             gestureEnabled: true,
             gestureDirection: "vertical",
+            contentStyle: { backgroundColor: Colors.background, paddingTop: 0 },
           }}
         />
         <Stack.Screen
@@ -111,6 +135,7 @@ export default function RootLayout() {
             animation: "slide_from_bottom",
             gestureEnabled: true,
             gestureDirection: "vertical",
+            contentStyle: { backgroundColor: Colors.background, paddingTop: 0 },
           }}
         />
         <Stack.Screen
@@ -121,6 +146,7 @@ export default function RootLayout() {
             animation: "slide_from_bottom",
             gestureEnabled: true,
             gestureDirection: "vertical",
+            contentStyle: { backgroundColor: Colors.background, paddingTop: 0 },
           }}
         />
         <Stack.Screen
@@ -131,6 +157,7 @@ export default function RootLayout() {
             animation: "slide_from_bottom",
             gestureEnabled: true,
             gestureDirection: "vertical",
+            contentStyle: { backgroundColor: Colors.background, paddingTop: 0 },
           }}
         />
         <Stack.Screen
@@ -139,6 +166,7 @@ export default function RootLayout() {
             headerShown: false,
             presentation: "modal",
             animation: "slide_from_bottom",
+            contentStyle: { backgroundColor: Colors.background, paddingTop: 0 },
           }}
         />
         <Stack.Screen

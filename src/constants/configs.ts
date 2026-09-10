@@ -154,7 +154,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       {
         key: "electronics",
         name: "Electronics",
-        icon: "monitor",
+        icon: "television",
         nested: [
           {
             key: "mobilePhones",
@@ -198,12 +198,12 @@ export const MAIN_CATEGORIES: MainCategory[] = [
             key: "camels",
             labelKey:
               "subcategories.marketplaceNested.animalAndSupplies.camels",
-            icon: "horse",
+            icon: "paw",
           },
           {
             key: "goats",
             labelKey: "subcategories.marketplaceNested.animalAndSupplies.goats",
-            icon: "cow",
+            icon: "paw-outline",
           },
           {
             key: "cattle",
@@ -226,7 +226,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
             key: "donkeys",
             labelKey:
               "subcategories.marketplaceNested.animalAndSupplies.donkeys",
-            icon: "horse-variant",
+            icon: "donkey",
           },
           {
             key: "poultry",
@@ -362,7 +362,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       {
         key: "forRent",
         name: "For Rent",
-        icon: "key-outline",
+        icon: "home-outline",
         nested: [
           {
             key: "apartmentFlat",
@@ -387,7 +387,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
           {
             key: "singleRoom",
             labelKey: "subcategories.realEstateNested.forRent.singleRoom",
-            icon: "door",
+            icon: "door-open",
           },
           OTHER,
         ],
@@ -395,7 +395,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       {
         key: "forSale",
         name: "For Sale",
-        icon: "home-city-outline",
+        icon: "currency-usd",
         nested: [
           {
             key: "newHouseVilla",
@@ -425,13 +425,13 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       {
         key: "landForSale",
         name: "Land For Sale",
-        icon: "earth",
+        icon: "terrain",
         nested: [
           {
             key: "residentialLand",
             labelKey:
               "subcategories.realEstateNested.landForSale.residentialLand",
-            icon: "home-outline",
+            icon: "land-plots",
           },
           {
             key: "commercialLand",
@@ -518,7 +518,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       {
         key: "carsForSale",
         name: "Cars For Sale",
-        icon: "car-outline",
+        icon: "car-side",
         nested: [
           {
             key: "sedan",
@@ -583,7 +583,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       {
         key: "trailers",
         name: "Trailers",
-        icon: "truck-outline",
+        icon: "truck-trailer",
         nested: [
           {
             key: "trailerSpareParts",
@@ -605,7 +605,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       {
         key: "carParts",
         name: "Car Parts",
-        icon: "wrench",
+        icon: "tools",
         nested: [
           {
             key: "engines",
@@ -752,7 +752,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       {
         key: "forRent",
         name: "For Rent",
-        icon: "motorbike",
+        icon: "car-key",
         nested: [
           {
             key: "motorcycleRental",
@@ -827,7 +827,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       {
         key: "other",
         name: "Other",
-        icon: "dots-horizontal-circle-outline",
+        icon: "toolbox-outline",
         nested: [
           {
             key: "miscellaneousEquipment",
@@ -1034,7 +1034,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       {
         key: "plow",
         name: "Plows",
-        icon: "tools",
+        icon: "shovel",
         nested: [
           {
             key: "moldboardPlow",

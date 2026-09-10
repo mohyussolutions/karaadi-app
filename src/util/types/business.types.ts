@@ -72,3 +72,5 @@ export interface Business {
   planId?: string;
   expiryDate?: string | null;
 }
+
+export type BusinessScreen = 'plan' | 'apply' | 'approval' | 'categories' | 'post';

@@ -19,18 +19,21 @@ export interface AuthResponse {
   user: User & { accessToken?: string };
 }
 
-export interface Session {
-  id: string;
+export type LoginResponse = AuthResponse & Partial<User>;
+
+interface DeviceInfo {
   device?: string | null;
   browser?: string | null;
+}
+
+export interface Session extends DeviceInfo {
+  id: string;
   active?: boolean;
   lastActive?: string | null;
 }
 
-export interface LoginEntry {
+export interface LoginEntry extends DeviceInfo {
   id: number;
-  device?: string | null;
-  browser?: string | null;
   ipAddress?: string | null;
   loggedAt: string;
 }

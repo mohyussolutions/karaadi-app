@@ -5,6 +5,12 @@ import { shadow } from '../../helpers/shadow';
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
     wrapper: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      zIndex: 20,
+      elevation: 20,
       backgroundColor: Colors.card,
       borderBottomWidth: 1,
       borderBottomColor: Colors.border,

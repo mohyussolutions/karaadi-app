@@ -13,18 +13,9 @@ import { setBrowseQuery, clearBrowseQuery } from '../../store/slices/browseSearc
 import { useThemeColors, useThemedStyles, useThemeMode } from '../../hooks/useTheme';
 import { useResponsive } from '../../hooks/useResponsive';
 import { tabletHeaderStyles, TABLET_HEADER_ICON_SIZES, TABLET_LANG_DROPDOWN_TOP_OFFSET } from '../../util/styles/shared/ipad.styles';
-import type { Lang } from '../../i18n/translations';
 import { createStyles } from '../../util/styles/layout/globalHeader.styles';
-
-const AUTH_RE = /\/(login|register|confirm|forgot-password|reset-password)/;
-const CHAT_RE = /^\/profile\/chat/;
-const DETAIL_RE = /^\/listing/;
-const TAB_PATHS = new Set(['/home', '/messages', '/profile', '/new-ad', '/businesses', '/notifications']);
-
-const LANGS: { code: Lang; label: string }[] = [
-  { code: 'en', label: 'English' },
-  { code: 'so', label: 'Soomaali' },
-];
+import { AUTH_RE, CHAT_RE, DETAIL_RE, TAB_PATHS, LANGS } from './GlobalHeader.constants';
+import type { Lang } from '../../i18n/translations';
 
 export default function GlobalHeader() {
   const insets = useSafeAreaInsets();

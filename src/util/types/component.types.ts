@@ -4,6 +4,11 @@ import type { ImageProps as ExpoImageProps } from 'expo-image';
 import type { ListingBase } from './listing.types';
 import type { MCIcon } from '../icons/icons';
 import type { Business, BusinessApplyFormState, BusinessPlan } from './business.types';
+import type { ModalProps, WithChildren } from './generic.types';
+
+export interface AppProvidersProps extends WithChildren {}
+
+export interface I18nProviderProps extends WithChildren {}
 
 export interface AppIconProps {
   name: string;
@@ -21,10 +26,8 @@ export interface VerifiedBadgeProps {
   size?: number;
 }
 
-export interface CameraCaptureProps {
-  visible: boolean;
+export interface CameraCaptureProps extends ModalProps {
   onCapture: (base64: string, mimeType: string) => void;
-  onClose: () => void;
   initialFacing?: 'back' | 'front';
 }
 
@@ -40,12 +43,10 @@ export interface ImageGalleryProps {
   isSold?: boolean;
 }
 
-export interface ZoomModalProps {
-  visible: boolean;
+export interface ZoomModalProps extends ModalProps {
   images: string[];
   startIndex: number;
   title: string;
-  onClose: () => void;
 }
 
 export interface SpecRow {
@@ -118,9 +119,7 @@ export interface MyAdCardProps {
   onPayNow: (item: ListingBase) => void;
 }
 
-export interface SocialShareSheetProps {
-  visible: boolean;
-  onClose: () => void;
+export interface SocialShareSheetProps extends ModalProps {
   title: string;
   message: string;
   monochrome?: boolean;
@@ -144,18 +143,6 @@ export interface SocialPostCardProps {
   images?: string[];
   listingUrl: string;
   isPremium90?: boolean;
-}
-
-export interface LoadingSpinnerProps {
-  fullScreen?: boolean;
-  size?: 'small' | 'large';
-  color?: string;
-}
-
-export interface EmptyStateProps {
-  icon?: string;
-  title: string;
-  message?: string;
 }
 
 export interface PaymentStatusConfig {

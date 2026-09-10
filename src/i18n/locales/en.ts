@@ -1354,6 +1354,7 @@ export const common = {
   updateNow: "Update Now",
   storeUpdateTitle: "New Version Available",
   storeUpdateMessage: "A new version of Karaadi is available on the store. Please update to get the latest features.",
+  close: "Close",
 } as const;
 
 export const mine = {

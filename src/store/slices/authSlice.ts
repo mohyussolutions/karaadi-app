@@ -2,10 +2,8 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import * as SecureStore from '../../util/helpers/secureStorage';
 import { connectSocket, disconnectSocket } from '../../actions/sockets/socket.actions';
 import { login as apiLogin, logout as apiLogout, register as apiRegister, getProfile } from '../../actions/core/auth.actions';
-import type { User, AuthResponse } from '../../util/types/user.types';
+import type { User, LoginResponse } from '../../util/types/user.types';
 import type { AuthState } from '../../util/types/redux.types';
-
-type LoginResponse = AuthResponse & Partial<User>;
 
 const initialState: AuthState = {
   user: null,

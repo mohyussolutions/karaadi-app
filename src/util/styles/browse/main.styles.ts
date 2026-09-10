@@ -66,7 +66,5 @@ export function createStyles(Colors: ColorPalette) {
     postBtnText: { color: Colors.white, fontWeight: "700", fontSize: 13 },
     listContent: { paddingBottom: 32 },
     emptyContainer: { flex: 1, paddingTop: 40 },
-    countRow: { paddingHorizontal: H_PAD, paddingVertical: 6 },
-    countText: { fontSize: 12, color: Colors.textMuted, fontWeight: "500" },
   });
 }

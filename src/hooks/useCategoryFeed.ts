@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { fetchByCategory } from '../actions/categories/feed.actions';
 import { prefetchImages } from '../util/helpers';
 import { CATEGORY_FEED_LIMIT } from '../constants';
+import { sortByTierRandom } from './feedTierPolicy';
 import type { ListingBase } from '../util/types/listing.types';
 
 const PREFETCH_LIMIT = 20;
@@ -21,8 +22,9 @@ export function useCategoryFeed(categoryKey: string, subcategoryKey?: string) {
       }
       const data = await fetchByCategory(categoryKey, params, signal);
       if (signal?.aborted) return;
-      setListings(data);
-      prefetchImages(data, PREFETCH_LIMIT).catch(() => {});
+      const sorted = sortByTierRandom(data);
+      setListings(sorted);
+      prefetchImages(sorted, PREFETCH_LIMIT).catch(() => {});
     } catch {
       setListings([]);
     } finally {

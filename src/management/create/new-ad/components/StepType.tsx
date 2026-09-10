@@ -1,20 +1,10 @@
-import type { ListingType, StepTypeProps } from '../../../../util/types';
+import type { StepTypeProps, ListingTypeOption } from '../../../../util/types';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles, type ColorPalette } from '../../../../hooks/useTheme';
 import { useAppTranslation } from '../../../../hooks/useAppTranslation';
 import { useTabBarClearance } from '../../../../hooks/useTabBarClearance';
-import type { MCIcon } from '../../../../util/icons/icons';
 import { createStyles } from '../../../../util/styles/new-ad/stepType.styles';
-
-interface ListingTypeOption {
-  type: ListingType;
-  labelKey: string;
-  subKey: string;
-  icon: MCIcon;
-  bg: string;
-  color: string;
-}
 
 function getOptions(Colors: ColorPalette): ListingTypeOption[] {
   return [

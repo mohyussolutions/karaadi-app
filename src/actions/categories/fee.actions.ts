@@ -1,12 +1,10 @@
 import { apiClient } from '../client';
 import { PAYMENT_ENDPOINTS, FEE_ENDPOINTS } from '../../api/endpoints';
 import type { ApiError } from '../../util/types/generic.types';
-import type { AllFeeConfigs, FeeRecord, SubPlanConfig, SystemFeeConfig } from '../../util/types/fee.types';
+import type { AllFeeConfigs, FeeRecord, SubPlanConfig, SystemFeeConfig, FeeArrayKey } from '../../util/types/fee.types';
 
 const feeUrl = (sub: string) => `${FEE_ENDPOINTS.BASE}/${sub}`;
 const feeById = (sub: string, id: string) => `${FEE_ENDPOINTS.BASE}/${sub}/${id}`;
-
-type FeeArrayKey = 'marketplace' | 'realEstate' | 'cars' | 'motorcycles' | 'boats' | 'equipment';
 
 const CATEGORY_FEE_KEY: Record<string, FeeArrayKey> = {
   Cars: 'cars',

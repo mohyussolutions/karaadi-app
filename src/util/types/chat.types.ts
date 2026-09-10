@@ -42,6 +42,16 @@ export interface Chat {
   lastMessageAt?: string;
 }
 
+export type GroupedChat = Chat & { allIds: number[]; unreadTotal: number };
+
+export interface UseChatConversationArgs {
+  chatIdParam?: string;
+  userId?: string;
+  username?: string;
+  listingId?: string;
+  listingType?: string;
+}
+
 export interface Chatroom {
   chatId: number;
   senderId: string;
@@ -94,14 +104,17 @@ export interface HageInputBarProps {
   insets: EdgeInsets;
 }
 
-export interface ListingRef {
-  id: string;
+interface ListingRefBase {
   _id?: string;
   title: string;
   mainCategory?: string;
   category?: string;
   price?: number;
   images?: string[];
+}
+
+export interface ListingRef extends ListingRefBase {
+  id: string;
 }
 
 export interface HageMessage {
@@ -116,14 +129,8 @@ export interface HageChatResult {
   listings: ListingRef[];
 }
 
-export interface RawListingRef {
+export interface RawListingRef extends ListingRefBase {
   id?: string;
-  _id?: string;
-  title: string;
-  mainCategory?: string;
-  category?: string;
-  price?: number;
-  images?: string[];
 }
 
 export interface HageChatApiResponse {

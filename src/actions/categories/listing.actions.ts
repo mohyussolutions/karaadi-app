@@ -1,13 +1,6 @@
 import { apiClient } from '../client';
 import { CATEGORY_ENDPOINTS } from '../../management/create/new-ad/constants/config';
-import type { VehicleListing } from '../../util/types/listing.types';
-
-interface CreateListingResponse {
-  _id?: string;
-  id?: string;
-  images?: string[];
-  listing?: { _id?: string };
-}
+import type { VehicleListing, CreateListingResponse } from '../../util/types/listing.types';
 
 export async function createListing(categoryKey: string, body: Record<string, unknown>, businessId?: string | null) {
   const endpoint = CATEGORY_ENDPOINTS[categoryKey] || '/api/marketplace';

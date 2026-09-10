@@ -7,7 +7,7 @@ import { useThemeColors } from '../../hooks/useTheme';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { styles } from '../../util/styles/modals/forceUpdateModal.styles';
 
-const inAppUpdates = new InAppUpdates(__DEV__);
+const inAppUpdates = new InAppUpdates(false);
 
 function isValidStoreUrl(value: string): boolean {
   try {
@@ -53,6 +53,10 @@ export default function StoreUpdateModal() {
     return () => sub.remove();
   }, []);
 
+  function handleDismiss() {
+    setVisible(false);
+  }
+
   async function handleUpdate() {
     setUpdating(true);
     try {
@@ -75,9 +79,17 @@ export default function StoreUpdateModal() {
   }
 
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={() => {}}>
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={handleDismiss}>
       <View style={styles.backdrop}>
         <View style={[styles.card, { backgroundColor: Colors.card, borderColor: Colors.border }]}>
+          <TouchableOpacity
+            style={styles.closeBtn}
+            onPress={handleDismiss}
+            hitSlop={8}
+            accessibilityLabel={t('common.close')}
+          >
+            <MaterialCommunityIcons name="close" size={20} color={Colors.textSecondary} />
+          </TouchableOpacity>
           <View style={[styles.iconWrap, { backgroundColor: Colors.primaryGhost }]}>
             <MaterialCommunityIcons name="storefront-outline" size={36} color={Colors.primary} />
           </View>

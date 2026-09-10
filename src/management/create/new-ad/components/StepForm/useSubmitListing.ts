@@ -6,20 +6,7 @@ import { getFeeForCategory } from "../../../../../actions/categories/fee.actions
 import { CATEGORY_MAIN_LABEL } from "../../constants/config";
 import { NUMERIC_KEYS, BOOLEAN_KEYS } from "../../constants/fields";
 import { REGEX_NON_DIGITS } from "../../../../../constants";
-import type { FieldDef, ListingType, User } from "../../../../../util/types";
-
-type ListingBody = Record<string, string | number | boolean | string[] | undefined>;
-
-interface UseSubmitListingArgs {
-  categoryKey: string;
-  listingType: ListingType | null;
-  fields: FieldDef[];
-  formData: Record<string, string>;
-  images: string[];
-  user: User | null;
-  onSuccess: () => void;
-  t: (key: string, opts?: Record<string, unknown>) => string;
-}
+import type { ListingBody, UseSubmitListingArgs } from "../../../../../util/types";
 
 export function useSubmitListing({
   categoryKey,

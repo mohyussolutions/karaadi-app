@@ -1,8 +1,7 @@
-import type { Business } from '../../../util/types/business.types';
+import type { Business, BusinessScreen } from '../../../util/types/business.types';
 
 export { getApiErrorMessage } from '../../../util/helpers';
-
-export type BusinessScreen = 'plan' | 'apply' | 'approval' | 'categories' | 'post';
+export type { BusinessScreen } from '../../../util/types/business.types';
 
 export function isExpired(business: Business | null | undefined): boolean {
   return !!business?.expiryDate && new Date(business.expiryDate) < new Date();

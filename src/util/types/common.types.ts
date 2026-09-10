@@ -1,4 +1,5 @@
 import type { store } from '../../store/store';
+import type { ItemRef } from './generic.types';
 
 export type Lang = 'en' | 'so';
 
@@ -65,10 +66,8 @@ export interface SearchParams {
   [key: string]: string | number | boolean | undefined | null;
 }
 
-export interface ReportPayload {
+export interface ReportPayload extends ItemRef {
   userId: string;
-  itemId: string;
-  itemType: string;
   reason: string;
   description?: string;
 }

@@ -1,6 +1,10 @@
-export const PLACEHOLDER_IMAGE = 'https://placehold.co/300x200/e5e7eb/9ca3af?text=No+Image';
+import { Image } from 'react-native';
 
-export const PLACEHOLDER = '/placeholder.png';
+const NO_IMAGE_URI = Image.resolveAssetSource(require('../../assets/icon.png')).uri;
+
+export const PLACEHOLDER_IMAGE = NO_IMAGE_URI;
+
+export const PLACEHOLDER = NO_IMAGE_URI;
 
 export const INITIAL_DISPLAY = 50;
 export const DISPLAY_INCREMENT = 20;
@@ -15,6 +19,6 @@ export const BADGE_MAX_LABEL = '9+';
 
 export const SITE_URL = 'https://karaadi.com';
 
-export const DETAIL_PLACEHOLDER = 'https://placehold.co/800x560/e5e7eb/9ca3af?text=No+Image';
+export const DETAIL_PLACEHOLDER = NO_IMAGE_URI;
 
 export const DESCRIPTION_TRUNCATE = 300;

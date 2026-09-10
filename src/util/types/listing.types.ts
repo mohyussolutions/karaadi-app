@@ -146,6 +146,8 @@ export interface Subscription {
   user?: ListingUser;
 }
 
+export type SubscriptionEnvelope = Subscription & { subscription?: Subscription; data?: Subscription };
+
 export interface SubscriptionPayload {
   userId: string;
   title: string;
@@ -217,6 +219,13 @@ export interface Favorite {
   image?: string;
   category?: string;
   createdAt: string;
+}
+
+export interface CreateListingResponse {
+  _id?: string;
+  id?: string;
+  images?: string[];
+  listing?: { _id?: string };
 }
 
 export interface SearchResult {

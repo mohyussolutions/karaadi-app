@@ -1,9 +1,24 @@
 import type { MCIcon } from '../icons/icons';
 import type { NestedSubCategory } from './browse.types';
+import type { ModalProps } from './generic.types';
+
+interface StepNavProps {
+  onNext: () => void;
+  onBack: () => void;
+}
 
 export type TFn = (key: string, opts?: Record<string, unknown>) => string;
 
 export type ListingType = 'private' | 'public';
+
+export interface ListingTypeOption {
+  type: ListingType;
+  labelKey: string;
+  subKey: string;
+  icon: MCIcon;
+  bg: string;
+  color: string;
+}
 
 export type Step = 'login' | 'type' | 'category' | 'form' | 'plan' | 'summary' | 'payment';
 
@@ -111,11 +126,9 @@ export interface ImagePickerRowProps {
   error?: string;
 }
 
-export interface StepCategoryProps {
+export interface StepCategoryProps extends StepNavProps {
   selected: string;
   onSelect: (key: string) => void;
-  onNext: () => void;
-  onBack: () => void;
 }
 
 export interface CategoryCardProps {
@@ -179,20 +192,16 @@ export interface ActivateListingPayload {
   paymentRef?: string;
 }
 
-export interface StepSummaryProps {
+export interface StepSummaryProps extends StepNavProps {
   plan: Plan;
   categoryName?: string;
-  onNext: () => void;
-  onBack: () => void;
 }
 
-export interface StepPlanProps {
+export interface StepPlanProps extends StepNavProps {
   plans: Plan[];
   loading: boolean;
   selected: Plan | null;
   onSelect: (p: Plan) => void;
-  onNext: () => void;
-  onBack: () => void;
 }
 
 export interface StepTypeProps {
@@ -309,8 +318,21 @@ export interface TotalDueProps {
   total: number;
 }
 
-export interface WantedAlertFormProps {
-  visible: boolean;
-  onClose: () => void;
+export interface WantedAlertFormProps extends ModalProps {
   onCreated: (sub: import('./listing.types').Subscription) => void;
+}
+
+export type UseWantedAlertFormArgs = Omit<WantedAlertFormProps, 'visible'>;
+
+export type ListingBody = Record<string, string | number | boolean | string[] | undefined>;
+
+export interface UseSubmitListingArgs {
+  categoryKey: string;
+  listingType: ListingType | null;
+  fields: FieldDef[];
+  formData: Record<string, string>;
+  images: string[];
+  user: import('./user.types').User | null;
+  onSuccess: () => void;
+  t: TFn;
 }
