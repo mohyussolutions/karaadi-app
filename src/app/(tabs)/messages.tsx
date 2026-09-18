@@ -1,1 +1,1 @@
-export { default } from '../../components/features/chat/screens/MessagesScreen';
+export { default } from '../../components/features/chat/screens/MessagesScreen/MessagesScreen';

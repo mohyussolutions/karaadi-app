@@ -2,20 +2,28 @@ import { StyleSheet } from "react-native";
 import type { ColorPalette } from "../../../hooks/useTheme";
 import { RADII } from "../../colors/colors";
 import { shadow } from "../../helpers/shadow";
-import { createCommonStyles } from "../common/common.style";
+import { createCommonStyles } from "../common/common.styles";
+import { FAVORITES_H_PAD } from '../../../constants/constants';
 
-export const H_PAD = 16;
-export const COL_GAP = 12;
+const centered = { alignItems: "center", justifyContent: "center" } as const;
 
-export function createStyles(Colors: ColorPalette) {
-  const common = createCommonStyles(Colors);
-  return StyleSheet.create({
-    safe: common.safeBase,
+const primaryButton = (Colors: ColorPalette, paddingHorizontal: number) =>
+  ({
+    marginTop: 8,
+    backgroundColor: Colors.primary,
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal,
+  }) as const;
+
+const guestStyles = (Colors: ColorPalette) => {
+  const { safeBase } = createCommonStyles(Colors);
+  return {
+    safe: safeBase,
     guestWrap: {
       flex: 1,
       backgroundColor: Colors.background,
-      alignItems: "center",
-      justifyContent: "center",
+      ...centered,
       padding: 32,
       gap: 14,
     },
@@ -31,31 +39,27 @@ export function createStyles(Colors: ColorPalette) {
       textAlign: "center",
       lineHeight: 20,
     },
-    signInBtn: {
-      marginTop: 8,
-      backgroundColor: Colors.primary,
-      borderRadius: 12,
-      paddingVertical: 14,
-      paddingHorizontal: 48,
-    },
+    signInBtn: primaryButton(Colors, 48),
     signInText: { color: Colors.white, fontWeight: "600", fontSize: 16 },
-    list: { paddingTop: H_PAD, paddingBottom: 32 },
-    listHeader: { paddingBottom: 10, paddingHorizontal: H_PAD },
+  } as const;
+};
+
+const listStyles = (Colors: ColorPalette) =>
+  ({
+    list: { paddingTop: FAVORITES_H_PAD, paddingBottom: 32 },
+    listHeader: { paddingBottom: 10, paddingHorizontal: FAVORITES_H_PAD },
     countText: { fontSize: 14, color: Colors.textMuted, fontWeight: "600" },
-    emptyWrap: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
-      padding: 32,
-      gap: 12,
-    },
+  }) as const;
+
+const emptyStyles = (Colors: ColorPalette) =>
+  ({
+    emptyWrap: { flex: 1, ...centered, padding: 32, gap: 12 },
     emptyIconCircle: {
       width: 96,
       height: 96,
       borderRadius: 48,
       backgroundColor: Colors.gray100,
-      alignItems: "center",
-      justifyContent: "center",
+      ...centered,
       marginBottom: 4,
     },
     emptyTitle: { fontSize: 20, fontWeight: "700", color: Colors.textPrimary },
@@ -65,19 +69,19 @@ export function createStyles(Colors: ColorPalette) {
       textAlign: "center",
       lineHeight: 21,
     },
-    browseBtn: {
-      marginTop: 8,
-      backgroundColor: Colors.primary,
-      borderRadius: 12,
-      paddingVertical: 14,
-      paddingHorizontal: 36,
-    },
+    browseBtn: primaryButton(Colors, 36),
     browseBtnText: { color: Colors.white, fontWeight: "600", fontSize: 15 },
-  });
-}
+  }) as const;
 
-export function createCardStyles(Colors: ColorPalette) {
-  return StyleSheet.create({
+export const createStyles = (Colors: ColorPalette) =>
+  StyleSheet.create({
+    ...guestStyles(Colors),
+    ...listStyles(Colors),
+    ...emptyStyles(Colors),
+  });
+
+const cardFrameStyles = (Colors: ColorPalette) =>
+  ({
     card: {
       flex: 1,
       backgroundColor: Colors.card,
@@ -85,9 +89,19 @@ export function createCardStyles(Colors: ColorPalette) {
       overflow: "hidden",
       borderWidth: 1,
       borderColor: Colors.gray100,
-      ...shadow({ color: Colors.shadow, offset: { width: 0, height: 1 }, opacity: 0.06, radius: 4, elevation: 2 }),
+      ...shadow({
+        color: Colors.shadow,
+        offset: { width: 0, height: 1 },
+        opacity: 0.06,
+        radius: 4,
+        elevation: 2,
+      }),
     },
     cardRemoving: { opacity: 0.4 },
+  }) as const;
+
+const cardImageStyles = (Colors: ColorPalette) =>
+  ({
     imgWrap: {
       position: "relative",
       width: "100%",
@@ -118,9 +132,12 @@ export function createCardStyles(Colors: ColorPalette) {
       borderRadius: 14,
       width: 30,
       height: 30,
-      alignItems: "center",
-      justifyContent: "center",
+      ...centered,
     },
+  }) as const;
+
+const cardBodyStyles = (Colors: ColorPalette) =>
+  ({
     body: { padding: 10, gap: 6 },
     title: {
       fontSize: 13,
@@ -139,5 +156,11 @@ export function createCardStyles(Colors: ColorPalette) {
       paddingVertical: 3,
       borderRadius: RADII.pill,
     },
+  }) as const;
+
+export const createCardStyles = (Colors: ColorPalette) =>
+  StyleSheet.create({
+    ...cardFrameStyles(Colors),
+    ...cardImageStyles(Colors),
+    ...cardBodyStyles(Colors),
   });
-}

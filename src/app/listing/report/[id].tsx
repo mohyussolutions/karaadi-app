@@ -12,7 +12,7 @@ import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAuthStore } from '../../../store/hooks/authStore';
 import { createReport } from '../../../actions/core/report.actions';
 import { getApiErrorMessage } from '../../../util/helpers';
-import { createStyles } from '../../../util/styles/listing/report.styles';
+import { createStyles } from '../../../util/styles/listing/reportListing.styles';
 import { maxLenSchema } from '../../../util/validation/schemas';
 
 const REASON_OPTIONS = [

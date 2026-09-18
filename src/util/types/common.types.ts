@@ -1,5 +1,6 @@
 import type { store } from '../../store/store';
 import type { ItemRef } from './generic.types';
+import { ROUTES } from '../../constants/constants';
 
 export type Lang = 'en' | 'so';
 
@@ -9,10 +10,10 @@ export type AppDispatch = typeof store.dispatch;
 export type RawItem = Record<string, unknown>;
 
 export type ListingRoute =
-  | { pathname: '/listing/vehicle/[id]'; params: { id: string; category: string } }
-  | { pathname: '/listing/real-estate/[id]'; params: { id: string } }
-  | { pathname: '/listing/job/[id]'; params: { id: string } }
-  | { pathname: '/listing/item-detail/[id]'; params: { id: string } };
+  | { pathname: typeof ROUTES.vehicleDetail; params: { id: string; category: string } }
+  | { pathname: typeof ROUTES.realEstateDetail; params: { id: string } }
+  | { pathname: typeof ROUTES.jobDetail; params: { id: string } }
+  | { pathname: typeof ROUTES.itemDetail; params: { id: string } };
 
 export type ShadowParams = {
   color: string;

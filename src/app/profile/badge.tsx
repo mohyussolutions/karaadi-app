@@ -3,7 +3,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../util/styles/profile/badge.styles';
+import { createStyles } from '../../util/styles/profile/profileBadge.styles';
 import type { MCIcon } from '../../util/icons/icons';
 
 const STATS: { icon: MCIcon; labelKey: string }[] = [

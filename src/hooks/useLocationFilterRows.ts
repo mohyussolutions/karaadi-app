@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { FilterRow } from '../util/types';
 import type { RegionPickerItem, UseLocationFilterRowsArgs } from '../util/types/browse.types';
+import { FILTER_KIND_REGION, FILTER_KIND_CITY } from '../constants/constants';
 
 function filterRegionsBySearch(regions: RegionPickerItem[], search: string): RegionPickerItem[] {
   const q = search.trim().toLowerCase();
@@ -11,7 +12,7 @@ function filterRegionsBySearch(regions: RegionPickerItem[], search: string): Reg
 function buildRegionRow(region: RegionPickerItem, regionCounts: Record<string, number>): FilterRow {
   return {
     key: `region-${region.id}`,
-    kind: 'region',
+    kind: FILTER_KIND_REGION,
     name: region.name,
     count: regionCounts[region.name.toLowerCase()] ?? 0,
   };
@@ -20,7 +21,7 @@ function buildRegionRow(region: RegionPickerItem, regionCounts: Record<string, n
 function buildCityRows(region: RegionPickerItem, cityCounts: Record<string, number>): FilterRow[] {
   return (region.cities ?? []).map((c) => ({
     key: `city-${region.id}-${c.id}`,
-    kind: 'city',
+    kind: FILTER_KIND_CITY,
     name: c.name,
     count: cityCounts[c.name.toLowerCase()] ?? 0,
   }));

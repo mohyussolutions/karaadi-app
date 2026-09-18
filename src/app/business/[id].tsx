@@ -9,7 +9,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { LoadingSpinner } from "../../components/loading";
-import RemoteImage from "../../components/shared/RemoteImage";
+import RemoteImage from "../../components/shared/RemoteImage/RemoteImage";
 import BottomTabBar from "../../navigation/tab-bar/BottomTabBar";
 import { useTranslation } from "react-i18next";
 import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
@@ -18,7 +18,7 @@ import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL, BUSINESS_CATEGORY_KEY_REVERSE 
 import { useBusinessDetail } from "../../hooks/useBusinessDetail";
 import { SOCIAL_ICONS, type SocialIcons } from "../../util/icons/icons";
 import { createStyles } from "../../util/styles/business/businessDetail.styles";
-import { createTabletPortraitStyles } from "../../util/styles/listing/tabletSplit.styles";
+import { createTabletPortraitStyles } from "../../util/styles/listing/tabletSplitLayout.styles";
 import { useResponsive } from "../../hooks/useResponsive";
 
 export default function BusinessDetailScreen() {

@@ -1,13 +1,20 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiClient } from '../client';
 import { SUBSCRIPTION_ENDPOINTS } from '../../api/endpoints';
+import {
+  SUBSCRIPTION_MATCH_LIMIT,
+  ALERTS_LAST_CHECKED_KEY,
+  ALERTS_SEEN_IDS_KEY,
+  ALERTS_SEEN_IDS_MAX,
+  ALERTS_MIN_CHECK_INTERVAL_MS,
+} from '../../constants/constants';
+import { storeRef } from '../../store/internal/storeRef';
+import { addNotification } from '../../components/features/notifications/store/notificationsSlice';
 import { searchCategory } from '../search/globalSearch';
 import { scheduleLocalNotification } from '../../components/features/notifications/services/notificationService';
 import type { Subscription, SubscriptionPayload, SubscriptionEnvelope, Plan } from '../../util/types';
 import type { RawItem } from '../../util/types/common.types';
 
-const LAST_CHECKED_KEY = 'karaadi_alerts_last_checked_v1';
-const MIN_CHECK_INTERVAL_MS = 5 * 60 * 1000;
 
 export async function fetchSubscriptionPlans(): Promise<Plan[]> {
   try {
@@ -56,20 +63,36 @@ export async function deleteSubscription(id: string): Promise<void> {
   } catch {}
 }
 
+async function loadSeenIds(): Promise<Set<string>> {
+  try {
+    const raw = await AsyncStorage.getItem(ALERTS_SEEN_IDS_KEY);
+    return new Set(raw ? (JSON.parse(raw) as string[]) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+async function saveSeenIds(seen: Set<string>): Promise<void> {
+  const trimmed = Array.from(seen).slice(-ALERTS_SEEN_IDS_MAX);
+  await AsyncStorage.setItem(ALERTS_SEEN_IDS_KEY, JSON.stringify(trimmed));
+}
+
 export async function checkAlertsForMatches(): Promise<void> {
   try {
-    const raw = await AsyncStorage.getItem(LAST_CHECKED_KEY);
+    const raw = await AsyncStorage.getItem(ALERTS_LAST_CHECKED_KEY);
     const lastChecked = raw
       ? new Date(raw)
       : new Date(Date.now() - 24 * 60 * 60 * 1000);
 
-    if (raw && Date.now() - lastChecked.getTime() < MIN_CHECK_INTERVAL_MS) return;
+    if (raw && Date.now() - lastChecked.getTime() < ALERTS_MIN_CHECK_INTERVAL_MS) return;
 
     const subs = await fetchMySubscriptions();
     if (!subs.length) return;
 
+    const seen = await loadSeenIds();
+    const startedAt = new Date();
     let totalMatches = 0;
-    const matchTitles: string[] = [];
+    let failed = false;
 
     for (const sub of subs) {
       const params = {
@@ -79,28 +102,43 @@ export async function checkAlertsForMatches(): Promise<void> {
         minPrice: sub.priceMin || undefined,
         maxPrice: sub.priceMax || undefined,
         ...(sub.subCategory ? { category: sub.subCategory, categoryTag: sub.subCategory } : {}),
-        limit: 10,
+        limit: SUBSCRIPTION_MATCH_LIMIT,
       };
 
-      const results = await searchCategory(sub.category, params);
+      let results;
+      try {
+        results = await searchCategory(sub.category, params);
+      } catch {
+        failed = true;
+        continue;
+      }
 
       const fresh = results.filter((r) => {
+        const id = String(r._id || r.id || '');
         const created = r.createdAt ? new Date(r.createdAt) : null;
-        return created && created > lastChecked;
+        return id && !seen.has(id) && created && created > lastChecked;
       });
 
-      if (fresh.length) {
-        totalMatches += fresh.length;
-        const first = fresh[0];
-        if (first.title) matchTitles.push(first.title);
-
-        if (fresh.length === 1) {
-          await scheduleLocalNotification(
-            'New match for your alert!',
-            `"${first.title}" just posted — tap to view`,
-            { type: 'alert_match', listingId: first._id || first.id, category: sub.category },
-          );
-        }
+      for (const item of fresh) {
+        const id = String(item._id || item.id);
+        seen.add(id);
+        totalMatches += 1;
+        const title = 'New match for your alert!';
+        const body = `"${item.title}" was just posted`;
+        const data = { type: 'alert_match', listingId: id, category: sub.category };
+        storeRef.dispatch?.(
+          addNotification({
+            _id: `alert-${id}`,
+            userId: String(sub.userId ?? ''),
+            title,
+            body,
+            type: 'subscription_match',
+            read: false,
+            data,
+            createdAt: new Date().toISOString(),
+          }),
+        );
+        if (fresh.length === 1) await scheduleLocalNotification(title, `${body} — tap to view`, data);
       }
     }
 
@@ -112,7 +150,8 @@ export async function checkAlertsForMatches(): Promise<void> {
       );
     }
 
-    await AsyncStorage.setItem(LAST_CHECKED_KEY, new Date().toISOString());
+    await saveSeenIds(seen);
+    if (!failed) await AsyncStorage.setItem(ALERTS_LAST_CHECKED_KEY, startedAt.toISOString());
   } catch {}
 }
 

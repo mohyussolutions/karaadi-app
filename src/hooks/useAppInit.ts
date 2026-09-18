@@ -9,6 +9,7 @@ import { registerForPushNotifications } from "../components/features/notificatio
 import { checkAlertsForMatches } from "../actions/categories/subscription.actions";
 import { getUnreadNotificationCount } from "../actions/core/notifications.actions";
 import { trackVisitor } from "../actions/core/visitor.actions";
+import { ALERTS_POLL_INTERVAL_MS } from "../constants/constants";
 
 export function useAppInit() {
   const { loadFromStorage } = useAuthStore();
@@ -41,10 +42,20 @@ export function useAppInit() {
         .catch(() => {});
     }
 
+    let timer: ReturnType<typeof setInterval> | null = null;
+    const startPolling = () => {
+      if (!timer) timer = setInterval(checkAlertsForMatches, ALERTS_POLL_INTERVAL_MS);
+    };
+    const stopPolling = () => {
+      if (timer) { clearInterval(timer); timer = null; }
+    };
+
     refreshAlerts();
+    startPolling();
     const sub = AppState.addEventListener("change", (state) => {
-      if (state === "active") refreshAlerts();
+      if (state === "active") { refreshAlerts(); startPolling(); }
+      else stopPolling();
     });
-    return () => sub.remove();
+    return () => { sub.remove(); stopPolling(); };
   }, [user?.id, dispatch]);
 }

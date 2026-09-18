@@ -1,4 +1,4 @@
-import { REGEX_TRAILING_SLASH } from "../constants/regex";
+import { REGEX_TRAILING_SLASH } from "../constants/constants";
 
 if (!process.env.EXPO_PUBLIC_API_URL) {
   throw new Error("EXPO_PUBLIC_API_URL is not set");

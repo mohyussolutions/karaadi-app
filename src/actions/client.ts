@@ -10,7 +10,13 @@ import {
   BEARER_PREFIX,
   CONTENT_TYPE_HEADER,
   JSON_CONTENT_TYPE,
-} from "./client.constants";
+  REQUEST_TIMEOUT_MS,
+  UPLOAD_TIMEOUT_MS,
+  RETRY_MAX_ATTEMPTS,
+  RETRY_BASE_DELAY_MS,
+  RETRY_MAX_DELAY_MS,
+  RETRY_STATUS_CODES,
+} from "../constants/constants";
 import type {
   ExtraHeaders,
   Params,
@@ -90,6 +96,56 @@ async function ensureOk(res: Response): Promise<void> {
   }
 }
 
+function withTimeout(external: AbortSignal | undefined, timeoutMs: number) {
+  const ctrl = new AbortController();
+  const onAbort = () => ctrl.abort();
+  if (external) {
+    if (external.aborted) ctrl.abort();
+    else external.addEventListener("abort", onAbort, { once: true });
+  }
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  return { signal: ctrl.signal, clear: () => clearTimeout(timer) };
+}
+
+function backoffDelay(attempt: number, retryAfter: string | null): number {
+  const retryAfterMs = retryAfter ? Number(retryAfter) * 1000 : NaN;
+  if (Number.isFinite(retryAfterMs) && retryAfterMs > 0) {
+    return Math.min(retryAfterMs, RETRY_MAX_DELAY_MS);
+  }
+  const exp = Math.min(RETRY_MAX_DELAY_MS, RETRY_BASE_DELAY_MS * 2 ** attempt);
+  return exp * (0.5 + Math.random() * 0.5);
+}
+
+function wait(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchWithRetry(
+  url: string,
+  init: RequestInit,
+  method: string,
+  external: AbortSignal | undefined,
+  timeoutMs: number,
+): Promise<Response> {
+  const maxAttempts = method === "GET" ? RETRY_MAX_ATTEMPTS + 1 : 1;
+  for (let attempt = 0; ; attempt++) {
+    const { signal, clear } = withTimeout(external, timeoutMs);
+    const isLast = attempt + 1 >= maxAttempts;
+    try {
+      const res = await fetch(url, { ...init, signal });
+      clear();
+      if (isLast || !RETRY_STATUS_CODES.includes(res.status)) return res;
+      const delay = backoffDelay(attempt, res.headers.get("Retry-After"));
+      await res.text().catch(() => "");
+      await wait(delay);
+    } catch (e) {
+      clear();
+      if (external?.aborted || isLast) throw e;
+      await wait(backoffDelay(attempt, null));
+    }
+  }
+}
+
 async function request<T>(
   method: string,
   path: string,
@@ -100,12 +156,13 @@ async function request<T>(
   const url = buildUrl(path, options?.params);
   const headers = await buildHeaders(options?.headers, isFormData);
 
-  const res = await fetch(url, {
+  const res = await fetchWithRetry(
+    url,
+    { method, headers, body: serializeBody(body) },
     method,
-    headers,
-    body: serializeBody(body),
-    signal: options?.signal,
-  });
+    options?.signal,
+    isFormData ? UPLOAD_TIMEOUT_MS : REQUEST_TIMEOUT_MS,
+  );
 
   await ensureOk(res);
 

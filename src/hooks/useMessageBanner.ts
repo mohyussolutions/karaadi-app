@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import { Animated } from "react-native";
 import { useRouter } from "expo-router";
 import { NATIVE_DRIVER } from "../util/helpers/animation";
+import { ROUTES } from "../constants/constants";
 import type { MessageBanner } from "../util/types";
 
 export function useMessageBanner() {
@@ -37,7 +38,7 @@ export function useMessageBanner() {
     setTimeout(() => {
       if (banner?.chatId && banner.senderId) {
         router.push({
-          pathname: "/profile/chat",
+          pathname: ROUTES.chat,
           params: {
             chatId: String(banner.chatId),
             userId: banner.senderId,
@@ -45,7 +46,7 @@ export function useMessageBanner() {
           },
         });
       } else {
-        router.push("/(tabs)/messages");
+        router.push(ROUTES.messages);
       }
     }, 100);
   }, [messageBanner, dismissBanner, router]);

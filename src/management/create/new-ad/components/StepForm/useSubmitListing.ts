@@ -102,7 +102,9 @@ export function useSubmitListing({
       if (categoryKey === "RealEstate") {
         if (body.region !== undefined) body.county = body.region;
         if (body.sizeSqm !== undefined) body.squareFeet = body.sizeSqm;
-        if (body.amenities === undefined) body.amenities = [];
+        body.amenities = body.amenities
+          ? String(body.amenities).split(",").filter(Boolean)
+          : [];
       }
 
       const SKIP_KEYS = new Set([
@@ -125,6 +127,18 @@ export function useSubmitListing({
             );
             if (matched && typeof matched !== 'string') displayVal = matched.label;
             else if (typeof matched === 'string') displayVal = matched;
+          }
+          if (f.type === 'multiselect' && f.options) {
+            displayVal = rawVal
+              .split(',')
+              .filter(Boolean)
+              .map((v) => {
+                const matched = f.options!.find((o) =>
+                  typeof o === 'string' ? o === v : o.value === v,
+                );
+                return matched ? (typeof matched === 'string' ? matched : matched.label) : v;
+              })
+              .join(', ');
           }
           return { label: f.label, value: displayVal };
         });
@@ -158,12 +172,12 @@ export function useSubmitListing({
     } catch (err) {
       Alert.alert(
         t("auth.common.error"),
-        submitError ||
+        (typeof err === "string" ? err : undefined) ||
           (err instanceof Error ? err.message : undefined) ||
           t("postAd.createListingError"),
       );
     }
-  }, [categoryKey, listingType, fields, formData, images, user, dispatch, onSuccess, submitError, t]);
+  }, [categoryKey, listingType, fields, formData, images, user, dispatch, onSuccess, t]);
 
   return { submitting, submitError, submitStatus, submit };
 }

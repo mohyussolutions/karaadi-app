@@ -5,7 +5,7 @@ import { formatDate } from '../util/helpers';
 import { SITE_URL } from './constants';
 import { CAT_PATHS } from '../api/paths';
 import { MARKETPLACE_ENDPOINTS, REAL_ESTATE_ENDPOINTS, JOBS_ENDPOINTS } from '../api/endpoints';
-import { REGEX_NON_DIGITS } from './regex';
+import { REGEX_NON_DIGITS } from './constants';
 
 export type { NestedSubCategory, SubCategory, MainCategory };
 export { CAT_COLORS };
@@ -349,7 +349,34 @@ export const MAIN_CATEGORIES: MainCategory[] = [
           OTHER,
         ],
       },
-      { key: "education", name: "Education", icon: "school-outline" },
+      {
+        key: "education",
+        name: "Education",
+        icon: "school-outline",
+        nested: [
+          {
+            key: "books",
+            labelKey: "subcategories.marketplaceNested.education.books",
+            icon: "book-open-variant",
+          },
+          {
+            key: "library",
+            labelKey: "subcategories.marketplaceNested.education.library",
+            icon: "library",
+          },
+          {
+            key: "schoolSupplies",
+            labelKey: "subcategories.marketplaceNested.education.schoolSupplies",
+            icon: "pencil-box-outline",
+          },
+          {
+            key: "stationery",
+            labelKey: "subcategories.marketplaceNested.education.stationery",
+            icon: "notebook-outline",
+          },
+          OTHER,
+        ],
+      },
     ],
   },
   {
@@ -1085,6 +1112,36 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       },
     ],
   },
+  // Jobs category hidden from the frontend for now
+  // {
+  //   key: "Jobs",
+  //   name: "Jobs",
+  //   icon: "briefcase-outline",
+  //   color: CAT_COLORS.jobs,
+  //   apiPath: CAT_PATHS.jobs,
+  //   subCategories: [
+  //     {
+  //       key: "fullTime",
+  //       name: "Full-Time",
+  //       icon: "briefcase-outline",
+  //     },
+  //     {
+  //       key: "partTime",
+  //       name: "Part-Time",
+  //       icon: "briefcase-clock-outline",
+  //     },
+  //     {
+  //       key: "freelance",
+  //       name: "Freelance",
+  //       icon: "laptop",
+  //     },
+  //     {
+  //       key: "other",
+  //       name: "Other",
+  //       icon: "dots-horizontal-circle-outline",
+  //     },
+  //   ],
+  // },
 ];
 
 export const getCategoryByKey = (key: string): MainCategory | undefined =>

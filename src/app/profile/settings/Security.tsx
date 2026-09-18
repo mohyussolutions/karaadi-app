@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { LoadingSpinner } from '../../../components/loading';
 import { useSecuritySettings } from '../../../hooks/useSecuritySettings';
-import { createStyles } from '../../../util/styles/settings/security.styles';
+import { createStyles } from '../../../util/styles/settings/securitySettings.styles';
 import type { MCIcon } from '../../../util/icons/icons';
 
 function fmtDate(iso: string) {

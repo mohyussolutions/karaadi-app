@@ -1,28 +1,11 @@
-import { memo, useCallback } from "react";
-import { View, Text, Pressable } from "react-native";
+import { useCallback } from "react";
+import { View } from "react-native";
 import { FlashList, type ListRenderItemInfo } from "@shopify/flash-list";
-import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
-import { useAppTranslation } from "../../../hooks/useAppTranslation";
-import { AppIcon } from "../../shared";
+import { useThemedStyles } from "../../../hooks/useTheme";
 import type { NestedSubCategory } from "../../../constants";
-import type { NestedChipsProps, ChipItemProps } from "../../../util/types";
-import { createStyles } from "../../../util/styles/browse/subcategory.styles";
-
-const ChipItem = memo(function ChipItem({ item, active, onPress }: ChipItemProps) {
-  const { t } = useAppTranslation();
-  const Colors = useThemeColors();
-  const styles = useThemedStyles(createStyles);
-  const handlePress = useCallback(() => onPress(active ? null : item), [onPress, active, item]);
-
-  return (
-    <Pressable onPress={handlePress} style={[styles.chip, active && styles.chipActive]} hitSlop={4}>
-      <AppIcon name={item.icon} size={14} color={active ? Colors.white : Colors.textSecondary} />
-      <Text style={[styles.chipLabel, active && styles.chipLabelActive]} numberOfLines={1}>
-        {t(item.labelKey)}
-      </Text>
-    </Pressable>
-  );
-});
+import type { NestedChipsProps } from "../../../util/types";
+import { createStyles } from "../../../util/styles/browse/subcategoryBrowse.styles";
+import { ChipItem } from "./ChipItem";
 
 export function NestedChips({ items, selectedKey, onPress }: NestedChipsProps) {
   const styles = useThemedStyles(createStyles);

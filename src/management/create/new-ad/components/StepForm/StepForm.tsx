@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -14,14 +14,14 @@ import { KEYBOARD_AVOIDING_BEHAVIOR } from "../../../../../platform/common-for-i
 import { useTabBarClearance } from "../../../../../hooks/useTabBarClearance";
 import RegionCityPicker from "../../../../../components/geo/RegionCityPicker";
 import { MAIN_CATEGORIES } from "../../../../../constants";
-import { FormField } from "../../../../../components/forms/FormField";
-import { ImagePickerRow } from "../../../../../components/forms/ImagePickerRow";
-import { CollapsibleSection } from "../../../../../components/forms/CollapsibleSection";
-import { getFields } from "../../constants/fields";
+import { FormField } from "../../../../../components/forms/FormField/FormField";
+import { ImagePickerRow } from "../../../../../components/forms/ImagePickerRow/ImagePickerRow";
+import { CollapsibleSection } from "../../../../../components/forms/CollapsibleSection/CollapsibleSection";
 import { useAuthStore } from "../../../../../store/hooks/authStore";
+import { useStepFormFields } from "../../../../../hooks/useStepFormFields";
 import type { FieldDef, StepFormProps } from "../../../../../util/types";
 import type { MCIcon } from "../../../../../util/icons/icons";
-import { createStyles } from "../../../../../util/styles/new-ad/stepForm.styles";
+import { createStyles } from "../../../../../util/styles/newAd/stepForm.styles";
 import { validateStepForm } from "../../../../../util/validation/schemas";
 import { useSubmitListing } from "./useSubmitListing";
 import { NestedSubcategoryPicker } from "./NestedSubcategoryPicker";
@@ -47,19 +47,7 @@ export function StepForm({
 
   const categoryMeta = MAIN_CATEGORIES.find((c) => c.key === categoryKey);
 
-  const allFields: Record<string, FieldDef[]> = useMemo(
-    () => getFields(t as (key: string, opts?: Record<string, unknown>) => string),
-    [t],
-  );
-  const fields: FieldDef[] = useMemo(
-    () => (allFields[categoryKey] || []).filter(
-      (f: FieldDef) => f.key !== "website" || listingType === "public",
-    ),
-    [allFields, categoryKey, listingType],
-  );
-
-  const primaryFields = useMemo(() => fields.filter((f) => f.required), [fields]);
-  const extraFields = useMemo(() => fields.filter((f) => !f.required), [fields]);
+  const { fields, primaryFields, extraFields } = useStepFormFields(categoryKey, listingType);
   const extraFieldsHaveError = extraFields.some((f) => !!errors[f.key]);
   const scrollRef = useRef<ScrollView>(null);
 
@@ -90,10 +78,11 @@ export function StepForm({
       if (key === "subcategory") delete next.nestedSubcategory;
       return next;
     });
-    if (errors[key])
+    const errorKey = key === "region" ? "_region" : key === "city" ? "_city" : key;
+    if (errors[errorKey])
       setErrors((e) => {
         const next = { ...e };
-        delete next[key];
+        delete next[errorKey];
         return next;
       });
   }
@@ -194,6 +183,9 @@ export function StepForm({
             selectedCity={formData.city || ""}
             onRegionChange={(name) => setField("region", name)}
             onCityChange={(name) => setField("city", name)}
+            regionError={errors._region}
+            cityError={errors._city}
+            scrollViewRef={scrollRef}
           />
 
           {!!submitError && submitStatus === "error" && (

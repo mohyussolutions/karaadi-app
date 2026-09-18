@@ -39,10 +39,10 @@ export const submitListing = createAsyncThunk(
         summary: summary ? { ...summary, images: images ?? summary.images } : null,
       };
     } catch (err) {
-      const message = err instanceof Error && 'response' in err
-        ? (err as { response?: { data?: { message?: string } } }).response?.data?.message
+      const data = err instanceof Error && 'response' in err
+        ? (err as { response?: { data?: { message?: string; error?: string } } }).response?.data
         : undefined;
-      return rejectWithValue(message || 'Failed to create listing. Please try again.');
+      return rejectWithValue(data?.error || data?.message || 'Failed to create listing. Please try again.');
     }
   },
 );

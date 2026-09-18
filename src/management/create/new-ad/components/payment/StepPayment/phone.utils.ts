@@ -1,4 +1,4 @@
-import { PHONE_ERROR, PHONE_REGEX, type PaymentMethodOption } from '../payment.constants';
+import { PHONE_ERROR, PHONE_REGEX, type PaymentMethodOption } from '../../../../../../constants/constants';
 import { REGEX_LEADING_ZERO, REGEX_PHONE_CLEAN, REGEX_SOMALI_COUNTRY_CODE } from '../../../../../../constants';
 
 export function normalizePhone(raw: string): string {

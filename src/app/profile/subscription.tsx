@@ -6,12 +6,13 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner } from '../../components/loading';
 import { EmptyState } from '../../components/shared';
-import ListingCard from '../../components/cards/ListingCard';
+import ListingCard from '../../components/cards/ListingCard/ListingCard';
 import { useThemedStyles } from '../../hooks/useTheme';
-import { createSubscriptionListStyles } from '../../util/styles/profile/profileSubscription.styles';
+import { createSubscriptionListStyles } from '../../util/styles/profile/mySubscription.styles';
 import { fetchMySubscriptions, deleteSubscription } from '../../actions/categories/subscription.actions';
 import { subscriptionToListingItem, subscriptionPriceLabel } from '../../util/helpers';
 import type { Subscription } from '../../util/types/listing.types';
+import { ROUTES } from '../../constants/constants';
 
 const COLUMN_GAP = 10;
 const H_PAD = 14;
@@ -78,7 +79,7 @@ export default function SubscriptionScreen() {
               item={subscriptionToListingItem(item)}
               priceLabel={subscriptionPriceLabel(item, t('priceOnRequest'))}
               onDelete={() => handleDelete(item)}
-              onPress={() => router.push({ pathname: '/listing/subscription/[id]', params: { id: item.id || item._id || '' } })}
+              onPress={() => router.push({ pathname: ROUTES.subscriptionDetail, params: { id: item.id || item._id || '' } })}
             />
           </View>
         )}

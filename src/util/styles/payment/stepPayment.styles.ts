@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
 import { shadow } from '../../helpers/shadow';
-import { createCommonStyles } from '../common/common.style';
+import { createCommonStyles } from '../common/common.styles';
 
 export function createStyles(Colors: ColorPalette) {
   const common = createCommonStyles(Colors);

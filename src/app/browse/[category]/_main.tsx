@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import {
   View,
   Text,
@@ -14,17 +14,20 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
 import { getCategoryByKey, SUB_I18N_GROUP } from "../../../constants";
 import { EmptyState, AppIcon } from "../../../components/shared";
-import ListingCard from "../../../components/cards/ListingCard";
+import ListingCard from "../../../components/cards/ListingCard/ListingCard";
 import { ListingCardSkeleton } from "../../../components/loading";
 import BottomTabBar from "../../../navigation/tab-bar/BottomTabBar";
 import { useAppTranslation } from "../../../hooks/useAppTranslation";
 import { useResponsive } from "../../../hooks/useResponsive";
 import { useCategoryFeed } from "../../../hooks/useCategoryFeed";
+import { useFilteredListings } from "../../../hooks/useFilteredListings";
 import { useAppSelector } from "../../../store/store";
 import type { SubCategory } from "../../../constants";
 import type { ListingBase } from "../../../util/types/listing.types";
 import type { GridProps, SidebarProps } from "../../../util/types";
-import { createStyles, H_PAD, GAP, GRID_GAP } from "../../../util/styles/browse/main.styles";
+import { H_PAD, GAP, GRID_GAP } from "../../../constants/constants";
+import { createStyles } from "../../../util/styles/browse/categoryBrowse.styles";
+import { ROUTES } from "../../../constants/constants";
 
 const SKELETON_COUNT = 6;
 
@@ -122,20 +125,10 @@ export default function CategoryScreen() {
   const subs = category?.subCategories ?? [];
   const categoryLabel = t(`categories.${categoryKey}`, { defaultValue: category?.name ?? categoryKey });
 
-  const filteredListings = useMemo(() => listings.filter((l) => {
-    const q = searchQuery.trim().toLowerCase();
-    if (q) {
-      const matchesTitle = (l.title ?? "").toLowerCase().includes(q);
-      const matchesCity = (l.city ?? "").toLowerCase().includes(q);
-      const matchesRegion = (l.region ?? "").toLowerCase().includes(q);
-      const matchesPrice = String(l.price ?? "").includes(q);
-      if (!matchesTitle && !matchesCity && !matchesRegion && !matchesPrice) return false;
-    }
-    return true;
-  }), [listings, searchQuery]);
+  const filteredListings = useFilteredListings(listings, searchQuery);
 
   function handleSubPress(sub: SubCategory) {
-    router.push({ pathname: "/browse/[category]/[subcategory]", params: { category: categoryKey, subcategory: sub.key } });
+    router.push({ pathname: ROUTES.browseSubcategory, params: { category: categoryKey, subcategory: sub.key } });
   }
 
   function handlePost() {

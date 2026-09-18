@@ -1,3 +1,5 @@
+import type { RefObject } from 'react';
+import type { ScrollView } from 'react-native';
 import type { ModalProps } from './generic.types';
 
 interface GeoEntityBase {
@@ -42,6 +44,9 @@ export interface RegionCityPickerProps {
   selectedCity: string;
   onRegionChange: (name: string) => void;
   onCityChange: (name: string) => void;
+  regionError?: string;
+  cityError?: string;
+  scrollViewRef?: RefObject<ScrollView | null>;
 }
 
 export interface PickerFieldsProps {
@@ -53,6 +58,8 @@ export interface PickerFieldsProps {
   onToggleRegion: () => void;
   onToggleCity: () => void;
   onClearCity: () => void;
+  regionError?: string;
+  cityError?: string;
 }
 
 export interface CityAccordionPanelProps {
@@ -195,5 +202,4 @@ export interface SubcategoryHeaderProps {
   onClearLocationFilter: () => void;
   showPostBtn: boolean;
   onPost: () => void;
-  resultsCount: number | null;
 }

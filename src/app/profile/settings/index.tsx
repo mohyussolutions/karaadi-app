@@ -12,7 +12,7 @@ import { toggleSound } from '../../../components/features/notifications/store/no
 import { playNotificationSound } from '../../../components/features/notifications/services/soundService';
 import { updatePhoneVisibility } from '../../../actions/core/auth.actions';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../util/styles/settings/settings.styles';
+import { createStyles } from '../../../util/styles/settings/settingsMenu.styles';
 import { SETTINGS_ROWS } from '../../../navigation/config/navConfig';
 import { SITE_URL } from '../../../constants';
 

@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../../../../hooks/useTheme';
 import { useAppTranslation } from '../../../../../../hooks/useAppTranslation';
-import SocialPostCard from '../../../../../../components/cards/SocialPostCard';
+import SocialPostCard from '../../../../../../components/cards/SocialPostCard/SocialPostCard';
 import { getListingShareUrl } from '../../../../../../constants';
 import type { SuccessScreenProps } from '../../../../../../util/types';
 import { createStyles } from '../../../../../../util/styles/payment/successScreen.styles';

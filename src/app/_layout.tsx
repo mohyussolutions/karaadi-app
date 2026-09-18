@@ -10,28 +10,27 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import GlobalHeader from "../components/layout/GlobalHeader";
+import GlobalHeader from "../components/layout/GlobalHeader/GlobalHeader";
 import BottomTabBar from "../navigation/tab-bar/BottomTabBar";
-import { EulaModal } from "../components/modals/EulaModal";
-import ForceUpdateModal from "../components/modals/ForceUpdateModal";
-import StoreUpdateModal from "../components/modals/StoreUpdateModal";
-import { IdentityGate } from "../components/features/identification/components/IdentityGate";
+import { EulaModal } from "../components/modals/EulaModal/EulaModal";
+import ForceUpdateModal from "../components/modals/ForceUpdateModal/ForceUpdateModal";
+import StoreUpdateModal from "../components/modals/StoreUpdateModal/StoreUpdateModal";
+import { IdentityGate } from "../components/features/identification/components/IdentityGate/IdentityGate";
 import { useIdentityGate } from "../hooks/useIdentityGate";
 import { SaveToast } from "../components/shared";
-import Hage from "../components/ai-assistant/components/Hage";
-import NotificationBanner from "../components/features/notifications/components/NotificationBanner";
+import Hage from "../components/ai-assistant/components/Hage/Hage";
+import NotificationBanner from "../components/features/notifications/components/NotificationBanner/NotificationBanner";
 import LanguageSync from "../i18n/LanguageSync";
 import { useAppInit } from "../hooks/useAppInit";
 import { useThemeColors, useThemeMode } from "../hooks/useTheme";
 import { useTabBarVisibility } from "../navigation/tab-bar/useTabBarVisibility";
+import { ROOT_STACK_SCREENS } from "../navigation/config/rootStackScreens";
 import { useMessageBanner } from "../hooks/useMessageBanner";
 import { useSocketMessages } from "../hooks/useSocketMessages";
 import { useSocketNotifications } from "../hooks/useSocketNotifications";
 import { useNotificationTap } from "../hooks/useNotificationTap";
 
-// Static per-route constants, not measured at runtime: a shared runtime value caused the
-// previous screen's content to jump when navigating to a route with a different header.
-const DEFAULT_HEADER_CONTENT_HEIGHT = 112;
+const DEFAULT_HEADER_CONTENT_HEIGHT = 104;
 const AUTH_HEADER_CONTENT_HEIGHT = 60;
 
 export default function RootLayout() {
@@ -90,97 +89,23 @@ export default function RootLayout() {
           animation: Platform.OS === "web" ? "none" : "default",
         }}
       >
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="(auth)"
-          options={{
-            headerShown: false,
-            contentStyle: { backgroundColor: Colors.background, paddingTop: authHeaderPadding },
-          }}
-        />
-        <Stack.Screen
-          name="profile/chat"
-          options={{
-            headerShown: false,
-            contentStyle: { backgroundColor: Colors.background, paddingTop: 0 },
-          }}
-        />
-        <Stack.Screen
-          name="listing/vehicle/[id]"
-          options={{
-            headerShown: false,
-            presentation: "modal",
-            animation: "slide_from_bottom",
-            gestureEnabled: true,
-            gestureDirection: "vertical",
-            contentStyle: { backgroundColor: Colors.background, paddingTop: 0 },
-          }}
-        />
-        <Stack.Screen
-          name="listing/item-detail/[id]"
-          options={{
-            headerShown: false,
-            presentation: "modal",
-            animation: "slide_from_bottom",
-            gestureEnabled: true,
-            gestureDirection: "vertical",
-            contentStyle: { backgroundColor: Colors.background, paddingTop: 0 },
-          }}
-        />
-        <Stack.Screen
-          name="listing/real-estate/[id]"
-          options={{
-            headerShown: false,
-            presentation: "modal",
-            animation: "slide_from_bottom",
-            gestureEnabled: true,
-            gestureDirection: "vertical",
-            contentStyle: { backgroundColor: Colors.background, paddingTop: 0 },
-          }}
-        />
-        <Stack.Screen
-          name="listing/job/[id]"
-          options={{
-            headerShown: false,
-            presentation: "modal",
-            animation: "slide_from_bottom",
-            gestureEnabled: true,
-            gestureDirection: "vertical",
-            contentStyle: { backgroundColor: Colors.background, paddingTop: 0 },
-          }}
-        />
-        <Stack.Screen
-          name="listing/subscription/[id]"
-          options={{
-            headerShown: false,
-            presentation: "modal",
-            animation: "slide_from_bottom",
-            gestureEnabled: true,
-            gestureDirection: "vertical",
-            contentStyle: { backgroundColor: Colors.background, paddingTop: 0 },
-          }}
-        />
-        <Stack.Screen
-          name="listing/report/[id]"
-          options={{
-            headerShown: false,
-            presentation: "modal",
-            animation: "slide_from_bottom",
-            contentStyle: { backgroundColor: Colors.background, paddingTop: 0 },
-          }}
-        />
-        <Stack.Screen
-          name="browse/[category]/index"
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="browse/[category]/[subcategory]"
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="business/[id]"
-          options={{ headerShown: false, presentation: "card" }}
-        />
+        {ROOT_STACK_SCREENS.map(({ name, options, contentPadding }) => (
+          <Stack.Screen
+            key={name}
+            name={name}
+            options={
+              contentPadding
+                ? {
+                    ...options,
+                    contentStyle: {
+                      backgroundColor: Colors.background,
+                      paddingTop: contentPadding === "auth" ? authHeaderPadding : 0,
+                    },
+                  }
+                : options
+            }
+          />
+        ))}
       </Stack>
       {showTabBar && <BottomTabBar />}
       {showTabBar && <Hage />}

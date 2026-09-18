@@ -2,7 +2,7 @@ import { memo, useCallback, useState } from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity,
 } from 'react-native';
-import { ConfirmModal } from '../../components/modals/ConfirmModal';
+import { ConfirmModal } from '../../components/modals/ConfirmModal/ConfirmModal';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -11,11 +11,12 @@ import { useAuthStore } from '../../store/hooks/authStore';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useResponsive } from '../../hooks/useResponsive';
 import { getImageUrl } from '../../util/helpers';
-import RemoteImage from '../../components/shared/RemoteImage';
+import RemoteImage from '../../components/shared/RemoteImage/RemoteImage';
 import { placeholderAvatar } from '../../constants';
 import { PROFILE_MENU_ITEMS } from '../../navigation/config/navConfig';
+import { ROUTES } from '../../constants/constants';
 import type { MenuItem } from '../../util/types';
-import { createStyles } from '../../util/styles/tabs/profile.styles';
+import { createStyles } from '../../util/styles/tabs/profileTab.styles';
 
 const AVATAR = placeholderAvatar(80, '2563eb', 'Me');
 
@@ -57,10 +58,10 @@ export default function ProfileScreen() {
           <MaterialCommunityIcons name="account-circle-outline" size={80} color={Colors.textMuted} />
           <Text style={styles.guestTitle}>{t('mine.guest')}</Text>
           <Text style={styles.guestSub}>{t('signInToView')}</Text>
-          <TouchableOpacity style={styles.signInBtn} onPress={() => router.push('/(auth)/login')}>
+          <TouchableOpacity style={styles.signInBtn} onPress={() => router.push(ROUTES.login)}>
             <Text style={styles.signInText}>{t('signIn')}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.registerBtn} onPress={() => router.push('/(auth)/register')}>
+          <TouchableOpacity style={styles.registerBtn} onPress={() => router.push(ROUTES.register)}>
             <Text style={styles.registerText}>{t('createAccount')}</Text>
           </TouchableOpacity>
         </View>

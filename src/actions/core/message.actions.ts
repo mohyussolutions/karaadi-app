@@ -55,3 +55,7 @@ export async function getUnreadCount(userId: string): Promise<number> {
   const { data } = await apiClient.get(MESSAGES_ENDPOINTS.UNREAD_COUNT(userId));
   return data?.count ?? 0;
 }
+
+export async function markChatRead(chatId: number): Promise<void> {
+  await apiClient.patch(CHATS_ENDPOINTS.READ(chatId));
+}

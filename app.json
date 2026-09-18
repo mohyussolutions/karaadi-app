@@ -2,7 +2,7 @@
   "expo": {
     "name": "Karaadi",
     "slug": "karaadi",
-    "version": "1.0.15",
+    "version": "1.0.18",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -40,7 +40,7 @@
         "android.permission.READ_MEDIA_VIDEO",
         "android.permission.RECORD_AUDIO"
       ],
-      "versionCode": 15
+      "versionCode": 17
     },
     "plugins": [
       "./plugins/withAbiFilters",

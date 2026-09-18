@@ -1,41 +1,71 @@
 import { StyleSheet } from "react-native";
 import type { ColorPalette } from "../../../hooks/useTheme";
 import { RADII } from "../../colors/colors";
+import { H_PAD, COL_GAP } from "../../../constants/constants";
 import { shadow } from "../../helpers/shadow";
-import { createCommonStyles } from "../common/common.style";
+import { createCommonStyles } from "../common/common.styles";
 
-export const COL_GAP = 8;
-export const H_PAD = 12;
+const centered = { alignItems: "center", justifyContent: "center" } as const;
 
-export function createStyles(Colors: ColorPalette, width = 390) {
-  const common = createCommonStyles(Colors);
-  const CARD_W = (width - H_PAD * 2 - COL_GAP) / 2;
-  return StyleSheet.create({
-    safe: common.safeBase,
-    center: {
-      flex: 1,
-      backgroundColor: Colors.background,
-      alignItems: "center",
-      justifyContent: "center",
-      padding: 32,
-      gap: 12,
-    },
+const fillCenter = {
+  flex: 1,
+  ...centered,
+  padding: 32,
+  gap: 12,
+} as const;
+
+const primaryButton = (Colors: ColorPalette, paddingHorizontal: number) =>
+  ({
+    marginTop: 8,
+    backgroundColor: Colors.primary,
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal,
+  }) as const;
+
+const iconCircle = (Colors: ColorPalette) =>
+  ({
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    backgroundColor: Colors.gray100,
+    ...centered,
+    marginBottom: 4,
+  }) as const;
+
+const stateTitle = (Colors: ColorPalette) =>
+  ({
+    fontSize: 20,
+    fontWeight: "700",
+    color: Colors.textPrimary,
+    textAlign: "center",
+  }) as const;
+
+const stateSub = (Colors: ColorPalette, lineHeight: number) =>
+  ({
+    fontSize: 14,
+    color: Colors.textMuted,
+    textAlign: "center",
+    lineHeight,
+  }) as const;
+
+const listStyles = (Colors: ColorPalette, width: number) => {
+  const { safeBase } = createCommonStyles(Colors);
+  return {
+    safe: safeBase,
+    center: { ...fillCenter, backgroundColor: Colors.background },
     list: { padding: H_PAD, paddingBottom: 90 },
     row: { gap: COL_GAP, marginBottom: COL_GAP },
-    cardWrap: { width: CARD_W },
-
-    btn: {
-      marginTop: 8,
-      backgroundColor: Colors.primary,
-      borderRadius: 12,
-      paddingVertical: 14,
-      paddingHorizontal: 40,
-    },
+    cardWrap: { width: (width - H_PAD * 2 - COL_GAP) / 2 },
+    btn: primaryButton(Colors, 40),
     btnText: { color: Colors.white, fontWeight: "700", fontSize: 16 },
-
     listHeader: { paddingHorizontal: 2, paddingBottom: 10 },
     countText: { fontSize: 13, color: Colors.textMuted, fontWeight: "600" },
+  } as const;
+};
 
+const headerStyles = (Colors: ColorPalette) =>
+  ({
     header: { paddingHorizontal: 2, paddingBottom: 14 },
     headerTitle: { fontSize: 22, fontWeight: "800", color: Colors.textPrimary },
     headerSub: {
@@ -44,7 +74,10 @@ export function createStyles(Colors: ColorPalette, width = 390) {
       marginTop: 2,
       fontWeight: "600",
     },
+  }) as const;
 
+const cardStyles = (Colors: ColorPalette) =>
+  ({
     cardFooter: {
       flexDirection: "row",
       alignItems: "center",
@@ -78,100 +111,63 @@ export function createStyles(Colors: ColorPalette, width = 390) {
       width: 28,
       height: 28,
       borderRadius: 14,
-      alignItems: "center",
-      justifyContent: "center",
+      ...centered,
       backgroundColor: Colors.errorGhost,
     },
+  }) as const;
 
-    guestWrap: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
-      padding: 32,
-      gap: 12,
-    },
-    guestIconCircle: {
-      width: 96,
-      height: 96,
-      borderRadius: 48,
-      backgroundColor: Colors.gray100,
-      alignItems: "center",
-      justifyContent: "center",
-      marginBottom: 4,
-    },
-    guestTitle: {
-      fontSize: 20,
-      fontWeight: "700",
-      color: Colors.textPrimary,
-      textAlign: "center",
-    },
-    guestSub: {
-      fontSize: 14,
-      color: Colors.textMuted,
-      textAlign: "center",
-      lineHeight: 20,
-    },
-    signInBtn: {
-      marginTop: 8,
-      backgroundColor: Colors.primary,
-      borderRadius: 12,
-      paddingVertical: 14,
-      paddingHorizontal: 40,
-    },
+const guestStyles = (Colors: ColorPalette) =>
+  ({
+    guestWrap: fillCenter,
+    guestIconCircle: iconCircle(Colors),
+    guestTitle: stateTitle(Colors),
+    guestSub: stateSub(Colors, 20),
+    signInBtn: primaryButton(Colors, 40),
     signInText: { color: Colors.white, fontWeight: "600", fontSize: 16 },
+  }) as const;
 
-    emptyWrap: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
-      padding: 32,
-      gap: 12,
-    },
-    emptyIconCircle: {
-      width: 96,
-      height: 96,
-      borderRadius: 48,
-      backgroundColor: Colors.gray100,
-      alignItems: "center",
-      justifyContent: "center",
-      marginBottom: 4,
-    },
-    emptyTitle: {
-      fontSize: 20,
-      fontWeight: "700",
-      color: Colors.textPrimary,
-      textAlign: "center",
-    },
-    emptySub: {
-      fontSize: 14,
-      color: Colors.textMuted,
-      textAlign: "center",
-      lineHeight: 21,
-    },
+const emptyStyles = (Colors: ColorPalette) =>
+  ({
+    emptyWrap: fillCenter,
+    emptyIconCircle: iconCircle(Colors),
+    emptyTitle: stateTitle(Colors),
+    emptySub: stateSub(Colors, 21),
     emptyBtn: {
-      marginTop: 8,
+      ...primaryButton(Colors, 28),
       flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
+      ...centered,
       gap: 8,
-      backgroundColor: Colors.primary,
-      borderRadius: 12,
-      paddingVertical: 14,
-      paddingHorizontal: 28,
     },
     emptyBtnText: { color: Colors.white, fontWeight: "700", fontSize: 15 },
+  }) as const;
 
+const postButtonStyles = (Colors: ColorPalette) =>
+  ({
     postBtn: {
       flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
+      ...centered,
       gap: 8,
       margin: 16,
       backgroundColor: Colors.primary,
       borderRadius: 14,
       paddingVertical: 15,
-      ...shadow({ color: Colors.primary, offset: { width: 0, height: 4 }, opacity: 0.25, radius: 8, elevation: 4 }),
+      ...shadow({
+        color: Colors.primary,
+        offset: { width: 0, height: 4 },
+        opacity: 0.25,
+        radius: 8,
+        elevation: 4,
+      }),
     },
     postBtnText: { color: Colors.white, fontWeight: "700", fontSize: 16 },
+  }) as const;
+
+export const createStyles = (Colors: ColorPalette, width = 390) =>
+  StyleSheet.create({
+    ...listStyles(Colors, width),
+    ...headerStyles(Colors),
+    ...cardStyles(Colors),
+    ...guestStyles(Colors),
+    ...emptyStyles(Colors),
+    ...postButtonStyles(Colors),
   });
-}

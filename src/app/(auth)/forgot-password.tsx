@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useForgotPassword } from '../../hooks/useForgotPassword';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../util/styles/auth/forgot-password.styles';
+import { createStyles } from '../../util/styles/auth/forgotPassword.styles';
 
 export default function ForgotPasswordScreen() {
   const router = useRouter();

@@ -11,6 +11,7 @@ import { EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
 import { createStyles } from '../../util/styles/profile/contactHistory.styles';
 import type { Ticket } from '../../util/types';
+import { ROUTES } from '../../constants/constants';
 
 const STATUS_COLOR_KEY: Record<string, 'success' | 'primary' | 'error' | 'textMuted'> = {
   DONE: 'success',
@@ -94,7 +95,7 @@ export default function ContactHistoryScreen() {
       <SafeAreaView style={styles.safe} edges={['bottom']}>
         <View style={styles.center}>
           <EmptyState icon="lock-outline" title={t('ticketHistory.loginRequired')} />
-          <TouchableOpacity onPress={() => router.push('/(auth)/login')}>
+          <TouchableOpacity onPress={() => router.push(ROUTES.login)}>
             <Text style={{ textAlign: 'center', color: Colors.primary, fontWeight: '700', marginTop: 12 }}>
               {t('auth.login.loginButton')}
             </Text>

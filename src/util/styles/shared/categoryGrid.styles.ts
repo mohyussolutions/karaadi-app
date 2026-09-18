@@ -1,13 +1,11 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
-
-export const H_PAD = 12;
-export const GAP = 6;
+import { H_PAD, GRID_GAP } from '../../../constants/constants';
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({
     container: { paddingHorizontal: H_PAD, paddingVertical: 4, gap: 6 },
-    row: { flexDirection: 'row', gap: GAP },
+    row: { flexDirection: 'row', gap: GRID_GAP },
     cell: {
       borderRadius: 12,
       paddingVertical: 10,

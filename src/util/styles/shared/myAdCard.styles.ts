@@ -3,8 +3,10 @@ import type { ColorPalette } from "../../../hooks/useTheme";
 import { RADII } from "../../colors/colors";
 import { shadow } from "../../helpers/shadow";
 
-export function createStyles(Colors: ColorPalette) {
-  return StyleSheet.create({
+const centered = { alignItems: "center", justifyContent: "center" } as const;
+
+const cardFrameStyles = (Colors: ColorPalette) =>
+  ({
     card: {
       flex: 1,
       backgroundColor: Colors.card,
@@ -12,7 +14,13 @@ export function createStyles(Colors: ColorPalette) {
       overflow: "hidden",
       borderWidth: 1,
       borderColor: Colors.gray100,
-      ...shadow({ color: Colors.shadow, offset: { width: 0, height: 1 }, opacity: 0.06, radius: 4, elevation: 2 }),
+      ...shadow({
+        color: Colors.shadow,
+        offset: { width: 0, height: 1 },
+        opacity: 0.06,
+        radius: 4,
+        elevation: 2,
+      }),
     },
     imgWrap: {
       position: "relative",
@@ -21,6 +29,10 @@ export function createStyles(Colors: ColorPalette) {
       backgroundColor: Colors.slate100,
     },
     img: { width: "100%", height: "100%" },
+  }) as const;
+
+const badgeStyles = (Colors: ColorPalette) =>
+  ({
     badgeRow: {
       position: "absolute",
       top: 8,
@@ -30,11 +42,7 @@ export function createStyles(Colors: ColorPalette) {
       flexWrap: "wrap",
       gap: 4,
     },
-    badge: {
-      borderRadius: 999,
-      paddingHorizontal: 8,
-      paddingVertical: 3,
-    },
+    badge: { borderRadius: 999, paddingHorizontal: 8, paddingVertical: 3 },
     badgeText: {
       color: Colors.white,
       fontSize: 9,
@@ -47,6 +55,10 @@ export function createStyles(Colors: ColorPalette) {
     badgeExpired: { backgroundColor: Colors.error },
     badgePending: { backgroundColor: Colors.warning },
     badgePlan: { backgroundColor: Colors.primary },
+  }) as const;
+
+const bodyStyles = (Colors: ColorPalette) =>
+  ({
     body: { padding: 10, gap: 6 },
     title: {
       fontSize: 13,
@@ -69,6 +81,10 @@ export function createStyles(Colors: ColorPalette) {
     infoValueMuted: { color: Colors.gray300 },
     infoValueWarning: { color: Colors.warning },
     infoValueDanger: { color: Colors.error },
+  }) as const;
+
+const priceStyles = (Colors: ColorPalette) =>
+  ({
     priceRow: {
       flexDirection: "row",
       alignItems: "center",
@@ -94,6 +110,10 @@ export function createStyles(Colors: ColorPalette) {
       color: Colors.textMuted,
       textTransform: "capitalize",
     },
+  }) as const;
+
+const actionStyles = (Colors: ColorPalette) =>
+  ({
     actions: {
       flexDirection: "row",
       gap: 6,
@@ -105,8 +125,7 @@ export function createStyles(Colors: ColorPalette) {
     actionBtn: {
       flex: 1,
       flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
+      ...centered,
       gap: 4,
       paddingVertical: 8,
       borderRadius: 10,
@@ -118,5 +137,13 @@ export function createStyles(Colors: ColorPalette) {
     actionBtnText: { fontSize: 11, fontWeight: "700", color: Colors.white },
     actionBtnTextView: { color: Colors.primary },
     actionBtnTextDelete: { color: Colors.error },
+  }) as const;
+
+export const createStyles = (Colors: ColorPalette) =>
+  StyleSheet.create({
+    ...cardFrameStyles(Colors),
+    ...badgeStyles(Colors),
+    ...bodyStyles(Colors),
+    ...priceStyles(Colors),
+    ...actionStyles(Colors),
   });
-}

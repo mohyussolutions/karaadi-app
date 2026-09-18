@@ -1,20 +1,21 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
-import ListingCard from '../../components/cards/ListingCard';
-import { WantedAlertForm } from '../../management/create/new-ad/components/WantedAlertForm';
+import ListingCard from '../../components/cards/ListingCard/ListingCard';
+import { WantedAlertForm } from '../../management/create/new-ad/components/WantedAlertForm/WantedAlertForm';
 import { useAuthStore } from '../../store/hooks/authStore';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { useGlobal } from '../../hooks/useGlobal';
+import { useSubscriptionRows } from '../../hooks/useSubscriptionRows';
 import { fetchMySubscriptions, deleteSubscription } from '../../actions/categories/subscription.actions';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles, createSheetInlineStyles } from '../../util/styles/profile/wanted.styles';
-import { subscriptionToListingItem, subscriptionPriceLabel } from '../../util/helpers';
+import { createStyles, createSheetInlineStyles } from '../../util/styles/profile/wantedAlerts.styles';
 import type { Subscription } from '../../util/types';
+import { ROUTES } from '../../constants/constants';
 
 export default function WantedScreen() {
   const { t } = useAppTranslation();
@@ -59,11 +60,7 @@ export default function WantedScreen() {
     );
   }, [t]);
 
-  const rows = useMemo(() => subs.map((sub) => ({
-    sub,
-    listingItem: subscriptionToListingItem(sub),
-    priceLabel: subscriptionPriceLabel(sub, t('priceOnRequest')),
-  })), [subs, t]);
+  const rows = useSubscriptionRows(subs);
 
   const keyExtractor = useCallback((row: (typeof rows)[number]) => row.sub.id, []);
 
@@ -73,7 +70,7 @@ export default function WantedScreen() {
         item={item.listingItem}
         priceLabel={item.priceLabel}
         onDelete={() => handleDelete(item.sub.id)}
-        onPress={() => router.push({ pathname: '/listing/subscription/[id]', params: { id: item.sub.id || item.sub._id || '' } })}
+        onPress={() => router.push({ pathname: ROUTES.subscriptionDetail, params: { id: item.sub.id || item.sub._id || '' } })}
       />
     </View>
   ), [CARD_WIDTH, handleDelete, router]);

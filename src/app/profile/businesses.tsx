@@ -7,12 +7,13 @@ import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
-import RemoteImage from '../../components/shared/RemoteImage';
+import RemoteImage from '../../components/shared/RemoteImage/RemoteImage';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useMyBusinesses } from '../../hooks/useMyBusinesses';
 import { placeholderAvatar } from '../../constants';
 import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL, BUSINESS_CATEGORY_KEY_REVERSE } from '../../util/types';
 import { createStyles } from '../../util/styles/profile/businesses.styles';
+import { ROUTES } from '../../constants/constants';
 
 const PLACEHOLDER = placeholderAvatar(80, '2563eb', 'B');
 
@@ -37,7 +38,7 @@ export default function BusinessesScreen() {
         ListHeaderComponent={
           <TouchableOpacity
             style={styles.createBtn}
-            onPress={() => router.push('/profile/business-create')}
+            onPress={() => router.push(ROUTES.businessCreate)}
             activeOpacity={0.88}
           >
             <MaterialCommunityIcons name="office-building-plus-outline" size={20} color={Colors.white} />

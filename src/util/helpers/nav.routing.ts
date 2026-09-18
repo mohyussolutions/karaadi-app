@@ -1,9 +1,10 @@
 import type { ListingRoute } from '../types/common.types';
+import { ROUTES } from '../../constants/constants';
 
 export type { ListingRoute };
 
 const VEHICLE_CATS = new Set([
-  'cars', 'motorcycles', 'boats',
+  'cars', 'motorcycles', 'boats', 'car', 'motorcycle', 'boat',
   'farmequipment', 'farm-equipment',
   'traktor', 'tractor',
 ]);
@@ -26,28 +27,28 @@ export function getListingDetailRoute(
   if (categoryKey) {
     if (VEHICLE_CAT_KEYS.has(categoryKey)) {
       return {
-        pathname: '/listing/vehicle/[id]',
+        pathname: ROUTES.vehicleDetail,
         params: { id, category: CATEGORY_KEY_TO_VEHICLE_PARAM[categoryKey] ?? categoryKey.toLowerCase() },
       };
     }
-    if (categoryKey === 'RealEstate') return { pathname: '/listing/real-estate/[id]', params: { id } };
-    if (categoryKey === 'Jobs') return { pathname: '/listing/job/[id]', params: { id } };
+    if (categoryKey === 'RealEstate') return { pathname: ROUTES.realEstateDetail, params: { id } };
+    if (categoryKey === 'Jobs') return { pathname: ROUTES.jobDetail, params: { id } };
   }
 
   const cat = (item.mainCategory || item.category || '').toLowerCase();
 
   if (VEHICLE_CATS.has(cat)) {
-    return { pathname: '/listing/vehicle/[id]', params: { id, category: cat } };
+    return { pathname: ROUTES.vehicleDetail, params: { id, category: cat } };
   }
   if (cat === 'realestate' || cat === 'real-estate') {
-    return { pathname: '/listing/real-estate/[id]', params: { id } };
+    return { pathname: ROUTES.realEstateDetail, params: { id } };
   }
   if (cat === 'jobs' || cat === 'job') {
-    return { pathname: '/listing/job/[id]', params: { id } };
+    return { pathname: ROUTES.jobDetail, params: { id } };
   }
   if (cat === 'marketplace') {
-    return { pathname: '/listing/item-detail/[id]', params: { id } };
+    return { pathname: ROUTES.itemDetail, params: { id } };
   }
 
-  return { pathname: '/listing/item-detail/[id]', params: { id } };
+  return { pathname: ROUTES.itemDetail, params: { id } };
 }

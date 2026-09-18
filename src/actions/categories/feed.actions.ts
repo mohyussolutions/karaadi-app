@@ -5,6 +5,7 @@ import {
   BOATS_ENDPOINTS, MARKETPLACE_ENDPOINTS, FARM_EQUIPMENT_ENDPOINTS,
   JOBS_ENDPOINTS, FEED_ENDPOINTS,
 } from '../../api/endpoints';
+import { FEED_GROUPS, FEED_DEFAULT_PAGE, FEED_FALLBACK_LIMIT, RECOMMENDED_LIMIT, type FeedGroup } from '../../constants/constants';
 import type { Car, RealEstate, Motorcycle, Boat, MarketplaceItem, FarmEquipment, ListingBase } from '../../util/types/listing.types';
 import type { Params } from '../../util/types/common.types';
 
@@ -86,30 +87,38 @@ export async function fetchByCategory(categoryKey: string, params?: Params, sign
   }
 }
 
-export async function fetchFeedGroup(group: 'fast' | 'slow', signal?: AbortSignal): Promise<ListingBase[]> {
+export async function fetchFeedGroup(group: FeedGroup, signal?: AbortSignal, page = FEED_DEFAULT_PAGE): Promise<ListingBase[]> {
   try {
-    const { data } = await apiClient.get(FEED_ENDPOINTS.GROUP(group), { signal });
+    const { data } = await apiClient.get(FEED_ENDPOINTS.GROUP(group, page), { signal });
     return extractList<ListingBase>(data);
   } catch {
-    if (group !== 'fast') return [];
+    if (group !== FEED_GROUPS.FAST || page !== FEED_DEFAULT_PAGE) return [];
     const results = await Promise.allSettled([
-      fetchCars({ limit: 4 }, signal),
-      fetchRealEstate({ limit: 4 }, signal),
-      fetchMotorcycles({ limit: 4 }, signal),
-      fetchMarketplace({ limit: 4 }, signal),
-      fetchBoats({ limit: 2 }, signal),
-      fetchFarmEquipment({ limit: 2 }, signal),
+      fetchCars({ limit: FEED_FALLBACK_LIMIT.LARGE }, signal),
+      fetchRealEstate({ limit: FEED_FALLBACK_LIMIT.LARGE }, signal),
+      fetchMotorcycles({ limit: FEED_FALLBACK_LIMIT.LARGE }, signal),
+      fetchMarketplace({ limit: FEED_FALLBACK_LIMIT.LARGE }, signal),
+      fetchBoats({ limit: FEED_FALLBACK_LIMIT.SMALL }, signal),
+      fetchFarmEquipment({ limit: FEED_FALLBACK_LIMIT.SMALL }, signal),
     ]);
     return results.flatMap((r) => (r.status === 'fulfilled' ? (r.value as ListingBase[]) : []));
   }
 }
 
+export async function fetchFeedPage(page: number, signal?: AbortSignal): Promise<ListingBase[]> {
+  const [fast, slow] = await Promise.all([
+    fetchFeedGroup(FEED_GROUPS.FAST, signal, page),
+    fetchFeedGroup(FEED_GROUPS.SLOW, signal, page),
+  ]);
+  return [...fast, ...slow];
+}
+
 export async function fetchFeed(signal?: AbortSignal): Promise<ListingBase[]> {
-  return fetchFeedGroup('fast', signal);
+  return fetchFeedGroup(FEED_GROUPS.FAST, signal);
 }
 
 export async function getRecommendedByEndpoint(endpoint: string, signal?: AbortSignal): Promise<ListingBase[]> {
-  const { data } = await apiClient.get<ListingBase[] | { listings?: ListingBase[]; items?: ListingBase[] }>(endpoint, { params: { limit: 10 }, signal });
+  const { data } = await apiClient.get<ListingBase[] | { listings?: ListingBase[]; items?: ListingBase[] }>(endpoint, { params: { limit: RECOMMENDED_LIMIT }, signal });
   return Array.isArray(data) ? data : data?.listings || data?.items || [];
 }
 

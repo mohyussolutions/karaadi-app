@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { Appearance, Platform, StyleSheet } from "react-native";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setThemeMode } from "../store/slices/themeSlice";
@@ -32,9 +32,27 @@ export function useThemeColors() {
   return useThemeMode().resolved === "dark" ? DARK_COLORS : LIGHT_COLORS;
 }
 
-export function useThemedStyles<T extends StyleSheet.NamedStyles<T>>(
-  factory: (c: ColorPalette) => T,
-): T {
+const styleCache = new WeakMap<object, Map<string, unknown>>();
+const MAX_STYLE_VARIANTS = 24;
+
+export function useThemedStyles<
+  T extends StyleSheet.NamedStyles<T>,
+  A extends unknown[],
+>(factory: (c: ColorPalette, ...args: A) => T, ...args: A): T {
   const colors = useThemeColors();
-  return useMemo(() => factory(colors), [colors]);
+  const key = `${colors === DARK_COLORS ? "d" : "l"}|${args.join("|")}`;
+
+  let variants = styleCache.get(factory);
+  if (!variants) {
+    variants = new Map();
+    styleCache.set(factory, variants);
+  }
+
+  let styles = variants.get(key) as T | undefined;
+  if (!styles) {
+    if (variants.size >= MAX_STYLE_VARIANTS) variants.clear();
+    styles = factory(colors, ...args);
+    variants.set(key, styles);
+  }
+  return styles;
 }

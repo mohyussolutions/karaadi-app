@@ -9,6 +9,7 @@ import {
 } from '../slices/authSlice';
 import * as SecureStore from '../../util/helpers/secureStorage';
 import { disconnectSocket, connectSocket } from '../../actions/sockets/socket.actions';
+import { unregisterPushToken } from '../../components/features/notifications/services/notificationService';
 import type { User } from '../../util/types/user.types';
 
 export function useAuthStore() {
@@ -45,7 +46,10 @@ export function useAuthStore() {
     login: (email: string, password: string) => dispatch(login({ email, password })).unwrap(),
     register: (payload: { username: string; email: string; password: string; phone?: string }) =>
       dispatch(register(payload)).unwrap(),
-    logout: () => dispatch(logout()).unwrap(),
+    logout: async () => {
+      await unregisterPushToken();
+      return dispatch(logout()).unwrap();
+    },
     loadFromStorage: () => dispatch(loadFromStorage()),
   };
 }

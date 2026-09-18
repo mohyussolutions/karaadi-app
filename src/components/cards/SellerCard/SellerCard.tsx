@@ -1,0 +1,74 @@
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
+import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
+import { getReviewsByUser } from '../../../actions/core/reviews.actions';
+import { placeholderAvatar } from '../../../constants';
+import type { SellerCardProps } from '../../../util/types';
+import type { IconName } from '../../../util/icons/icons';
+import { createStyles } from '../../../util/styles/detail/sellerCard.styles';
+import RemoteImage from '../../shared/RemoteImage/RemoteImage';
+import VerifiedBadge from '../../shared/VerifiedBadge/VerifiedBadge';
+import { StarRating } from './StarRating';
+
+const SellerCard = React.memo(function SellerCard({
+  username, profileImage, phone, subtitle, userId, isVerified,
+  onMessage, onCall, messageBtnLabel, messageBtnIcon = 'message-outline', disabled,
+}: SellerCardProps) {
+  const { t } = useTranslation();
+  const Colors = useThemeColors();
+  const s = useThemedStyles(createStyles);
+  const initial = (username?.[0] ?? 'S').toUpperCase();
+  const fallback = placeholderAvatar(80, '3B82F6', initial);
+
+  const [rating, setRating] = useState<number | null>(null);
+  const [reviewCount, setReviewCount] = useState(0);
+
+  useEffect(() => {
+    if (!userId) return;
+    getReviewsByUser(userId)
+      .then((list) => {
+        if (list.length === 0) return;
+        const avg = list.reduce((sum: number, r: { rating?: number }) => sum + (r.rating || 0), 0) / list.length;
+        setRating(avg);
+        setReviewCount(list.length);
+      })
+      .catch(() => {});
+  }, [userId]);
+
+  return (
+    <View style={s.card}>
+      <View style={s.row}>
+        <RemoteImage source={{ uri: profileImage || fallback }} style={s.avatar} iconSize={16} />
+        <View style={s.info}>
+          <View style={s.nameRow}>
+            <Text style={s.name}>{username || t('chats.seller')}</Text>
+            <VerifiedBadge visible={isVerified} size={15} />
+          </View>
+          {subtitle && <Text style={s.sub}>{subtitle}</Text>}
+          {rating !== null && <StarRating rating={rating} count={reviewCount} />}
+        </View>
+        {phone && onCall && (
+          <TouchableOpacity style={s.phoneBtn} onPress={onCall}>
+            <MaterialCommunityIcons name="phone-outline" size={18} color={Colors.primary} />
+          </TouchableOpacity>
+        )}
+
+      </View>
+
+      {onMessage && (
+        <TouchableOpacity
+          style={[s.msgBtn, disabled && s.msgBtnDisabled]}
+          onPress={onMessage}
+          disabled={disabled}
+        >
+          <MaterialCommunityIcons name={messageBtnIcon as IconName} size={18} color={Colors.white} />
+          <Text style={s.msgText}>{messageBtnLabel || t('realEstateDetail.sendMessage')}</Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+});
+
+export default SellerCard;

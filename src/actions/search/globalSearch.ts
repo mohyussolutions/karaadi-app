@@ -1,23 +1,9 @@
 import { apiClient } from '../client';
 import { extractList } from '../../util/helpers';
-import {
-  SEARCH_ENDPOINTS,
-  CARS_ENDPOINTS, REAL_ESTATE_ENDPOINTS, MOTORCYCLES_ENDPOINTS,
-  BOATS_ENDPOINTS, MARKETPLACE_ENDPOINTS, FARM_EQUIPMENT_ENDPOINTS, JOBS_ENDPOINTS,
-} from '../../api/endpoints';
+import { SEARCH_ENDPOINTS, CATEGORY_ENDPOINTS } from '../../api/endpoints';
 import type { SearchResult, SearchParams } from '../../util/types';
 
 export type { SearchParams };
-
-const CATEGORY_ENDPOINTS: Record<string, string> = {
-  Cars: CARS_ENDPOINTS.LIST,
-  RealEstate: REAL_ESTATE_ENDPOINTS.LIST,
-  Motorcycles: MOTORCYCLES_ENDPOINTS.LIST,
-  Boats: BOATS_ENDPOINTS.LIST,
-  Marketplace: MARKETPLACE_ENDPOINTS.LIST,
-  farmequipment: FARM_EQUIPMENT_ENDPOINTS.LIST,
-  Jobs: JOBS_ENDPOINTS.LIST,
-};
 
 export async function searchCategory(categoryKey: string, params: SearchParams): Promise<SearchResult[]> {
   try {

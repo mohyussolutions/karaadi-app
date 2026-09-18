@@ -9,6 +9,7 @@ import { trackItemView } from '../actions/categories/feed.actions';
 
 import { getCachedListing } from '../util/cache/listingCache';
 import { showToast } from '../util/cache/toastService';
+import { ROUTES } from '../constants/constants';
 import type { RealEstate } from '../util/types/listing.types';
 
 export function useRealEstateDetail(id: string) {
@@ -43,14 +44,14 @@ export function useRealEstateDetail(id: string) {
   }, [item?.id]);
 
   async function toggleFav() {
-    if (!user) { router.push('/(auth)/login'); return; }
+    if (!user) { router.push(ROUTES.login); return; }
     const willSave = !isFavorite;
     try {
       await dispatch(toggleFavorite({ itemId: id, wasFav: isFavorite, listing: item, categoryHint: 'realestate' })).unwrap();
       showToast({
         message: willSave ? 'Saved to favorites' : 'Removed from favorites',
         type: willSave ? 'saved' : 'removed',
-        onView: willSave ? () => router.push('/profile/favorites') : undefined,
+        onView: willSave ? () => router.push(ROUTES.favorites) : undefined,
       });
     } catch {
       showToast({ message: 'Could not update favorites', type: 'removed' });
@@ -58,10 +59,10 @@ export function useRealEstateDetail(id: string) {
   }
 
   function handleContact() {
-    if (!user) { router.push('/(auth)/login'); return; }
+    if (!user) { router.push(ROUTES.login); return; }
     const sellerId = item?.userId || item?.user?._id || item?.user?.id;
     if (sellerId) {
-      router.push({ pathname: '/profile/chat', params: { userId: sellerId, username: item.user?.username || 'Seller', listingId: id, listingType: 'RealEstate' } });
+      router.push({ pathname: ROUTES.chat, params: { userId: sellerId, username: item.user?.username || 'Seller', listingId: id, listingType: 'RealEstate' } });
     }
   }
 

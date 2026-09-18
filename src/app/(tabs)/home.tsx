@@ -1,19 +1,22 @@
-import { useMemo, useCallback } from 'react';
+import { useCallback } from 'react';
 import {
-  View, Text, TouchableOpacity, RefreshControl, ScrollView,
+  View, Text, TouchableOpacity, RefreshControl, ScrollView, ActivityIndicator,
 } from 'react-native';
 import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { CategoryGrid, HowToUseVideo } from '../../components/shared';
-import ListingCard from '../../components/cards/ListingCard';
+import ListingCard from '../../components/cards/ListingCard/ListingCard';
 import { ListingCardSkeleton } from '../../components/loading';
 import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useHomeFeed } from '../../hooks/useHomeFeed';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useSearchFilteredListings } from '../../hooks/useFilteredListings';
+import { useSkeletonListings } from '../../hooks/useSkeletonListings';
 import { useAppSelector } from '../../store/store';
-import { createStyles, H_PAD, COL_GAP } from '../../util/styles/tabs/home.styles';
+import { H_PAD, COL_GAP } from '../../constants/constants';
+import { createStyles } from '../../util/styles/tabs/homeTab.styles';
 import type { ListingBase } from '../../util/types/listing.types';
 
 const SKELETON_COUNT = 6;
@@ -22,32 +25,19 @@ export default function HomeScreen() {
   const router = useRouter();
   const { t } = useAppTranslation();
   const { isTabletLandscape, sidebarWidth, mainWidth, numColumns, cardWidth } = useResponsive();
-  const { user, listings, recommendations, refreshing, loading, visibleListings, hasMore, onRefresh, showMore } = useHomeFeed();
+  const { user, listings, recommendations, refreshing, loading, visibleListings, hasMore, loadingMore, onRefresh, showMore } = useHomeFeed();
   const searchQuery = useAppSelector((s) => s.browseSearch.query);
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
 
   const REC_CARD_W = cardWidth(mainWidth, numColumns, H_PAD, COL_GAP) * 1.12;
 
-  const filteredListings = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    if (!q) return null;
-    return listings.filter((item) => {
-      const matchesTitle = (item.title ?? '').toLowerCase().includes(q);
-      const matchesCity = (item.city ?? '').toLowerCase().includes(q);
-      const matchesRegion = (item.region ?? '').toLowerCase().includes(q);
-      const matchesPrice = String(item.price ?? '').includes(q);
-      return matchesTitle || matchesCity || matchesRegion || matchesPrice;
-    });
-  }, [listings, searchQuery]);
+  const filteredListings = useSearchFilteredListings(listings, searchQuery);
 
   const displayListings = filteredListings ?? visibleListings;
   const showLoadMore = !filteredListings && hasMore;
   const showSkeleton = loading && !filteredListings;
-  const skeletonData = useMemo(
-    () => Array.from({ length: SKELETON_COUNT }, (_, i) => ({ _id: `sk-${i}`, id: `sk-${i}` }) as unknown as ListingBase),
-    [],
-  );
+  const skeletonData = useSkeletonListings(SKELETON_COUNT);
 
   const renderFeedItem = useCallback(({ item, index }: ListRenderItemInfo<ListingBase>) => (
     <View
@@ -129,10 +119,17 @@ export default function HomeScreen() {
           <TouchableOpacity
             style={styles.readMoreBtn}
             onPress={showMore}
+            disabled={loadingMore}
             activeOpacity={0.8}
           >
-            <Text style={styles.readMoreText}>{t('loadMore')}</Text>
-            <MaterialCommunityIcons name="chevron-down" size={16} color={Colors.primary} />
+            {loadingMore ? (
+              <ActivityIndicator size="small" color={Colors.primary} />
+            ) : (
+              <>
+                <Text style={styles.readMoreText}>{t('loadMore')}</Text>
+                <MaterialCommunityIcons name="chevron-down" size={16} color={Colors.primary} />
+              </>
+            )}
           </TouchableOpacity>
         ) : null
       }

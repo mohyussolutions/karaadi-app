@@ -9,6 +9,7 @@ export interface UseHomeFeedResult {
   loading: boolean;
   visibleListings: ListingBase[];
   hasMore: boolean;
+  loadingMore: boolean;
   onRefresh: () => Promise<void>;
   showMore: () => void;
 }

@@ -1,11 +1,11 @@
-import { useMemo } from "react";
 import { View, Text, TextInput, TouchableOpacity, Pressable } from "react-native";
 import { useTranslation } from "react-i18next";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useThemeColors, useThemedStyles } from "../../../../../hooks/useTheme";
+import { useFilteredNestedOptions } from "../../../../../hooks/useFilteredNestedOptions";
 import type { MCIcon } from "../../../../../util/icons/icons";
 import type { NestedSubcategoryPickerProps } from "../../../../../util/types/new-ad.types";
-import { createStyles } from "../../../../../util/styles/new-ad/stepForm.styles";
+import { createStyles } from "../../../../../util/styles/newAd/stepForm.styles";
 
 export function NestedSubcategoryPicker({
   options,
@@ -18,11 +18,7 @@ export function NestedSubcategoryPicker({
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
 
-  const query = search.trim().toLowerCase();
-  const filtered = useMemo(
-    () => (query ? options.filter((n) => t(n.labelKey).toLowerCase().includes(query)) : options),
-    [options, query, t],
-  );
+  const filtered = useFilteredNestedOptions(options, search);
 
   return (
     <View style={s.nestedWrap}>

@@ -1,1 +1,1 @@
-export { default as SocialShareSheet } from './SocialShareSheet';
+export { default as SocialShareSheet } from './SocialShareSheet/SocialShareSheet';

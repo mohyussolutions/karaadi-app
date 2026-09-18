@@ -7,7 +7,7 @@ import type { PickerFieldsProps } from '../../../util/types';
 
 export function PickerFields({
   selectedRegion, cityText, loadingRegions, regionExpanded, cityExpanded,
-  onToggleRegion, onToggleCity, onClearCity,
+  onToggleRegion, onToggleCity, onClearCity, regionError, cityError,
 }: PickerFieldsProps) {
   const { t } = useTranslation();
   const Colors = useThemeColors();
@@ -18,7 +18,7 @@ export function PickerFields({
       <View style={s.fieldBlock}>
         <Text style={s.label}>{t('createRealEstate.regionLabel')}</Text>
         <TouchableOpacity
-          style={[s.picker, !selectedRegion && s.pickerEmpty, regionExpanded && s.pickerActive]}
+          style={[s.picker, !selectedRegion && s.pickerEmpty, regionExpanded && s.pickerActive, !!regionError && s.pickerError]}
           onPress={onToggleRegion}
           activeOpacity={0.8}
         >
@@ -40,12 +40,13 @@ export function PickerFields({
             color={regionExpanded ? Colors.primary : Colors.textMuted}
           />
         </TouchableOpacity>
+        {!!regionError && <Text style={s.errorText}>{regionError}</Text>}
       </View>
 
       <View style={s.fieldBlock}>
         <Text style={s.label}>{t('createRealEstate.cityLabel')}</Text>
         <TouchableOpacity
-          style={[s.picker, !selectedRegion && s.pickerDisabled, cityExpanded && s.pickerActive]}
+          style={[s.picker, !selectedRegion && s.pickerDisabled, cityExpanded && s.pickerActive, !!cityError && s.pickerError]}
           onPress={onToggleCity}
           activeOpacity={0.8}
         >
@@ -69,6 +70,7 @@ export function PickerFields({
             />
           )}
         </TouchableOpacity>
+        {!!cityError && <Text style={s.errorText}>{cityError}</Text>}
       </View>
     </View>
   );

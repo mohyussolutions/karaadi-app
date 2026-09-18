@@ -1,4 +1,10 @@
 import { CAT_PATHS } from "./paths";
+import {
+  FEED_BASE_PATH,
+  FEED_DEFAULT_PAGE,
+  FEED_DEFAULT_PAGE_SIZE,
+  type FeedGroup,
+} from "../constants/constants";
 import { withId, withIdSuffix, createCrudEndpoints } from "../util/helpers/endpoint.builders";
 
 export const MARKETPLACE_ENDPOINTS = createCrudEndpoints(CAT_PATHS.marketplace);
@@ -9,15 +15,29 @@ export const BOATS_ENDPOINTS = createCrudEndpoints(CAT_PATHS.boats);
 export const FARM_EQUIPMENT_ENDPOINTS = createCrudEndpoints(CAT_PATHS.farmEquipment);
 export const JOBS_ENDPOINTS = createCrudEndpoints(CAT_PATHS.jobs);
 
+export const CATEGORY_ENDPOINTS: Record<string, string> = {
+  Marketplace: CAT_PATHS.marketplace,
+  Cars: CAT_PATHS.cars,
+  RealEstate: CAT_PATHS.realEstate,
+  Motorcycles: CAT_PATHS.motorcycles,
+  Boats: CAT_PATHS.boats,
+  farmequipment: CAT_PATHS.farmEquipment,
+  Jobs: CAT_PATHS.jobs,
+};
+
 export const MY_ADS_ENDPOINTS = {
   LIST: "/api/listings/my-ads",
   DELETE: withId("/api/listings/delete"),
+  PATCH: withId("/api/listings"),
 };
 
 export const FEED_ENDPOINTS = {
-  FEED: "/api/feed",
-  GROUP: (group: "fast" | "slow", page = 1, pageSize = 100) =>
-    `/api/feed?group=${group}&page=${page}&pageSize=${pageSize}`,
+  FEED: FEED_BASE_PATH,
+  GROUP: (
+    group: FeedGroup,
+    page = FEED_DEFAULT_PAGE,
+    pageSize = FEED_DEFAULT_PAGE_SIZE,
+  ) => `${FEED_BASE_PATH}?group=${group}&page=${page}&pageSize=${pageSize}`,
   RECOMMENDATIONS: "/api/recommendations",
   TRACK_VIEW: "/api/recommendations/track-view",
 };
@@ -124,9 +144,7 @@ export const PAYMENT_ENDPOINTS = {
   MOBILE_STATUS: withId("/api/payments/mobile/status"),
   WAAFI_INITIATE: "/api/payments/waafi/initiate",
   WAAFI_STATUS: withId("/api/payments/waafi/status"),
-  AD_PATCH: withId("/api/listings"),
   CREATE: "/api/payments",
-  ACTIVATE: (category: string, id: string) => `/api/${category}/${id}/payment`,
 };
 
 export const CHATS_ENDPOINTS = {
@@ -135,6 +153,7 @@ export const CHATS_ENDPOINTS = {
   FIND: "/api/chats/conversation/find",
   BY_ID: withId("/api/chats"),
   MESSAGES: withIdSuffix("/api/chats", "messages"),
+  READ: withIdSuffix("/api/chats", "read"),
 };
 
 export const MESSAGES_ENDPOINTS = {

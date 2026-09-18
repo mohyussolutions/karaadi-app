@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Keyboard } from 'react-native';
 import type { RegionPickerItem, RegionCityPickerProps } from '../../../util/types';
 import { clientAddCity } from '../../../actions/categories/geo.actions';
 import { toRegionPickerItems } from '../../../util/helpers';
@@ -42,7 +43,10 @@ export function useRegionCityPicker({
 
   function toggleRegionPanel() {
     setCityExpanded(false);
-    setRegionExpanded((prev) => !prev);
+    setRegionExpanded((prev) => {
+      if (!prev) Keyboard.dismiss();
+      return !prev;
+    });
   }
 
   function handleSelectRegion(r: RegionPickerItem) {
@@ -62,7 +66,7 @@ export function useRegionCityPicker({
     if (!selectedRegionObj) { toggleRegionPanel(); return; }
     setRegionExpanded(false);
     setCityExpanded((prev) => {
-      if (!prev) setCitySearch('');
+      if (!prev) { setCitySearch(''); Keyboard.dismiss(); }
       return !prev;
     });
   }

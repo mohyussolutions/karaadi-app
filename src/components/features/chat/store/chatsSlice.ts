@@ -15,9 +15,15 @@ const chatsSlice = createSlice({
       state.items = action.payload;
       state.loaded = true;
     },
+    markChatsRead(state, action: PayloadAction<number[]>) {
+      const ids = new Set(action.payload);
+      state.items.forEach((chat) => {
+        if (ids.has(chat.id) && chat._count) chat._count.messages = 0;
+      });
+    },
     clearChats: () => initialState,
   },
 });
 
-export const { setChats, clearChats } = chatsSlice.actions;
+export const { setChats, markChatsRead, clearChats } = chatsSlice.actions;
 export default chatsSlice.reducer;

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { addNotification, markOneRead, markAllRead, removeNotification, clearNotifications } from '../components/features/notifications/store/notificationsSlice';
 import { getSocket } from '../actions/sockets/socket.actions';
+import { scheduleLocalNotification } from '../components/features/notifications/services/notificationService';
 import { playNotificationSound } from '../components/features/notifications/services/soundService';
 import type { SocketNotificationPayload } from '../util/types/notification.types';
 
@@ -47,7 +48,16 @@ export function useSocketNotifications() {
           const list = (Array.isArray(payload) ? payload : [payload]).filter((item) => isForCurrentUser(item, user!.id));
           if (list.length === 0) return;
           playNotificationSound();
-          list.forEach((item) => dispatch(addNotification(toNotification(user!.id, type, item))));
+          list.forEach((item) => {
+            dispatch(addNotification(toNotification(user!.id, type, item)));
+            if (item?.itemId) {
+              scheduleLocalNotification(
+                item.title ?? 'New match for your alert!',
+                item.message ?? item.body ?? '',
+                { type: 'alert_match', listingId: item.itemId, category: item.itemType },
+              );
+            }
+          });
         };
       }
 

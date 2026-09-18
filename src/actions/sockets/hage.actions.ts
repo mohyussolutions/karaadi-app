@@ -1,3 +1,4 @@
+import { HAGE_SEARCH_LIMIT } from '../../constants/constants';
 import { HAGE_ENDPOINTS, SEARCH_ENDPOINTS } from '../../api/endpoints';
 import { apiClient } from '../client';
 import { extractList } from '../../util/helpers';
@@ -26,7 +27,7 @@ export async function sendHageChat(
   const [chatRes, searchRes] = await Promise.allSettled([
     apiClient.post<HageChatApiResponse>(HAGE_ENDPOINTS.CHAT, { message: content, lang, history: chatHistory })
       .then((r) => r.data),
-    apiClient.get<unknown>(SEARCH_ENDPOINTS.GLOBAL, { params: { title: content, limit: 5 } }),
+    apiClient.get<unknown>(SEARCH_ENDPOINTS.GLOBAL, { params: { title: content, limit: HAGE_SEARCH_LIMIT } }),
   ]);
 
   if (chatRes.status === 'rejected') throw new Error('No response');

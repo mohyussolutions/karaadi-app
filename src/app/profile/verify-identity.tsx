@@ -7,8 +7,9 @@ import { useTranslation } from 'react-i18next';
 import { LoadingSpinner } from '../../components/loading';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useIdentification } from '../../hooks/useIdentification';
-import { IdentityCaptureForm } from '../../components/features/identification/components/IdentityCaptureForm';
+import { IdentityCaptureForm } from '../../components/features/identification/components/IdentityCaptureForm/IdentityCaptureForm';
 import { createStyles } from '../../util/styles/profile/verifyIdentity.styles';
+import { ROUTES } from '../../constants/constants';
 
 export default function VerifyIdentityScreen() {
   const { t } = useTranslation();
@@ -25,7 +26,7 @@ export default function VerifyIdentityScreen() {
         <MaterialCommunityIcons name="shield-account-outline" size={64} color={Colors.gray300} />
         <Text style={s.guestTitle}>{t('mine.identification.guestTitle')}</Text>
         <Text style={s.guestSub}>{t('mine.identification.guestSub')}</Text>
-        <TouchableOpacity style={s.signInBtn} onPress={() => router.push('/(auth)/login')}>
+        <TouchableOpacity style={s.signInBtn} onPress={() => router.push(ROUTES.login)}>
           <Text style={s.signInText}>{t('auth.login.loginButton')}</Text>
         </TouchableOpacity>
       </View>

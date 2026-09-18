@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { PAYMENT_ENDPOINTS, FEE_ENDPOINTS } from '../../api/endpoints';
+import { FEE_ENDPOINTS } from '../../api/endpoints';
 import type { ApiError } from '../../util/types/generic.types';
 import type { AllFeeConfigs, FeeRecord, SubPlanConfig, SystemFeeConfig, FeeArrayKey } from '../../util/types/fee.types';
 
@@ -202,12 +202,3 @@ export const deleteSubscriptionFee  = (id: string) => deleteCategoryFee('subscri
 export const getBusinessPlanFees   = () => getCategoryFees('business-plans');
 export const createBusinessPlanFee = (d: Record<string, unknown>) => createCategoryFee('business-plans', d);
 export const updateBusinessPlanFee = (id: string, d: Record<string, unknown>) => updateCategoryFee('business-plans', id, d);
-
-export async function patchAdPayment(adId: string, isPaid: boolean, planId?: string) {
-  try {
-    const { data } = await apiClient.patch(PAYMENT_ENDPOINTS.AD_PATCH(adId), { isPaid, ...(planId ? { planId } : {}) });
-    return { success: true, data };
-  } catch {
-    return { success: false };
-  }
-}

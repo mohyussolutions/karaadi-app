@@ -8,7 +8,7 @@ import type { TFunction } from 'i18next';
 import { useThemeColors, useThemedStyles, type ColorPalette } from '../../../hooks/useTheme';
 import { LoadingSpinner } from '../../../components/loading';
 import { usePaymentHistory, type PaymentItem } from '../../../hooks/usePaymentHistory';
-import { createStyles } from '../../../util/styles/settings/payment.styles';
+import { createStyles } from '../../../util/styles/settings/paymentSettings.styles';
 import type { PaymentStatusConfig, PaymentCategoryInfo } from '../../../util/types';
 
 function getStatusConfig(t: TFunction, Colors: ColorPalette): Record<string, PaymentStatusConfig> {

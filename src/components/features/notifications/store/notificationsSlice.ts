@@ -25,6 +25,15 @@ const notificationsSlice = createSlice({
     setUnreadCount: (state, action: PayloadAction<number>) => {
       state.unreadCount = action.payload;
     },
+    markChatNotificationsRead: (state, action: PayloadAction<number[]>) => {
+      const ids = new Set(action.payload.map(String));
+      state.items.forEach((n) => {
+        if (n.type === 'message' && !n.read && ids.has(String(n.data?.chatId))) {
+          n.read = true;
+          state.unreadCount = Math.max(0, state.unreadCount - 1);
+        }
+      });
+    },
     markAllRead: (state) => {
       state.items = state.items.map((n) => ({ ...n, read: true }));
       state.unreadCount = 0;
@@ -53,6 +62,7 @@ const notificationsSlice = createSlice({
 export const {
   setNotifications,
   addNotification,
+  markChatNotificationsRead,
   setUnreadCount,
   markAllRead,
   markOneRead,

@@ -1,6 +1,6 @@
 import type { ListingBase } from '../util/types/listing.types';
 import type { FeedTierKey } from '../util/types/feedTier.types';
-import { TOP_ITEMS_DAYS, DAY_MS } from './feedTierPolicy.constants';
+import { TOP_ITEMS_DAYS, DAY_MS } from '../constants/constants';
 
 export function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];

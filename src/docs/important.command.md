@@ -1,16 +1,22 @@
 # iOS
 
+# Option A: build, then submit manually
 npm run build:ios
-npm run deploy:ios
 eas submit --platform ios --latest --non-interactive
+
+# Option B: build and auto-submit in one step
+npm run deploy:ios
 
 # Android
 
+# Option A: build, then submit manually
 npm run build:android
-npm run deploy:android
 eas submit --platform android --latest --non-interactive
 
-# Shared
+# Option B: build and auto-submit in one step
+npm run deploy:android
 
-npm run build
-npm run deploy
+# Shared (iOS only — these are aliases for the :ios scripts, not cross-platform)
+
+npm run build   # same as build:ios
+npm run deploy  # same as deploy:ios

@@ -1,1 +1,1 @@
-export { CheckoutBar } from './CheckoutBar';
+export { CheckoutBar } from './CheckoutBar/CheckoutBar';

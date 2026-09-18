@@ -22,9 +22,7 @@ export async function clientGetAllCities(regionId?: string): Promise<GeoCity[]> 
   if (region?.cities) return region.cities;
 
   try {
-    const res = await apiClient.get<GeoCity[]>(
-      `${GEO_ENDPOINTS.CITIES}?regionId=${regionId}`,
-    );
+    const res = await apiClient.get<GeoCity[]>(GEO_ENDPOINTS.CITIES, { params: { regionId } });
     return res.data ?? [];
   } catch {
     return [];

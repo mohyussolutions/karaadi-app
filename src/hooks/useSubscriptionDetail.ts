@@ -3,6 +3,7 @@ import { Linking } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuthStore } from '../store/hooks/authStore';
 import { getSubscriptionById } from '../actions/categories/subscription.actions';
+import { ROUTES } from '../constants/constants';
 
 import type { Subscription } from '../util/types/listing.types';
 
@@ -35,12 +36,12 @@ export function useSubscriptionDetail(id: string) {
   const ownerAvatar = owner?.profileImage || null;
 
   function handleMessage() {
-    if (!user) { router.push('/(auth)/login'); return; }
+    if (!user) { router.push(ROUTES.login); return; }
     const ownerId = typeof item?.user === 'object'
       ? item.user?._id || item.user?.id
       : item?.userId;
     if (ownerId) {
-      router.push({ pathname: '/profile/chat', params: { userId: ownerId, username: ownerName, listingId: id, listingType: 'Subscription' } });
+      router.push({ pathname: ROUTES.chat, params: { userId: ownerId, username: ownerName, listingId: id, listingType: 'Subscription' } });
     }
   }
 

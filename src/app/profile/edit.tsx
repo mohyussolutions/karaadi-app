@@ -11,9 +11,9 @@ import { placeholderAvatar, REGEX_PHONE_INPUT_FILTER } from '../../constants';
 import { updateUsername, updatePhone, updateProfileImage, deleteAccount } from '../../actions/core/auth.actions';
 import { useAuthStore } from '../../store/hooks/authStore';
 import { getImageUrl, getApiErrorMessage } from '../../util/helpers';
-import RemoteImage from '../../components/shared/RemoteImage';
+import RemoteImage from '../../components/shared/RemoteImage/RemoteImage';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../util/styles/profile/edit.styles';
+import { createStyles } from '../../util/styles/profile/editProfile.styles';
 import { useTranslation } from 'react-i18next';
 import { usernameSchema, somaliPhoneSchema } from '../../util/validation/schemas';
 

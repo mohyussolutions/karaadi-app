@@ -1,3 +1,3 @@
-export { Dropdown } from './Dropdown';
-export { FormField } from './FormField';
-export { ImagePickerRow } from './ImagePickerRow';
+export { Dropdown } from './Dropdown/Dropdown';
+export { FormField } from './FormField/FormField';
+export { ImagePickerRow } from './ImagePickerRow/ImagePickerRow';

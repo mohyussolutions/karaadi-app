@@ -78,8 +78,12 @@ export async function updateProfileImage(formData: FormData): Promise<User> {
   return data.user ?? data;
 }
 
-export async function updatePushToken(pushToken: string): Promise<void> {
-  await apiClient.put(AUTH_ENDPOINTS.UPDATE_PUSH_TOKEN, { pushToken });
+export async function updatePushToken(pushToken: string, platform?: string): Promise<void> {
+  await apiClient.put(AUTH_ENDPOINTS.UPDATE_PUSH_TOKEN, { pushToken, platform });
+}
+
+export async function removePushToken(pushToken: string): Promise<void> {
+  await apiClient.delete(AUTH_ENDPOINTS.UPDATE_PUSH_TOKEN, { params: { token: pushToken } });
 }
 
 export async function deleteAccount(): Promise<void> {

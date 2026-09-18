@@ -10,7 +10,7 @@ import { LoadingSpinner } from '../../../../../../components/loading';
 import { useAppSelector } from '../../../../../../store/store';
 import type { StepPaymentProps } from '../../../../../../util/types';
 import type { TopBarProps, ErrorBannerProps, PayFooterProps } from '../../../../../../util/types/new-ad.types';
-import { MAX_POLL_ATTEMPTS } from '../payment.constants';
+import { MAX_POLL_ATTEMPTS } from '../../../../../../constants/constants';
 import { SITE_URL } from '../../../../../../constants';
 import { PaymentMethodSelector } from './PaymentMethodSelector';
 import { PhoneInput } from './PhoneInput';

@@ -11,18 +11,18 @@ import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, JOBS_CONFIG, buildSpecItems }
 import { JOBS_ENDPOINTS } from '../../../api/endpoints';
 import { getImageUrl, formatDate } from '../../../util/helpers';
 import { useJobDetail, formatSalary } from '../../../hooks/useJobDetail';
-import ImageGallery from '../../../components/detail/ImageGallery';
-import ZoomModal from '../../../components/modals/ZoomModal';
-import { SpecGrid } from '../../../components/cards/DetailCard';
-import SellerCard from '../../../components/cards/SellerCard';
-import ReportLink from '../../../components/detail/ReportLink';
-import RecommendedSection from '../../../components/detail/RecommendedSection';
+import ImageGallery from '../../../components/detail/ImageGallery/ImageGallery';
+import ZoomModal from '../../../components/modals/ZoomModal/ZoomModal';
+import { SpecGrid } from '../../../components/cards/DetailCard/DetailCard';
+import SellerCard from '../../../components/cards/SellerCard/SellerCard';
+import ReportLink from '../../../components/detail/ReportLink/ReportLink';
+import RecommendedSection from '../../../components/detail/RecommendedSection/RecommendedSection';
 import { SocialShareSheet } from '../../../components/features/social/components';
-import DetailNotFound from '../../../components/detail/DetailNotFound';
-import DetailActionBar from '../../../components/detail/DetailActionBar';
-import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
-import { createStyles } from '../../../util/styles/listing/job.styles';
-import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplit.styles';
+import DetailNotFound from '../../../components/detail/DetailNotFound/DetailNotFound';
+import DetailActionBar from '../../../components/detail/DetailActionBar/DetailActionBar';
+import SwipeDownToClose from '../../../components/detail/SwipeDownToClose/SwipeDownToClose';
+import { createStyles } from '../../../util/styles/listing/jobDetail.styles';
+import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplitLayout.styles';
 import { useResponsive } from '../../../hooks/useResponsive';
 
 export default function JobDetailScreen() {

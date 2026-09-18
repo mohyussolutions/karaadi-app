@@ -9,6 +9,7 @@ import { useAuthStore } from '../../../store/hooks/authStore';
 import { createTicket } from '../../../actions/core/support.actions';
 import { createDetailStyles } from '../../../util/styles/profile/aboutKaraadi.styles';
 import { maxLenSchema } from '../../../util/validation/schemas';
+import { ROUTES } from '../../../constants/constants';
 
 export default function ContactScreen() {
   const { t } = useAppTranslation();
@@ -23,7 +24,7 @@ export default function ContactScreen() {
 
   async function handleSubmit() {
     if (!user) {
-      router.push('/(auth)/login');
+      router.push(ROUTES.login);
       return;
     }
     if (!subject.trim() || !message.trim()) {
@@ -48,7 +49,7 @@ export default function ContactScreen() {
       });
       setSubject('');
       setMessage('');
-      router.push('/profile/contact-history');
+      router.push(ROUTES.contactHistory);
     } catch {
       Alert.alert(
         t('auth.common.error'),
@@ -71,7 +72,7 @@ export default function ContactScreen() {
             <TouchableOpacity
               style={styles.historyButton}
               activeOpacity={0.85}
-              onPress={() => router.push('/profile/contact-history')}
+              onPress={() => router.push(ROUTES.contactHistory)}
             >
               <MaterialCommunityIcons name="history" size={16} color={Colors.primary} />
               <Text style={styles.historyButtonText}>{t('supportModule.historyButton')}</Text>
@@ -82,7 +83,7 @@ export default function ContactScreen() {
         {!user ? (
           <>
             <Text style={styles.loginPrompt}>{t('supportModule.loginRequired')}</Text>
-            <TouchableOpacity style={styles.loginButton} activeOpacity={0.85} onPress={() => router.push('/(auth)/login')}>
+            <TouchableOpacity style={styles.loginButton} activeOpacity={0.85} onPress={() => router.push(ROUTES.login)}>
               <Text style={styles.loginButtonText}>{t('auth.login.loginButton')}</Text>
             </TouchableOpacity>
           </>

@@ -5,8 +5,32 @@ import { getSocket } from "../actions/sockets/socket.actions";
 import { scheduleLocalNotification } from "../components/features/notifications/services/notificationService";
 import { playNotificationSound } from "../components/features/notifications/services/soundService";
 import { isViewingChat, getCachedUserName } from "../components/features/chat/services/chatState";
+import { MESSAGE_DEDUPE_MAX } from "../constants/constants";
 import type { MessageBanner } from "../util/types";
 import type { ChatMessage } from "../util/types/chat.types";
+
+type IncomingMessage = ChatMessage | { chatId?: number; message?: ChatMessage };
+
+const handledIds = new Set<string>();
+
+function unwrapMessage(payload: IncomingMessage | null | undefined): ChatMessage | null {
+  if (!payload) return null;
+  const wrapped = payload as { chatId?: number; message?: ChatMessage };
+  const inner = wrapped.message ?? (payload as ChatMessage);
+  if (!inner) return null;
+  return { ...inner, chatId: inner.chatId ?? wrapped.chatId as number };
+}
+
+function alreadyHandled(id: string | number | undefined): boolean {
+  if (id === undefined || id === null) return false;
+  const key = String(id);
+  if (handledIds.has(key)) return true;
+  handledIds.add(key);
+  if (handledIds.size > MESSAGE_DEDUPE_MAX) {
+    handledIds.delete(handledIds.values().next().value as string);
+  }
+  return false;
+}
 
 export function useSocketMessages(showBanner: (data: MessageBanner) => void) {
   const dispatch = useAppDispatch();
@@ -24,9 +48,11 @@ export function useSocketMessages(showBanner: (data: MessageBanner) => void) {
       const socket = getSocket();
       if (!socket) return;
 
-      function handleNewMessage(msg: ChatMessage) {
+      function handleNewMessage(payload: IncomingMessage) {
+        const msg = unwrapMessage(payload);
         const me = userRef.current;
         if (!msg || !me || msg.senderId === me.id) return;
+        if (alreadyHandled(msg.id)) return;
 
         const chatId = msg.chatId;
         const alreadyViewing = chatId && isViewingChat(chatId);
@@ -56,7 +82,7 @@ export function useSocketMessages(showBanner: (data: MessageBanner) => void) {
             title: notifTitle,
             body: content,
             type: "message",
-            read: false,
+            read: !!alreadyViewing,
             data: { chatId, senderId: msg.senderId },
             createdAt: new Date().toISOString(),
           }),

@@ -1,7 +1,7 @@
 import { View, Text, ScrollView } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../util/styles/settings/privacy.styles';
+import { createStyles } from '../../../util/styles/settings/privacySettings.styles';
 
 const SECTIONS = [
   {

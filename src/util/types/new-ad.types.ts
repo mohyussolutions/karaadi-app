@@ -98,7 +98,7 @@ export interface FieldDef {
   key: string;
   label: string;
   placeholder?: string;
-  type: 'text' | 'textarea' | 'number' | 'dropdown' | 'phone';
+  type: 'text' | 'textarea' | 'number' | 'dropdown' | 'phone' | 'multiselect';
   options?: Array<string | DropdownOption>;
   required?: boolean;
 }
@@ -186,10 +186,7 @@ export interface InitiatePaymentPayload {
 
 export interface ActivateListingPayload {
   isPaid: boolean;
-  planId: string;
-  planAmount: number;
-  planType: string;
-  paymentRef?: string;
+  planId?: string;
 }
 
 export interface StepSummaryProps extends StepNavProps {

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { confirmAccount, resendCode } from '../actions/core/auth.actions';
 import { confirmationCodeSchema } from '../util/validation/schemas';
+import { ROUTES } from '../constants/constants';
 import type { ApiError } from '../util/types/generic.types';
 
 export function useConfirm(email: string) {
@@ -22,7 +23,7 @@ export function useConfirm(email: string) {
     setIsConfirmLoading(true);
     try {
       await confirmAccount(email, code.trim());
-      router.replace({ pathname: '/(auth)/login', params: { email } });
+      router.replace({ pathname: ROUTES.login, params: { email } });
       return { success: true };
     } catch (err) {
       const msg = (err as ApiError)?.response?.data?.message || 'Invalid or expired code.';

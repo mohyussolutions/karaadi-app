@@ -28,6 +28,8 @@ export interface SocketNotificationPayload {
   ownerId?: string;
   recipientId?: string;
   notificationId?: string;
+  itemId?: string;
+  itemType?: string;
 }
 
 export interface MessageBanner {

@@ -1,1 +1,1 @@
-export { default } from '../../management/create/business/components/BusinessCreateScreen';
+export { default } from '../../management/create/business/components/BusinessCreateScreen/BusinessCreateScreen';

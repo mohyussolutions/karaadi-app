@@ -1,23 +1,28 @@
 import { StyleSheet, Platform } from "react-native";
 import { RADII } from "../../colors/colors";
 import type { ColorPalette } from "../../../hooks/useTheme";
+import { IMG_H } from "../../../constants/constants";
 import { shadow } from "../../helpers/shadow";
 
-export const IMG_H = 320;
+const centered = { alignItems: "center", justifyContent: "center" } as const;
 
-export function createStyles(Colors: ColorPalette, width = 390, imgH = 320) {
-  return StyleSheet.create({
+const roundBox = (size: number) =>
+  ({ width: size, height: size, borderRadius: size / 2 }) as const;
+
+const galleryFrameStyles = (Colors: ColorPalette, width: number, imgH: number) =>
+  ({
     wrapper: { backgroundColor: Colors.galleryBg },
     image: { width, height: imgH },
+  }) as const;
+
+const arrowStyles = (Colors: ColorPalette, imgH: number) =>
+  ({
     arrow: {
       position: "absolute",
       top: imgH / 2 - 22,
-      width: 40,
-      height: 40,
-      borderRadius: 20,
+      ...roundBox(40),
       backgroundColor: Colors.shadow32,
-      alignItems: "center",
-      justifyContent: "center",
+      ...centered,
     },
     arrowL: { left: 10 },
     arrowR: { right: 10 },
@@ -27,6 +32,10 @@ export function createStyles(Colors: ColorPalette, width = 390, imgH = 320) {
       lineHeight: 32,
       marginTop: -2,
     },
+  }) as const;
+
+const overlayStyles = (Colors: ColorPalette) =>
+  ({
     topLeft: {
       position: "absolute",
       left: 12,
@@ -51,25 +60,23 @@ export function createStyles(Colors: ColorPalette, width = 390, imgH = 320) {
       fontWeight: "800",
       letterSpacing: 0.5,
     },
-    rightActions: {
-      position: "absolute",
-      right: 12,
-      gap: 10,
-    },
+    rightActions: { position: "absolute", right: 12, gap: 10 },
     actionBtn: {
-      width: 44,
-      height: 44,
-      borderRadius: 22,
+      ...roundBox(44),
       backgroundColor: Colors.overlay,
-      alignItems: "center",
-      justifyContent: "center",
-      ...shadow({ color: Colors.shadow, offset: { width: 0, height: 2 }, opacity: 0.3, radius: 4, elevation: 5 }),
+      ...centered,
+      ...shadow({
+        color: Colors.shadow,
+        offset: { width: 0, height: 2 },
+        opacity: 0.3,
+        radius: 4,
+        elevation: 5,
+      }),
     },
     soldOverlay: {
       ...StyleSheet.absoluteFill,
       backgroundColor: Colors.shadow45,
-      alignItems: "center",
-      justifyContent: "center",
+      ...centered,
     },
     soldText: {
       color: Colors.white,
@@ -77,6 +84,10 @@ export function createStyles(Colors: ColorPalette, width = 390, imgH = 320) {
       fontWeight: "900",
       letterSpacing: 2,
     },
+  }) as const;
+
+const dotStyles = (Colors: ColorPalette) =>
+  ({
     dotsOverlay: {
       position: "absolute",
       bottom: 56,
@@ -90,12 +101,14 @@ export function createStyles(Colors: ColorPalette, width = 390, imgH = 320) {
       paddingVertical: 5,
     },
     dot: {
-      width: 6,
-      height: 6,
-      borderRadius: 3,
+      ...roundBox(6),
       backgroundColor: Colors.whiteAlpha35,
     },
     dotActive: { width: 18, backgroundColor: Colors.white, borderRadius: 3 },
+  }) as const;
+
+const thumbStyles = (Colors: ColorPalette) =>
+  ({
     thumbStrip: {
       paddingHorizontal: 10,
       paddingBottom: 10,
@@ -112,11 +125,19 @@ export function createStyles(Colors: ColorPalette, width = 390, imgH = 320) {
       opacity: 0.6,
     },
     thumbActive: { borderColor: Colors.info, opacity: 1 },
-  });
-}
+  }) as const;
 
-export function createSheetStyles(Colors: ColorPalette) {
-  return StyleSheet.create({
+export const createStyles = (Colors: ColorPalette, width = 390, imgH = IMG_H) =>
+  StyleSheet.create({
+    ...galleryFrameStyles(Colors, width, imgH),
+    ...arrowStyles(Colors, imgH),
+    ...overlayStyles(Colors),
+    ...dotStyles(Colors),
+    ...thumbStyles(Colors),
+  });
+
+const sheetLayoutStyles = (Colors: ColorPalette) =>
+  ({
     overlay: {
       flex: 1,
       backgroundColor: Colors.shadow45,
@@ -139,14 +160,15 @@ export function createSheetStyles(Colors: ColorPalette) {
       alignSelf: "center",
       marginBottom: 6,
     },
+  }) as const;
+
+const sheetContentStyles = (Colors: ColorPalette) =>
+  ({
     iconRow: { alignItems: "center" },
     iconBadge: {
-      width: 48,
-      height: 48,
-      borderRadius: 24,
+      ...roundBox(48),
       backgroundColor: Colors.primary + "18",
-      alignItems: "center",
-      justifyContent: "center",
+      ...centered,
     },
     title: {
       fontSize: 17,
@@ -160,10 +182,13 @@ export function createSheetStyles(Colors: ColorPalette) {
       textAlign: "center",
       lineHeight: 18,
     },
+  }) as const;
+
+const sheetButtonStyles = (Colors: ColorPalette) =>
+  ({
     confirmBtn: {
       flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
+      ...centered,
       gap: 8,
       backgroundColor: Colors.primary,
       borderRadius: RADII.pill,
@@ -172,8 +197,7 @@ export function createSheetStyles(Colors: ColorPalette) {
     },
     confirmText: { color: Colors.white, fontSize: 15, fontWeight: "700" },
     cancelBtn: {
-      alignItems: "center",
-      justifyContent: "center",
+      ...centered,
       borderWidth: 1.5,
       borderColor: Colors.border,
       borderRadius: RADII.pill,
@@ -184,5 +208,11 @@ export function createSheetStyles(Colors: ColorPalette) {
       color: Colors.textSecondary,
       fontWeight: "600",
     },
+  }) as const;
+
+export const createSheetStyles = (Colors: ColorPalette) =>
+  StyleSheet.create({
+    ...sheetLayoutStyles(Colors),
+    ...sheetContentStyles(Colors),
+    ...sheetButtonStyles(Colors),
   });
-}

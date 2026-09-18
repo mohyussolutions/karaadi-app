@@ -4,7 +4,7 @@ import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
 import { useAppTranslation } from "../../../hooks/useAppTranslation";
 import { AppIcon } from "../../shared";
 import type { SubcategoryHeaderProps } from "../../../util/types";
-import { createStyles } from "../../../util/styles/browse/subcategory.styles";
+import { createStyles } from "../../../util/styles/browse/subcategoryBrowse.styles";
 import { NestedChips } from "./NestedChips";
 
 export function SubcategoryHeader({
@@ -21,7 +21,6 @@ export function SubcategoryHeader({
   onClearLocationFilter,
   showPostBtn,
   onPost,
-  resultsCount,
 }: SubcategoryHeaderProps) {
   const { t } = useAppTranslation();
   const Colors = useThemeColors();
@@ -82,13 +81,6 @@ export function SubcategoryHeader({
           <Text style={styles.postBtnText}>{t("wantSell.title")}</Text>
           <MaterialCommunityIcons name="chevron-right" size={18} color={Colors.white} />
         </TouchableOpacity>
-      )}
-
-      {resultsCount !== null && (
-        <View style={styles.countRow}>
-          <Text style={styles.countLabel}>{t("common.results", { defaultValue: "Results" })}:</Text>
-          <Text style={styles.countValue}>{resultsCount}</Text>
-        </View>
       )}
     </View>
   );

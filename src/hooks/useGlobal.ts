@@ -1,5 +1,5 @@
 import { useWindowDimensions } from 'react-native';
-import { BP_SMALL, BP_TABLET } from '../util/styles/common/common.style';
+import { BP_SMALL, BP_TABLET } from '../constants/constants';
 
 export function useGlobal() {
   const { width, height } = useWindowDimensions();

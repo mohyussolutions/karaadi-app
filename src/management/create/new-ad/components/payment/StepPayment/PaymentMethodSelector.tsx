@@ -3,7 +3,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemedStyles } from '../../../../../../hooks/useTheme';
 import { useAppTranslation } from '../../../../../../hooks/useAppTranslation';
 import type { PaymentMethodSelectorProps } from '../../../../../../util/types';
-import { PAYMENT_METHODS } from '../payment.constants';
+import { PAYMENT_METHODS } from '../../../../../../constants/constants';
 import { createStyles } from '../../../../../../util/styles/payment/paymentMethodSelector.styles';
 
 export function PaymentMethodSelector({ selected, onChange }: PaymentMethodSelectorProps) {

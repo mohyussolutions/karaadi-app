@@ -1,29 +1,10 @@
-import { memo } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import type { RegionAccordionPanelProps, RegionPickerItem } from '../../../util/types';
+import type { RegionAccordionPanelProps } from '../../../util/types';
 import { createStyles } from '../../../util/styles/geo/regionCityPicker.styles';
-
-const RegionRow = memo(function RegionRow({
-  region, active, onSelectRegion,
-}: {
-  region: RegionPickerItem;
-  active: boolean;
-  onSelectRegion: (r: RegionPickerItem) => void;
-}) {
-  const Colors = useThemeColors();
-  const s = useThemedStyles(createStyles);
-  return (
-    <TouchableOpacity style={[s.option, active && s.optionActive]} onPress={() => onSelectRegion(region)} activeOpacity={0.75}>
-      <Text style={[s.optionText, active && s.optionTextActive]}>{region.name}</Text>
-      {active && (
-        <MaterialCommunityIcons name="check" size={18} color={Colors.primary} />
-      )}
-    </TouchableOpacity>
-  );
-});
+import { RegionRow } from './RegionRow';
 
 export function RegionAccordionPanel({
   regions, selectedRegion, onSelectRegion, onClose,

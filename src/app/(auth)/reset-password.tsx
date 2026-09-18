@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { useResetPassword } from '../../hooks/useResetPassword';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../util/styles/auth/reset-password.styles';
+import { createStyles } from '../../util/styles/auth/resetPassword.styles';
 
 export default function ResetPasswordScreen() {
   const { t } = useTranslation();

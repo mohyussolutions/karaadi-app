@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { PAYMENT_ENDPOINTS } from '../../api/endpoints';
+import { PAYMENT_ENDPOINTS, MY_ADS_ENDPOINTS } from '../../api/endpoints';
 import type { PaymentItem, InitiatePaymentPayload, ActivateListingPayload } from '../../util/types/new-ad.types';
 
 export async function getPaymentHistory(signal?: AbortSignal): Promise<PaymentItem[]> {
@@ -17,6 +17,6 @@ export async function getPaymentStatus(paymentRef: string, signal?: AbortSignal)
   return data?.status || '';
 }
 
-export async function activateListing(catPath: string, listingId: string, payload: ActivateListingPayload): Promise<void> {
-  await apiClient.patch(PAYMENT_ENDPOINTS.ACTIVATE(catPath, listingId), payload);
+export async function activateListing(listingId: string, payload: ActivateListingPayload): Promise<void> {
+  await apiClient.patch(MY_ADS_ENDPOINTS.PATCH(listingId), payload);
 }

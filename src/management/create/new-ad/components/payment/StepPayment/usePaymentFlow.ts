@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { initiatePayment, getPaymentStatus, activateListing } from '../../../../../../actions/core/payment.actions';
+import { initiatePayment, getPaymentStatus } from '../../../../../../actions/core/payment.actions';
 import { CATEGORY_ENDPOINTS } from '../../../constants/config';
 import { useAppSelector } from '../../../../../../store/store';
 import type { PaymentMethod, PaymentStatus, UsePaymentFlowParams } from '../../../../../../util/types';
-import { MAX_POLL_ATTEMPTS, PAYMENT_METHODS, POLL_INTERVAL_MS } from '../payment.constants';
+import { MAX_POLL_ATTEMPTS, PAYMENT_METHODS, POLL_INTERVAL_MS } from '../../../../../../constants/constants';
 import { getPhoneError, normalizePhone } from './phone.utils';
+import { activateListingWithRetry } from './usePaymentFlow.helpers';
 
 export function usePaymentFlow({ plan, listingId, categoryKey }: UsePaymentFlowParams) {
   const feeAmount = useAppSelector((s) => s.newAd.feeAmount);
@@ -27,9 +28,19 @@ export function usePaymentFlow({ plan, listingId, categoryKey }: UsePaymentFlowP
   const [autoActivating, setAutoActivating] = useState(total === 0);
   useEffect(() => {
     if (total !== 0) return;
-    activateListing(catPath, listingId, { isPaid: true, planId: plan._id, planAmount: plan.price, planType: plan.key })
-      .catch(() => {})
-      .finally(() => { setAutoActivating(false); setPayStatus('success'); });
+    let cancelled = false;
+    activateListingWithRetry(listingId, { isPaid: true, planId: plan._id })
+      .then((confirmed) => {
+        if (cancelled) return;
+        setAutoActivating(false);
+        if (confirmed) {
+          setPayStatus('success');
+        } else {
+          setPayStatus('failed');
+          setErrorMsg('Could not activate your listing. Please try again.');
+        }
+      });
+    return () => { cancelled = true; };
   }, []);
 
   const stopPolling = useCallback(() => {
@@ -46,9 +57,6 @@ export function usePaymentFlow({ plan, listingId, categoryKey }: UsePaymentFlowP
         const status = await getPaymentStatus(paymentRef);
         if (status === 'success') {
           stopPolling();
-          try {
-            await activateListing(catPath, listingId, { isPaid: true, planId: plan._id, planAmount: plan.price, planType: plan.key, paymentRef });
-          } catch {}
           setPayStatus('success');
           return;
         }

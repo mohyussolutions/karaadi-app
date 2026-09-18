@@ -1,0 +1,113 @@
+import { useEffect, useRef, useState } from 'react';
+import type { FormFieldProps } from '../../../util/types';
+import { View, Text, TextInput, Animated, Pressable } from 'react-native';
+import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
+import { Dropdown } from '../Dropdown/Dropdown';
+import { createStyles } from '../../../util/styles/newAd/formField.styles';
+import { REGEX_NUMBER_INPUT_FILTER, REGEX_PHONE_INPUT_FILTER } from '../../../constants';
+
+export function FormField({ field, value, onChange, error }: FormFieldProps) {
+  const Colors = useThemeColors();
+  const s = useThemedStyles(createStyles);
+  const [focused, setFocused] = useState(false);
+  const float = useRef(new Animated.Value(value ? 1 : 0)).current;
+
+  useEffect(() => {
+    Animated.timing(float, {
+      toValue: focused || !!value ? 1 : 0,
+      duration: 150,
+      useNativeDriver: false,
+    }).start();
+  }, [focused, value, float]);
+
+  if (field.type === 'dropdown') {
+    return (
+      <Dropdown
+        label={field.label}
+        value={value}
+        options={field.options || []}
+        onChange={onChange}
+        placeholder={field.placeholder}
+        required={field.required}
+        error={error}
+      />
+    );
+  }
+
+  if (field.type === 'multiselect') {
+    const selected = value ? value.split(',').filter(Boolean) : [];
+    function toggle(optValue: string) {
+      const next = selected.includes(optValue)
+        ? selected.filter((v) => v !== optValue)
+        : [...selected, optValue];
+      onChange(next.join(','));
+    }
+    return (
+      <View style={s.wrap}>
+        <Text style={s.multiselectLabel}>
+          {field.label}{field.required && ' *'}
+        </Text>
+        <View style={s.chipsRow}>
+          {(field.options || []).map((opt) => {
+            const optValue = typeof opt === 'string' ? opt : opt.value;
+            const optLabel = typeof opt === 'string' ? opt : opt.label;
+            const active = selected.includes(optValue);
+            return (
+              <Pressable
+                key={optValue}
+                onPress={() => toggle(optValue)}
+                style={[s.chip, active && s.chipActive]}
+                hitSlop={4}
+              >
+                <Text style={[s.chipText, active && s.chipTextActive]}>{optLabel}</Text>
+              </Pressable>
+            );
+          })}
+        </View>
+        {!!error && <Text style={s.errorText}>{error}</Text>}
+      </View>
+    );
+  }
+
+  const isTextarea = field.type === 'textarea';
+  const isNumber = field.type === 'number';
+  const isPhone = field.type === 'phone';
+
+  function handleChange(v: string) {
+    if (isNumber) return onChange(v.replace(REGEX_NUMBER_INPUT_FILTER, ''));
+    if (isPhone) return onChange(v.replace(REGEX_PHONE_INPUT_FILTER, ''));
+    onChange(v);
+  }
+
+  const labelTop = float.interpolate({ inputRange: [0, 1], outputRange: [isTextarea ? 18 : 16, -9] });
+  const labelSize = float.interpolate({ inputRange: [0, 1], outputRange: [15, 11.5] });
+
+  return (
+    <View style={s.wrap}>
+      <View style={[s.field, isTextarea && s.fieldTextarea, focused && s.fieldFocused, error ? s.fieldError : null]}>
+        <Animated.Text
+          style={[s.floatingLabel, { top: labelTop, fontSize: labelSize }, focused && s.floatingLabelActive]}
+          numberOfLines={1}
+        >
+          {field.label}{field.required && ' *'}
+        </Animated.Text>
+        <TextInput
+          style={[s.input, isTextarea && s.inputTextarea]}
+          value={value}
+          onChangeText={handleChange}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          placeholder={focused ? field.placeholder : undefined}
+          placeholderTextColor={Colors.placeholder}
+          keyboardType={isNumber ? 'number-pad' : isPhone ? 'phone-pad' : 'default'}
+          autoComplete={isPhone ? 'tel' : undefined}
+          multiline={isTextarea}
+          numberOfLines={isTextarea ? 4 : 1}
+          textAlignVertical={isTextarea ? 'top' : 'center'}
+          underlineColorAndroid="transparent"
+        />
+      </View>
+      {!!error && <Text style={s.errorText}>{error}</Text>}
+    </View>
+  );
+}

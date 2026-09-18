@@ -12,12 +12,13 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner } from '../../components/loading';
-import RemoteImage from '../../components/shared/RemoteImage';
+import RemoteImage from '../../components/shared/RemoteImage/RemoteImage';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { formatPrice, getImageUrl } from '../../util/helpers';
 import { useFavoritesData, CATEGORY_LABELS, CATEGORY_COLOR_KEYS } from '../../hooks/useFavoritesData';
 import type { Favorite } from '../../util/types';
-import { createStyles, createCardStyles, H_PAD, COL_GAP } from '../../util/styles/profile/favorites.styles';
+import { createStyles, createCardStyles } from '../../util/styles/profile/favorites.styles';
+import { ROUTES, FAVORITES_H_PAD, FAVORITES_COL_GAP } from '../../constants/constants';
 
 const NUM_COLUMNS = 2;
 
@@ -46,7 +47,7 @@ export default function FavoritesScreen() {
         <MaterialCommunityIcons name="heart-off-outline" size={64} color={Colors.gray300} />
         <Text style={s.guestTitle}>{t('mine.favorites.guestTitle')}</Text>
         <Text style={s.guestSub}>{t('mine.favorites.guestSub')}</Text>
-        <TouchableOpacity style={s.signInBtn} onPress={() => router.push('/(auth)/login')}>
+        <TouchableOpacity style={s.signInBtn} onPress={() => router.push(ROUTES.login)}>
           <Text style={s.signInText}>{t('auth.login.loginButton')}</Text>
         </TouchableOpacity>
       </View>
@@ -97,7 +98,7 @@ export default function FavoritesScreen() {
             <Text style={s.emptySub}>{t('mine.favorites.emptySub')}</Text>
             <TouchableOpacity
               style={s.browseBtn}
-              onPress={() => router.push('/(tabs)/home' as any)}
+              onPress={() => router.push(ROUTES.home as any)}
             >
               <Text style={s.browseBtnText}>{t('mine.favorites.browseListings')}</Text>
             </TouchableOpacity>
@@ -106,9 +107,9 @@ export default function FavoritesScreen() {
         renderItem={({ item: fav, index }) => (
           <View
             style={{
-              paddingLeft: index % NUM_COLUMNS === 0 ? H_PAD : COL_GAP / 2,
-              paddingRight: (index + 1) % NUM_COLUMNS === 0 ? H_PAD : COL_GAP / 2,
-              paddingBottom: COL_GAP,
+              paddingLeft: index % NUM_COLUMNS === 0 ? FAVORITES_H_PAD : FAVORITES_COL_GAP / 2,
+              paddingRight: (index + 1) % NUM_COLUMNS === 0 ? FAVORITES_H_PAD : FAVORITES_COL_GAP / 2,
+              paddingBottom: FAVORITES_COL_GAP,
             }}
           >
             <FavCard

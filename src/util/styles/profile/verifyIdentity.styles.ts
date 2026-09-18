@@ -1,19 +1,46 @@
 import { StyleSheet } from "react-native";
 import type { ColorPalette } from "../../../hooks/useTheme";
 import { RADII } from "../../colors/colors";
-import { createCommonStyles } from "../common/common.style";
+import { createCommonStyles } from "../common/common.styles";
 
-export function createStyles(Colors: ColorPalette) {
-  const common = createCommonStyles(Colors);
-  return StyleSheet.create({
-    safe: common.safeBase,
+const centered = { alignItems: "center", justifyContent: "center" } as const;
+const rowCentered = { flexDirection: "row", alignItems: "center" } as const;
+
+const primaryButton = (Colors: ColorPalette, paddingHorizontal: number) =>
+  ({
+    marginTop: 8,
+    backgroundColor: Colors.primary,
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal,
+  }) as const;
+
+const previewButton = (backgroundColor: string) =>
+  ({
+    flex: 1,
+    flexDirection: "row",
+    ...centered,
+    gap: 8,
+    paddingVertical: 14,
+    borderRadius: 14,
+    backgroundColor,
+  }) as const;
+
+const layoutStyles = (Colors: ColorPalette) => {
+  const { safeBase } = createCommonStyles(Colors);
+  return {
+    safe: safeBase,
     scroll: { padding: 16, paddingBottom: 48, gap: 16 },
     flexFull: { flex: 1 },
+  } as const;
+};
+
+const guestStyles = (Colors: ColorPalette) =>
+  ({
     guestWrap: {
       flex: 1,
       backgroundColor: Colors.background,
-      alignItems: "center",
-      justifyContent: "center",
+      ...centered,
       padding: 32,
       gap: 14,
     },
@@ -29,22 +56,13 @@ export function createStyles(Colors: ColorPalette) {
       textAlign: "center",
       lineHeight: 20,
     },
-    signInBtn: {
-      marginTop: 8,
-      backgroundColor: Colors.primary,
-      borderRadius: 12,
-      paddingVertical: 14,
-      paddingHorizontal: 48,
-    },
+    signInBtn: primaryButton(Colors, 48),
     signInText: { color: Colors.white, fontWeight: "600", fontSize: 16 },
-    retryBtn: {
-      marginTop: 8,
-      backgroundColor: Colors.primary,
-      borderRadius: 12,
-      paddingVertical: 14,
-      paddingHorizontal: 36,
-    },
+    retryBtn: primaryButton(Colors, 36),
+  }) as const;
 
+const bannerStyles = (Colors: ColorPalette) =>
+  ({
     banner: {
       flexDirection: "row",
       alignItems: "flex-start",
@@ -57,10 +75,12 @@ export function createStyles(Colors: ColorPalette) {
     bannerSubmitted: { backgroundColor: Colors.successGhost },
     bannerTitle: { fontSize: 14, fontWeight: "700", color: Colors.textPrimary },
     bannerSub: { fontSize: 13, color: Colors.textMuted, marginTop: 2, lineHeight: 18 },
-
     sectionTitle: { fontSize: 16, fontWeight: "700", color: Colors.textPrimary, marginTop: 4 },
     sectionHint: { fontSize: 13, color: Colors.textMuted, lineHeight: 18, marginTop: -8 },
+  }) as const;
 
+const slotStyles = (Colors: ColorPalette) =>
+  ({
     slot: {
       borderRadius: RADII.lg,
       borderWidth: 1,
@@ -71,20 +91,13 @@ export function createStyles(Colors: ColorPalette) {
     },
     slotFilled: { borderStyle: "solid" },
     slotImage: { width: "100%", height: 180 },
-    slotEmpty: {
-      height: 140,
-      alignItems: "center",
-      justifyContent: "center",
-      gap: 8,
-      padding: 16,
-    },
+    slotEmpty: { height: 140, ...centered, gap: 8, padding: 16 },
     slotLabel: { fontSize: 14, fontWeight: "600", color: Colors.textPrimary },
     slotActionRow: { flexDirection: "row", gap: 10, padding: 10 },
     slotActionBtn: {
       flex: 1,
       flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
+      ...centered,
       gap: 6,
       paddingVertical: 10,
       borderRadius: 10,
@@ -93,40 +106,38 @@ export function createStyles(Colors: ColorPalette) {
     slotActionText: { fontSize: 13, fontWeight: "600", color: Colors.primary },
     retakeBar: {
       flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
+      ...centered,
       gap: 6,
       paddingVertical: 10,
       backgroundColor: Colors.gray100,
     },
     retakeText: { fontSize: 13, fontWeight: "600", color: Colors.primary },
+  }) as const;
 
+const submitStyles = (Colors: ColorPalette) =>
+  ({
     submitBtn: {
       marginTop: 8,
       backgroundColor: Colors.primary,
       borderRadius: 14,
       paddingVertical: 15,
-      alignItems: "center",
-      justifyContent: "center",
+      ...centered,
     },
     submitBtnDisabled: { backgroundColor: Colors.gray300 },
     submitBtnText: { color: Colors.white, fontWeight: "700", fontSize: 16 },
-
-    resubmitBtn: {
-      marginTop: 4,
-      alignSelf: "flex-start",
-      paddingVertical: 8,
-    },
+    resubmitBtn: { marginTop: 4, alignSelf: "flex-start", paddingVertical: 8 },
     resubmitText: { color: Colors.primary, fontWeight: "600", fontSize: 14 },
-
     errorText: {
       marginTop: 4,
       fontSize: 13,
       color: Colors.error,
       textAlign: "center",
     },
+  }) as const;
 
-    previewRoot: { flex: 1, alignItems: "center", justifyContent: "center" },
+const previewStyles = (Colors: ColorPalette) =>
+  ({
+    previewRoot: { flex: 1, ...centered },
     previewImage: { width: "100%", height: "78%" },
     previewActions: {
       position: "absolute",
@@ -138,27 +149,18 @@ export function createStyles(Colors: ColorPalette) {
       paddingHorizontal: 20,
       paddingTop: 16,
     },
-    previewBtnSecondary: {
-      flex: 1,
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: 8,
-      paddingVertical: 14,
-      borderRadius: 14,
-      backgroundColor: Colors.whiteAlpha15,
-    },
+    previewBtnSecondary: previewButton(Colors.whiteAlpha15),
     previewBtnSecondaryText: { color: Colors.white, fontWeight: "600", fontSize: 15 },
-    previewBtnPrimary: {
-      flex: 1,
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: 8,
-      paddingVertical: 14,
-      borderRadius: 14,
-      backgroundColor: Colors.primary,
-    },
+    previewBtnPrimary: previewButton(Colors.primary),
     previewBtnPrimaryText: { color: Colors.white, fontWeight: "700", fontSize: 15 },
+  }) as const;
+
+export const createStyles = (Colors: ColorPalette) =>
+  StyleSheet.create({
+    ...layoutStyles(Colors),
+    ...guestStyles(Colors),
+    ...bannerStyles(Colors),
+    ...slotStyles(Colors),
+    ...submitStyles(Colors),
+    ...previewStyles(Colors),
   });
-}

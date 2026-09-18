@@ -12,17 +12,17 @@ import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, REAL_ESTATE_CONFIG, buildSpec
 import { REAL_ESTATE_ENDPOINTS } from '../../../api/endpoints';
 import { AMENITY_ICONS, AMENITY_KEYS } from '../../../util/icons/icons';
 import { useRealEstateDetail } from '../../../hooks/useRealEstateDetail';
-import ImageGallery from '../../../components/detail/ImageGallery';
-import ZoomModal from '../../../components/modals/ZoomModal';
-import SellerCard from '../../../components/cards/SellerCard';
-import ReportLink from '../../../components/detail/ReportLink';
-import { SpecGrid } from '../../../components/cards/DetailCard';
-import RecommendedSection from '../../../components/detail/RecommendedSection';
+import ImageGallery from '../../../components/detail/ImageGallery/ImageGallery';
+import ZoomModal from '../../../components/modals/ZoomModal/ZoomModal';
+import SellerCard from '../../../components/cards/SellerCard/SellerCard';
+import ReportLink from '../../../components/detail/ReportLink/ReportLink';
+import { SpecGrid } from '../../../components/cards/DetailCard/DetailCard';
+import RecommendedSection from '../../../components/detail/RecommendedSection/RecommendedSection';
 import { SocialShareSheet } from '../../../components/features/social/components';
-import DetailNotFound from '../../../components/detail/DetailNotFound';
-import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
-import { createStyles } from '../../../util/styles/listing/realEstate.styles';
-import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplit.styles';
+import DetailNotFound from '../../../components/detail/DetailNotFound/DetailNotFound';
+import SwipeDownToClose from '../../../components/detail/SwipeDownToClose/SwipeDownToClose';
+import { createStyles } from '../../../util/styles/listing/realEstateDetail.styles';
+import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplitLayout.styles';
 import { useResponsive } from '../../../hooks/useResponsive';
 
 export default function RealEstateDetailScreen() {

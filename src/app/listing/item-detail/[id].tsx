@@ -12,16 +12,16 @@ import { MARKETPLACE_ENDPOINTS } from '../../../api/endpoints';
 import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
 import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, CONDITION_COLORS } from '../../../constants';
 import { useItemDetail } from '../../../hooks/useItemDetail';
-import ImageGallery from '../../../components/detail/ImageGallery';
-import ZoomModal from '../../../components/modals/ZoomModal';
-import SellerCard from '../../../components/cards/SellerCard';
-import ReportLink from '../../../components/detail/ReportLink';
-import RecommendedSection from '../../../components/detail/RecommendedSection';
+import ImageGallery from '../../../components/detail/ImageGallery/ImageGallery';
+import ZoomModal from '../../../components/modals/ZoomModal/ZoomModal';
+import SellerCard from '../../../components/cards/SellerCard/SellerCard';
+import ReportLink from '../../../components/detail/ReportLink/ReportLink';
+import RecommendedSection from '../../../components/detail/RecommendedSection/RecommendedSection';
 import { SocialShareSheet } from '../../../components/features/social/components';
-import DetailNotFound from '../../../components/detail/DetailNotFound';
-import SwipeDownToClose from '../../../components/detail/SwipeDownToClose';
+import DetailNotFound from '../../../components/detail/DetailNotFound/DetailNotFound';
+import SwipeDownToClose from '../../../components/detail/SwipeDownToClose/SwipeDownToClose';
 import { createStyles } from '../../../util/styles/listing/itemDetail.styles';
-import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplit.styles';
+import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplitLayout.styles';
 import { useResponsive } from '../../../hooks/useResponsive';
 
 export default function ItemDetailScreen() {

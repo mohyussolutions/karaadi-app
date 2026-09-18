@@ -5,7 +5,7 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { EmptyState } from '../../components/shared';
-import MyAdCard from '../../components/cards/MyAdCard';
+import MyAdCard from '../../components/cards/MyAdCard/MyAdCard';
 import { LoadingSpinner } from '../../components/loading';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/profile/myAds.styles';
@@ -13,6 +13,7 @@ import { useMyAds } from '../../hooks/useMyAds';
 import { useAppDispatch } from '../../store/store';
 import { prefillForPayment } from '../../store/slices/newAdSlice';
 import type { ListingBase } from '../../util/types';
+import { ROUTES } from '../../constants/constants';
 
 export default function MyAdsScreen() {
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function MyAdsScreen() {
   const dispatch = useAppDispatch();
   const { user, ads, loading, refreshing, error, deletingId, onRefresh, retry, handleDelete } = useMyAds();
   const Colors = useThemeColors();
-  const styles = useThemedStyles((c) => createStyles(c, width));
+  const styles = useThemedStyles(createStyles, width);
   const insets = useSafeAreaInsets();
 
   const handlePayNow = useCallback((item: ListingBase) => {
@@ -40,7 +41,7 @@ export default function MyAdsScreen() {
         description: item.description || undefined,
       },
     }));
-    router.push('/(tabs)/new-ad');
+    router.push(ROUTES.newAd);
   }, [dispatch, router]);
 
   const keyExtractor = useCallback((item: ListingBase) => item._id || item.id, []);
@@ -60,7 +61,7 @@ export default function MyAdsScreen() {
     return (
       <View style={styles.center}>
         <EmptyState icon="lock-outline" title={t('signInRequired')} message={t('signInToView')} />
-        <TouchableOpacity style={styles.btn} onPress={() => router.push('/(auth)/login')}>
+        <TouchableOpacity style={styles.btn} onPress={() => router.push(ROUTES.login)}>
           <Text style={styles.btnText}>{t('auth.login.loginButton')}</Text>
         </TouchableOpacity>
       </View>
@@ -114,7 +115,7 @@ export default function MyAdsScreen() {
         }
         renderItem={renderItem}
       />
-      <TouchableOpacity style={[styles.postBtn, { marginBottom: insets.bottom + 84 }]} onPress={() => router.push('/(tabs)/new-ad')}>
+      <TouchableOpacity style={[styles.postBtn, { marginBottom: insets.bottom + 84 }]} onPress={() => router.push(ROUTES.newAd)}>
         <Text style={styles.postBtnText}>+ {t('postNewAd')}</Text>
       </TouchableOpacity>
     </SafeAreaView>

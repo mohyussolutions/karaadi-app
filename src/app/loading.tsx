@@ -1,1 +1,1 @@
-export { default } from '../components/loading/AppLoadingScreen';
+export { default } from '../components/loading/AppLoadingScreen/AppLoadingScreen';

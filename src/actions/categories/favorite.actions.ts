@@ -1,10 +1,11 @@
 import { apiClient } from '../client';
 import { extractList, getImageUrl } from '../../util/helpers';
 import { FAVORITES_ENDPOINTS } from '../../api/endpoints';
+import { FAVORITES_LIST_LIMIT } from '../../constants/constants';
 import type { Favorite, ListingBase } from '../../util/types';
 
 export async function getFavorites(): Promise<Favorite[]> {
-  const { data } = await apiClient.get(`${FAVORITES_ENDPOINTS.LIST}?limit=200`);
+  const { data } = await apiClient.get(FAVORITES_ENDPOINTS.LIST, { params: { limit: FAVORITES_LIST_LIMIT } });
   if (data?.favorites) return extractList<Favorite>(data.favorites);
   return extractList<Favorite>(data);
 }

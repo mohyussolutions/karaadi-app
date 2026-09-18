@@ -3,8 +3,10 @@ import type { ColorPalette } from "../../../hooks/useTheme";
 import { RADII } from "../../colors/colors";
 import { shadow } from "../../helpers/shadow";
 
-export function createStyles(Colors: ColorPalette) {
-  return StyleSheet.create({
+const centered = { alignItems: "center", justifyContent: "center" } as const;
+
+const cardFrameStyles = (Colors: ColorPalette) =>
+  ({
     card: {
       flex: 1,
       backgroundColor: Colors.card,
@@ -12,7 +14,13 @@ export function createStyles(Colors: ColorPalette) {
       overflow: "hidden",
       borderWidth: 1,
       borderColor: Colors.gray100,
-      ...shadow({ color: Colors.shadow, offset: { width: 0, height: 1 }, opacity: 0.06, radius: 4, elevation: 2 }),
+      ...shadow({
+        color: Colors.shadow,
+        offset: { width: 0, height: 1 },
+        opacity: 0.06,
+        radius: 4,
+        elevation: 2,
+      }),
     },
     imgWrap: {
       position: "relative",
@@ -22,8 +30,7 @@ export function createStyles(Colors: ColorPalette) {
     },
     img: { width: "100%", height: "100%" },
     wantedPlaceholder: {
-      alignItems: "center",
-      justifyContent: "center",
+      ...centered,
       backgroundColor: Colors.primaryGhost,
       paddingHorizontal: 12,
     },
@@ -34,6 +41,10 @@ export function createStyles(Colors: ColorPalette) {
       textAlign: "center",
       lineHeight: 18,
     },
+  }) as const;
+
+const overlayStyles = (Colors: ColorPalette) =>
+  ({
     badge: {
       position: "absolute",
       top: 8,
@@ -58,12 +69,13 @@ export function createStyles(Colors: ColorPalette) {
       borderRadius: 14,
       width: 30,
       height: 30,
-      alignItems: "center",
-      justifyContent: "center",
+      ...centered,
     },
-    heartBtnActive: {
-      backgroundColor: Colors.favoriteTint,
-    },
+    heartBtnActive: { backgroundColor: Colors.favoriteTint },
+  }) as const;
+
+const bodyStyles = (Colors: ColorPalette) =>
+  ({
     body: { padding: 10, gap: 4 },
     title: {
       fontSize: 13,
@@ -72,7 +84,12 @@ export function createStyles(Colors: ColorPalette) {
       lineHeight: 17,
       minHeight: 34,
     },
-    description: { fontSize: 12, color: Colors.textSecondary, lineHeight: 16, minHeight: 16 },
+    description: {
+      fontSize: 12,
+      color: Colors.textSecondary,
+      lineHeight: 16,
+      minHeight: 16,
+    },
     footer: {
       flexDirection: "row",
       alignItems: "center",
@@ -93,5 +110,11 @@ export function createStyles(Colors: ColorPalette) {
       letterSpacing: -0.2,
       flexShrink: 0,
     },
+  }) as const;
+
+export const createStyles = (Colors: ColorPalette) =>
+  StyleSheet.create({
+    ...cardFrameStyles(Colors),
+    ...overlayStyles(Colors),
+    ...bodyStyles(Colors),
   });
-}

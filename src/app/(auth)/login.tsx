@@ -11,6 +11,7 @@ import { useLogin } from '../../hooks/useLogin';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/auth/login.styles';
+import { ROUTES } from '../../constants/constants';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -79,7 +80,7 @@ export default function LoginScreen() {
             </View>
             <TouchableOpacity
               style={styles.forgotRow}
-              onPress={() => router.push('/(auth)/forgot-password')}
+              onPress={() => router.push(ROUTES.forgotPassword)}
             >
               <Text style={styles.forgotLink}>{t('auth.login.forgotPassword')}</Text>
             </TouchableOpacity>

@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import { useFocusEffect } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { useThemedStyles } from "../../hooks/useTheme";
-import { createStyles } from "../../util/styles/tabs/newAd.styles";
+import { createStyles } from "../../util/styles/tabs/newAdTab.styles";
 import { LoadingSpinner } from "../../components/loading";
 import { useAuthStore } from "../../store/hooks/authStore";
 import { useAppDispatch, useAppSelector } from "../../store/store";
@@ -17,10 +17,11 @@ import {
 } from "../../store/slices/newAdSlice";
 import { useNewAdStepNavigation } from "../../hooks/useNewAdStepNavigation";
 import { CheckoutBar } from "../../components/features/subscription/components/checklist";
-import { StepType, StepCategory, StepForm, StepPlan, StepSummary, StepPayment } from "../../management/create/new-ad";
+import { StepType, StepCategory, StepPlan, StepSummary, StepPayment, CATEGORY_FORMS } from "../../management/create/new-ad";
 
 import type { ListingType, Step, StepItem } from "../../util/types/new-ad.types";
 import { MAIN_CATEGORIES } from "../../navigation/config/navConfig";
+import { ROUTES } from "../../constants/constants";
 
 const STEP_INDEX: Record<Step, number> = {
   login: 0,
@@ -96,7 +97,7 @@ export default function NewAdScreen() {
         <StepType
           onSelect={(type: ListingType) => {
             if (type === "public") {
-              router.push("/profile/business-create");
+              router.push(ROUTES.businessCreate);
               return;
             }
             dispatch(setListingType(type));
@@ -114,25 +115,27 @@ export default function NewAdScreen() {
         />
       )}
 
-      {step === "form" && (
-        <StepForm
-          categoryKey={categoryKey}
-          listingType={listingType}
-          onSuccess={() => {
-            if (businessId) {
-              dispatch(resetNewAd());
-              Alert.alert(
-                t("postAd.businessPostedTitle"),
-                t("postAd.businessPostedMessage"),
-                [{ text: t("auth.common.ok"), onPress: () => router.replace("/profile/businesses") }],
-              );
-            } else {
-              goToStep("plan");
-            }
-          }}
-          onBack={() => goToStep("category")}
-        />
-      )}
+      {step === "form" && CATEGORY_FORMS[categoryKey] && (() => {
+        const CategoryForm = CATEGORY_FORMS[categoryKey];
+        return (
+          <CategoryForm
+            listingType={listingType}
+            onSuccess={() => {
+              if (businessId) {
+                dispatch(resetNewAd());
+                Alert.alert(
+                  t("postAd.businessPostedTitle"),
+                  t("postAd.businessPostedMessage"),
+                  [{ text: t("auth.common.ok"), onPress: () => router.replace("/profile/businesses") }],
+                );
+              } else {
+                goToStep("plan");
+              }
+            }}
+            onBack={() => goToStep("category")}
+          />
+        );
+      })()}
 
       {step === "plan" && (
         <StepPlan

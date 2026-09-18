@@ -1,11 +1,11 @@
 import { useCallback } from "react";
-import { View, Text, RefreshControl } from "react-native";
+import { View, RefreshControl } from "react-native";
 import { FlashList, type ListRenderItemInfo } from "@shopify/flash-list";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { useThemeColors, useThemedStyles } from "../../../../hooks/useTheme";
 import { EmptyState } from "../../../../components/shared";
-import ListingCard from "../../../../components/cards/ListingCard";
+import ListingCard from "../../../../components/cards/ListingCard/ListingCard";
 import { ListingCardSkeleton } from "../../../../components/loading";
 import BottomTabBar from "../../../../navigation/tab-bar/BottomTabBar";
 import { useAppSelector } from "../../../../store/store";
@@ -14,15 +14,13 @@ import { useResponsive } from "../../../../hooks/useResponsive";
 import { useCategoryFeed } from "../../../../hooks/useCategoryFeed";
 import { useLocationFilter } from "../../../../hooks/useLocationFilter";
 import { useSubcategoryListings } from "../../../../hooks/useSubcategoryListings";
-import { getCategoryByKey, SUB_I18N_GROUP } from "../../../../constants";
-import { createStyles } from "../../../../util/styles/browse/subcategory.styles";
+import { getCategoryByKey, SUB_I18N_GROUP, H_PAD, GAP } from "../../../../constants";
+import { createStyles } from "../../../../util/styles/browse/subcategoryBrowse.styles";
 import { SubcategoryHeader } from "../../../../components/browse/SubcategoryScreen/SubcategoryHeader";
 import { SidebarNested } from "../../../../components/browse/SubcategoryScreen/SidebarNested";
-import { LocationFilterModal } from "../../../../components/modals/LocationFilterModal";
+import { LocationFilterModal } from "../../../../components/modals/LocationFilterModal/LocationFilterModal";
 import type { ListingBase } from "../../../../util/types/listing.types";
 
-const H_PAD = 12;
-const GAP = 8;
 const SKELETON_COUNT = 6;
 const skeletonData = Array.from({ length: SKELETON_COUNT }, (_, i) => ({ _id: `sk-${i}`, id: `sk-${i}` }));
 
@@ -62,8 +60,6 @@ export default function SubcategoryScreen() {
     router.push(user ? "/(tabs)/new-ad" : "/(auth)/login");
   }
 
-  const resultsCount = !loading && listings.length > 0 ? listings.length : null;
-
   const renderListItem = useCallback(({ item, index }: ListRenderItemInfo<ListingBase>) => (
     <View
       style={{
@@ -91,19 +87,7 @@ export default function SubcategoryScreen() {
       onClearLocationFilter={clearLocationFilter}
       showPostBtn={!isTabletLandscape}
       onPost={handlePost}
-      resultsCount={resultsCount}
     />
-  );
-
-  const tabletHeader = (
-    <View style={styles.countRow}>
-      {resultsCount !== null && (
-        <>
-          <Text style={styles.countLabel}>{t("common.results", { defaultValue: "Results" })}:</Text>
-          <Text style={styles.countValue}>{resultsCount}</Text>
-        </>
-      )}
-    </View>
   );
 
   const feedList = (
@@ -115,7 +99,7 @@ export default function SubcategoryScreen() {
       contentContainerStyle={listings.length === 0 && !loading ? styles.emptyContainer : [styles.listContent, { paddingBottom: insets.bottom + 84 }]}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}
       showsVerticalScrollIndicator={false}
-      ListHeaderComponent={isTabletLandscape ? tabletHeader : header}
+      ListHeaderComponent={isTabletLandscape ? null : header}
       ListEmptyComponent={
         !loading ? (
           <EmptyState

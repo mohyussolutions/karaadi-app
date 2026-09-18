@@ -9,6 +9,7 @@ import { getJobById } from '../actions/categories/job.actions';
 import { getCachedListing } from '../util/cache/listingCache';
 import { showToast } from '../util/cache/toastService';
 import { formatPrice } from '../util/helpers';
+import { ROUTES } from '../constants/constants';
 import type { Job } from '../util/types/listing.types';
 
 export function formatSalary(min?: number, max?: number): string {
@@ -45,14 +46,14 @@ export function useJobDetail(id: string) {
   }, [id]);
 
   async function toggleFav() {
-    if (!user) { router.push('/(auth)/login'); return; }
+    if (!user) { router.push(ROUTES.login); return; }
     const willSave = !isFavorite;
     try {
       await dispatch(toggleFavorite({ itemId: id, wasFav: isFavorite, listing: item, categoryHint: 'jobs' })).unwrap();
       showToast({
         message: willSave ? 'Saved to favorites' : 'Removed from favorites',
         type: willSave ? 'saved' : 'removed',
-        onView: willSave ? () => router.push('/profile/favorites') : undefined,
+        onView: willSave ? () => router.push(ROUTES.favorites) : undefined,
       });
     } catch {
       showToast({ message: 'Could not update favorites', type: 'removed' });
@@ -60,10 +61,10 @@ export function useJobDetail(id: string) {
   }
 
   function handleContact() {
-    if (!user) { router.push('/(auth)/login'); return; }
+    if (!user) { router.push(ROUTES.login); return; }
     const sellerId = item?.userId || item?.user?._id || item?.user?.id;
     if (sellerId) {
-      router.push({ pathname: '/profile/chat', params: { userId: sellerId, username: item.user?.username || 'Employer', listingId: id } });
+      router.push({ pathname: ROUTES.chat, params: { userId: sellerId, username: item.user?.username || 'Employer', listingId: id } });
     }
   }
 

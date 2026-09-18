@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { FlatList } from 'react-native';
 import { useNavigation } from 'expo-router';
-import { getChatMessages, sendMessage, createOrFindChat } from '../actions/core/message.actions';
+import { getChatMessages, sendMessage, createOrFindChat, markChatRead } from '../actions/core/message.actions';
 import { joinChat, leaveChat, emitSendMessage, emitMarkAsRead, getSocket } from '../actions/sockets/socket.actions';
 import { setActiveChatId, cacheUserName } from '../components/features/chat/services/chatState';
 import { useAuthStore } from '../store/hooks/authStore';
+import { useAppDispatch } from '../store/store';
+import { markChatsRead } from '../components/features/chat/store/chatsSlice';
+import { markChatNotificationsRead } from '../components/features/notifications/store/notificationsSlice';
 import type { ChatMessage, UseChatConversationArgs } from '../util/types';
 
 const chatIdCache = new Map<string, number>();
@@ -24,6 +27,7 @@ function getItemModel(category?: string): string {
 export function useChatConversation({ chatIdParam, userId, username, listingId, listingType }: UseChatConversationArgs) {
   const navigation = useNavigation();
   const { user } = useAuthStore();
+  const dispatch = useAppDispatch();
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [fetching, setFetching] = useState(true);
@@ -78,10 +82,14 @@ export function useChatConversation({ chatIdParam, userId, username, listingId, 
 
       if (resolvedId) {
         setActiveChatId(resolvedId);
+        const socketReady = !!getSocket()?.connected;
         allIds.forEach((id) => {
           joinChat(id);
           emitMarkAsRead(id);
+          if (!socketReady) markChatRead(id).catch(() => {});
         });
+        dispatch(markChatsRead(allIds));
+        dispatch(markChatNotificationsRead(allIds));
 
         Promise.all(allIds.map((id) => getChatMessages(id, user!.id).catch(() => [])))
           .then((lists) => {
@@ -133,6 +141,7 @@ export function useChatConversation({ chatIdParam, userId, username, listingId, 
         return [...prev, msg];
       });
       emitMarkAsRead(chatIdNum);
+      dispatch(markChatNotificationsRead([chatIdNum]));
       setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 80);
     };
 
@@ -142,7 +151,7 @@ export function useChatConversation({ chatIdParam, userId, username, listingId, 
       socket.off('receiveMessage', onReceive);
       socket.off('newMessage', onReceive);
     };
-  }, [chatIdNum]);
+  }, [chatIdNum, dispatch]);
 
   async function handleSend() {
     if (!text.trim() || !chatIdNum || !user?.id) return;

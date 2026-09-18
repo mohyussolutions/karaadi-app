@@ -5,8 +5,9 @@ import { useRouter, usePathname } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuthStore } from "../../store/hooks/authStore";
 import { useThemedStyles, useThemeMode } from "../../hooks/useTheme";
-import { createLayoutStyles, GLASS_DARK, GLASS_LIGHT } from "../../util/styles/tabs/layout.styles";
+import { createLayoutStyles } from "../../util/styles/tabs/tabBar.styles";
 import { TAB_ITEMS, LOGIN_TAB_ITEM } from "../config/navConfig";
+import { ROUTES, GLASS_LIGHT, GLASS_DARK } from "../../constants/constants";
 import { BottomTabItem } from "./BottomTabItem";
 import { getActiveTab } from "./getActiveTab";
 
@@ -29,7 +30,7 @@ export default memo(function BottomTabBar() {
       );
 
   const handlePress = useCallback((name: string) => {
-    if (name === "login") router.push("/(auth)/login");
+    if (name === "login") router.push(ROUTES.login);
     else router.navigate(`/(tabs)/${name}` as any);
   }, [router]);
 

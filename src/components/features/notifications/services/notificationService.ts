@@ -1,6 +1,6 @@
-import { Platform, Vibration } from 'react-native';
+import { AppState, Platform, Vibration } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { updatePushToken } from '../../../../actions/core/auth.actions';
+import { updatePushToken, removePushToken } from '../../../../actions/core/auth.actions';
 import { isSoundEnabled } from './soundService';
 import { COLORS } from '../../../../util/colors/colors';
 
@@ -10,7 +10,7 @@ async function syncPushToken(token: string): Promise<void> {
   try {
     const cached = await AsyncStorage.getItem(PUSH_TOKEN_CACHE_KEY);
     if (cached === token) return;
-    await updatePushToken(token);
+    await updatePushToken(token, Platform.OS);
     await AsyncStorage.setItem(PUSH_TOKEN_CACHE_KEY, token);
   } catch {}
 }
@@ -19,12 +19,16 @@ let Notifications: typeof import('expo-notifications') | null = null;
 try {
   Notifications = require('expo-notifications');
   Notifications!.setNotificationHandler({
-    handleNotification: async () => ({
-      shouldShowBanner: true,
-      shouldShowList: true,
-      shouldPlaySound: isSoundEnabled(),
-      shouldSetBadge: true,
-    }),
+    handleNotification: async (notification) => {
+      const trigger = notification.request.trigger as { type?: string } | null;
+      const suppress = trigger?.type === 'push' && AppState.currentState === 'active';
+      return {
+        shouldShowBanner: !suppress,
+        shouldShowList: !suppress,
+        shouldPlaySound: !suppress && isSoundEnabled(),
+        shouldSetBadge: true,
+      };
+    },
   });
 } catch {}
 
@@ -44,6 +48,15 @@ async function setupAndroidChannels() {
       importance: Notifications.AndroidImportance.DEFAULT,
       sound: 'default',
     });
+  } catch {}
+}
+
+export async function unregisterPushToken(): Promise<void> {
+  try {
+    const cached = await AsyncStorage.getItem(PUSH_TOKEN_CACHE_KEY);
+    if (!cached) return;
+    await removePushToken(cached);
+    await AsyncStorage.removeItem(PUSH_TOKEN_CACHE_KEY);
   } catch {}
 }
 

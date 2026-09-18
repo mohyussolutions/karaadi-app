@@ -20,9 +20,9 @@ export function createStyles(Colors: ColorPalette) {
       alignItems: 'center',
       justifyContent: 'space-between',
       paddingHorizontal: 12,
-      paddingVertical: 8,
+      paddingVertical: 6,
     },
-    left: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+    left: { flexDirection: 'row', alignItems: 'center', gap: 3 },
     backSlot: { width: 28, height: 28, alignItems: 'center', justifyContent: 'center' },
     logo: { width: 110, height: 40, borderRadius: 16, overflow: 'hidden' },
     langBtn: {
@@ -33,19 +33,19 @@ export function createStyles(Colors: ColorPalette) {
     langText: { color: Colors.white, fontSize: 12, fontWeight: '700' },
     searchBar: {
       flexDirection: 'row', alignItems: 'center', gap: 8,
-      marginHorizontal: 12, marginBottom: 10,
+      marginHorizontal: 12, marginBottom: 8,
       paddingHorizontal: 12, paddingVertical: 10,
       backgroundColor: Colors.inputBg, borderRadius: 10,
       borderWidth: 1, borderColor: Colors.border,
     },
     searchInput: { fontSize: 13, color: Colors.textPrimary, flex: 1, padding: 0 },
 
-    rightGroup: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+    rightGroup: { flexDirection: 'row', alignItems: 'center', gap: 6 },
     themeSwitch: { transform: [{ scale: Platform.OS === 'android' ? 1.2 : 0.85 }] },
     notifBtn: {
       width: 44, height: 44, borderRadius: 22,
       backgroundColor: Colors.primaryGhost, alignItems: 'center', justifyContent: 'center',
-      marginLeft: 8,
+      marginLeft: 6,
     },
     notifBadge: {
       position: 'absolute', top: 2, right: 2,

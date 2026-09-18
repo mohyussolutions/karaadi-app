@@ -9,6 +9,7 @@ import { trackItemView } from '../actions/categories/feed.actions';
 import { VEHICLE_ENDPOINTS } from '../api/paths';
 import { getCachedListing } from '../util/cache/listingCache';
 import { showToast } from '../util/cache/toastService';
+import { ROUTES } from '../constants/constants';
 import type { VehicleListing } from '../util/types/listing.types';
 
 export function useVehicleDetail(id: string, category: string) {
@@ -44,14 +45,14 @@ export function useVehicleDetail(id: string, category: string) {
   }, [item?.id]);
 
   async function toggleFav() {
-    if (!user) { router.push('/(auth)/login'); return; }
+    if (!user) { router.push(ROUTES.login); return; }
     const willSave = !isFavorite;
     try {
       await dispatch(toggleFavorite({ itemId: id, wasFav: isFavorite, listing: item, categoryHint: category || 'cars' })).unwrap();
       showToast({
         message: willSave ? 'Saved to favorites' : 'Removed from favorites',
         type: willSave ? 'saved' : 'removed',
-        onView: willSave ? () => router.push('/profile/favorites') : undefined,
+        onView: willSave ? () => router.push(ROUTES.favorites) : undefined,
       });
     } catch {
       showToast({ message: 'Could not update favorites', type: 'removed' });
@@ -59,9 +60,9 @@ export function useVehicleDetail(id: string, category: string) {
   }
 
   function handleContact() {
-    if (!user) { router.push('/(auth)/login'); return; }
+    if (!user) { router.push(ROUTES.login); return; }
     if (item?.userId) {
-      router.push({ pathname: '/profile/chat', params: { userId: item.userId, username: item.user?.username || 'Seller', listingId: id } });
+      router.push({ pathname: ROUTES.chat, params: { userId: item.userId, username: item.user?.username || 'Seller', listingId: id } });
     }
   }
 

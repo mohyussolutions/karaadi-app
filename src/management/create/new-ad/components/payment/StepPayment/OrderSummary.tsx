@@ -1,10 +1,11 @@
-import { useState, useMemo, memo } from 'react';
+import { useState, memo } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { useGlobal } from '../../../../../../hooks/useGlobal';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../../../../hooks/useTheme';
 import { useAppTranslation } from '../../../../../../hooks/useAppTranslation';
+import { useDisplayAttrs } from '../../../../../../hooks/useDisplayAttrs';
 import { planStyle } from '../../../constants/plan';
 import type { OrderSummaryProps } from '../../../../../../util/types';
 import type {
@@ -15,7 +16,7 @@ import { createStyles } from '../../../../../../util/styles/payment/orderSummary
 
 const SummaryHeader = memo(function SummaryHeader() {
   const { width } = useGlobal();
-  const s = useThemedStyles((c) => createStyles(c, width));
+  const s = useThemedStyles(createStyles, width);
   const Colors = useThemeColors();
   const { t } = useAppTranslation();
 
@@ -35,7 +36,7 @@ const SummaryHeader = memo(function SummaryHeader() {
 function ImageCarousel({ images, index, onChangeIndex }: ImageCarouselProps) {
   const Colors = useThemeColors();
   const { width } = useGlobal();
-  const s = useThemedStyles((c) => createStyles(c, width));
+  const s = useThemedStyles(createStyles, width);
   return (
     <View style={s.imgBox}>
       <Image source={{ uri: images[index] }} style={s.img} contentFit="cover" cachePolicy="memory-disk" />
@@ -62,7 +63,7 @@ function ImageCarousel({ images, index, onChangeIndex }: ImageCarouselProps) {
 
 const EmptyImageState = memo(function EmptyImageState() {
   const { width } = useGlobal();
-  const s = useThemedStyles((c) => createStyles(c, width));
+  const s = useThemedStyles(createStyles, width);
   const Colors = useThemeColors();
   const { t } = useAppTranslation();
   return (
@@ -78,7 +79,7 @@ const EmptyImageState = memo(function EmptyImageState() {
 const TitleSection = memo(function TitleSection({ item, categoryName }: TitleSectionProps) {
   const Colors = useThemeColors();
   const { width } = useGlobal();
-  const s = useThemedStyles((c) => createStyles(c, width));
+  const s = useThemedStyles(createStyles, width);
   return (
     <View style={s.titleSection}>
       {!!item?.title && <Text style={s.listingTitle} numberOfLines={2}>{item.title}</Text>}
@@ -104,7 +105,7 @@ const TitleSection = memo(function TitleSection({ item, categoryName }: TitleSec
 
 const AllFieldsGrid = memo(function AllFieldsGrid({ attrs }: AllFieldsGridProps) {
   const { width } = useGlobal();
-  const s = useThemedStyles((c) => createStyles(c, width));
+  const s = useThemedStyles(createStyles, width);
   return (
     <View style={s.attrsGrid}>
       {attrs.map((a) => (
@@ -119,7 +120,7 @@ const AllFieldsGrid = memo(function AllFieldsGrid({ attrs }: AllFieldsGridProps)
 
 const DescriptionBox = memo(function DescriptionBox({ text }: DescriptionBoxProps) {
   const { width } = useGlobal();
-  const s = useThemedStyles((c) => createStyles(c, width));
+  const s = useThemedStyles(createStyles, width);
   const { t } = useAppTranslation();
   return (
     <View style={s.descBox}>
@@ -131,7 +132,7 @@ const DescriptionBox = memo(function DescriptionBox({ text }: DescriptionBoxProp
 
 const PriceBreakdown = memo(function PriceBreakdown({ plan, ps, feeAmount }: PriceBreakdownProps) {
   const { width } = useGlobal();
-  const s = useThemedStyles((c) => createStyles(c, width));
+  const s = useThemedStyles(createStyles, width);
   const { t } = useAppTranslation();
   return (
     <View style={s.breakdown}>
@@ -159,7 +160,7 @@ const PriceBreakdown = memo(function PriceBreakdown({ plan, ps, feeAmount }: Pri
 const TotalDue = memo(function TotalDue({ total }: TotalDueProps) {
   const Colors = useThemeColors();
   const { width } = useGlobal();
-  const s = useThemedStyles((c) => createStyles(c, width));
+  const s = useThemedStyles(createStyles, width);
   const { t } = useAppTranslation();
   const isFree = total === 0;
   return (
@@ -177,18 +178,13 @@ const TotalDue = memo(function TotalDue({ total }: TotalDueProps) {
 
 export function OrderSummary({ plan, item, categoryName, feeAmount }: OrderSummaryProps) {
   const { width } = useGlobal();
-  const s = useThemedStyles((c) => createStyles(c, width));
+  const s = useThemedStyles(createStyles, width);
   const [imgIdx, setImgIdx] = useState(0);
   const ps = planStyle(plan, useThemeColors());
   const total = feeAmount + plan.price;
   const images = item?.images || [];
 
-  const displayAttrs = useMemo(
-    () => (item?.allAttrs && item.allAttrs.length > 0
-      ? item.allAttrs.filter((a) => a.value && String(a.value).trim())
-      : []),
-    [item?.allAttrs],
-  );
+  const displayAttrs = useDisplayAttrs(item);
 
   return (
     <View style={s.wrap}>
