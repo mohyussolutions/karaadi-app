@@ -69,6 +69,13 @@ export const MIN_DESCRIPTION_LENGTH = 5;
 export const MAX_TEXTAREA_LENGTH = 5000;
 export const MAX_PRICE = 100_000_000;
 export const MIN_IMAGES_REQUIRED = 2;
+export const IMAGE_MAX_COUNT = 10;
+export const IMAGE_MAX_DATA_URI_LENGTH = 7_000_000;
+export const IMAGE_COMPRESSION_STEPS = [
+  { maxDimension: 1600, quality: 0.75 },
+  { maxDimension: 1280, quality: 0.6 },
+  { maxDimension: 1024, quality: 0.5 },
+] as const;
 export const WEBSITE_MAX_LENGTH = 200;
 export const PASSWORD_MIN_LENGTH = 8;
 export const USERNAME_MIN_LENGTH = 3;

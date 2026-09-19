@@ -4,6 +4,7 @@ import {
   MAX_PRICE,
   MAX_SHORT_TEXT_LENGTH,
   MAX_TEXTAREA_LENGTH,
+  IMAGE_MAX_COUNT,
   MAX_TITLE_LENGTH,
   MIN_DESCRIPTION_LENGTH,
   MIN_IMAGES_REQUIRED,
@@ -212,10 +213,15 @@ const validateLocation = (data: FormData, t: Translate): FormData => ({
   }),
 });
 
-const validateImages = (images: string[], t: Translate): FormData =>
-  images.length < MIN_IMAGES_REQUIRED
-    ? { _images: t("postAd.minPhotosRequired") }
-    : {};
+const validateImages = (images: string[], t: Translate): FormData => {
+  if (images.length < MIN_IMAGES_REQUIRED) {
+    return { _images: t("postAd.minPhotosRequired") };
+  }
+  if (images.length > IMAGE_MAX_COUNT) {
+    return { _images: t("postAd.maxPhotosMessage", { max: IMAGE_MAX_COUNT }) };
+  }
+  return {};
+};
 
 export const validateStepForm = (
   fields: FieldDef[],

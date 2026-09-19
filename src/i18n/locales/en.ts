@@ -1894,6 +1894,7 @@ export const postAd = {
   continueToPlan: "Continue to Plan",
   limitReachedTitle: "Limit reached",
   maxPhotosMessage: "You can upload a maximum of {{max}} photos.",
+  imageProcessFailed: "{{count}} photo(s) could not be added. Please pick a different photo.",
   photosLabel: "Photos",
   minPhotosHint: "(min {{min}})",
   addPhoto: "Add",

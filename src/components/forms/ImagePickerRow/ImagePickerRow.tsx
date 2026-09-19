@@ -1,51 +1,66 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { ImagePickerRowProps } from '../../../util/types';
-import { View, Image, TouchableOpacity, Text, ScrollView } from 'react-native';
+import { View, Image, TouchableOpacity, Text, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { createStyles } from '../../../util/styles/newAd/imagePickerRow.styles';
+import { compressImageToDataUri } from '../../../util/helpers/imageCompression';
+import { IMAGE_MAX_COUNT, MIN_IMAGES_REQUIRED } from '../../../constants/constants';
 import { CameraCapture } from '../CameraCapture/CameraCapture';
 
-const MIN_IMAGES = 2;
-const MAX_IMAGES = 10;
+interface ImageSource {
+  uri: string;
+  width?: number;
+  height?: number;
+}
 
 export function ImagePickerRow({ images, onChange, error }: ImagePickerRowProps) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
-  const remaining = MAX_IMAGES - images.length;
+  const remaining = IMAGE_MAX_COUNT - images.length;
   const canAdd = remaining > 0;
   const [cameraOpen, setCameraOpen] = useState(false);
+  const [processing, setProcessing] = useState(false);
+  const imagesRef = useRef(images);
+  imagesRef.current = images;
 
-  function addDataUri(base64: string, mime: string) {
-    const uri = `data:${mime};base64,${base64}`;
-    onChange([...images, uri].slice(0, MAX_IMAGES));
+  async function addSources(sources: ImageSource[]) {
+    setProcessing(true);
+    try {
+      const added: string[] = [];
+      for (const { uri, width, height } of sources) {
+        const size = width && height ? { width, height } : undefined;
+        const dataUri = await compressImageToDataUri(uri, size).catch(() => null);
+        if (dataUri) added.push(dataUri);
+      }
+      if (added.length) onChange([...imagesRef.current, ...added].slice(0, IMAGE_MAX_COUNT));
+      if (added.length < sources.length) {
+        Alert.alert(t('postAd.imageProcessFailed', { count: sources.length - added.length }));
+      }
+    } finally {
+      setProcessing(false);
+    }
   }
 
-  function addAssets(assets: ImagePicker.ImagePickerAsset[]) {
-    const uris = assets
-      .filter((a) => !!a.base64)
-      .map((a) => {
-        const mime = a.mimeType === 'image/png' || a.mimeType === 'image/webp' ? a.mimeType : 'image/jpeg';
-        return `data:${mime};base64,${a.base64}`;
-      });
-    onChange([...images, ...uris].slice(0, MAX_IMAGES));
+  function addCameraPhoto(base64: string, mime: string) {
+    addSources([{ uri: `data:${mime};base64,${base64}` }]);
   }
 
   async function pickFromLibrary() {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: 'images' as const,
       allowsMultipleSelection: true,
-      quality: 0.6,
-      base64: true,
       selectionLimit: remaining,
     });
-    if (!result.canceled) addAssets(result.assets);
+    if (!result.canceled) {
+      addSources(result.assets.map(({ uri, width, height }) => ({ uri, width, height })));
+    }
   }
 
-  const countColor = images.length < MIN_IMAGES ? Colors.error : Colors.primary;
+  const countColor = images.length < MIN_IMAGES_REQUIRED ? Colors.error : Colors.primary;
 
   return (
     <View style={s.wrap}>
@@ -54,9 +69,9 @@ export function ImagePickerRow({ images, onChange, error }: ImagePickerRowProps)
           {t('postAd.photosLabel')} <Text style={s.req}>*</Text>
         </Text>
         <Text style={[s.counter, { color: countColor }]}>
-          {images.length} / {MAX_IMAGES}
-          {images.length < MIN_IMAGES && (
-            <Text style={s.minHint}>  {t('postAd.minPhotosHint', { min: MIN_IMAGES })}</Text>
+          {images.length} / {IMAGE_MAX_COUNT}
+          {images.length < MIN_IMAGES_REQUIRED && (
+            <Text style={s.minHint}>  {t('postAd.minPhotosHint', { min: MIN_IMAGES_REQUIRED })}</Text>
           )}
         </Text>
       </View>
@@ -64,14 +79,15 @@ export function ImagePickerRow({ images, onChange, error }: ImagePickerRowProps)
       <View style={[s.uploader, error ? s.uploaderError : null]}>
         {canAdd && (
           <View style={s.actionRow}>
-            <TouchableOpacity style={s.actionBtn} onPress={pickFromLibrary} activeOpacity={0.8}>
+            <TouchableOpacity style={s.actionBtn} onPress={pickFromLibrary} activeOpacity={0.8} disabled={processing}>
               <MaterialCommunityIcons name="image-plus" size={18} color={Colors.primary} />
               <Text style={s.actionText}>{t('postAd.chooseFromLibrary')}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={s.actionBtn} onPress={() => setCameraOpen(true)} activeOpacity={0.8}>
+            <TouchableOpacity style={s.actionBtn} onPress={() => setCameraOpen(true)} activeOpacity={0.8} disabled={processing}>
               <MaterialCommunityIcons name="camera-outline" size={18} color={Colors.primary} />
               <Text style={s.actionText}>{t('postAd.takePhoto')}</Text>
             </TouchableOpacity>
+            {processing && <ActivityIndicator size="small" color={Colors.primary} />}
           </View>
         )}
 
@@ -101,7 +117,7 @@ export function ImagePickerRow({ images, onChange, error }: ImagePickerRowProps)
 
       <CameraCapture
         visible={cameraOpen}
-        onCapture={addDataUri}
+        onCapture={addCameraPhoto}
         onClose={() => setCameraOpen(false)}
       />
     </View>

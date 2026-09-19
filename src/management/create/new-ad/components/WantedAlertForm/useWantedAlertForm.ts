@@ -7,6 +7,7 @@ import { createSubscription } from '../../../../../actions/categories/subscripti
 import { MAIN_CATEGORIES, getCategoryByKey, SUB_I18N_GROUP } from '../../../../../constants';
 import type { SubscriptionPayload, WantedFormState, UseWantedAlertFormArgs } from '../../../../../util/types';
 import { maxLenSchema } from '../../../../../util/validation/schemas';
+import { compressImageToDataUri } from '../../../../../util/helpers/imageCompression';
 
 const MAX_IMAGES = 3;
 
@@ -76,19 +77,18 @@ export function useWantedAlertForm({ onClose, onCreated }: UseWantedAlertFormArg
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: 'images' as const,
       allowsMultipleSelection: true,
-      quality: 0.6,
-      base64: true,
       selectionLimit: remaining,
     });
-    if (!result.canceled) {
-      const dataUris = result.assets
-        .filter((a) => !!a.base64)
-        .map((a) => {
-          const mime = a.mimeType === 'image/png' || a.mimeType === 'image/webp' ? a.mimeType : 'image/jpeg';
-          return `data:${mime};base64,${a.base64}`;
-        });
-      setForm((prev) => ({ ...prev, images: [...prev.images, ...dataUris].slice(0, MAX_IMAGES) }));
+    if (result.canceled) return;
+    const compressed: string[] = [];
+    for (const { uri, width, height } of result.assets) {
+      const dataUri = await compressImageToDataUri(uri, { width, height }).catch(() => null);
+      if (dataUri) compressed.push(dataUri);
     }
+    if (compressed.length < result.assets.length) {
+      Alert.alert(t('postAd.imageProcessFailed', { count: result.assets.length - compressed.length }));
+    }
+    setForm((prev) => ({ ...prev, images: [...prev.images, ...compressed].slice(0, MAX_IMAGES) }));
   }
 
   function removeImage(index: number) {

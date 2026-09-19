@@ -423,6 +423,7 @@ export const postAd = {
   continueToPlan: "Sii Wad Qorshaha",
   limitReachedTitle: "Xadka waa la gaaray",
   maxPhotosMessage: "Waxaad geli kartaa ugu badnaan {{max}} sawir.",
+  imageProcessFailed: "{{count}} sawir lama darin karo. Fadlan dooro sawir kale.",
   photosLabel: "Sawiro",
   minPhotosHint: "(ugu yaraan {{min}})",
   addPhoto: "Ku dar",
