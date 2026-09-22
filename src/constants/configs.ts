@@ -1129,9 +1129,12 @@ const buildTagIndex = (
   return { owner, ambiguous };
 };
 
-const { owner: SUBCATEGORY_OWNER, ambiguous: AMBIGUOUS_SUBCATEGORY_KEYS } = buildTagIndex(
-  MAIN_CATEGORIES.flatMap((main) => main.subCategories.map((sub) => ({ key: sub.key, mainKey: main.key }))),
-);
+const JOB_SUBCATEGORY_KEYS = ['fullTime', 'partTime', 'freelance'];
+
+const { owner: SUBCATEGORY_OWNER, ambiguous: AMBIGUOUS_SUBCATEGORY_KEYS } = buildTagIndex([
+  ...MAIN_CATEGORIES.flatMap((main) => main.subCategories.map((sub) => ({ key: sub.key, mainKey: main.key }))),
+  ...JOB_SUBCATEGORY_KEYS.map((key) => ({ key, mainKey: 'Jobs' })),
+]);
 
 const { owner: NESTED_OWNER, ambiguous: AMBIGUOUS_NESTED_KEYS } = buildTagIndex(
   MAIN_CATEGORIES.flatMap((main) =>
