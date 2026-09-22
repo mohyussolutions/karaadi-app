@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { fetchByCategory } from '../actions/categories/feed.actions';
 import { prefetchImages } from '../util/helpers';
 import { CATEGORY_FEED_LIMIT } from '../constants';
-import { sortByTierRandom } from './feedTierPolicy';
+import { sortByTierRandom } from '../policy/feedTierPolicy';
 import type { ListingBase } from '../util/types/listing.types';
 
 const PREFETCH_LIMIT = 20;

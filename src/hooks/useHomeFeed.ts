@@ -6,15 +6,24 @@ import { prefetchImages } from '../util/helpers';
 import { setFeed, mergeFeed, setRecommendations } from '../store/slices/feedSlice';
 import { INITIAL_VISIBLE, FEED_REVEAL_STEPS, READ_MORE_STEP, EAGER_PREFETCH_COUNT, FEED_GROUPS, FEED_MAX_ITEMS, FEED_DEFAULT_PAGE } from '../constants/constants';
 import { fetchRecommendations, fetchWantedListings } from './useHomeFeed.helpers';
-import { sortByTierRandom } from './feedTierPolicy';
+import { sortByTierRandom } from '../policy/feedTierPolicy';
 import type { ListingBase } from '../util/types/listing.types';
 import type { UseHomeFeedResult } from '../util/types/useHomeFeed.types';
 
+function getListingKey(listing: ListingBase): string {
+  return listing.id || listing._id;
+}
+
+function findNewListings(knownListings: ListingBase[], fetchedListings: ListingBase[]): ListingBase[] {
+  const knownListingKeys = new Set(knownListings.map(getListingKey));
+  return fetchedListings.filter((listing) => !knownListingKeys.has(getListingKey(listing)));
+}
+
 export function useHomeFeed(): UseHomeFeedResult {
   const dispatch = useAppDispatch();
-  const user = useAppSelector((s) => s.auth.user);
-  const listings = useAppSelector((s) => s.feed.listings ?? []);
-  const recommendations = useAppSelector((s) => s.feed.recommendations ?? []);
+  const user = useAppSelector((state) => state.auth.user);
+  const listings = useAppSelector((state) => state.feed.listings ?? []);
+  const recommendations = useAppSelector((state) => state.feed.recommendations ?? []);
 
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -30,90 +39,110 @@ export function useHomeFeed(): UseHomeFeedResult {
   useEffect(() => { listingsRef.current = listings; }, [listings]);
 
   useEffect(() => {
-    const ctrl = new AbortController();
-    async function init() {
-      let fast: ListingBase[] = [];
+    const abortController = new AbortController();
+
+    async function loadFastGroup(): Promise<ListingBase[]> {
+      let fastListings: ListingBase[] = [];
       try {
-        fast = await fetchFeedGroup(FEED_GROUPS.FAST, ctrl.signal);
+        fastListings = await fetchFeedGroup(FEED_GROUPS.FAST, abortController.signal);
       } finally {
-        if (!ctrl.signal.aborted && fast.length > 0) setLoading(false);
+        if (!abortController.signal.aborted && fastListings.length > 0) setLoading(false);
       }
-      if (ctrl.signal.aborted) return;
-      let current = fast;
-      if (fast.length > 0) {
-        const sorted = sortByTierRandom(fast);
-        dispatch(setFeed(sorted));
-        prefetchImages(sorted, EAGER_PREFETCH_COUNT).catch(() => {});
+      if (fastListings.length > 0) {
+        const sortedFastListings = sortByTierRandom(fastListings);
+        dispatch(setFeed(sortedFastListings));
+        prefetchImages(sortedFastListings, EAGER_PREFETCH_COUNT).catch(() => {});
       }
+      return fastListings;
+    }
 
-      const wantedPromise = fetchWantedListings(ctrl.signal).catch(() => [] as ListingBase[]);
-
-      const slow = await fetchFeedGroup(FEED_GROUPS.SLOW, ctrl.signal);
-      if (!ctrl.signal.aborted) {
-        if (slow.length > 0) {
-          current = mergeListings(current, slow);
-          dispatch(setFeed(sortByTierRandom(current)));
+    async function loadSlowGroup(currentListings: ListingBase[]): Promise<ListingBase[]> {
+      const slowListings = await fetchFeedGroup(FEED_GROUPS.SLOW, abortController.signal);
+      let mergedListings = currentListings;
+      if (!abortController.signal.aborted) {
+        if (slowListings.length > 0) {
+          mergedListings = mergeListings(currentListings, slowListings);
+          dispatch(setFeed(sortByTierRandom(mergedListings)));
         }
         setLoading(false);
       }
+      return mergedListings;
+    }
 
-      const wanted = await wantedPromise;
-      if (!ctrl.signal.aborted && wanted.length > 0) {
-        current = mergeListings(current, wanted);
-        dispatch(setFeed(sortByTierRandom(current)));
+    async function loadWantedGroup(currentListings: ListingBase[], wantedPromise: Promise<ListingBase[]>): Promise<void> {
+      const wantedListings = await wantedPromise;
+      if (!abortController.signal.aborted && wantedListings.length > 0) {
+        const mergedListings = mergeListings(currentListings, wantedListings);
+        dispatch(setFeed(sortByTierRandom(mergedListings)));
       }
     }
+
+    async function init() {
+      const fastListings = await loadFastGroup();
+      if (abortController.signal.aborted) return;
+
+      const wantedPromise = fetchWantedListings(abortController.signal).catch(() => [] as ListingBase[]);
+
+      const currentListings = await loadSlowGroup(fastListings);
+
+      await loadWantedGroup(currentListings, wantedPromise);
+    }
+
     init();
-    return () => ctrl.abort();
+    return () => abortController.abort();
   }, [dispatch]);
 
   useEffect(() => {
     if (!user) return;
-    const ctrl = new AbortController();
-    fetchRecommendations(user.id, ctrl.signal).then((recs) => {
-      if (ctrl.signal.aborted) return;
-      dispatch(setRecommendations(recs));
-      if (recs.length > 0) prefetchImages(recs).catch(() => {});
+    const abortController = new AbortController();
+    fetchRecommendations(user.id, abortController.signal).then((recommendedListings) => {
+      if (abortController.signal.aborted) return;
+      dispatch(setRecommendations(recommendedListings));
+      if (recommendedListings.length > 0) prefetchImages(recommendedListings).catch(() => {});
     });
-    return () => ctrl.abort();
+    return () => abortController.abort();
   }, [user?.id, dispatch]);
 
   const userId = user?.id;
 
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true);
+  const resetPagination = useCallback(() => {
     setVisibleCount(INITIAL_VISIBLE);
     nextPageRef.current = FEED_DEFAULT_PAGE + 1;
     endReachedRef.current = false;
     revealStepRef.current = 0;
     setEndReached(false);
+  }, []);
 
-    const [fast, recs] = await Promise.allSettled([
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    resetPagination();
+
+    const [fastResult, recommendationsResult] = await Promise.allSettled([
       fetchFeedGroup(FEED_GROUPS.FAST),
       userId ? fetchRecommendations(userId) : Promise.resolve([]),
     ]);
-    const fastValue = fast.status === 'fulfilled' ? fast.value : [];
-    const recsValue = recs.status === 'fulfilled' ? (recs.value as ListingBase[]) : [];
+    const fastListings = fastResult.status === 'fulfilled' ? fastResult.value : [];
+    const recommendedListings = recommendationsResult.status === 'fulfilled' ? (recommendationsResult.value as ListingBase[]) : [];
 
-    if (fastValue.length > 0) dispatch(setFeed(sortByTierRandom(fastValue)));
-    if (recs.status === 'fulfilled') dispatch(setRecommendations(recsValue));
+    if (fastListings.length > 0) dispatch(setFeed(sortByTierRandom(fastListings)));
+    if (recommendationsResult.status === 'fulfilled') dispatch(setRecommendations(recommendedListings));
     setRefreshing(false);
-    Promise.all([prefetchImages(fastValue, EAGER_PREFETCH_COUNT), prefetchImages(recsValue)]).catch(() => {});
+    Promise.all([prefetchImages(fastListings, EAGER_PREFETCH_COUNT), prefetchImages(recommendedListings)]).catch(() => {});
 
-    let current = fast.status === 'fulfilled' ? fastValue : listingsRef.current;
+    let latestListings = fastResult.status === 'fulfilled' ? fastListings : listingsRef.current;
 
-    fetchWantedListings().then((wanted) => {
-      if (wanted.length === 0) return;
-      current = mergeListings(current, wanted);
-      dispatch(setFeed(sortByTierRandom(current)));
+    fetchWantedListings().then((wantedListings) => {
+      if (wantedListings.length === 0) return;
+      latestListings = mergeListings(latestListings, wantedListings);
+      dispatch(setFeed(sortByTierRandom(latestListings)));
     }).catch(() => {});
 
-    fetchFeedGroup(FEED_GROUPS.SLOW).then((slow) => {
-      if (slow.length === 0) return;
-      current = mergeListings(current, slow);
-      dispatch(setFeed(sortByTierRandom(current)));
+    fetchFeedGroup(FEED_GROUPS.SLOW).then((slowListings) => {
+      if (slowListings.length === 0) return;
+      latestListings = mergeListings(latestListings, slowListings);
+      dispatch(setFeed(sortByTierRandom(latestListings)));
     });
-  }, [userId, dispatch]);
+  }, [userId, dispatch, resetPagination]);
 
   const loadNextPage = useCallback(async () => {
     if (loadingMoreRef.current || endReachedRef.current) return;
@@ -125,16 +154,15 @@ export function useHomeFeed(): UseHomeFeedResult {
     loadingMoreRef.current = true;
     setLoadingMore(true);
     try {
-      const items = await fetchFeedPage(nextPageRef.current);
-      const known = new Set(listingsRef.current.map((l) => l.id || l._id));
-      const novel = items.filter((l) => !known.has(l.id || l._id));
-      if (novel.length === 0) {
+      const fetchedListings = await fetchFeedPage(nextPageRef.current);
+      const newListings = findNewListings(listingsRef.current, fetchedListings);
+      if (newListings.length === 0) {
         endReachedRef.current = true;
         setEndReached(true);
       } else {
         nextPageRef.current += 1;
-        dispatch(mergeFeed(sortByTierRandom(novel)));
-        prefetchImages(novel, EAGER_PREFETCH_COUNT).catch(() => {});
+        dispatch(mergeFeed(sortByTierRandom(newListings)));
+        prefetchImages(newListings, EAGER_PREFETCH_COUNT).catch(() => {});
       }
     } catch {
     } finally {
@@ -144,12 +172,12 @@ export function useHomeFeed(): UseHomeFeedResult {
   }, [dispatch]);
 
   const showMore = useCallback(() => {
-    const step = FEED_REVEAL_STEPS[revealStepRef.current] ?? READ_MORE_STEP;
+    const revealCount = FEED_REVEAL_STEPS[revealStepRef.current] ?? READ_MORE_STEP;
     revealStepRef.current += 1;
-    const nextBatch = listingsRef.current.slice(visibleCount, visibleCount + step);
-    setVisibleCount((n: number) => n + step);
-    prefetchImages(nextBatch).catch(() => {});
-    if (visibleCount + step * 2 >= listingsRef.current.length) loadNextPage();
+    const upcomingListings = listingsRef.current.slice(visibleCount, visibleCount + revealCount);
+    setVisibleCount((previousVisibleCount: number) => previousVisibleCount + revealCount);
+    prefetchImages(upcomingListings).catch(() => {});
+    if (visibleCount + revealCount * 2 >= listingsRef.current.length) loadNextPage();
   }, [visibleCount, loadNextPage]);
 
   const visibleListings = useMemo(() => listings.slice(0, visibleCount), [listings, visibleCount]);
