@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { formatPrice, getImageUrl, truncate, truncateWords } from '../../../util/helpers';
-import { PLACEHOLDER_IMAGE, resolveMainCategoryKey } from '../../../constants';
+import { PLACEHOLDER_IMAGE } from '../../../constants';
 import { getListingDetailRoute } from '../../../util/helpers';
 import { showToast } from '../../../util/cache/toastService';
 import { useAppSelector, useAppDispatch } from '../../../store/store';
@@ -38,8 +38,7 @@ const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey
       router.push({ pathname: ROUTES.subscriptionDetail, params: { id: listingId } } as never);
       return;
     }
-    const resolvedCategoryKey = categoryKey || item.mainCategory || resolveMainCategoryKey(item.category, item.subcategory);
-    router.push(getListingDetailRoute(item, resolvedCategoryKey) as never);
+    router.push(getListingDetailRoute(item, categoryKey) as never);
   }
 
   async function handleHeart(e: GestureResponderEvent) {

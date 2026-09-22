@@ -1117,40 +1117,6 @@ export const MAIN_CATEGORIES: MainCategory[] = [
 export const getCategoryByKey = (key: string): MainCategory | undefined =>
   MAIN_CATEGORIES.find((c) => c.key === key);
 
-const buildTagIndex = (
-  entries: { key: string; mainKey: string }[],
-): { owner: Record<string, string>; ambiguous: Set<string> } => {
-  const owner: Record<string, string> = {};
-  const ambiguous = new Set<string>();
-  entries.forEach(({ key, mainKey }) => {
-    if (key in owner && owner[key] !== mainKey) ambiguous.add(key);
-    else owner[key] = mainKey;
-  });
-  return { owner, ambiguous };
-};
-
-const JOB_SUBCATEGORY_KEYS = ['fullTime', 'partTime', 'freelance'];
-
-const MAIN_CATEGORY_KEYS = new Set(MAIN_CATEGORIES.map((main) => main.key).concat('Jobs'));
-
-const { owner: SUBCATEGORY_OWNER, ambiguous: AMBIGUOUS_SUBCATEGORY_KEYS } = buildTagIndex([
-  ...MAIN_CATEGORIES.flatMap((main) => main.subCategories.map((sub) => ({ key: sub.key, mainKey: main.key }))),
-  ...JOB_SUBCATEGORY_KEYS.map((key) => ({ key, mainKey: 'Jobs' })),
-]);
-
-const { owner: NESTED_OWNER, ambiguous: AMBIGUOUS_NESTED_KEYS } = buildTagIndex(
-  MAIN_CATEGORIES.flatMap((main) =>
-    main.subCategories.flatMap((sub) => (sub.nested ?? []).map((nested) => ({ key: nested.key, mainKey: main.key }))),
-  ),
-);
-
-export const resolveMainCategoryKey = (tag?: string, nestedTag?: string): string | undefined => {
-  if (tag && MAIN_CATEGORY_KEYS.has(tag)) return tag;
-  if (tag && !AMBIGUOUS_SUBCATEGORY_KEYS.has(tag)) return SUBCATEGORY_OWNER[tag];
-  if (nestedTag && !AMBIGUOUS_NESTED_KEYS.has(nestedTag)) return NESTED_OWNER[nestedTag];
-  return undefined;
-};
-
 export const SUB_I18N_GROUP: Record<string, string> = {
   Marketplace: "marketplace",
   RealEstate: "realEstate",
