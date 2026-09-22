@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../store/store';
 import { toggleFavorite, selectFavoriteIdSet } from '../store/slices/favoritesSlice';
 import { useAuthStore } from '../store/hooks/authStore';
 import { trackItemView } from '../actions/categories/feed.actions';
+import { isAbortError } from '../util/helpers/api.format';
 import { showToast } from '../util/cache/toastService';
 import { ROUTES } from '../constants/constants';
 import type { ListingBase, UseListingDetailOptions } from '../util/types/listing.types';
@@ -32,9 +33,7 @@ export function useListingDetail<T extends ListingBase>(
         const data = await fetchItem(id, ctrl.signal);
         if (data) setItem({ ...data, id: data.id || data._id });
       } catch (err) {
-        if ((err as { name?: string })?.name !== 'AbortError') {
-          console.warn(`[useListingDetail] failed for ${categoryHint}/${id}:`, err);
-        }
+        if (!isAbortError(err)) console.warn(`[useListingDetail] failed for ${categoryHint}/${id}:`, err);
       }
       setLoading(false);
     }

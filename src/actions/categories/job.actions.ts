@@ -1,5 +1,6 @@
 import { apiClient } from '../client';
 import { JOBS_ENDPOINTS } from '../../api/endpoints';
+import { isAbortError } from '../../util/helpers/api.format';
 import type { RawItem, Params } from '../../util/types/common.types';
 import type { ApiError } from '../../util/types/generic.types';
 import type { CreateJobData, Job } from '../../util/types/listing.types';
@@ -36,9 +37,7 @@ export async function getJobById(id: string, signal?: AbortSignal): Promise<Job 
     const item = Array.isArray(data) ? data[0] : data;
     return item ? normJob<Job>(item) : null;
   } catch (err) {
-    if ((err as { name?: string })?.name !== 'AbortError') {
-      console.warn(`[getJobById] failed for id ${id}:`, err);
-    }
+    if (!isAbortError(err)) console.warn(`[getJobById] failed for id ${id}:`, err);
     return null;
   }
 }

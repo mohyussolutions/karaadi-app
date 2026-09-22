@@ -8,6 +8,12 @@ export function getApiErrorMessage(err: unknown): string | undefined {
   return data?.message ?? data?.error;
 }
 
+export function isAbortError(err: unknown): boolean {
+  const name = (err as { name?: string })?.name;
+  const message = (err as { message?: string })?.message ?? '';
+  return name === 'AbortError' || /cancel|abort/i.test(message);
+}
+
 export function getImageUrl(path: string | undefined | null): string {
   if (!path) return '';
   if (path.startsWith('http')) return path;

@@ -1,5 +1,6 @@
 import { apiClient } from '../client';
 import { REAL_ESTATE_ENDPOINTS } from '../../api/endpoints';
+import { isAbortError } from '../../util/helpers/api.format';
 import type { RawItem, Params } from '../../util/types/common.types';
 import type { ApiError } from '../../util/types/generic.types';
 import type { RealEstate } from '../../util/types/listing.types';
@@ -22,9 +23,7 @@ export async function getRealEstateById(id: string, signal?: AbortSignal): Promi
     const { data } = await apiClient.get<RawItem>(REAL_ESTATE_ENDPOINTS.BY_ID(id), { signal });
     return data ? normItem<RealEstate>(data) : null;
   } catch (err) {
-    if ((err as { name?: string })?.name !== 'AbortError') {
-      console.warn(`[getRealEstateById] failed for id ${id}:`, err);
-    }
+    if (!isAbortError(err)) console.warn(`[getRealEstateById] failed for id ${id}:`, err);
     return null;
   }
 }

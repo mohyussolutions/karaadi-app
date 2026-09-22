@@ -1,5 +1,6 @@
 import { apiClient } from '../client';
 import { MARKETPLACE_ENDPOINTS } from '../../api/endpoints';
+import { isAbortError } from '../../util/helpers/api.format';
 import type { RawItem, Params } from '../../util/types/common.types';
 import type { ApiError } from '../../util/types/generic.types';
 import type { MarketplaceItem } from '../../util/types/listing.types';
@@ -22,9 +23,7 @@ export async function getMarketplaceItemById(id: string, signal?: AbortSignal): 
     const { data } = await apiClient.get<RawItem>(MARKETPLACE_ENDPOINTS.BY_ID(id), { signal });
     return data ? normItem<MarketplaceItem>(data) : null;
   } catch (err) {
-    if ((err as { name?: string })?.name !== 'AbortError') {
-      console.warn(`[getMarketplaceItemById] failed for id ${id}:`, err);
-    }
+    if (!isAbortError(err)) console.warn(`[getMarketplaceItemById] failed for id ${id}:`, err);
     return null;
   }
 }
