@@ -1,10 +1,8 @@
-import React from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   RefreshControl,
-  ActivityIndicator,
 } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
@@ -12,15 +10,32 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner } from '../../components/loading';
-import RemoteImage from '../../components/shared/RemoteImage/RemoteImage';
+import ListingCard from '../../components/cards/ListingCard/ListingCard';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { formatPrice, getImageUrl } from '../../util/helpers';
-import { useFavoritesData, CATEGORY_LABELS, CATEGORY_COLOR_KEYS } from '../../hooks/useFavoritesData';
+import { useFavoritesData } from '../../hooks/useFavoritesData';
 import type { Favorite } from '../../util/types';
-import { createStyles, createCardStyles } from '../../util/styles/profile/favorites.styles';
+import type { ListingBase } from '../../util/types/listing.types';
+import { createStyles } from '../../util/styles/profile/favorites.styles';
 import { ROUTES, FAVORITES_H_PAD, FAVORITES_COL_GAP } from '../../constants/constants';
 
 const NUM_COLUMNS = 2;
+
+function toListingItem(fav: Favorite): ListingBase {
+  return {
+    _id: fav.itemId,
+    id: fav.itemId,
+    userId: fav.userId || '',
+    title: fav.title,
+    description: fav.description || '',
+    price: fav.price ? Number(fav.price) : 0,
+    region: '',
+    city: '',
+    images: fav.image ? [fav.image] : [],
+    mainCategory: fav.category || '',
+    createdAt: fav.createdAt,
+    updatedAt: fav.createdAt,
+  };
+}
 
 export default function FavoritesScreen() {
   const { t } = useTranslation();
@@ -112,11 +127,11 @@ export default function FavoritesScreen() {
               paddingBottom: FAVORITES_COL_GAP,
             }}
           >
-            <FavCard
-              fav={fav}
-              isRemoving={removing.has(fav.itemId)}
+            <ListingCard
+              item={toListingItem(fav)}
+              removing={removing.has(fav.itemId)}
               onPress={() => handleCardPress(fav)}
-              onRemove={() => handleRemove(fav)}
+              onDelete={() => handleRemove(fav)}
             />
           </View>
         )}
@@ -124,76 +139,3 @@ export default function FavoritesScreen() {
     </SafeAreaView>
   );
 }
-
-const FavCard = React.memo(
-  ({
-    fav,
-    isRemoving,
-    onPress,
-    onRemove,
-  }: {
-    fav: Favorite;
-    isRemoving: boolean;
-    onPress: () => void;
-    onRemove: () => void;
-  }) => {
-    const { t } = useTranslation();
-    const Colors = useThemeColors();
-    const s = useThemedStyles(createCardStyles);
-
-    const catKey = String(fav.category || '').toLowerCase();
-    const catLabel = CATEGORY_LABELS[catKey] || catKey;
-    const catColor = Colors[CATEGORY_COLOR_KEYS[catKey]] || Colors.primary;
-    const imageUri = getImageUrl(fav.image);
-    const price = fav.price ? Number(fav.price) : 0;
-
-    return (
-      <TouchableOpacity
-        style={[s.card, isRemoving && s.cardRemoving]}
-        onPress={onPress}
-        activeOpacity={0.88}
-        disabled={isRemoving}
-      >
-        <View style={s.imgWrap}>
-          {!!imageUri && (
-            <RemoteImage source={{ uri: imageUri }} style={s.img} contentFit="cover" recyclingKey={fav.itemId} />
-          )}
-
-          {!!catLabel && (
-            <View style={[s.catBadge, { backgroundColor: catColor }]}>
-              <Text style={s.catLabel}>{catLabel}</Text>
-            </View>
-          )}
-
-          <TouchableOpacity
-            style={s.heartBtn}
-            onPress={onRemove}
-            disabled={isRemoving}
-            hitSlop={6}
-            activeOpacity={0.8}
-          >
-            {isRemoving ? (
-              <ActivityIndicator size="small" color={Colors.favorite} />
-            ) : (
-              <MaterialCommunityIcons name="heart" size={16} color={Colors.favorite} />
-            )}
-          </TouchableOpacity>
-        </View>
-
-        <View style={s.body}>
-          <Text style={s.title} numberOfLines={1}>
-            {fav.title}
-          </Text>
-          {!!fav.description && (
-            <Text style={s.description} numberOfLines={2}>
-              {fav.description}
-            </Text>
-          )}
-          <Text style={s.price} numberOfLines={1}>
-            {price > 0 ? formatPrice(price) : t('priceOnRequest')}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  },
-);

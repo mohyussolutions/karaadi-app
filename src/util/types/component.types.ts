@@ -110,6 +110,7 @@ export interface ListingCardProps {
   imageAspectRatio?: number;
   priceLabel?: string;
   onDelete?: (item: ListingBase) => void;
+  removing?: boolean;
 }
 
 export interface MyAdCardProps {

@@ -22,6 +22,7 @@ const cardFrameStyles = (Colors: ColorPalette) =>
         elevation: 2,
       }),
     },
+    cardRemoving: { opacity: 0.4 },
     imgWrap: {
       position: "relative",
       width: "100%",

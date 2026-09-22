@@ -1,7 +1,5 @@
 import { StyleSheet } from "react-native";
 import type { ColorPalette } from "../../../hooks/useTheme";
-import { RADII } from "../../colors/colors";
-import { shadow } from "../../helpers/shadow";
 import { createCommonStyles } from "../common/common.styles";
 import { FAVORITES_H_PAD } from '../../../constants/constants';
 
@@ -78,89 +76,4 @@ export const createStyles = (Colors: ColorPalette) =>
     ...guestStyles(Colors),
     ...listStyles(Colors),
     ...emptyStyles(Colors),
-  });
-
-const cardFrameStyles = (Colors: ColorPalette) =>
-  ({
-    card: {
-      flex: 1,
-      backgroundColor: Colors.card,
-      borderRadius: RADII.xl,
-      overflow: "hidden",
-      borderWidth: 1,
-      borderColor: Colors.gray100,
-      ...shadow({
-        color: Colors.shadow,
-        offset: { width: 0, height: 1 },
-        opacity: 0.06,
-        radius: 4,
-        elevation: 2,
-      }),
-    },
-    cardRemoving: { opacity: 0.4 },
-  }) as const;
-
-const cardImageStyles = (Colors: ColorPalette) =>
-  ({
-    imgWrap: {
-      position: "relative",
-      width: "100%",
-      aspectRatio: 1,
-      backgroundColor: Colors.slate100,
-    },
-    img: { width: "100%", height: "100%" },
-    catBadge: {
-      position: "absolute",
-      top: 8,
-      left: 8,
-      borderRadius: 5,
-      paddingHorizontal: 7,
-      paddingVertical: 3,
-    },
-    catLabel: {
-      fontSize: 10,
-      fontWeight: "800",
-      color: Colors.white,
-      textTransform: "uppercase",
-      letterSpacing: 0.5,
-    },
-    heartBtn: {
-      position: "absolute",
-      top: 8,
-      right: 8,
-      backgroundColor: Colors.shadow35,
-      borderRadius: 14,
-      width: 30,
-      height: 30,
-      ...centered,
-    },
-  }) as const;
-
-const cardBodyStyles = (Colors: ColorPalette) =>
-  ({
-    body: { padding: 10, gap: 6 },
-    title: {
-      fontSize: 13,
-      fontWeight: "700",
-      color: Colors.textPrimary,
-      lineHeight: 17,
-    },
-    description: { fontSize: 11, color: Colors.textMuted, lineHeight: 14 },
-    price: {
-      fontSize: 13,
-      fontWeight: "800",
-      color: Colors.white,
-      backgroundColor: Colors.primary,
-      alignSelf: "flex-start",
-      paddingHorizontal: 8,
-      paddingVertical: 3,
-      borderRadius: RADII.pill,
-    },
-  }) as const;
-
-export const createCardStyles = (Colors: ColorPalette) =>
-  StyleSheet.create({
-    ...cardFrameStyles(Colors),
-    ...cardImageStyles(Colors),
-    ...cardBodyStyles(Colors),
   });

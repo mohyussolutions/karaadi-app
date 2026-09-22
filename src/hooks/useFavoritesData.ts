@@ -7,28 +7,6 @@ import { getFavorites } from '../actions/categories/favorite.actions';
 import { getListingDetailRoute } from '../util/helpers';
 import type { Favorite } from '../util/types';
 
-export const CATEGORY_LABELS: Record<string, string> = {
-  marketplace: 'Marketplace',
-  cars: 'Cars',
-  motorcycles: 'Motorcycles',
-  boats: 'Boats',
-  realestate: 'Real Estate',
-  'real-estate': 'Real Estate',
-  farmequipment: 'Farm Equipment',
-  jobs: 'Jobs',
-};
-
-export const CATEGORY_COLOR_KEYS: Record<string, 'catMarketplace' | 'catCars' | 'catMotorcycles' | 'catBoats' | 'catRealEstate' | 'catFarmEquipment' | 'catJobs'> = {
-  marketplace: 'catMarketplace',
-  cars: 'catCars',
-  motorcycles: 'catMotorcycles',
-  boats: 'catBoats',
-  realestate: 'catRealEstate',
-  'real-estate': 'catRealEstate',
-  farmequipment: 'catFarmEquipment',
-  jobs: 'catJobs',
-};
-
 export function useFavoritesData() {
   const router = useRouter();
   const dispatch = useAppDispatch();

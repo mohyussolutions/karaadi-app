@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, type GestureResponderEvent } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, type GestureResponderEvent } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,7 @@ import type { ListingCardProps } from '../../../util/types';
 import { createStyles } from '../../../util/styles/shared/listingCard.styles';
 import { ROUTES } from '../../../constants/constants';
 
-const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey, imageAspectRatio, priceLabel, onDelete }: ListingCardProps) {
+const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey, imageAspectRatio, priceLabel, onDelete, removing }: ListingCardProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -33,6 +33,7 @@ const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey
   const isWanted = (category || '').toLowerCase() === 'subscription';
 
   function handlePress() {
+    if (removing) return;
     if (onPress) { onPress(); return; }
     if (isWanted) {
       router.push({ pathname: ROUTES.subscriptionDetail, params: { id: listingId } } as never);
@@ -59,7 +60,12 @@ const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey
   }
 
   return (
-    <TouchableOpacity style={styles.card} onPress={handlePress} activeOpacity={0.88}>
+    <TouchableOpacity
+      style={[styles.card, removing && styles.cardRemoving]}
+      onPress={handlePress}
+      activeOpacity={0.88}
+      disabled={removing}
+    >
       <View style={[styles.imgWrap, imageAspectRatio ? { aspectRatio: imageAspectRatio } : null]}>
         {isWanted ? (
           <View style={[styles.img, styles.wantedPlaceholder]}>
@@ -86,7 +92,11 @@ const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey
           </View>
         ) : null}
 
-        {onDelete ? (
+        {removing ? (
+          <View style={styles.heartBtn}>
+            <ActivityIndicator size="small" color={Colors.white} />
+          </View>
+        ) : onDelete ? (
           <TouchableOpacity
             style={styles.heartBtn}
             onPress={(e) => { e.stopPropagation(); onDelete(item); }}
