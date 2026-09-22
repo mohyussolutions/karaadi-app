@@ -4,7 +4,7 @@ import { fetchFeedGroup, fetchFeedPage } from '../actions/categories/feed.action
 import { mergeListings } from '../util/cache/feedCacheService';
 import { prefetchImages } from '../util/helpers';
 import { setFeed, mergeFeed, setRecommendations } from '../store/slices/feedSlice';
-import { INITIAL_VISIBLE, READ_MORE_STEP, EAGER_PREFETCH_COUNT, FEED_GROUPS, FEED_MAX_ITEMS, FEED_DEFAULT_PAGE } from '../constants/constants';
+import { INITIAL_VISIBLE, FEED_REVEAL_STEPS, READ_MORE_STEP, EAGER_PREFETCH_COUNT, FEED_GROUPS, FEED_MAX_ITEMS, FEED_DEFAULT_PAGE } from '../constants/constants';
 import { fetchRecommendations, fetchWantedListings } from './useHomeFeed.helpers';
 import { sortByTierRandom } from './feedTierPolicy';
 import type { ListingBase } from '../util/types/listing.types';
@@ -24,6 +24,7 @@ export function useHomeFeed(): UseHomeFeedResult {
   const nextPageRef = useRef(FEED_DEFAULT_PAGE + 1);
   const loadingMoreRef = useRef(false);
   const endReachedRef = useRef(false);
+  const revealStepRef = useRef(0);
 
   const listingsRef = useRef(listings);
   useEffect(() => { listingsRef.current = listings; }, [listings]);
@@ -84,6 +85,7 @@ export function useHomeFeed(): UseHomeFeedResult {
     setVisibleCount(INITIAL_VISIBLE);
     nextPageRef.current = FEED_DEFAULT_PAGE + 1;
     endReachedRef.current = false;
+    revealStepRef.current = 0;
     setEndReached(false);
 
     const [fast, recs] = await Promise.allSettled([
@@ -142,10 +144,12 @@ export function useHomeFeed(): UseHomeFeedResult {
   }, [dispatch]);
 
   const showMore = useCallback(() => {
-    const nextBatch = listingsRef.current.slice(visibleCount, visibleCount + READ_MORE_STEP);
-    setVisibleCount((n: number) => n + READ_MORE_STEP);
+    const step = FEED_REVEAL_STEPS[revealStepRef.current] ?? READ_MORE_STEP;
+    revealStepRef.current += 1;
+    const nextBatch = listingsRef.current.slice(visibleCount, visibleCount + step);
+    setVisibleCount((n: number) => n + step);
     prefetchImages(nextBatch).catch(() => {});
-    if (visibleCount + READ_MORE_STEP * 2 >= listingsRef.current.length) loadNextPage();
+    if (visibleCount + step * 2 >= listingsRef.current.length) loadNextPage();
   }, [visibleCount, loadNextPage]);
 
   const visibleListings = useMemo(() => listings.slice(0, visibleCount), [listings, visibleCount]);

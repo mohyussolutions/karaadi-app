@@ -1,5 +1,5 @@
 import type { ListingRoute, RouteBuilder } from '../types/common.types';
-import { EXACT_CATEGORY_ROUTES, CATEGORY_PATTERN_ROUTES, DEFAULT_DETAIL_ROUTE_BUILDER } from '../../constants/configs';
+import { EXACT_CATEGORY_ROUTES, CATEGORY_PATTERN_ROUTES, DEFAULT_DETAIL_ROUTE_BUILDER } from '../../constants/constants';
 
 export type { ListingRoute };
 
