@@ -1112,36 +1112,6 @@ export const MAIN_CATEGORIES: MainCategory[] = [
       },
     ],
   },
-  // Jobs category hidden from the frontend for now
-  // {
-  //   key: "Jobs",
-  //   name: "Jobs",
-  //   icon: "briefcase-outline",
-  //   color: CAT_COLORS.jobs,
-  //   apiPath: CAT_PATHS.jobs,
-  //   subCategories: [
-  //     {
-  //       key: "fullTime",
-  //       name: "Full-Time",
-  //       icon: "briefcase-outline",
-  //     },
-  //     {
-  //       key: "partTime",
-  //       name: "Part-Time",
-  //       icon: "briefcase-clock-outline",
-  //     },
-  //     {
-  //       key: "freelance",
-  //       name: "Freelance",
-  //       icon: "laptop",
-  //     },
-  //     {
-  //       key: "other",
-  //       name: "Other",
-  //       icon: "dots-horizontal-circle-outline",
-  //     },
-  //   ],
-  // },
 ];
 
 export const getCategoryByKey = (key: string): MainCategory | undefined =>
@@ -1169,10 +1139,6 @@ const { owner: NESTED_OWNER, ambiguous: AMBIGUOUS_NESTED_KEYS } = buildTagIndex(
   ),
 );
 
-// A listing's `category`/`subcategory` tags (e.g. "forRent") are shared by more than
-// one main category, so this is a best-effort match: unambiguous tags resolve directly,
-// ambiguous ones (like "forRent" on both RealEstate and Motorcycles) fall back to the
-// more specific nested tag, which usually disambiguates them.
 export const resolveMainCategoryKey = (tag?: string, nestedTag?: string): string | undefined => {
   if (tag && !AMBIGUOUS_SUBCATEGORY_KEYS.has(tag)) return SUBCATEGORY_OWNER[tag];
   if (nestedTag && !AMBIGUOUS_NESTED_KEYS.has(nestedTag)) return NESTED_OWNER[nestedTag];

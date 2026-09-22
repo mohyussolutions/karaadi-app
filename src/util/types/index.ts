@@ -24,7 +24,7 @@ export type {
   MarketplaceItem, FarmEquipment, Job, WantedItem,
   AnyListing, VehicleListing,
   Subscription, SubscriptionPayload, SubscriptionEnvelope, Favorite, SearchResult, WantedFormState,
-  CategorySpecField, CategoryTypeConfig, CreateJobData, CreateListingResponse,
+  CategorySpecField, CategoryTypeConfig, CreateJobData, CreateListingResponse, UseListingDetailOptions,
 } from './listing.types';
 export type {
   Chat, ChatMessage, ChatUser, Chatroom, GroupedChat, UseChatConversationArgs,

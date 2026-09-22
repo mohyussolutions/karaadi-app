@@ -8,15 +8,7 @@ import { trackItemView } from '../actions/categories/feed.actions';
 import { getCachedListing } from '../util/cache/listingCache';
 import { showToast } from '../util/cache/toastService';
 import { ROUTES } from '../constants/constants';
-import type { ListingBase } from '../util/types/listing.types';
-
-interface UseListingDetailOptions<T extends ListingBase> {
-  fetchItem: (id: string, signal: AbortSignal) => Promise<T | null | undefined>;
-  categoryHint: string;
-  listingType?: string;
-  contactRole?: string;
-  extraDeps?: unknown[];
-}
+import type { ListingBase, UseListingDetailOptions } from '../util/types/listing.types';
 
 export function useListingDetail<T extends ListingBase>(
   id: string,
@@ -45,7 +37,6 @@ export function useListingDetail<T extends ListingBase>(
     }
     load();
     return () => ctrl.abort();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, ...extraDeps]);
 
   useEffect(() => {

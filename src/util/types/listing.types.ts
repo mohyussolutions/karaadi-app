@@ -240,3 +240,11 @@ export interface SearchResult {
   mainCategory?: string;
   createdAt: string;
 }
+
+export interface UseListingDetailOptions<T extends ListingBase> {
+  fetchItem: (id: string, signal: AbortSignal) => Promise<T | null | undefined>;
+  categoryHint: string;
+  listingType?: string;
+  contactRole?: string;
+  extraDeps?: unknown[];
+}
