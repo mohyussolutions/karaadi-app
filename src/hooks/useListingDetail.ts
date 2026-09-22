@@ -28,9 +28,6 @@ export function useListingDetail<T extends ListingBase>(
   const isFavorite = useAppSelector(selectFavoriteIdSet).has(id);
 
   const [item, setItem] = useState<T | null>(() => getCachedListing(id) as T | null);
-  // Cache gives an instant preview (title/price), but the feed only ever sends
-  // one thumbnail image per listing, so the gallery must wait for the full
-  // fetch before rendering — otherwise it looks done with just one photo.
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
   const [zoomed, setZoomed] = useState(false);
