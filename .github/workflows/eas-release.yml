@@ -24,9 +24,20 @@ jobs:
       - run: npm ci
 
       - name: Restore store credentials
+        env:
+          ASC_API_KEY_P8: ${{ secrets.ASC_API_KEY_P8 }}
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON || secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
         run: |
-          echo "${{ secrets.ASC_API_KEY_P8 }}" > AuthKey_T4K9ZTB9VV.p8
-          echo '${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}' > google-play-service-account.json
+          if [ -z "$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" ]; then
+            echo "::error::Missing Google Play service account secret. Set GOOGLE_PLAY_SERVICE_ACCOUNT_JSON (preferred) or legacy GOOGLE_PLAY_SERVICE_ACCOUNT."
+            exit 1
+          fi
+          printf '%s' "$ASC_API_KEY_P8" > AuthKey_T4K9ZTB9VV.p8
+          printf '%s' "$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" > google-play-service-account.json
+          if ! JSON_VALIDATION_ERROR="$(node -e "const fs=require('fs'); JSON.parse(fs.readFileSync('google-play-service-account.json','utf8'));" 2>&1)"; then
+            echo "::error::Failed to validate google-play-service-account.json. Ensure GOOGLE_PLAY_SERVICE_ACCOUNT_JSON contains complete valid JSON (no truncation/extra escaping). Parser output: $JSON_VALIDATION_ERROR"
+            exit 1
+          fi
 
       - name: Build and submit to both stores
         run: eas build --platform all --profile production --non-interactive --no-wait --auto-submit
