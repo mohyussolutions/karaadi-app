@@ -1,60 +1,7 @@
-import type { ListingRoute } from '../types/common.types';
-import { ROUTES } from '../../constants/constants';
+import type { ListingRoute, RouteBuilder } from '../types/common.types';
+import { EXACT_CATEGORY_ROUTES, CATEGORY_PATTERN_ROUTES, DEFAULT_DETAIL_ROUTE_BUILDER } from '../../constants/configs';
 
 export type { ListingRoute };
-
-type RouteBuilder = (id: string) => ListingRoute;
-
-const buildCarsRoute: RouteBuilder = (id) => ({ pathname: ROUTES.vehicleDetail, params: { id, category: 'cars' } });
-const buildBoatsRoute: RouteBuilder = (id) => ({ pathname: ROUTES.vehicleDetail, params: { id, category: 'boats' } });
-const buildMotorcyclesRoute: RouteBuilder = (id) => ({ pathname: ROUTES.vehicleDetail, params: { id, category: 'motorcycles' } });
-const buildFarmEquipmentRoute: RouteBuilder = (id) => ({ pathname: ROUTES.vehicleDetail, params: { id, category: 'farmequipment' } });
-const buildRealEstateRoute: RouteBuilder = (id) => ({ pathname: ROUTES.realEstateDetail, params: { id } });
-const buildJobRoute: RouteBuilder = (id) => ({ pathname: ROUTES.jobDetail, params: { id } });
-const buildMarketplaceRoute: RouteBuilder = (id) => ({ pathname: ROUTES.itemDetail, params: { id } });
-
-const DEFAULT_DETAIL_ROUTE_BUILDER = buildMarketplaceRoute;
-
-const EXACT_CATEGORY_ROUTES: Record<string, RouteBuilder> = {
-  gawaari: buildCarsRoute,
-  car: buildCarsRoute,
-  cars: buildCarsRoute,
-  boat: buildBoatsRoute,
-  boats: buildBoatsRoute,
-  motorcycle: buildMotorcyclesRoute,
-  motorcycles: buildMotorcyclesRoute,
-  matooro: buildMotorcyclesRoute,
-  equipment: buildFarmEquipmentRoute,
-  farmequipment: buildFarmEquipmentRoute,
-  'farm equipment': buildFarmEquipmentRoute,
-  'farm-equipment': buildFarmEquipmentRoute,
-  traktor: buildFarmEquipmentRoute,
-  tractor: buildFarmEquipmentRoute,
-  realestate: buildRealEstateRoute,
-  'real estate': buildRealEstateRoute,
-  'real-estate': buildRealEstateRoute,
-  marketplace: buildMarketplaceRoute,
-  electronics: buildMarketplaceRoute,
-  fashion: buildMarketplaceRoute,
-  furniture: buildMarketplaceRoute,
-  animals: buildMarketplaceRoute,
-  sports: buildMarketplaceRoute,
-  antiques: buildMarketplaceRoute,
-  job: buildJobRoute,
-  jobs: buildJobRoute,
-  fulltime: buildJobRoute,
-  parttime: buildJobRoute,
-  freelance: buildJobRoute,
-};
-
-const CATEGORY_PATTERN_ROUTES: { patterns: string[]; build: RouteBuilder }[] = [
-  { patterns: ['gawaari', 'car'], build: buildCarsRoute },
-  { patterns: ['boat'], build: buildBoatsRoute },
-  { patterns: ['motorcycle', 'matooro'], build: buildMotorcyclesRoute },
-  { patterns: ['farm', 'equipment', 'traktor', 'tractor'], build: buildFarmEquipmentRoute },
-  { patterns: ['estate', 'apartment', 'house', 'land', 'villa', 'iib', 'kira'], build: buildRealEstateRoute },
-  { patterns: ['job'], build: buildJobRoute },
-];
 
 function findExactRouteBuilder(category: string): RouteBuilder | null {
   return EXACT_CATEGORY_ROUTES[category.toLowerCase().trim()] ?? null;

@@ -1,11 +1,11 @@
 import type { Language, CategorySpecField, CategoryTypeConfig } from '../util/types';
 import type { NestedSubCategory, SubCategory, MainCategory } from '../util/types/browse.types';
+import type { RouteBuilder } from '../util/types/common.types';
 import { CAT_COLORS } from '../util/colors/colors';
-import { formatDate } from '../util/helpers';
-import { SITE_URL } from './constants';
+import { formatDate } from '../util/helpers/ui.format';
+import { SITE_URL, ROUTES, REGEX_NON_DIGITS } from './constants';
 import { CAT_PATHS } from '../api/paths';
 import { MARKETPLACE_ENDPOINTS, REAL_ESTATE_ENDPOINTS, JOBS_ENDPOINTS } from '../api/endpoints';
-import { REGEX_NON_DIGITS } from './constants';
 
 export type { NestedSubCategory, SubCategory, MainCategory };
 export { CAT_COLORS };
@@ -1116,6 +1116,57 @@ export const MAIN_CATEGORIES: MainCategory[] = [
 
 export const getCategoryByKey = (key: string): MainCategory | undefined =>
   MAIN_CATEGORIES.find((c) => c.key === key);
+
+const buildCarsRoute: RouteBuilder = (id) => ({ pathname: ROUTES.vehicleDetail, params: { id, category: 'cars' } });
+const buildBoatsRoute: RouteBuilder = (id) => ({ pathname: ROUTES.vehicleDetail, params: { id, category: 'boats' } });
+const buildMotorcyclesRoute: RouteBuilder = (id) => ({ pathname: ROUTES.vehicleDetail, params: { id, category: 'motorcycles' } });
+const buildFarmEquipmentRoute: RouteBuilder = (id) => ({ pathname: ROUTES.vehicleDetail, params: { id, category: 'farmequipment' } });
+const buildRealEstateRoute: RouteBuilder = (id) => ({ pathname: ROUTES.realEstateDetail, params: { id } });
+const buildJobRoute: RouteBuilder = (id) => ({ pathname: ROUTES.jobDetail, params: { id } });
+const buildMarketplaceRoute: RouteBuilder = (id) => ({ pathname: ROUTES.itemDetail, params: { id } });
+
+export const DEFAULT_DETAIL_ROUTE_BUILDER = buildMarketplaceRoute;
+
+export const EXACT_CATEGORY_ROUTES: Record<string, RouteBuilder> = {
+  gawaari: buildCarsRoute,
+  car: buildCarsRoute,
+  cars: buildCarsRoute,
+  boat: buildBoatsRoute,
+  boats: buildBoatsRoute,
+  motorcycle: buildMotorcyclesRoute,
+  motorcycles: buildMotorcyclesRoute,
+  matooro: buildMotorcyclesRoute,
+  equipment: buildFarmEquipmentRoute,
+  farmequipment: buildFarmEquipmentRoute,
+  'farm equipment': buildFarmEquipmentRoute,
+  'farm-equipment': buildFarmEquipmentRoute,
+  traktor: buildFarmEquipmentRoute,
+  tractor: buildFarmEquipmentRoute,
+  realestate: buildRealEstateRoute,
+  'real estate': buildRealEstateRoute,
+  'real-estate': buildRealEstateRoute,
+  marketplace: buildMarketplaceRoute,
+  electronics: buildMarketplaceRoute,
+  fashion: buildMarketplaceRoute,
+  furniture: buildMarketplaceRoute,
+  animals: buildMarketplaceRoute,
+  sports: buildMarketplaceRoute,
+  antiques: buildMarketplaceRoute,
+  job: buildJobRoute,
+  jobs: buildJobRoute,
+  fulltime: buildJobRoute,
+  parttime: buildJobRoute,
+  freelance: buildJobRoute,
+};
+
+export const CATEGORY_PATTERN_ROUTES: { patterns: string[]; build: RouteBuilder }[] = [
+  { patterns: ['gawaari', 'car'], build: buildCarsRoute },
+  { patterns: ['boat'], build: buildBoatsRoute },
+  { patterns: ['motorcycle', 'matooro'], build: buildMotorcyclesRoute },
+  { patterns: ['farm', 'equipment', 'traktor', 'tractor'], build: buildFarmEquipmentRoute },
+  { patterns: ['estate', 'apartment', 'house', 'land', 'villa', 'iib', 'kira'], build: buildRealEstateRoute },
+  { patterns: ['job'], build: buildJobRoute },
+];
 
 export const SUB_I18N_GROUP: Record<string, string> = {
   Marketplace: "marketplace",

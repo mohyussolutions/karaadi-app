@@ -1,6 +1,6 @@
 export type {
   Params, ExtraHeaders, RequestOptions, ReportPayload, SearchParams,
-  RootState, AppDispatch, RawItem, ListingRoute, Lang, ShadowParams, ToastPayload,
+  RootState, AppDispatch, RawItem, ListingRoute, RouteBuilder, Lang, ShadowParams, ToastPayload,
   ConfirmModalAction, ConfirmModalProps, EulaModalProps,
 } from './common.types';
 

@@ -22,17 +22,8 @@ export function getImageUrl(path: string | undefined | null): string {
 
 const PREFETCH_TIMEOUT_MS = 1200;
 
-// URIs we've already prefetched (or are currently prefetching) this session,
-// so we never issue a redundant native prefetch for the same image.
 const prefetchedUris = new Set<string>();
 
-// expo-image's native prefetch is not safe to call concurrently: overlapping
-// batches cancel/replace each other's underlying SDWebImage/Glide tokens, and
-// if a cancelled batch's completion handler fires after the JS runtime has
-// already been torn down (Fast Refresh, reload, screen unmount) it crashes
-// natively (EXC_BAD_ACCESS / SIGBUS deep in SDWebImagePrefetchToken teardown).
-// Serializing every call through this queue guarantees at most one native
-// prefetch batch is ever in flight, so our own calls can't race each other.
 let prefetchQueue: Promise<void> = Promise.resolve();
 
 function runPrefetch(uris: string[]): Promise<void> {

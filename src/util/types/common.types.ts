@@ -15,6 +15,8 @@ export type ListingRoute =
   | { pathname: typeof ROUTES.jobDetail; params: { id: string } }
   | { pathname: typeof ROUTES.itemDetail; params: { id: string } };
 
+export type RouteBuilder = (id: string) => ListingRoute;
+
 export type ShadowParams = {
   color: string;
   offset?: { width: number; height: number };
