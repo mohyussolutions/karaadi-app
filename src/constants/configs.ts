@@ -1131,6 +1131,8 @@ const buildTagIndex = (
 
 const JOB_SUBCATEGORY_KEYS = ['fullTime', 'partTime', 'freelance'];
 
+const MAIN_CATEGORY_KEYS = new Set(MAIN_CATEGORIES.map((main) => main.key).concat('Jobs'));
+
 const { owner: SUBCATEGORY_OWNER, ambiguous: AMBIGUOUS_SUBCATEGORY_KEYS } = buildTagIndex([
   ...MAIN_CATEGORIES.flatMap((main) => main.subCategories.map((sub) => ({ key: sub.key, mainKey: main.key }))),
   ...JOB_SUBCATEGORY_KEYS.map((key) => ({ key, mainKey: 'Jobs' })),
@@ -1143,6 +1145,7 @@ const { owner: NESTED_OWNER, ambiguous: AMBIGUOUS_NESTED_KEYS } = buildTagIndex(
 );
 
 export const resolveMainCategoryKey = (tag?: string, nestedTag?: string): string | undefined => {
+  if (tag && MAIN_CATEGORY_KEYS.has(tag)) return tag;
   if (tag && !AMBIGUOUS_SUBCATEGORY_KEYS.has(tag)) return SUBCATEGORY_OWNER[tag];
   if (nestedTag && !AMBIGUOUS_NESTED_KEYS.has(nestedTag)) return NESTED_OWNER[nestedTag];
   return undefined;
