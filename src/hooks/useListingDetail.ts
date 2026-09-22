@@ -31,7 +31,11 @@ export function useListingDetail<T extends ListingBase>(
       try {
         const data = await fetchItem(id, ctrl.signal);
         if (data) setItem({ ...data, id: data.id || data._id });
-      } catch {}
+      } catch (err) {
+        if ((err as { name?: string })?.name !== 'AbortError') {
+          console.warn(`[useListingDetail] failed for ${categoryHint}/${id}:`, err);
+        }
+      }
       setLoading(false);
     }
     load();

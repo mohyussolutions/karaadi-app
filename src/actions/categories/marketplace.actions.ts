@@ -21,7 +21,12 @@ export async function getMarketplaceItemById(id: string, signal?: AbortSignal): 
   try {
     const { data } = await apiClient.get<RawItem>(MARKETPLACE_ENDPOINTS.BY_ID(id), { signal });
     return data ? normItem<MarketplaceItem>(data) : null;
-  } catch { return null; }
+  } catch (err) {
+    if ((err as { name?: string })?.name !== 'AbortError') {
+      console.warn(`[getMarketplaceItemById] failed for id ${id}:`, err);
+    }
+    return null;
+  }
 }
 
 export async function createMarketplaceItem(body: Record<string, unknown>) {

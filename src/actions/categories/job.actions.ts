@@ -35,7 +35,12 @@ export async function getJobById(id: string, signal?: AbortSignal): Promise<Job 
     if (!data) return null;
     const item = Array.isArray(data) ? data[0] : data;
     return item ? normJob<Job>(item) : null;
-  } catch { return null; }
+  } catch (err) {
+    if ((err as { name?: string })?.name !== 'AbortError') {
+      console.warn(`[getJobById] failed for id ${id}:`, err);
+    }
+    return null;
+  }
 }
 
 export async function createJob(body: CreateJobData) {
