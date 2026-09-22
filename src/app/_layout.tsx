@@ -15,7 +15,7 @@ import BottomTabBar from "../navigation/tab-bar/BottomTabBar";
 import { EulaModal } from "../components/modals/EulaModal/EulaModal";
 import ForceUpdateModal from "../components/modals/ForceUpdateModal/ForceUpdateModal";
 import StoreUpdateModal from "../components/modals/StoreUpdateModal/StoreUpdateModal";
-import { IdentityGate } from "../components/features/identification/components/IdentityGate/IdentityGate";
+import { IdentityGate } from "../components/modals/IdentityGate/IdentityGate";
 import { useIdentityGate } from "../hooks/useIdentityGate";
 import { SaveToast } from "../components/shared";
 import Hage from "../components/ai-assistant/components/Hage/Hage";

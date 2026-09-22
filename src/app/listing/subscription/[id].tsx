@@ -15,7 +15,7 @@ import RecommendedSection from '../../../components/detail/RecommendedSection/Re
 import { SocialShareSheet } from '../../../components/features/social/components';
 import DetailNotFound from '../../../components/detail/DetailNotFound/DetailNotFound';
 import DetailActionBar from '../../../components/detail/DetailActionBar/DetailActionBar';
-import SwipeDownToClose from '../../../components/detail/SwipeDownToClose/SwipeDownToClose';
+import SwipeDownToClose from '../../../components/modals/SwipeDownToClose/SwipeDownToClose';
 import { createStyles } from '../../../util/styles/listing/subscriptionDetail.styles';
 import { createTabletSplitNarrowStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplitLayout.styles';
 import { useResponsive } from '../../../hooks/useResponsive';

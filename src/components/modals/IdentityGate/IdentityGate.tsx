@@ -3,11 +3,11 @@ import { View, Text, Modal, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../../../hooks/useTheme';
-import { IdentityCaptureForm } from '../IdentityCaptureForm/IdentityCaptureForm';
-import { submitIdentification } from '../../../../../actions/categories/identification.actions';
-import { createStyles } from '../../../../../util/styles/profile/verifyIdentity.styles';
-import type { IdentityGateProps } from '../../../../../util/types';
+import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
+import { IdentityCaptureForm } from '../../features/identification/components/IdentityCaptureForm/IdentityCaptureForm';
+import { submitIdentification } from '../../../actions/categories/identification.actions';
+import { createStyles } from '../../../util/styles/profile/verifyIdentity.styles';
+import type { IdentityGateProps } from '../../../util/types';
 
 export function IdentityGate({ visible, idCardRequired, selfieRequired, onVerified }: IdentityGateProps) {
   const { t } = useTranslation();

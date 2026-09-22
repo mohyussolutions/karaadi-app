@@ -27,43 +27,46 @@ export function subscriptionPriceLabel(item: Subscription, priceOnRequestLabel: 
   return priceOnRequestLabel;
 }
 
-function toStr(val: unknown): string {
-  if (!val) return '';
-  if (Array.isArray(val)) return (val[0] as string) ?? '';
-  return String(val);
+function toSingleString(value: unknown): string {
+  if (!value) return '';
+  if (Array.isArray(value)) return (value[0] as string) ?? '';
+  return String(value);
 }
 
-function toArr(val: unknown): string[] {
-  if (!val) return [];
-  if (Array.isArray(val)) return val as string[];
-  return [String(val)];
+function toStringArray(value: unknown): string[] {
+  if (!value) return [];
+  if (Array.isArray(value)) return value as string[];
+  return [String(value)];
 }
 
 export function normalizeItem<T>(item: RawItem): T {
-  const catStr  = toStr(item['category']);
-  const subStr  = toStr(item['subcategory']);
-  const catTag  = (item['categoryTag'] as string) || catStr;
+  const categoryString = toSingleString(item['category']);
+  const subcategoryString = toSingleString(item['subcategory']);
+  const categoryTag = (item['categoryTag'] as string) || categoryString;
   return {
     ...item,
     id:             item['id']  || item['_id'] || '',
     _id:            item['_id'] || item['id']  || '',
-    category:       catStr,
-    subcategory:    subStr,
-    categoryTag:    catTag,
-    categoryArr:    toArr(item['category']),
-    subcategoryArr: toArr(item['subcategory']),
+    category:       categoryString,
+    subcategory:    subcategoryString,
+    categoryTag:    categoryTag,
+    categoryArr:    toStringArray(item['category']),
+    subcategoryArr: toStringArray(item['subcategory']),
   } as T;
 }
 
-export function normalizeList<T>(arr: RawItem[]): T[] {
-  return arr.map((i) => normalizeItem<T>(i));
+export function normalizeList<T>(items: RawItem[]): T[] {
+  return items.map((item) => normalizeItem<T>(item));
+}
+
+function extractRawList(result: unknown): RawItem[] {
+  if (Array.isArray(result)) return result;
+  const typed = result as RawItem;
+  return (typed?.['data'] || typed?.['items'] || typed?.['listings'] || typed?.['results'] || []) as RawItem[];
 }
 
 export function extractList<T>(result: unknown): T[] {
-  const raw = Array.isArray(result)
-    ? result
-    : (result as RawItem)?.['data'] || (result as RawItem)?.['items'] || (result as RawItem)?.['listings'] || (result as RawItem)?.['results'] || [];
-  return normalizeList<T>(raw as RawItem[]);
+  return normalizeList<T>(extractRawList(result));
 }
 
 export function matchesCategoryKey(item: { category?: string }, key: string): boolean {

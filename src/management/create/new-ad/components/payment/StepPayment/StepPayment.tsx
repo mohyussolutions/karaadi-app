@@ -14,7 +14,7 @@ import { MAX_POLL_ATTEMPTS } from '../../../../../../constants/constants';
 import { SITE_URL } from '../../../../../../constants';
 import { PaymentMethodSelector } from './PaymentMethodSelector';
 import { PhoneInput } from './PhoneInput';
-import { PollingOverlay } from './PollingOverlay';
+import { PollingOverlay } from '../../../../../../components/modals/PollingOverlay/PollingOverlay';
 import { SuccessScreen } from './SuccessScreen';
 import { usePaymentFlow } from './usePaymentFlow';
 import { createStyles } from '../../../../../../util/styles/payment/stepPayment.styles';

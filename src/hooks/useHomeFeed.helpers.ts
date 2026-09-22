@@ -12,6 +12,6 @@ export async function fetchRecommendations(userId: string, signal?: AbortSignal)
 }
 
 export async function fetchWantedListings(signal?: AbortSignal): Promise<ListingBase[]> {
-  const subs = await fetchAllPaidSubscriptions(signal);
-  return subs.map(subscriptionToListingItem);
+  const paidSubscriptions = await fetchAllPaidSubscriptions(signal);
+  return paidSubscriptions.map(subscriptionToListingItem);
 }

@@ -19,7 +19,7 @@ import ReportLink from '../../../components/detail/ReportLink/ReportLink';
 import RecommendedSection from '../../../components/detail/RecommendedSection/RecommendedSection';
 import { SocialShareSheet } from '../../../components/features/social/components';
 import DetailNotFound from '../../../components/detail/DetailNotFound/DetailNotFound';
-import SwipeDownToClose from '../../../components/detail/SwipeDownToClose/SwipeDownToClose';
+import SwipeDownToClose from '../../../components/modals/SwipeDownToClose/SwipeDownToClose';
 import { createStyles } from '../../../util/styles/listing/itemDetail.styles';
 import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplitLayout.styles';
 import { useResponsive } from '../../../hooks/useResponsive';

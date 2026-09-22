@@ -33,15 +33,22 @@ function runPrefetch(uris: string[]): Promise<void> {
   return next;
 }
 
-export function prefetchImages(items: { images?: string[] }[], limit?: number): Promise<void> {
-  const list = typeof limit === 'number' ? items.slice(0, limit) : items;
-  const uris = list
+function limitItems<T>(items: T[], limit?: number): T[] {
+  return typeof limit === 'number' ? items.slice(0, limit) : items;
+}
+
+function collectUncachedImageUris(items: { images?: string[] }[], limit?: number): string[] {
+  return limitItems(items, limit)
     .map((item) => getImageUrl(item.images?.[0]))
     .filter((uri): uri is string => !!uri)
     .filter((uri) => !prefetchedUris.has(uri));
-  if (uris.length === 0) return Promise.resolve();
-  uris.forEach((uri) => prefetchedUris.add(uri));
-  return runPrefetch(uris);
+}
+
+export function prefetchImages(items: { images?: string[] }[], limit?: number): Promise<void> {
+  const imageUris = collectUncachedImageUris(items, limit);
+  if (imageUris.length === 0) return Promise.resolve();
+  imageUris.forEach((uri) => prefetchedUris.add(uri));
+  return runPrefetch(imageUris);
 }
 
 export function waitForImages(items: { images?: string[] }[], limit?: number): Promise<void> {

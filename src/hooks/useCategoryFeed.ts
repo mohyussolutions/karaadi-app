@@ -7,6 +7,15 @@ import type { ListingBase } from '../util/types/listing.types';
 
 const PREFETCH_LIMIT = 20;
 
+function buildCategoryFetchParams(subcategoryKey?: string): Record<string, string> {
+  const params: Record<string, string> = { limit: String(CATEGORY_FEED_LIMIT) };
+  if (subcategoryKey) {
+    params.category = subcategoryKey;
+    params.categoryTag = subcategoryKey;
+  }
+  return params;
+}
+
 export function useCategoryFeed(categoryKey: string, subcategoryKey?: string) {
   const [listings, setListings] = useState<ListingBase[]>([]);
   const [loading, setLoading] = useState(true);
@@ -15,16 +24,12 @@ export function useCategoryFeed(categoryKey: string, subcategoryKey?: string) {
   const fetchData = useCallback(async (signal?: AbortSignal) => {
     if (!categoryKey) return;
     try {
-      const params: Record<string, string> = { limit: String(CATEGORY_FEED_LIMIT) };
-      if (subcategoryKey) {
-        params.category = subcategoryKey;
-        params.categoryTag = subcategoryKey;
-      }
-      const data = await fetchByCategory(categoryKey, params, signal);
+      const params = buildCategoryFetchParams(subcategoryKey);
+      const fetchedListings = await fetchByCategory(categoryKey, params, signal);
       if (signal?.aborted) return;
-      const sorted = sortByTierRandom(data);
-      setListings(sorted);
-      prefetchImages(sorted, PREFETCH_LIMIT).catch(() => {});
+      const sortedListings = sortByTierRandom(fetchedListings);
+      setListings(sortedListings);
+      prefetchImages(sortedListings, PREFETCH_LIMIT).catch(() => {});
     } catch {
       setListings([]);
     } finally {
@@ -34,10 +39,10 @@ export function useCategoryFeed(categoryKey: string, subcategoryKey?: string) {
   }, [categoryKey, subcategoryKey]);
 
   useEffect(() => {
-    const ctrl = new AbortController();
+    const abortController = new AbortController();
     setLoading(true);
-    fetchData(ctrl.signal);
-    return () => ctrl.abort();
+    fetchData(abortController.signal);
+    return () => abortController.abort();
   }, [categoryKey, subcategoryKey]);
 
   const onRefresh = useCallback(() => {
