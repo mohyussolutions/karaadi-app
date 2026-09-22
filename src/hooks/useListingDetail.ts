@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from '../store/store';
 import { toggleFavorite, selectFavoriteIdSet } from '../store/slices/favoritesSlice';
 import { useAuthStore } from '../store/hooks/authStore';
 import { trackItemView } from '../actions/categories/feed.actions';
-import { getCachedListing } from '../util/cache/listingCache';
 import { showToast } from '../util/cache/toastService';
 import { ROUTES } from '../constants/constants';
 import type { ListingBase, UseListingDetailOptions } from '../util/types/listing.types';
@@ -19,7 +18,7 @@ export function useListingDetail<T extends ListingBase>(
   const { user } = useAuthStore();
   const isFavorite = useAppSelector(selectFavoriteIdSet).has(id);
 
-  const [item, setItem] = useState<T | null>(() => getCachedListing(id) as T | null);
+  const [item, setItem] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
   const [zoomed, setZoomed] = useState(false);
