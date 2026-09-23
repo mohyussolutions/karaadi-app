@@ -1,8 +1,6 @@
-import type {
-  ColorKey, ColorPalette, ThemeMode, SpacingKey, RadiusKey, TypographyKey, Theme,
-} from '../types/theme.types';
+import type { ColorPalette, ThemeMode } from '../types/theme.types';
 
-export type { ColorKey, ColorPalette, ThemeMode, SpacingKey, RadiusKey, TypographyKey, Theme };
+export type { ColorPalette, ThemeMode };
 
 export const COLORS = {
   primary: '#0063FB',
@@ -36,6 +34,10 @@ export const COLORS = {
   background: '#FFFFFF',
   surface: '#F9FAFB',
   card: '#FFFFFF',
+  providerWaafi: '#1A6FB0',
+  providerEvc: '#E53935',
+  providerZaad: '#1976D2',
+  providerSahal: '#388E3C',
   overlay: 'rgba(0,0,0,0.5)',
 
   text: '#111827',
@@ -111,9 +113,7 @@ export const COLORS = {
   favoriteTint: 'rgba(255,59,92,0.18)',
 } as const;
 
-export const Colors = COLORS;
 
-export const LIGHT_COLORS = COLORS;
 
 export const DARK_COLORS = {
   primary: '#0063FB',
@@ -147,6 +147,10 @@ export const DARK_COLORS = {
   background: '#0B0F19',
   surface: '#111827',
   card: '#1E293B',
+  providerWaafi: '#1A6FB0',
+  providerEvc: '#E53935',
+  providerZaad: '#1976D2',
+  providerSahal: '#388E3C',
   overlay: 'rgba(0,0,0,0.5)',
 
   text: '#F9FAFB',
@@ -259,13 +263,3 @@ export const TYPOGRAPHY = {
   heading: { fontSize: 20, fontWeight: '700', lineHeight: 26 },
   display: { fontSize: 26, fontWeight: '800', lineHeight: 32 },
 } as const;
-
-export const THEME = {
-  colors: COLORS,
-  catColors: CAT_COLORS,
-  spacing: SPACING,
-  radii: RADII,
-  typography: TYPOGRAPHY,
-} as const;
-
-export default THEME;

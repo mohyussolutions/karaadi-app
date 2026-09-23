@@ -5,7 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuthStore } from '../../../store/hooks/authStore';
 import { useThemeColors } from '../../../hooks/useTheme';
 import { styles } from '../../../util/styles/detail/reportLink.styles';
-import { ROUTES } from '../../../constants/constants';
+import { ROUTES } from '../../../constants';
 
 export default function ReportLink({ itemId, itemType }: { itemId: string; itemType: string }) {
   const router = useRouter();

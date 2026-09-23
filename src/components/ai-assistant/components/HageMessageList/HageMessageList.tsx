@@ -18,7 +18,7 @@ export function HageMessageList({
 
   return (
     <View style={styles.messageListWrap}>
-      <FlatList
+      <FlatList overScrollMode="never"
         ref={listRef}
         data={messages}
         keyExtractor={(m) => String(m.id)}

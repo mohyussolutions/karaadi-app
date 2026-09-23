@@ -15,7 +15,7 @@ import { useAppSelector } from '../../../../../store/store';
 import { createStyles } from '../../../../../util/styles/tabs/messagesTab.styles';
 import type { GroupedChat } from '../../../../../util/types';
 import { ConvoItem } from './ConvoItem';
-import { ROUTES } from '../../../../../constants/constants';
+import { ROUTES } from '../../../../../constants';
 
 export default function MessagesScreen() {
   const router = useRouter();
@@ -67,7 +67,7 @@ export default function MessagesScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={[]}>
       <View style={[styles.header, isTablet && styles.tabletHeader]}><Text style={styles.title}>{t('messages.title')}</Text></View>
-      <FlatList
+      <FlatList overScrollMode="never"
         style={isTablet && styles.tabletList}
         data={groupedChats}
         keyExtractor={(item) => String(item.id)}

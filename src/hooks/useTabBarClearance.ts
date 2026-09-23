@@ -1,11 +1,7 @@
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { usePathname } from 'expo-router';
-import { SPACING } from '../util/colors/colors';
-
-export const TAB_BAR_ITEM_HEIGHT = 54;
-export const TAB_BAR_GLASS_VERTICAL_PADDING = SPACING.xs * 2;
-export const TAB_BAR_TOP_GAP = SPACING.xl;
-export const TAB_BAR_HEIGHT = TAB_BAR_TOP_GAP + TAB_BAR_GLASS_VERTICAL_PADDING + TAB_BAR_ITEM_HEIGHT;
+import { TAB_BAR_ITEM_HEIGHT, TAB_BAR_GLASS_VERTICAL_PADDING, TAB_BAR_TOP_GAP } from "../constants";
+const TAB_BAR_HEIGHT = TAB_BAR_TOP_GAP + TAB_BAR_GLASS_VERTICAL_PADDING + TAB_BAR_ITEM_HEIGHT;
 
 export function useTabBarClearance(extra = 0): number {
   const insets = useSafeAreaInsets();

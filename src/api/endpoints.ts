@@ -1,10 +1,10 @@
-import { CAT_PATHS } from "./paths";
 import {
+  CAT_PATHS,
   FEED_BASE_PATH,
   FEED_DEFAULT_PAGE,
   FEED_DEFAULT_PAGE_SIZE,
   type FeedGroup,
-} from "../constants/feed";
+} from "./paths";
 import { withId, withIdSuffix, createCrudEndpoints } from "../util/helpers/endpoint.builders";
 
 export const MARKETPLACE_ENDPOINTS = createCrudEndpoints(CAT_PATHS.marketplace);
@@ -69,11 +69,6 @@ export const REVIEWS_ENDPOINTS = {
 export const REPORT_ENDPOINTS = {
   CREATE: "/api/reports",
 };
-
-export const IMAGE_ENDPOINTS = {
-  UPLOAD: "/api/images/upload",
-};
-
 export const AUTH_ENDPOINTS = {
   LOGIN: "/api/users/auth",
   REGISTER: "/api/users/register",

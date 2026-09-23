@@ -12,12 +12,9 @@ import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useResponsive } from '../../hooks/useResponsive';
 import { getImageUrl } from '../../util/helpers';
 import RemoteImage from '../../components/shared/RemoteImage/RemoteImage';
-import { placeholderAvatar } from '../../constants';
-import { PROFILE_MENU_ITEMS } from '../../navigation/config/navConfig';
-import { ROUTES } from '../../constants/constants';
+import { placeholderAvatar, ROUTES, PROFILE_MENU_ITEMS } from '../../constants';
 import type { MenuItem } from '../../util/types';
 import { createStyles } from '../../util/styles/tabs/profileTab.styles';
-
 const AVATAR = placeholderAvatar(80, '2563eb', 'Me');
 
 const MenuCard = memo(function MenuCard({ item, onPress }: { item: MenuItem; onPress: () => void }) {
@@ -71,7 +68,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={[]}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
+      <ScrollView overScrollMode="never" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
         <View style={isTablet && styles.tabletInner}>
         <View style={styles.profileCard}>
           <RemoteImage source={{ uri: getImageUrl(user.profileImage) || AVATAR }} style={styles.avatar} />

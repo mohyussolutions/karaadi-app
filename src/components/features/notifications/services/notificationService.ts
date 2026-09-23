@@ -3,8 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { updatePushToken, removePushToken } from '../../../../actions/core/auth.actions';
 import { isSoundEnabled } from './soundService';
 import { COLORS } from '../../../../util/colors/colors';
-
-const PUSH_TOKEN_CACHE_KEY = 'karaadi_push_token_v1';
+import { PUSH_TOKEN_CACHE_KEY } from "../../../../constants";
 
 async function syncPushToken(token: string): Promise<void> {
   try {

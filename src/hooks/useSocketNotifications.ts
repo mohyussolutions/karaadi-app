@@ -13,8 +13,10 @@ function toNotification(userId: string, type: string, data: SocketNotificationPa
     title: data?.title ?? 'Karaadi',
     body: data?.message ?? data?.body ?? 'You have a new notification',
     type: data?.category ?? type,
-    read: false,
-    data: data?.link ? { link: data.link } : undefined,
+    read: Boolean(data?.isRead),
+    data: data?.itemId
+      ? { type: 'alert_match', listingId: data.itemId, category: data.itemType }
+      : data?.link ? { link: data.link } : undefined,
     createdAt: data?.createdAt ?? new Date().toISOString(),
   };
 }

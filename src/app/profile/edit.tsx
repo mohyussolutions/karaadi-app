@@ -7,7 +7,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { placeholderAvatar, REGEX_PHONE_INPUT_FILTER } from '../../constants';
+import { placeholderAvatar, REGEX_PHONE_INPUT_FILTER, DELETE_CONFIRM_TEXT } from '../../constants';
 import { updateUsername, updatePhone, updateProfileImage, deleteAccount } from '../../actions/core/auth.actions';
 import { useAuthStore } from '../../store/hooks/authStore';
 import { getImageUrl, getApiErrorMessage } from '../../util/helpers';
@@ -16,9 +16,7 @@ import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/profile/editProfile.styles';
 import { useTranslation } from 'react-i18next';
 import { usernameSchema, somaliPhoneSchema } from '../../util/validation/schemas';
-
 const AVATAR = placeholderAvatar(100, '2563eb', 'Me');
-const DELETE_CONFIRM_TEXT = 'delete account';
 
 export default function EditProfileScreen() {
   const { t } = useTranslation();
@@ -122,7 +120,7 @@ export default function EditProfileScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
-      <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }]} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+      <ScrollView overScrollMode="never" contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }]} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
 
         <View style={styles.avatarSection}>
           <RemoteImage

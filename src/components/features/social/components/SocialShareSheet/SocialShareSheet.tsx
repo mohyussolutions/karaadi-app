@@ -8,11 +8,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../../../hooks/useTheme';
 import { useResponsive } from '../../../../../hooks/useResponsive';
 import { tabletModalStyles } from '../../../../../util/styles/shared/tablet.styles';
-import { SOCIAL_SHARE_URLS, SOCIAL_BRAND_COLORS } from '../../../../../constants';
+import { SOCIAL_SHARE_URLS, SOCIAL_BRAND_COLORS, TABLET_MODAL_ICON_SIZES } from '../../../../../constants';
 import type { SocialShareSheetProps, SocialAction } from '../../../../../util/types';
 import { createStyles } from '../../../../../util/styles/social/socialShareSheet.styles';
-import { TABLET_MODAL_ICON_SIZES } from '../../../../../constants/constants';
-
 const SOCIALS: SocialAction[] = [
   {
     key: 'whatsapp',

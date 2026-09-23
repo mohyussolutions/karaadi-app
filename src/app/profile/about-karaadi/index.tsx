@@ -5,15 +5,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { createStyles } from '../../../util/styles/profile/aboutKaraadi.styles';
-import { SOCIAL_LINKS } from '../../../constants';
-import { SOCIAL_ICONS, type MCIcon } from '../../../util/icons/icons';
-import { SOCIAL_BRAND_COLORS } from '../../../constants';
-
-const PAGES: { id: string; icon: MCIcon; titleKey: string; route: string }[] = [
-  { id: 'about', icon: 'information-outline', titleKey: 'about.heading', route: '/profile/about-karaadi/about' },
-  { id: 'terms', icon: 'file-document-outline', titleKey: 'terms.heading', route: '/profile/about-karaadi/terms' },
-  { id: 'contact', icon: 'email-outline', titleKey: 'contact.heading', route: '/profile/about-karaadi/contact' },
-];
+import { SOCIAL_LINKS, SOCIAL_BRAND_COLORS, PAGES } from '../../../constants';
+import { SOCIAL_ICONS } from '../../../util/icons/icons';
 
 export default function AboutKaraadiScreen() {
   const { t } = useAppTranslation();
@@ -24,7 +17,7 @@ export default function AboutKaraadiScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
-      <FlatList
+      <FlatList overScrollMode="never"
         data={PAGES}
         keyExtractor={(item) => item.id}
         contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }]}

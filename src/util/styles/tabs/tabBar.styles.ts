@@ -1,4 +1,4 @@
-import { StyleSheet, type ViewStyle } from "react-native";
+import { StyleSheet } from "react-native";
 import { RADII, SPACING, type ColorPalette } from "../../colors/colors";
 import { shadow } from "../../helpers/shadow";
 

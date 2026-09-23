@@ -5,7 +5,6 @@ import {
   Image, Pressable,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../../../platform/common-for-ios-andriod';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { REGEX_PHONE_INPUT_FILTER } from '../../../../../constants';
@@ -18,6 +17,7 @@ import type { BusinessApplyStepProps } from '../../../../../util/types/component
 import { createStyles } from '../../../../../util/styles/business/businessCreate.styles';
 import { getApiErrorMessage } from '../../helpers/business.helpers';
 import { SectionHeader, Field } from '../FormControls/FormControls';
+import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../../../util/platform/common-for-ios-andriod';
 
 export function ApplyStep({
   initialValues,
@@ -111,7 +111,7 @@ export function ApplyStep({
 
   return (
     <KeyboardAvoidingView style={s.flexFull} behavior={KEYBOARD_AVOIDING_BEHAVIOR}>
-      <ScrollView
+      <ScrollView overScrollMode="never"
         contentContainerStyle={[s.scroll, { paddingBottom: insets.bottom + 84 }]}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"

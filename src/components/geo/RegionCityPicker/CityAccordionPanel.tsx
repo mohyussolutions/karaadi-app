@@ -50,7 +50,7 @@ export function CityAccordionPanel({
         </TouchableOpacity>
       </View>
 
-      <ScrollView
+      <ScrollView overScrollMode="never"
         style={s.panelList}
         contentContainerStyle={s.listContent}
         keyboardShouldPersistTaps="handled"

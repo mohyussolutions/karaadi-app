@@ -98,6 +98,7 @@ function MyAdCard({ item, deleting, onDelete, onPayNow }: MyAdCardProps) {
                 numberOfLines={1}
               >
                 {expiryInfo.date}
+                <Text style={s.infoStatus}> ({expiryInfo.status})</Text>
               </Text>
             ) : (
               <Text style={[s.infoValue, s.infoValueMuted]} numberOfLines={1}>—</Text>

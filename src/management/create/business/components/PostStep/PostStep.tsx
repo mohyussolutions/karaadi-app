@@ -21,7 +21,7 @@ export function PostStep({
   const BUSINESS_CATEGORIES = useBusinessCategoryOptions(allowedBackendKeys);
 
   return (
-    <ScrollView contentContainerStyle={[s.scroll, { paddingBottom: insets.bottom + 84 }]} keyboardShouldPersistTaps="handled">
+    <ScrollView overScrollMode="never" contentContainerStyle={[s.scroll, { paddingBottom: insets.bottom + 84 }]} keyboardShouldPersistTaps="handled">
       <Text style={s.heading}>{t('mine.businesses.postQuestion')}</Text>
       <Text style={s.statusMessage}>{t('mine.businesses.postCategoryDesc', { name: business.name })}</Text>
 

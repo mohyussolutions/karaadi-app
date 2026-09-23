@@ -6,11 +6,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuthStore } from "../../store/hooks/authStore";
 import { useThemedStyles, useThemeMode } from "../../hooks/useTheme";
 import { createLayoutStyles } from "../../util/styles/tabs/tabBar.styles";
-import { TAB_ITEMS, LOGIN_TAB_ITEM } from "../config/navConfig";
-import { ROUTES, GLASS_LIGHT, GLASS_DARK } from "../../constants/constants";
+import { ROUTES, GLASS_LIGHT, GLASS_DARK, TAB_ITEMS, LOGIN_TAB_ITEM } from "../../constants";
 import { BottomTabItem } from "./BottomTabItem";
 import { getActiveTab } from "./getActiveTab";
-
 export default memo(function BottomTabBar() {
   const insets = useSafeAreaInsets();
   const { tabBarSide } = useGlobal();

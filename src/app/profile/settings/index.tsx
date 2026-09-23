@@ -13,8 +13,7 @@ import { playNotificationSound } from '../../../components/features/notification
 import { updatePhoneVisibility } from '../../../actions/core/auth.actions';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { createStyles } from '../../../util/styles/settings/settingsMenu.styles';
-import { SETTINGS_ROWS } from '../../../navigation/config/navConfig';
-import { SITE_URL } from '../../../constants';
+import { SITE_URL, SETTINGS_ROWS } from '../../../constants';
 
 export default function SettingsIndex() {
   const router = useRouter();
@@ -57,7 +56,7 @@ export default function SettingsIndex() {
 
   return (
     <SafeAreaView style={s.safe} edges={['bottom']}>
-      <ScrollView contentContainerStyle={[s.content, { paddingBottom: insets.bottom + 84 }]} showsVerticalScrollIndicator={false}>
+      <ScrollView overScrollMode="never" contentContainerStyle={[s.content, { paddingBottom: insets.bottom + 84 }]} showsVerticalScrollIndicator={false}>
         <Text style={s.sectionTitle}>{t('mine.settingsPage.account')}</Text>
         <View style={s.section}>
           {SETTINGS_ROWS.map((row) => (

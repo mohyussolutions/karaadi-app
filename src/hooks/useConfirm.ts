@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { confirmAccount, resendCode } from '../actions/core/auth.actions';
 import { confirmationCodeSchema } from '../util/validation/schemas';
-import { ROUTES } from '../constants/constants';
+import { ROUTES } from '../constants';
 import type { ApiError } from '../util/types/generic.types';
 
 export function useConfirm(email: string) {

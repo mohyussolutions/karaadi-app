@@ -1,6 +1,6 @@
 import { Image } from 'react-native';
 import * as ImageManipulator from 'expo-image-manipulator';
-import { IMAGE_COMPRESSION_STEPS, IMAGE_MAX_DATA_URI_LENGTH } from '../../constants/constants';
+import { IMAGE_COMPRESSION_STEPS, IMAGE_MAX_DATA_URI_LENGTH } from '../../constants';
 
 interface ImageSize {
   width: number;

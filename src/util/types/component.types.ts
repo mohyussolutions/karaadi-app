@@ -49,16 +49,6 @@ export interface ZoomModalProps extends ModalProps {
   title: string;
 }
 
-export interface SpecRow {
-  label: string;
-  value: string;
-}
-
-export interface DetailCardProps {
-  title: string;
-  rows: SpecRow[];
-  children?: ReactNode;
-}
 
 export interface DetailNotFoundProps {
   icon?: string;
@@ -143,6 +133,7 @@ export interface SocialPostCardProps {
   price?: number;
   images?: string[];
   listingUrl: string;
+  listingId?: string;
   isPremium90?: boolean;
 }
 
@@ -178,6 +169,15 @@ export interface BusinessApprovalStepProps {
 export interface BusinessCategoriesStepProps {
   business: Business;
   onSaved: (biz: Business) => void;
+}
+
+export interface BusinessPlanCardProps {
+  plan: BusinessPlan;
+  selected: boolean;
+  isBestValue: boolean;
+  onSelect: (p: BusinessPlan) => void;
+  compact?: boolean;
+  width?: number;
 }
 
 export interface BusinessPlanStepProps {

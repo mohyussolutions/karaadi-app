@@ -3,8 +3,9 @@ import { Keyboard } from 'react-native';
 import type { RegionPickerItem, RegionCityPickerProps } from '../../../util/types';
 import { clientAddCity } from '../../../actions/categories/geo.actions';
 import { toRegionPickerItems } from '../../../util/helpers';
-import { fetchGeoRegions, invalidateGeoCache, GEO_CACHE_TTL } from '../../../store/slices/geoSlice';
+import { fetchGeoRegions, invalidateGeoCache } from '../../../store/slices/geoSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
+import { GEO_CACHE_TTL } from "../../../constants";
 
 export function useRegionCityPicker({
   selectedRegion,

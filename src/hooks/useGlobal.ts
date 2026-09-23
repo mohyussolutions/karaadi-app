@@ -1,5 +1,5 @@
 import { useWindowDimensions } from 'react-native';
-import { BP_SMALL, BP_TABLET } from '../constants/constants';
+import { BP_SMALL, BP_TABLET } from '../constants';
 
 export function useGlobal() {
   const { width, height } = useWindowDimensions();
@@ -42,6 +42,10 @@ export function useGlobal() {
     return isTablet ? 150 : isSmall ? 86 : 110;
   }
 
+  function logoSize(): { width: number; height: number } {
+    return { width: logoW(), height: isTablet ? 54 : 40 };
+  }
+
   function fontSize(base: number): number {
     if (isSmall)  return Math.max(base - 2, 10);
     if (isTablet) return base + 2;
@@ -66,6 +70,7 @@ export function useGlobal() {
     cardWInContainer,
     tabBarSide,
     logoW,
+    logoSize,
     fontSize,
   };
 }

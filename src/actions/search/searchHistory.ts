@@ -2,11 +2,6 @@ import { apiClient } from '../client';
 import { SEARCH_HISTORY_ENDPOINTS } from '../../api/endpoints';
 import type { SearchHistoryItem } from '../../util/types/browse.types';
 
-export async function saveSearchHistory(query: string): Promise<void> {
-  if (!query.trim()) return;
-  await apiClient.post(SEARCH_HISTORY_ENDPOINTS.LOG, { query }).catch(() => {});
-}
-
 export async function deleteSearchHistory(id: string): Promise<void> {
   await apiClient.delete(SEARCH_HISTORY_ENDPOINTS.DELETE(id)).catch(() => {});
 }

@@ -2,25 +2,7 @@ import { View, Text, ScrollView } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../../../hooks/useTheme';
 import { createStyles } from '../../../util/styles/settings/privacySettings.styles';
-
-const SECTIONS = [
-  {
-    title: 'Dejinta Karaadi',
-    body: 'Xogta aan ka aruurinay adiga waxaa loo isticmaalaa in lagu habeeyo khibradaada Karaadi ee bogga iyo app-ka. Dejintan waxay khusaysaa macluumaadka akoonkaaga.',
-  },
-  {
-    title: 'Fariimaha iyo Cusboonaysiinta',
-    body: 'Karaadi waxay kuu soo diri doontaa wargeysyo, talooyin safar, tartamo iyo xog kale oo ku saabsan adeegyada iyo alaabta aad xiisaynayso.',
-  },
-  {
-    title: 'Macluumaadkaaga Gaarka ah',
-    body: "Xogtaada waxaa loo isticmaalaa in lagu tuso waxyaabaha aad xiisaynayso, laguugu soo bandhigo xayaysiisyo ku habboon, iyo inaad hesho macluumaad muhiim ah oo ku saabsan adeegyada Karaadi.",
-  },
-  {
-    title: 'Xayeysiiska iyo Koontaroolka',
-    body: "Xogtaada waxaa loo isticmaalaa in lagu habeeyo xayeysiiska aad aragto. Waxaad dooran kartaa in xayeysiiska lagu habeeyo da'da, jinsiga, danaha ama goobta aad ku sugan tahay.",
-  },
-];
+import { SECTIONS } from "../../../constants";
 
 export default function PrivacySettings() {
   const s = useThemedStyles(createStyles);
@@ -28,7 +10,7 @@ export default function PrivacySettings() {
 
   return (
     <SafeAreaView style={s.safe} edges={['bottom']}>
-      <ScrollView contentContainerStyle={[s.content, { paddingBottom: insets.bottom + 84 }]} showsVerticalScrollIndicator={false}>
+      <ScrollView overScrollMode="never" contentContainerStyle={[s.content, { paddingBottom: insets.bottom + 84 }]} showsVerticalScrollIndicator={false}>
 
         <Text style={s.heading}>Dejinta Asturnaanta</Text>
         <Text style={s.intro}>

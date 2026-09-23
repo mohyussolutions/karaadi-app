@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useAppTranslation } from './useAppTranslation';
-import { MAIN_CATEGORIES } from '../navigation/config/navConfig';
+import { MAIN_CATEGORIES } from '../constants';
 import { BUSINESS_CATEGORY_KEY_MAP, BUSINESS_TYPE_ICON } from '../util/types/business.types';
 
 export function useBusinessCategoryOptions(allowedBackendKeys: string[] = []) {

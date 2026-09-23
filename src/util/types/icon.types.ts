@@ -10,30 +10,6 @@ export interface NavIconEntry {
   outline: MCIcon;
 }
 
-export interface CategoryIcons {
-  Cars: MCIcon;
-  Motorcycles: MCIcon;
-  Boats: MCIcon;
-  farmequipment: MCIcon;
-  RealEstate: MCIcon;
-  Marketplace: MCIcon;
-  Jobs: MCIcon;
-  Subscriptions: MCIcon;
-}
-
-export interface ListingTypeIcons {
-  sell: MCIcon;
-  rent: MCIcon;
-  wanted: MCIcon;
-}
-
-export interface ConditionIcons {
-  new: MCIcon;
-  used: MCIcon;
-  likeNew: MCIcon;
-  refurbished: MCIcon;
-}
-
 export interface SocialIcons {
   phone: MCIcon;
   whatsapp: MCIcon;

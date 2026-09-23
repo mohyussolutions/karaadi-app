@@ -3,7 +3,7 @@ export interface SocialStatus {
   tiktok: boolean;
 }
 
-export interface SocialPostResult {
+interface SocialPostResult {
   success: boolean;
   error?: string;
   postId?: string;
@@ -21,6 +21,7 @@ export interface SocialPostUpdatePayload {
   imageUrl?: string;
   imageUrls?: string[];
   listingUrl: string;
+  listingId?: string;
   platforms?: { facebook?: boolean; tiktok?: boolean };
   paymentId?: string;
 }

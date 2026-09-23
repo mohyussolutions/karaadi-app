@@ -175,15 +175,15 @@ export default function SubscriptionDetailScreen() {
       <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
         {isTabletLandscape ? (
           <View style={tabletSplitNarrow.row}>
-            <ScrollView style={tabletSplitNarrow.leftCol} showsVerticalScrollIndicator={false}>
+            <ScrollView overScrollMode="never" style={tabletSplitNarrow.leftCol} showsVerticalScrollIndicator={false}>
               {heroPanel}
             </ScrollView>
-            <ScrollView style={tabletSplitNarrow.rightCol} showsVerticalScrollIndicator={false}>
+            <ScrollView overScrollMode="never" style={tabletSplitNarrow.rightCol} showsVerticalScrollIndicator={false}>
               {bodyContent}
             </ScrollView>
           </View>
         ) : (
-          <ScrollView
+          <ScrollView overScrollMode="never"
             showsVerticalScrollIndicator={false}
             contentContainerStyle={isTablet ? [styles.scroll, tabletPortrait.scrollContent] : styles.scroll}
           >

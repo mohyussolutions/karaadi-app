@@ -24,7 +24,7 @@ export function createStyles(Colors: ColorPalette) {
     },
     left: { flexDirection: 'row', alignItems: 'center', gap: 3 },
     backSlot: { width: 28, height: 28, alignItems: 'center', justifyContent: 'center' },
-    logo: { width: 110, height: 40, borderRadius: 16, overflow: 'hidden' },
+    logo: { width: 110, height: 40, borderRadius: 16, overflow: 'hidden', flexShrink: 0 },
     langBtn: {
       flexDirection: 'row', alignItems: 'center', gap: 3,
       backgroundColor: Colors.hage, borderRadius: 8,

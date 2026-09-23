@@ -1,17 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../../../hooks/useTheme';
 import { useAppTranslation } from '../../../../../hooks/useAppTranslation';
+import { usePlanLayout } from '../../../../../hooks/usePlanLayout';
+import { useTabBarClearance } from '../../../../../hooks/useTabBarClearance';
 import { LoadingSpinner } from '../../../../../components/loading';
 import type { BusinessPlan } from '../../../../../util/types/business.types';
 import type { BusinessPlanStepProps } from '../../../../../util/types/component.types';
 import {
   fetchBusinessPlans, selectBusinessPlan, extendBusinessPlan,
 } from '../../../../../actions/categories/businessPlan.actions';
-import { createStyles } from '../../../../../util/styles/business/businessCreate.styles';
+import { createStyles, PLAN_FOOTER_HEIGHT } from '../../../../../util/styles/newAd/stepPlan.styles';
 import { getApiErrorMessage } from '../../helpers/business.helpers';
+import { BusinessPlanCard } from './BusinessPlanCard';
+import { bottomOffset, spacerHeight } from '../../../../../util/styles/common/dynamic.styles';
 
 export function PlanStep({
   business,
@@ -20,7 +24,9 @@ export function PlanStep({
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
+  const { wide, compact, gridCardWidth } = usePlanLayout();
   const insets = useSafeAreaInsets();
+  const clearance = useTabBarClearance() - insets.bottom;
   const [plans, setPlans] = useState<BusinessPlan[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<BusinessPlan | null>(null);
@@ -30,11 +36,10 @@ export function PlanStep({
     fetchBusinessPlans().then(setPlans).finally(() => setLoading(false));
   }, []);
 
-  function tierFor(plan: BusinessPlan): { label: string; color: string } {
-    if (plan.durationDays >= 90) return { label: t('mine.businesses.tierPremium'), color: Colors.primary };
-    if (plan.durationDays >= 60) return { label: t('mine.businesses.tierStandard'), color: Colors.success };
-    return { label: t('mine.businesses.tierBasic'), color: Colors.textSecondary };
-  }
+  const maxPrice = useMemo(
+    () => (plans.length > 0 ? Math.max(...plans.map((p) => p.price)) : 0),
+    [plans],
+  );
 
   async function handleConfirm() {
     if (!selected) return;
@@ -58,70 +63,77 @@ export function PlanStep({
 
   if (loading) return <LoadingSpinner fullScreen />;
 
+  const selectedId = selected ? (selected._id || selected.id) : null;
+
   return (
-    <ScrollView contentContainerStyle={[s.scroll, { paddingBottom: insets.bottom + 84 }]} keyboardShouldPersistTaps="handled">
-      <Text style={s.heading}>
-        {!business
-          ? t('mine.businesses.prePlanTitle')
-          : business.planId ? t('mine.businesses.renewPlan') : t('mine.businesses.selectPlanTitle')}
-      </Text>
-      <Text style={s.statusMessage}>
-        {!business
-          ? t('mine.businesses.prePlanDesc')
-          : t('mine.businesses.selectPlanDesc', { name: business.name })}
-      </Text>
-
-      {plans.map((plan) => {
-        const tier = tierFor(plan);
-        const planId = plan._id || plan.id;
-        const selectedId = selected ? (selected._id || selected.id) : null;
-        const active = selectedId === planId;
-        return (
-          <TouchableOpacity
-            key={planId}
-            style={[s.planCard, active && s.planCardActive]}
-            onPress={() => setSelected(plan)}
-            activeOpacity={0.85}
-          >
-            <View style={s.planHeader}>
-              <Text style={s.planName}>{plan.name}</Text>
-              <View style={[s.tierBadge, { backgroundColor: tier.color + '18' }]}>
-                <Text style={[s.tierBadgeText, { color: tier.color }]}>{tier.label}</Text>
-              </View>
+    <View style={s.root}>
+      <ScrollView overScrollMode="never" contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
+        <View style={wide && s.wideContent}>
+          <View style={s.header}>
+            <View style={s.headerIcon}>
+              <MaterialCommunityIcons name="briefcase-outline" size={28} color={Colors.primary} />
             </View>
-            <Text style={s.planPrice}>
-              ${plan.price} <Text style={s.planDuration}>/ {plan.durationDays} {t('mine.businesses.days')}</Text>
+            <Text style={s.title}>
+              {!business
+                ? t('mine.businesses.prePlanTitle')
+                : business.planId ? t('mine.businesses.renewPlan') : t('mine.businesses.selectPlanTitle')}
             </Text>
-            <Text style={s.planMeta}>{t('mine.businesses.upToListings', { count: plan.maxListings })}</Text>
-            {plan.features?.map((f, i) => (
-              <View key={i} style={s.featureRow}>
-                <MaterialCommunityIcons name="check" size={14} color={Colors.success} />
-                <Text style={s.featureText}>{f}</Text>
-              </View>
-            ))}
-          </TouchableOpacity>
-        );
-      })}
-
-      <TouchableOpacity
-        style={[s.submitBtn, (!selected || submitting) && s.submitBtnDisabled]}
-        onPress={handleConfirm}
-        disabled={!selected || submitting}
-        activeOpacity={0.88}
-      >
-        {submitting ? (
-          <ActivityIndicator size="small" color={Colors.white} />
-        ) : (
-          <>
-            <Text style={s.submitText}>
-              {!business ? t('mine.businesses.continueToApply') : t('mine.businesses.confirmPlan')}
+            <Text style={s.sub}>
+              {!business
+                ? t('mine.businesses.prePlanDesc')
+                : t('mine.businesses.selectPlanDesc', { name: business.name })}
             </Text>
-            <MaterialCommunityIcons name="arrow-right" size={18} color={Colors.white} />
-          </>
-        )}
-      </TouchableOpacity>
+          </View>
 
-      <View style={s.spacer40} />
-    </ScrollView>
+          <View style={wide ? s.cardsGrid : s.cardsCol}>
+            {plans.map((plan) => {
+              const planId = plan._id || plan.id;
+              return (
+                <BusinessPlanCard
+                  key={planId}
+                  plan={plan}
+                  selected={selectedId === planId}
+                  isBestValue={maxPrice > 0 && plan.price === maxPrice}
+                  onSelect={setSelected}
+                  compact={compact}
+                  width={gridCardWidth}
+                />
+              );
+            })}
+          </View>
+        </View>
+
+        <View style={spacerHeight(clearance + PLAN_FOOTER_HEIGHT)} />
+      </ScrollView>
+
+      <View style={[s.footer, bottomOffset(clearance)]}>
+        <View style={wide && s.footerWide}>
+          {selected ? (
+            <TouchableOpacity
+              style={s.continueBtn}
+              onPress={handleConfirm}
+              disabled={submitting}
+              activeOpacity={0.88}
+            >
+              {submitting ? (
+                <ActivityIndicator size="small" color={Colors.white} />
+              ) : (
+                <>
+                  <Text style={s.continueBtnText}>
+                    {!business ? t('mine.businesses.continueToApply') : t('mine.businesses.confirmPlan')}
+                  </Text>
+                  <MaterialCommunityIcons name="arrow-right" size={14} color={Colors.white} />
+                </>
+              )}
+            </TouchableOpacity>
+          ) : (
+            <View style={s.continueBtnOff}>
+              <MaterialCommunityIcons name="gesture-tap" size={16} color={Colors.textMuted} />
+              <Text style={s.continueBtnOffText}>{t('postAd.selectPlanToContinue')}</Text>
+            </View>
+          )}
+        </View>
+      </View>
+    </View>
   );
 }

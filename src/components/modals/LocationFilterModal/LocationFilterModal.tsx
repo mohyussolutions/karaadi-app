@@ -10,11 +10,11 @@ import { useResponsive } from "../../../hooks/useResponsive";
 import { useAppTranslation } from "../../../hooks/useAppTranslation";
 import { useLocationFilterRows } from "../../../hooks/useLocationFilterRows";
 import type { LocationFilterModalProps, FilterRow } from "../../../util/types";
-import { KEYBOARD_AVOIDING_BEHAVIOR } from "../../../platform/common-for-ios-andriod";
 import { tabletModalStyles } from "../../../util/styles/shared/tablet.styles";
 import { createStyles } from "../../../util/styles/browse/subcategoryBrowse.styles";
 import { isCityRow } from "./LocationFilterModal.helpers";
-import { TABLET_MODAL_ICON_SIZES } from '../../../constants/constants';
+import { TABLET_MODAL_ICON_SIZES } from '../../../constants';
+import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../util/platform/common-for-ios-andriod';
 
 type FilterStyles = ReturnType<typeof createStyles>;
 
@@ -190,7 +190,7 @@ export function LocationFilterModal({
           styles={styles}
         />
 
-        <FlatList
+        <FlatList overScrollMode="never"
           data={rows}
           keyExtractor={(row) => row.key}
           style={styles.filterList}

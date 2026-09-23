@@ -19,7 +19,7 @@ export default function SavedSearchesScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
-      <FlatList
+      <FlatList overScrollMode="never"
         data={searches}
         keyExtractor={(item) => item._id || item.id || ''}
         contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 84 }, searches.length === 0 && { flex: 1 }]}

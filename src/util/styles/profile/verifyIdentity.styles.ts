@@ -4,7 +4,6 @@ import { RADII } from "../../colors/colors";
 import { createCommonStyles } from "../common/common.styles";
 
 const centered = { alignItems: "center", justifyContent: "center" } as const;
-const rowCentered = { flexDirection: "row", alignItems: "center" } as const;
 
 const primaryButton = (Colors: ColorPalette, paddingHorizontal: number) =>
   ({

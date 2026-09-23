@@ -1,28 +1,10 @@
 import { apiClient } from '../client';
 import { GEO_ENDPOINTS } from '../../api/endpoints';
-import type { GeoRegion, GeoCity } from '../../util/types/browse.types';
+import type { GeoRegion } from '../../util/types/browse.types';
 
 export async function clientGetAllRegions(): Promise<GeoRegion[]> {
   try {
     const res = await apiClient.get<GeoRegion[]>(GEO_ENDPOINTS.REGIONS);
-    return res.data ?? [];
-  } catch {
-    return [];
-  }
-}
-
-export async function clientGetAllCities(regionId?: string): Promise<GeoCity[]> {
-  if (!regionId) {
-    const regions = await clientGetAllRegions();
-    return regions.flatMap((r) => r.cities ?? []);
-  }
-
-  const regions = await clientGetAllRegions();
-  const region = regions.find((r) => r.id === regionId);
-  if (region?.cities) return region.cities;
-
-  try {
-    const res = await apiClient.get<GeoCity[]>(GEO_ENDPOINTS.CITIES, { params: { regionId } });
     return res.data ?? [];
   } catch {
     return [];

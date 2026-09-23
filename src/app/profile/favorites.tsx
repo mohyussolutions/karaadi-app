@@ -16,9 +16,7 @@ import { useFavoritesData } from '../../hooks/useFavoritesData';
 import type { Favorite } from '../../util/types';
 import type { ListingBase } from '../../util/types/listing.types';
 import { createStyles } from '../../util/styles/profile/favorites.styles';
-import { ROUTES, FAVORITES_H_PAD, FAVORITES_COL_GAP } from '../../constants/constants';
-
-const NUM_COLUMNS = 2;
+import { ROUTES, FAVORITES_H_PAD, FAVORITES_COL_GAP, NUM_COLUMNS } from '../../constants';
 
 function toListingItem(fav: Favorite): ListingBase {
   return {
@@ -86,7 +84,7 @@ export default function FavoritesScreen() {
 
   return (
     <SafeAreaView style={s.safe} edges={['bottom']}>
-      <FlashList
+      <FlashList overScrollMode="never"
         data={favorites}
         keyExtractor={(fav) => fav.id || fav.itemId}
         numColumns={NUM_COLUMNS}

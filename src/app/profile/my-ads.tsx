@@ -10,39 +10,20 @@ import { LoadingSpinner } from '../../components/loading';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/profile/myAds.styles';
 import { useMyAds } from '../../hooks/useMyAds';
-import { useAppDispatch } from '../../store/store';
-import { prefillForPayment } from '../../store/slices/newAdSlice';
+import { usePayForAd } from '../../hooks/usePayForAd';
 import type { ListingBase } from '../../util/types';
-import { ROUTES } from '../../constants/constants';
+import { ROUTES } from '../../constants';
 
 export default function MyAdsScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { width } = useGlobal();
-  const dispatch = useAppDispatch();
   const { user, ads, loading, refreshing, error, deletingId, onRefresh, retry, handleDelete } = useMyAds();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles, width);
   const insets = useSafeAreaInsets();
 
-  const handlePayNow = useCallback((item: ListingBase) => {
-    dispatch(prefillForPayment({
-      categoryKey: item.mainCategory,
-      createdId: item._id || item.id,
-      createdTitle: item.title,
-      createdItem: {
-        title: item.title,
-        price: item.price,
-        images: item.images,
-        categoryTag: item.category || item.mainCategory,
-        mainCategory: item.mainCategory,
-        region: item.region || undefined,
-        city: item.city || undefined,
-        description: item.description || undefined,
-      },
-    }));
-    router.push(ROUTES.newAd);
-  }, [dispatch, router]);
+  const handlePayNow = usePayForAd();
 
   const keyExtractor = useCallback((item: ListingBase) => item._id || item.id, []);
 
@@ -87,7 +68,7 @@ export default function MyAdsScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
-      <FlatList
+      <FlatList overScrollMode="never"
         data={ads}
         keyExtractor={keyExtractor}
         numColumns={2}

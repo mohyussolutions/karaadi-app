@@ -5,10 +5,6 @@ export function setActiveChatId(id: number | null): void {
   _activeChatId = id;
 }
 
-export function getActiveChatId(): number | null {
-  return _activeChatId;
-}
-
 export function isViewingChat(chatId: number): boolean {
   return _activeChatId === chatId;
 }

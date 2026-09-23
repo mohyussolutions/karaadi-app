@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { forgotPassword } from '../actions/core/auth.actions';
-import { REGEX_EMAIL } from '../constants';
-import { ROUTES } from '../constants/constants';
+import { REGEX_EMAIL, ROUTES } from '../constants';
 import type { ApiError } from '../util/types/generic.types';
 
 export function useForgotPassword() {

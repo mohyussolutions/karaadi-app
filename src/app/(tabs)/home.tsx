@@ -15,11 +15,9 @@ import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useSearchFilteredListings } from '../../hooks/useFilteredListings';
 import { useSkeletonListings } from '../../hooks/useSkeletonListings';
 import { useAppSelector } from '../../store/store';
-import { H_PAD, COL_GAP } from '../../constants/constants';
+import { H_PAD, COL_GAP, SKELETON_COUNT } from '../../constants';
 import { createStyles } from '../../util/styles/tabs/homeTab.styles';
 import type { ListingBase } from '../../util/types/listing.types';
-
-const SKELETON_COUNT = 6;
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -88,7 +86,7 @@ export default function HomeScreen() {
           <Text style={[styles.sectionTitle, styles.recTitle]}>
             {t('recommended') || 'Recommended for You'}
           </Text>
-          <FlashList
+          <FlashList overScrollMode="never"
             horizontal
             data={recommendations}
             keyExtractor={(item) => `rec-${item.id || item._id}`}
@@ -103,7 +101,7 @@ export default function HomeScreen() {
   );
 
   const feedList = (
-    <FlashList
+    <FlashList overScrollMode="never"
       key={`feed-${numColumns}`}
       data={showSkeleton ? skeletonData : displayListings}
       numColumns={numColumns}
@@ -147,7 +145,7 @@ export default function HomeScreen() {
       <View style={styles.safe}>
         <View style={styles.outerRow}>
           <View style={[styles.sidebar, { width: sidebarWidth }]}>
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.sidebarContent}>
+            <ScrollView overScrollMode="never" showsVerticalScrollIndicator={false} contentContainerStyle={styles.sidebarContent}>
               <View style={styles.videoSection}>
                 <HowToUseVideo />
               </View>

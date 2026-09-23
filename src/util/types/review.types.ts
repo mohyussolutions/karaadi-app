@@ -17,5 +17,3 @@ export interface Review extends ReviewCore {
   createdAt: string;
   user?: ReviewAuthor;
 }
-
-export interface CreateReviewPayload extends ReviewCore {}

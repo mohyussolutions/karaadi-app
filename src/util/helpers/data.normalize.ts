@@ -39,7 +39,7 @@ function toStringArray(value: unknown): string[] {
   return [String(value)];
 }
 
-export function normalizeItem<T>(item: RawItem): T {
+function normalizeItem<T>(item: RawItem): T {
   const categoryString = toSingleString(item['category']);
   const subcategoryString = toSingleString(item['subcategory']);
   const categoryTag = (item['categoryTag'] as string) || categoryString;
@@ -55,7 +55,7 @@ export function normalizeItem<T>(item: RawItem): T {
   } as T;
 }
 
-export function normalizeList<T>(items: RawItem[]): T[] {
+function normalizeList<T>(items: RawItem[]): T[] {
   return items.map((item) => normalizeItem<T>(item));
 }
 

@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { getListingDetailRoute } from "../util/helpers/nav.routing";
 import type { NotificationTapRouter as Router, NotificationData } from "../util/types/notification.types";
 import type { NotificationResponse } from "expo-notifications";
+import { USE_NOTIFICATION_TAP_ROUTES } from "../constants";
 
 LogBox.ignoreLogs([
   "expo-notifications: Android Push notifications",
@@ -15,21 +16,13 @@ try {
   Notifications = require("expo-notifications");
 } catch {}
 
-const ROUTES = {
-  chat: "/profile/chat",
-  wanted: "/profile/wanted",
-  subscription: "/profile/subscription",
-  messages: "/(tabs)/messages",
-  notifications: "/profile/notifications",
-} as const;
-
 function getChatId(data: NotificationData) {
   return data?.chatId ?? data?.chat_id ?? data?.conversationId ?? data?.conversation_id;
 }
 
 function navigateToChat(router: Router, data: NotificationData, chatId: string) {
   router.push({
-    pathname: ROUTES.chat,
+    pathname: USE_NOTIFICATION_TAP_ROUTES.chat,
     params: {
       chatId: String(chatId),
       userId: data.senderId || "",
@@ -44,11 +37,11 @@ function navigateToAlertMatch(router: Router, data: NotificationData) {
       getListingDetailRoute({ id: data.listingId, category: data.category }) as Parameters<typeof router.push>[0],
     );
   } else {
-    router.push(ROUTES.wanted);
+    router.push(USE_NOTIFICATION_TAP_ROUTES.wanted);
   }
 }
 
-function handleNotificationData(router: Router, data: NotificationData) {
+export function handleNotificationData(router: Router, data: NotificationData) {
   const type = data?.type as string | undefined;
   const chatId = getChatId(data);
 
@@ -63,16 +56,16 @@ function handleNotificationData(router: Router, data: NotificationData) {
   }
 
   if (type === "subscription" || type === "subscription_expiry") {
-    router.push(ROUTES.subscription);
+    router.push(USE_NOTIFICATION_TAP_ROUTES.subscription);
     return;
   }
 
   if (type === "message") {
-    router.push(ROUTES.messages);
+    router.push(USE_NOTIFICATION_TAP_ROUTES.messages);
     return;
   }
 
-  router.push(ROUTES.notifications);
+  router.push(USE_NOTIFICATION_TAP_ROUTES.notifications);
 }
 
 export function useNotificationTap() {

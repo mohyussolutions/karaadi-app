@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
 import { shadow } from '../../helpers/shadow';
-import { FAB_SIZE } from '../../../constants/constants';
+import { FAB_SIZE } from '../../../constants';
 
 const centered = { alignItems: 'center', justifyContent: 'center' } as const;
 const rowCentered = { flexDirection: 'row', alignItems: 'center' } as const;

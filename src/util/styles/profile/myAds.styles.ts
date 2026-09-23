@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import type { ColorPalette } from "../../../hooks/useTheme";
 import { RADII } from "../../colors/colors";
-import { H_PAD, COL_GAP } from "../../../constants/constants";
+import { H_PAD, COL_GAP } from "../../../constants";
 import { shadow } from "../../helpers/shadow";
 import { createCommonStyles } from "../common/common.styles";
 

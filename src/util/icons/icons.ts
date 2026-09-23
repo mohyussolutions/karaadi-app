@@ -1,35 +1,10 @@
 import type {
-  CategoryIcons, ListingTypeIcons, ConditionIcons, SocialIcons, NavIcons,
+  SocialIcons, NavIcons,
 } from '../types/icon.types';
 
 export type {
-  MCIcon, IconName, NavIconEntry, CategoryIcons, ListingTypeIcons, ConditionIcons, SocialIcons, NavIcons,
+  MCIcon, IconName, SocialIcons
 } from '../types/icon.types';
-
-export const CATEGORY_ICONS: CategoryIcons = {
-  Cars: "car-outline",
-  Motorcycles: "motorbike",
-  Boats: "sail-boat",
-  farmequipment: "tractor-variant",
-  RealEstate: "home-city-outline",
-  Marketplace: "storefront-outline",
-  Jobs: "briefcase-outline",
-  Subscriptions: "crown-outline",
-};
-
-export const LISTING_TYPE_ICONS: ListingTypeIcons = {
-  sell: "tag-outline",
-  rent: "key-outline",
-  wanted: "magnify",
-};
-
-export const CONDITION_ICONS: ConditionIcons = {
-  new: "star-circle-outline",
-  used: "recycle",
-  likeNew: "star-half-full",
-  refurbished: "wrench-outline",
-};
-
 export const SOCIAL_ICONS: SocialIcons = {
   phone: "phone-outline",
   whatsapp: "whatsapp",

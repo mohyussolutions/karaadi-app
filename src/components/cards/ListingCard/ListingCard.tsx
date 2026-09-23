@@ -3,9 +3,8 @@ import { View, Text, TouchableOpacity, ActivityIndicator, type GestureResponderE
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { formatPrice, getImageUrl, truncate, truncateWords } from '../../../util/helpers';
-import { PLACEHOLDER_IMAGE } from '../../../constants';
-import { getListingDetailRoute } from '../../../util/helpers';
+import { formatPrice, getImageUrl, truncate, truncateWords, getListingDetailRoute } from '../../../util/helpers';
+import { PLACEHOLDER_IMAGE, ROUTES } from '../../../constants';
 import { showToast } from '../../../util/cache/toastService';
 import { useAppSelector, useAppDispatch } from '../../../store/store';
 import { toggleFavorite, selectFavoriteIdSet } from '../../../store/slices/favoritesSlice';
@@ -13,8 +12,6 @@ import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import RemoteImage from '../../shared/RemoteImage/RemoteImage';
 import type { ListingCardProps } from '../../../util/types';
 import { createStyles } from '../../../util/styles/shared/listingCard.styles';
-import { ROUTES } from '../../../constants/constants';
-
 const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey, imageAspectRatio, priceLabel, onDelete, removing }: ListingCardProps) {
   const router = useRouter();
   const { t } = useTranslation();

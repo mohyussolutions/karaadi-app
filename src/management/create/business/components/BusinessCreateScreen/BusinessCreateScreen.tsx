@@ -20,15 +20,7 @@ import { ApprovalStep } from '../ApprovalStep/ApprovalStep';
 import { CategoriesStep } from '../CategoriesStep/CategoriesStep';
 import { PlanStep } from '../PlanStep/PlanStep';
 import { PostStep } from '../PostStep/PostStep';
-
-const EMPTY: BusinessApplyFormState = {
-  name: '', orgNumber: '', email: '', phone: '',
-  contactName: '', website: '', address: '', description: '',
-};
-
-const CHECKUP_INDEX: Record<BusinessScreen, number> = {
-  plan: 0, apply: 1, approval: 2, categories: 3, post: 4,
-};
+import { EMPTY, CHECKUP_INDEX } from "../../../../../constants";
 
 export default function BusinessCreateScreen() {
   const router = useRouter();

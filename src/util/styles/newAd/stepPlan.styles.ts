@@ -6,6 +6,8 @@ import { createCommonStyles } from "../common/common.styles";
 export const PLAN_WIDE_MAX_WIDTH = 760;
 export const PLAN_GRID_GAP = 14;
 export const PLAN_COMPACT_MAX_WIDTH = 360;
+export const PLAN_FOOTER_HEIGHT = 108;
+export const PLAN_SCROLL_PADDING = 16;
 
 const centered = { alignItems: "center", justifyContent: "center" } as const;
 const rowCentered = { flexDirection: "row", alignItems: "center" } as const;
@@ -51,7 +53,6 @@ const planFrameStyles = (Colors: ColorPalette) =>
     },
   }) as const;
 
-// `compact` scales the card down for narrow phones (< 360pt wide).
 const planContentStyles = (Colors: ColorPalette, compact: boolean) =>
   ({
     inner: compact
@@ -129,7 +130,7 @@ const screenStyles = (Colors: ColorPalette) => {
       backgroundColor: Colors.gray100,
       ...centered,
     },
-    scroll: { padding: 16, flexGrow: 1 },
+    scroll: { padding: PLAN_SCROLL_PADDING, flexGrow: 1 },
     header: { alignItems: "center", marginBottom: 14, gap: 4 },
     headerIcon: {
       width: 44,
@@ -142,7 +143,6 @@ const screenStyles = (Colors: ColorPalette) => {
     title: { fontSize: 19, fontWeight: "800", color: Colors.textPrimary },
     sub: { fontSize: 12.5, color: Colors.textMuted, textAlign: "center" },
     cardsCol: { gap: 14 },
-    // Tablets / landscape phones: two cards per row inside a centered column.
     wideContent: { alignSelf: "center", width: "100%", maxWidth: PLAN_WIDE_MAX_WIDTH },
     cardsGrid: { flexDirection: "row", flexWrap: "wrap", gap: PLAN_GRID_GAP },
     footerWide: { alignSelf: "center", width: "100%", maxWidth: 460 },
@@ -156,29 +156,9 @@ const footerStyles = (Colors: ColorPalette) =>
       left: 0,
       right: 0,
       paddingHorizontal: 16,
-      paddingTop: 14,
-      paddingBottom: 16,
-      backgroundColor: Colors.card,
-      borderTopLeftRadius: 24,
-      borderTopRightRadius: 24,
-      borderWidth: 1,
-      borderColor: Colors.border,
-      borderBottomWidth: 0,
-      ...shadow({
-        color: Colors.black,
-        offset: { width: 0, height: -4 },
-        opacity: 0.08,
-        radius: 16,
-        elevation: 8,
-      }),
-    },
-    footerHandle: {
-      width: 36,
-      height: 4,
-      borderRadius: 2,
-      backgroundColor: Colors.border,
-      alignSelf: "center",
-      marginBottom: 12,
+      paddingTop: 10,
+      paddingBottom: 12,
+      backgroundColor: Colors.background,
     },
     continueBtn: {
       ...pillButton,

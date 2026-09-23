@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
-import { H_PAD } from '../../../constants/constants';
+import { H_PAD } from '../../../constants';
 import { createCommonStyles } from '../common/common.styles';
 export function createStyles(Colors: ColorPalette) {
   const common = createCommonStyles(Colors);

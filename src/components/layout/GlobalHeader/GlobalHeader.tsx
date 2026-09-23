@@ -14,8 +14,9 @@ import { useThemeColors, useThemedStyles, useThemeMode } from '../../../hooks/us
 import { useResponsive } from '../../../hooks/useResponsive';
 import { tabletHeaderStyles } from '../../../util/styles/shared/tablet.styles';
 import { createStyles } from '../../../util/styles/layout/globalHeader.styles';
-import { AUTH_RE, CHAT_RE, DETAIL_RE, TAB_PATHS, LANGS, ROUTES, TABLET_HEADER_ICON_SIZES, TABLET_LANG_DROPDOWN_TOP_OFFSET } from '../../../constants/constants';
+import { AUTH_RE, CHAT_RE, TAB_PATHS, LANGS, ROUTES, TABLET_HEADER_ICON_SIZES, TABLET_LANG_DROPDOWN_TOP_OFFSET } from '../../../constants';
 import type { Lang } from '../../../i18n/translations';
+import { useIsOverlayActive } from '../../../navigation/headerVisibility';
 
 export default function GlobalHeader() {
   const insets = useSafeAreaInsets();
@@ -27,7 +28,7 @@ export default function GlobalHeader() {
   const unreadCount = useAppSelector((s) => s.notifications.unreadCount);
   const user = useAppSelector((s) => s.auth.user);
 
-  const { logoW } = useGlobal();
+  const { logoSize } = useGlobal();
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchInput, setSearchInput] = useState('');
@@ -39,7 +40,7 @@ export default function GlobalHeader() {
 
   const isAuth = AUTH_RE.test(pathname);
   const isChat = CHAT_RE.test(pathname);
-  const isDetail = DETAIL_RE.test(pathname);
+  const isDetail = useIsOverlayActive();
   const isTab = TAB_PATHS.has(pathname);
   const showBack = !isTab && !isAuth && !isChat && !isDetail && router.canGoBack();
   const showSearchBar = !isDetail && !isAuth && !isChat;
@@ -72,7 +73,7 @@ export default function GlobalHeader() {
       <View style={[styles.wrapper, { paddingTop: insets.top }]}>
         <View style={[styles.inner, isTablet && tabletHeaderStyles.inner]}>
           <TouchableOpacity onPress={() => router.push(ROUTES.home)} activeOpacity={0.8}>
-            <Image source={require('../../../../assets/logo.jpg')} style={[styles.logo, isTablet && tabletHeaderStyles.logo]} resizeMode="contain" />
+            <Image source={require('../../../../assets/logo.jpg')} style={[styles.logo, logoSize()]} resizeMode="contain" />
           </TouchableOpacity>
           <View style={styles.rightGroup}>
             <Switch
@@ -112,7 +113,7 @@ export default function GlobalHeader() {
             )}
           </View>
           <TouchableOpacity onPress={() => router.push(ROUTES.home)} activeOpacity={0.8}>
-            <Image source={require('../../../../assets/logo.jpg')} style={[styles.logo, { width: logoW() }]} resizeMode="contain" />
+            <Image source={require('../../../../assets/logo.jpg')} style={[styles.logo, logoSize()]} resizeMode="contain" />
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.notifBtn, isTablet && tabletHeaderStyles.notifBtn]}

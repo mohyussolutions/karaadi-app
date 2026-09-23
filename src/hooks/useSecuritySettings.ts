@@ -9,8 +9,6 @@ import {
 } from '../actions/core/security.actions';
 import type { Session, LoginEntry } from '../util/types';
 
-export type { Session, LoginEntry };
-
 export function useSecuritySettings() {
   const router = useRouter();
   const { t } = useTranslation();

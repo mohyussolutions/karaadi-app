@@ -18,7 +18,7 @@ export function NestedChips({ items, selectedKey, onPress }: NestedChipsProps) {
 
   return (
     <View style={styles.chipsScroll}>
-      <FlashList
+      <FlashList overScrollMode="never"
         horizontal
         data={items}
         keyExtractor={(item) => item.key}

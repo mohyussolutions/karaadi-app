@@ -29,9 +29,8 @@ import { useMessageBanner } from "../hooks/useMessageBanner";
 import { useSocketMessages } from "../hooks/useSocketMessages";
 import { useSocketNotifications } from "../hooks/useSocketNotifications";
 import { useNotificationTap } from "../hooks/useNotificationTap";
-
-const DEFAULT_HEADER_CONTENT_HEIGHT = 104;
-const AUTH_HEADER_CONTENT_HEIGHT = 60;
+import { useIsOverlayActive } from "../navigation/headerVisibility";
+import { DEFAULT_HEADER_CONTENT_HEIGHT, AUTH_HEADER_CONTENT_HEIGHT } from "../constants";
 
 export default function RootLayout() {
   const [showEula, setShowEula] = useState(false);
@@ -61,7 +60,8 @@ export default function RootLayout() {
   const { mode, resolved } = useThemeMode();
   const Colors = useThemeColors();
   const pathname = usePathname();
-  const showTabBar = useTabBarVisibility(pathname);
+  const overlayActive = useIsOverlayActive();
+  const showTabBar = useTabBarVisibility(pathname) && !overlayActive;
 
   useEffect(() => {
     if (Platform.OS !== "web") {
@@ -80,13 +80,12 @@ export default function RootLayout() {
     <View style={{ flex: 1, backgroundColor: Colors.background }}>
       <LanguageSync />
       <StatusBar style={resolved === "dark" ? "light" : "dark"} />
-      <GlobalHeader />
       <Stack
         screenOptions={{
           headerShown: false,
           title: "",
           contentStyle: { backgroundColor: Colors.background, paddingTop: defaultHeaderPadding },
-          animation: Platform.OS === "web" ? "none" : "default",
+          animation: Platform.OS === "ios" ? "default" : "none",
         }}
       >
         {ROOT_STACK_SCREENS.map(({ name, options, contentPadding }) => (
@@ -107,6 +106,7 @@ export default function RootLayout() {
           />
         ))}
       </Stack>
+      <GlobalHeader />
       {showTabBar && <BottomTabBar />}
       {showTabBar && <Hage />}
       <SaveToast />

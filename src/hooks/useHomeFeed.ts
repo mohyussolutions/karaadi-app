@@ -4,9 +4,9 @@ import { fetchFeedGroup, fetchFeedPage } from '../actions/categories/feed.action
 import { mergeListings } from '../util/cache/feedCacheService';
 import { prefetchImages } from '../util/helpers';
 import { setFeed, mergeFeed, setRecommendations } from '../store/slices/feedSlice';
-import { INITIAL_VISIBLE, FEED_REVEAL_STEPS, READ_MORE_STEP, EAGER_PREFETCH_COUNT, FEED_GROUPS, FEED_MAX_ITEMS, FEED_DEFAULT_PAGE } from '../constants/constants';
+import { INITIAL_VISIBLE, FEED_REVEAL_STEPS, READ_MORE_STEP, EAGER_PREFETCH_COUNT, FEED_GROUPS, FEED_MAX_ITEMS, FEED_DEFAULT_PAGE } from '../constants';
 import { fetchRecommendations, fetchWantedListings } from './useHomeFeed.helpers';
-import { sortByTierRandom } from '../policy/feedTierPolicy';
+import { sortByTierRandom } from '../util/policy/feedTierPolicy';
 import type { ListingBase } from '../util/types/listing.types';
 import type { UseHomeFeedResult } from '../util/types/useHomeFeed.types';
 

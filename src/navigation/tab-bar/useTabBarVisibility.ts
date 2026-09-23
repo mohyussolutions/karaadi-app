@@ -1,5 +1,4 @@
-const HIDDEN_TAB_BAR_ROUTES = ["/(auth)", "/listing", "/profile/chat"];
-const NEW_AD_ROUTES = ["/(tabs)/new-ad", "/new-ad"];
+import { HIDDEN_TAB_BAR_ROUTES, NEW_AD_ROUTES } from "../../constants";
 
 export function useTabBarVisibility(pathname: string) {
   const isNewAdFlow = NEW_AD_ROUTES.some((route) => pathname.startsWith(route));

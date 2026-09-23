@@ -1,68 +1,8 @@
 import { apiClient } from '../client';
 import { FEE_ENDPOINTS } from '../../api/endpoints';
-import type { ApiError } from '../../util/types/generic.types';
-import type { AllFeeConfigs, FeeRecord, SubPlanConfig, SystemFeeConfig, FeeArrayKey } from '../../util/types/fee.types';
-
+import type { AllFeeConfigs, SubPlanConfig } from '../../util/types/fee.types';
+import { CATEGORY_FEE_KEY, SUBCATEGORY_FEE_FIELD, SUB_PLANS_TTL } from "../../constants";
 const feeUrl = (sub: string) => `${FEE_ENDPOINTS.BASE}/${sub}`;
-const feeById = (sub: string, id: string) => `${FEE_ENDPOINTS.BASE}/${sub}/${id}`;
-
-const CATEGORY_FEE_KEY: Record<string, FeeArrayKey> = {
-  Cars: 'cars',
-  Marketplace: 'marketplace',
-  RealEstate: 'realEstate',
-  Motorcycles: 'motorcycles',
-  Boats: 'boats',
-  farmequipment: 'equipment',
-  Jobs: 'marketplace',
-};
-
-const SUBCATEGORY_FEE_FIELD: Record<string, Record<string, string>> = {
-  Marketplace: {
-    antiques: 'art',
-    electronics: 'electronics',
-    animalAndSupplies: 'animal',
-    sportsAndOutdoors: 'sports',
-    furniture: 'furniture',
-    fashion: 'fashion',
-    education: 'other',
-  },
-  Cars: {
-    carsForSale: 'carSale',
-    leaseCars: 'carRent',
-    trailers: 'trailer',
-    carParts: 'carParts',
-    truck: 'truck',
-    electricCars: 'electricCar',
-    buses: 'carSale',
-  },
-  RealEstate: {
-    forRent: 'rent',
-    forSale: 'sale',
-    landForSale: 'land',
-    farmForSale: 'farm',
-    commercial: 'business',
-  },
-  Motorcycles: {
-    forSale: 'motoSale',
-    forRent: 'motoRent',
-    spareParts: 'motoParts',
-    other: 'other',
-  },
-  Boats: {
-    boatsForSale: 'boatSale',
-    boatsForRent: 'boatRent',
-    boatEnginesForSale: 'boatEngine',
-    boatParts: 'boatParts',
-  },
-  farmequipment: {
-    tractor: 'tractorSale',
-    tools: 'agriTool',
-    harvester: 'harvester',
-    fertilizerSpreader: 'other',
-    plow: 'other',
-    irrigation: 'other',
-  },
-};
 
 export async function getFeeForCategory(
   categoryKey: string,
@@ -84,7 +24,7 @@ export async function getFeeForCategory(
   }
 }
 
-export async function getAllFees(): Promise<AllFeeConfigs> {
+async function getAllFees(): Promise<AllFeeConfigs> {
   try {
     const { data } = await apiClient.get<Partial<AllFeeConfigs>>(feeUrl('all'));
     return {
@@ -105,7 +45,6 @@ export async function getAllFees(): Promise<AllFeeConfigs> {
 }
 
 let _subPlansCache: { data: SubPlanConfig[]; at: number } | null = null;
-const SUB_PLANS_TTL = 60_000;
 
 export async function getSubPlans(): Promise<SubPlanConfig[]> {
   if (_subPlansCache && Date.now() - _subPlansCache.at < SUB_PLANS_TTL) {
@@ -120,85 +59,3 @@ export async function getSubPlans(): Promise<SubPlanConfig[]> {
   }
 }
 
-export async function getSubPlanById(id: string): Promise<SubPlanConfig | null> {
-  try {
-    const { data } = await apiClient.get<SubPlanConfig>(feeById('sub-plans', id));
-    return data ?? null;
-  } catch {
-    return null;
-  }
-}
-
-export async function getSystemConfig(): Promise<SystemFeeConfig | null> {
-  try {
-    const { data } = await apiClient.get<SystemFeeConfig>(feeUrl('system-config'));
-    return data ?? null;
-  } catch {
-    return null;
-  }
-}
-
-async function getCategoryFees(cat: string): Promise<FeeRecord[]> {
-  try {
-    const { data } = await apiClient.get<FeeRecord[] | FeeRecord>(feeUrl(cat));
-    return Array.isArray(data) ? data : (data ? [data] : []);
-  } catch { return []; }
-}
-async function getCategoryFeeById(cat: string, id: string): Promise<FeeRecord | null> {
-  try { const { data } = await apiClient.get<FeeRecord>(feeById(cat, id)); return data ?? null; } catch { return null; }
-}
-async function createCategoryFee(cat: string, body: Record<string, unknown>) {
-  try { const { data } = await apiClient.post<FeeRecord>(feeUrl(cat), body); return data; } catch (e) { return { error: (e as ApiError)?.response?.data?.message || 'Failed' }; }
-}
-async function updateCategoryFee(cat: string, id: string, body: Record<string, unknown>) {
-  try { const { data } = await apiClient.patch<FeeRecord>(feeById(cat, id), body); return data; } catch (e) { return { error: (e as ApiError)?.response?.data?.message || 'Failed' }; }
-}
-async function deleteCategoryFee(cat: string, id: string) {
-  try { await apiClient.delete(feeById(cat, id)); return { success: true }; } catch { return { success: false }; }
-}
-
-export const getMarketplaceFees    = () => getCategoryFees('marketplace');
-export const getMarketplaceFeeById = (id: string) => getCategoryFeeById('marketplace', id);
-export const createMarketplaceFee  = (d: Record<string, unknown>) => createCategoryFee('marketplace', d);
-export const updateMarketplaceFee  = (id: string, d: Record<string, unknown>) => updateCategoryFee('marketplace', id, d);
-export const deleteMarketplaceFee  = (id: string) => deleteCategoryFee('marketplace', id);
-
-export const getRealEstateFees    = () => getCategoryFees('real-estate');
-export const getRealEstateFeeById = (id: string) => getCategoryFeeById('real-estate', id);
-export const createRealEstateFee  = (d: Record<string, unknown>) => createCategoryFee('real-estate', d);
-export const updateRealEstateFee  = (id: string, d: Record<string, unknown>) => updateCategoryFee('real-estate', id, d);
-export const deleteRealEstateFee  = (id: string) => deleteCategoryFee('real-estate', id);
-
-export const getCarFees    = () => getCategoryFees('cars');
-export const getCarFeeById = (id: string) => getCategoryFeeById('cars', id);
-export const createCarFee  = (d: Record<string, unknown>) => createCategoryFee('cars', d);
-export const updateCarFee  = (id: string, d: Record<string, unknown>) => updateCategoryFee('cars', id, d);
-export const deleteCarFee  = (id: string) => deleteCategoryFee('cars', id);
-
-export const getMotorcycleFees    = () => getCategoryFees('motorcycles');
-export const getMotorcycleFeeById = (id: string) => getCategoryFeeById('motorcycles', id);
-export const createMotorcycleFee  = (d: Record<string, unknown>) => createCategoryFee('motorcycles', d);
-export const updateMotorcycleFee  = (id: string, d: Record<string, unknown>) => updateCategoryFee('motorcycles', id, d);
-export const deleteMotorcycleFee  = (id: string) => deleteCategoryFee('motorcycles', id);
-
-export const getBoatFees    = () => getCategoryFees('boats');
-export const getBoatFeeById = (id: string) => getCategoryFeeById('boats', id);
-export const createBoatFee  = (d: Record<string, unknown>) => createCategoryFee('boats', d);
-export const updateBoatFee  = (id: string, d: Record<string, unknown>) => updateCategoryFee('boats', id, d);
-export const deleteBoatFee  = (id: string) => deleteCategoryFee('boats', id);
-
-export const getEquipmentFees    = () => getCategoryFees('equipment');
-export const getEquipmentFeeById = (id: string) => getCategoryFeeById('equipment', id);
-export const createEquipmentFee  = (d: Record<string, unknown>) => createCategoryFee('equipment', d);
-export const updateEquipmentFee  = (id: string, d: Record<string, unknown>) => updateCategoryFee('equipment', id, d);
-export const deleteEquipmentFee  = (id: string) => deleteCategoryFee('equipment', id);
-
-export const getSubscriptionFees    = () => getCategoryFees('subscription');
-export const getSubscriptionFeeById = (id: string) => getCategoryFeeById('subscription', id);
-export const createSubscriptionFee  = (d: Record<string, unknown>) => createCategoryFee('subscription', d);
-export const updateSubscriptionFee  = (id: string, d: Record<string, unknown>) => updateCategoryFee('subscription', id, d);
-export const deleteSubscriptionFee  = (id: string) => deleteCategoryFee('subscription', id);
-
-export const getBusinessPlanFees   = () => getCategoryFees('business-plans');
-export const createBusinessPlanFee = (d: Record<string, unknown>) => createCategoryFee('business-plans', d);
-export const updateBusinessPlanFee = (id: string, d: Record<string, unknown>) => updateCategoryFee('business-plans', id, d);

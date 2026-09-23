@@ -52,25 +52,6 @@ export interface UseChatConversationArgs {
   listingType?: string;
 }
 
-export interface Chatroom {
-  chatId: number;
-  senderId: string;
-  senderName: string;
-  senderAvatar: string | null;
-  receiverId: string;
-  receiverName: string;
-  receiverAvatar: string | null;
-  lastMessage: string | null;
-  lastMessageAt: string | null;
-  unreadCount: number;
-  updatedAt: string;
-  itemTitle: string | null;
-  itemImage: string | null;
-  itemPrice: number | null;
-  itemId?: string | null;
-  itemModel?: string | null;
-}
-
 export interface HageReplySegment {
   text: string;
   route?: ListingRoute;

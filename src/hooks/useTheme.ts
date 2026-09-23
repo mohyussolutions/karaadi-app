@@ -3,13 +3,14 @@ import { Appearance, Platform, StyleSheet } from "react-native";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setThemeMode } from "../store/slices/themeSlice";
 import {
-  LIGHT_COLORS,
+  COLORS,
   DARK_COLORS,
   type ColorPalette,
   type ThemeMode,
 } from "../util/colors/colors";
+import { MAX_STYLE_VARIANTS } from "../constants";
 
-export type { ThemeMode, ColorPalette };
+export type { ColorPalette };
 
 export function useThemeMode() {
   const mode = useAppSelector((s) => s.theme.mode);
@@ -29,11 +30,10 @@ export function useThemeMode() {
 }
 
 export function useThemeColors() {
-  return useThemeMode().resolved === "dark" ? DARK_COLORS : LIGHT_COLORS;
+  return useThemeMode().resolved === "dark" ? DARK_COLORS : COLORS;
 }
 
 const styleCache = new WeakMap<object, Map<string, unknown>>();
-const MAX_STYLE_VARIANTS = 24;
 
 export function useThemedStyles<
   T extends StyleSheet.NamedStyles<T>,

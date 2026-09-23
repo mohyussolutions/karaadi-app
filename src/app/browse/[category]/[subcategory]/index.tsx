@@ -14,14 +14,12 @@ import { useResponsive } from "../../../../hooks/useResponsive";
 import { useCategoryFeed } from "../../../../hooks/useCategoryFeed";
 import { useLocationFilter } from "../../../../hooks/useLocationFilter";
 import { useSubcategoryListings } from "../../../../hooks/useSubcategoryListings";
-import { getCategoryByKey, SUB_I18N_GROUP, H_PAD, GAP } from "../../../../constants";
+import { getCategoryByKey, SUB_I18N_GROUP, H_PAD, GAP, SKELETON_COUNT } from "../../../../constants";
 import { createStyles } from "../../../../util/styles/browse/subcategoryBrowse.styles";
 import { SubcategoryHeader } from "../../../../components/browse/SubcategoryScreen/SubcategoryHeader";
 import { SidebarNested } from "../../../../components/browse/SubcategoryScreen/SidebarNested";
 import { LocationFilterModal } from "../../../../components/modals/LocationFilterModal/LocationFilterModal";
 import type { ListingBase } from "../../../../util/types/listing.types";
-
-const SKELETON_COUNT = 6;
 const skeletonData = Array.from({ length: SKELETON_COUNT }, (_, i) => ({ _id: `sk-${i}`, id: `sk-${i}` }));
 
 export default function SubcategoryScreen() {

@@ -7,7 +7,7 @@ import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { createStyles } from '../../../util/styles/newAd/imagePickerRow.styles';
 import { compressImageToDataUri } from '../../../util/helpers/imageCompression';
-import { IMAGE_MAX_COUNT, MIN_IMAGES_REQUIRED } from '../../../constants/constants';
+import { IMAGE_MAX_COUNT, MIN_IMAGES_REQUIRED } from '../../../constants';
 import { CameraCapture } from '../CameraCapture/CameraCapture';
 
 interface ImageSource {
@@ -91,7 +91,7 @@ export function ImagePickerRow({ images, onChange, error }: ImagePickerRowProps)
           </View>
         )}
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={s.row}>
+        <ScrollView overScrollMode="never" horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={s.row}>
           {images.map((uri, i) => (
             <View key={uri + i} style={s.imgWrap}>
               <Image source={{ uri }} style={s.thumb} />

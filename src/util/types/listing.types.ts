@@ -102,22 +102,6 @@ export interface Job extends ListingBase {
   location?: string;
 }
 
-export interface WantedItem extends ListingBase {}
-
-export interface CreateJobData {
-  title: string;
-  description: string;
-  company?: string;
-  location?: string;
-  salary?: number;
-  employmentType?: string;
-  experienceLevel?: string;
-  city: string;
-  region: string;
-  type?: string;
-  isPaid?: boolean;
-}
-
 export interface Subscription {
   id: string;
   _id?: string;
@@ -176,8 +160,6 @@ export interface WantedFormState {
   description: string;
   images: string[];
 }
-
-export type AnyListing = Car | RealEstate | Motorcycle | Boat | MarketplaceItem | FarmEquipment | Job | WantedItem;
 
 export interface VehicleListing extends ListingBase {
   brand?: string;

@@ -1,7 +1,6 @@
 import { getListingDetailRoute } from '../../../util/helpers/nav.routing';
 import type { ListingRoute, HageReplySegment } from '../../../util/types';
-
-const MD_LINK = /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g;
+import { MD_LINK } from "../../../constants";
 
 function routeFromUrl(url: string): ListingRoute | null {
   let pathname: string;

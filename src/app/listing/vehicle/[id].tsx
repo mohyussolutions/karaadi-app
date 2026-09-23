@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
 import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
-import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, getVehicleConfig, buildSpecItems } from '../../../constants';
+import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, getVehicleConfig, buildSpecItems, VEHICLE_REPORT_TYPES } from '../../../constants';
 import { VEHICLE_ENDPOINTS } from '../../../api/paths';
 import { useVehicleDetail } from '../../../hooks/useVehicleDetail';
 import ImageGallery from '../../../components/detail/ImageGallery/ImageGallery';
@@ -24,15 +24,6 @@ import SwipeDownToClose from '../../../components/modals/SwipeDownToClose/SwipeD
 import { createStyles } from '../../../util/styles/listing/vehicleDetail.styles';
 import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplitLayout.styles';
 import { useResponsive } from '../../../hooks/useResponsive';
-
-const VEHICLE_REPORT_TYPES: Record<string, string> = {
-  cars: 'CAR',
-  boats: 'BOAT',
-  motorcycles: 'MOTORCYCLE',
-  'farm-equipment': 'TRAKTOR',
-  farmequipment: 'TRAKTOR',
-  traktor: 'TRAKTOR',
-};
 
 export default function VehicleDetailScreen() {
   const { id, category } = useLocalSearchParams<{ id: string; category: string }>();
@@ -148,15 +139,15 @@ export default function VehicleDetailScreen() {
       <SafeAreaView style={styles.safe} edges={['bottom']}>
         {isTabletLandscape ? (
           <View style={tabletSplit.row}>
-            <ScrollView style={tabletSplit.leftCol} showsVerticalScrollIndicator={false}>
+            <ScrollView overScrollMode="never" style={tabletSplit.leftCol} showsVerticalScrollIndicator={false}>
               {galleryAndSpecs}
             </ScrollView>
-            <ScrollView style={tabletSplit.rightCol} showsVerticalScrollIndicator={false}>
+            <ScrollView overScrollMode="never" style={tabletSplit.rightCol} showsVerticalScrollIndicator={false}>
               {mainContent}
             </ScrollView>
           </View>
         ) : (
-          <ScrollView
+          <ScrollView overScrollMode="never"
             showsVerticalScrollIndicator={false}
             contentContainerStyle={isTablet ? tabletPortrait.scrollContent : undefined}
           >

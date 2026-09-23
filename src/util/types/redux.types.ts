@@ -1,5 +1,4 @@
-import type { Favorite } from './listing.types';
-import type { ListingBase } from './listing.types';
+import type { Favorite, ListingBase } from './listing.types';
 import type { HageMessage, Chat } from './chat.types';
 import type { Lang } from './common.types';
 import type { ThemeMode } from './theme.types';

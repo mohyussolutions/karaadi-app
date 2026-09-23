@@ -20,7 +20,6 @@ export function getImageUrl(path: string | undefined | null): string {
   return `${API_BASE_URL}/${path.startsWith('/') ? path.slice(1) : path}`;
 }
 
-const PREFETCH_TIMEOUT_MS = 1200;
 
 const prefetchedUris = new Set<string>();
 
@@ -49,11 +48,4 @@ export function prefetchImages(items: { images?: string[] }[], limit?: number): 
   if (imageUris.length === 0) return Promise.resolve();
   imageUris.forEach((uri) => prefetchedUris.add(uri));
   return runPrefetch(imageUris);
-}
-
-export function waitForImages(items: { images?: string[] }[], limit?: number): Promise<void> {
-  return Promise.race([
-    prefetchImages(items, limit),
-    new Promise<void>((resolve) => setTimeout(resolve, PREFETCH_TIMEOUT_MS)),
-  ]);
 }

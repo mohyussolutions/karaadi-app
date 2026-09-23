@@ -1,11 +1,9 @@
 import { useState, useCallback, useEffect } from 'react';
 import { fetchByCategory } from '../actions/categories/feed.actions';
 import { prefetchImages } from '../util/helpers';
-import { CATEGORY_FEED_LIMIT } from '../constants';
-import { sortByTierRandom } from '../policy/feedTierPolicy';
+import { CATEGORY_FEED_LIMIT, PREFETCH_LIMIT } from '../constants';
+import { sortByTierRandom } from '../util/policy/feedTierPolicy';
 import type { ListingBase } from '../util/types/listing.types';
-
-const PREFETCH_LIMIT = 20;
 
 function buildCategoryFetchParams(subcategoryKey?: string): Record<string, string> {
   const params: Record<string, string> = { limit: String(CATEGORY_FEED_LIMIT) };

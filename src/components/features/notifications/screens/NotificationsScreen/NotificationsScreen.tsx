@@ -1,4 +1,4 @@
-import { useCallback, useEffect, memo } from 'react';
+import { useCallback, useEffect, useMemo, useState, memo } from 'react';
 import { View, Text, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -11,8 +11,9 @@ import { createStyles } from '../../../../../util/styles/profile/notifications.s
 import { useNotificationsData } from '../../../../../hooks/useNotificationsData';
 import { useUnreadCount } from '../../../../../hooks/useUnreadCount';
 import { useAuthStore } from '../../../../../store/hooks/authStore';
-import type { Notification } from '../../../../../util/types';
-
+import { handleNotificationData } from '../../../../../hooks/useNotificationTap';
+import type { Notification, NotificationFilter } from '../../../../../util/types';
+import { FILTERS, ICON_BY_TYPE } from "../../../../../constants";
 const NotificationRow = memo(function NotificationRow({
   item, onPress,
 }: {
@@ -29,7 +30,7 @@ const NotificationRow = memo(function NotificationRow({
     >
       <View style={[styles.iconBg, !item.read && styles.iconBgUnread]}>
         <MaterialCommunityIcons
-          name="bell"
+          name={ICON_BY_TYPE[item.type] ?? 'bell'}
           size={20}
           color={!item.read ? Colors.primary : Colors.textMuted}
         />
@@ -59,29 +60,62 @@ export default function NotificationsScreen() {
     }
   }, [authLoading, user]);
 
+  const [filter, setFilter] = useState<NotificationFilter>('all');
+
   const handleItemPress = useCallback((item: Notification) => {
     if (!item.read) markOneRead(item._id);
-  }, [markOneRead]);
+    const data = item.data ?? {};
+    if (data.chatId || data.listingId) handleNotificationData(router, data);
+  }, [markOneRead, router]);
 
   const unreadCount = useUnreadCount(notifications);
+  const readCount = notifications.length - unreadCount;
+
+  const visible = useMemo(() => {
+    if (filter === 'unread') return notifications.filter((n) => !n.read);
+    if (filter === 'read') return notifications.filter((n) => n.read);
+    return notifications;
+  }, [notifications, filter]);
+
+  const countFor = (f: NotificationFilter) =>
+    f === 'unread' ? unreadCount : f === 'read' ? readCount : notifications.length;
 
   const renderItem = useCallback(({ item }: { item: Notification }) => (
     <NotificationRow item={item} onPress={handleItemPress} />
   ), [handleItemPress]);
 
-  if (!user || loading) return <LoadingSpinner fullScreen />;
+  if (!user || (loading && notifications.length === 0)) return <LoadingSpinner fullScreen />;
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
-      {unreadCount > 0 && (
-        <TouchableOpacity style={styles.markAllBtn} onPress={markAllRead}>
-          <Text style={styles.markAllText}>{t('notifications.card.markRead')} ({unreadCount})</Text>
-        </TouchableOpacity>
-      )}
-      <FlatList
-        data={notifications}
+      <View style={styles.toolbar}>
+        <View style={styles.tabs}>
+          {FILTERS.map((f) => {
+            const active = filter === f;
+            return (
+              <TouchableOpacity
+                key={f}
+                style={[styles.tab, active && styles.tabActive]}
+                onPress={() => setFilter(f)}
+                activeOpacity={0.85}
+              >
+                <Text style={[styles.tabText, active && styles.tabTextActive]} numberOfLines={1}>
+                  {t(`notifications.tabs.${f}`)} ({countFor(f)})
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+        {unreadCount > 0 && (
+          <TouchableOpacity onPress={markAllRead} hitSlop={8}>
+            <Text style={styles.markAllText}>{t('notifications.card.markRead')}</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+      <FlatList overScrollMode="never"
+        data={visible}
         keyExtractor={(item) => item._id}
-        contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 84 }, notifications.length === 0 && { flex: 1 }]}
+        contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 84 }, visible.length === 0 && { flex: 1 }]}
         showsVerticalScrollIndicator={false}
         initialNumToRender={15}
         maxToRenderPerBatch={15}
@@ -90,8 +124,8 @@ export default function NotificationsScreen() {
         ListEmptyComponent={
           <EmptyState
             icon="bell-off-outline"
-            title={t('notifications.empty.all')}
-            message={t('notifications.empty.allSub')}
+            title={t(`notifications.empty.${filter}`)}
+            message={filter === 'all' ? t('notifications.empty.allSub') : undefined}
           />
         }
         renderItem={renderItem}

@@ -13,7 +13,26 @@ export interface Notification {
   read: boolean;
   data?: Record<string, unknown>;
   createdAt: string;
+  local?: boolean;
 }
+
+export interface ServerNotification {
+  id?: string;
+  _id?: string;
+  userId?: string;
+  title?: string;
+  message?: string;
+  body?: string;
+  category?: string;
+  type?: string;
+  isRead?: boolean;
+  read?: boolean;
+  itemId?: string | null;
+  itemType?: string | null;
+  createdAt?: string;
+}
+
+export type NotificationFilter = 'all' | 'unread' | 'read';
 
 export interface SocketNotificationPayload {
   id?: string | number;
@@ -30,6 +49,7 @@ export interface SocketNotificationPayload {
   notificationId?: string;
   itemId?: string;
   itemType?: string;
+  isRead?: boolean;
 }
 
 export interface MessageBanner {

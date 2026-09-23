@@ -11,22 +11,6 @@ export function formatDate(dateString: string): string {
   }
 }
 
-export function formatTimeAgo(dateString: string): string {
-  try {
-    const now = Date.now();
-    const then = new Date(dateString).getTime();
-    const diff = Math.floor((now - then) / 1000);
-
-    if (diff < 60) return 'just now';
-    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-    if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-    if (diff < 604800) return `${Math.floor(diff / 86400)}d ago`;
-    return formatDate(dateString);
-  } catch {
-    return '';
-  }
-}
-
 export function truncate(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
   return `${text.slice(0, maxLength)}...`;

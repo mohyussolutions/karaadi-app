@@ -7,15 +7,11 @@ import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useResponsive } from '../../../hooks/useResponsive';
 import { useMyAdManage } from '../../../hooks/useMyAdManage';
 import { formatPrice, getImageUrl, getListingDetailRoute, getListingExpiryInfo } from '../../../util/helpers';
-import { PLACEHOLDER_IMAGE } from '../../../constants';
+import { PLACEHOLDER_IMAGE, GRID_COLUMNS, GRID_H_PAD, MY_ADS_GRID_GAP } from '../../../constants';
 import { LoadingSpinner } from '../../../components/loading';
 import { EmptyState } from '../../../components/shared';
 import RemoteImage from '../../../components/shared/RemoteImage/RemoteImage';
 import { createStyles } from '../../../util/styles/profile/myAdManage.styles';
-
-const GRID_COLUMNS = 2;
-const GRID_H_PAD = 8;
-const GRID_GAP = 8;
 
 export default function MyAdManageScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -47,7 +43,7 @@ export default function MyAdManageScreen() {
 
   const mainImage = getImageUrl(ad.images?.[0]) || PLACEHOLDER_IMAGE;
   const restImages = (ad.images || []).slice(1);
-  const gridWidth = gridCellWidth(GRID_COLUMNS, GRID_H_PAD, GRID_GAP);
+  const gridWidth = gridCellWidth(GRID_COLUMNS, GRID_H_PAD, MY_ADS_GRID_GAP);
   const expiryInfo = getListingExpiryInfo(ad.expiryDate, t);
 
   const planKey = ad.isPremium90
@@ -60,7 +56,7 @@ export default function MyAdManageScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView overScrollMode="never" contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()} hitSlop={10} style={styles.backBtn}>
             <MaterialCommunityIcons name="chevron-left" size={28} color={Colors.text} />

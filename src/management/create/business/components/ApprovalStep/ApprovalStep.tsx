@@ -9,8 +9,7 @@ import { useBusinessStatusMeta } from '../../../../../hooks/useBusinessStatusMet
 import { getMyBusinesses } from '../../../../../actions/core/business.actions';
 import type { BusinessApprovalStepProps } from '../../../../../util/types/component.types';
 import { createStyles } from '../../../../../util/styles/business/businessCreate.styles';
-
-const APPROVAL_POLL_INTERVAL_MS = 5000;
+import { APPROVAL_POLL_INTERVAL_MS } from "../../../../../constants";
 
 export function ApprovalStep({
   business,
@@ -55,7 +54,7 @@ export function ApprovalStep({
   const color = Colors[meta.colorKey];
 
   return (
-    <ScrollView contentContainerStyle={[s.statusScroll, { paddingBottom: insets.bottom + 84 }]} keyboardShouldPersistTaps="handled">
+    <ScrollView overScrollMode="never" contentContainerStyle={[s.statusScroll, { paddingBottom: insets.bottom + 84 }]} keyboardShouldPersistTaps="handled">
       <View style={[s.statusIconWrap, { backgroundColor: color + '18' }]}>
         <MaterialCommunityIcons name={meta.icon} size={56} color={color} />
       </View>

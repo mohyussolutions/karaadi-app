@@ -5,13 +5,11 @@ import {
   REGEX_PASSWORD_LOWERCASE,
   REGEX_PASSWORD_UPPERCASE,
   REGEX_PASSWORD_DIGIT,
-  REGEX_PASSWORD_SPECIAL,
-} from '../constants';
+  REGEX_PASSWORD_SPECIAL, ROUTES } from '../constants';
 import { emailSchema, usernameSchema } from '../util/validation/schemas';
-import { ROUTES } from '../constants/constants';
 import type { ApiError } from '../util/types/generic.types';
 
-export const PASSWORD_RULES = [
+const PASSWORD_RULES = [
   { id: 'length',  labelKey: 'auth.passwordRules.length',    test: (p: string) => p.length >= 8 },
   { id: 'lower',   labelKey: 'auth.passwordRules.lowercase', test: (p: string) => REGEX_PASSWORD_LOWERCASE.test(p) },
   { id: 'upper',   labelKey: 'auth.passwordRules.uppercase', test: (p: string) => REGEX_PASSWORD_UPPERCASE.test(p) },

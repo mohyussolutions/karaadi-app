@@ -1,13 +1,5 @@
 import { LogBox } from 'react-native';
-
-const IGNORED_WARNS = [
-  'expo-notifications: Android Push notifications',
-  '`expo-notifications` functionality is not fully supported in Expo Go',
-  '[expo-notifications] Listening to push token changes is not yet fully supported on web',
-  '"shadow*" style props are deprecated. Use "boxShadow"',
-  'props.pointerEvents is deprecated. Use style.pointerEvents',
-  'bundle scheme is file - unable to connect to sharedPackageConnection',
-];
+import { IGNORED_WARNS } from "../../constants";
 
 LogBox.ignoreLogs(IGNORED_WARNS);
 

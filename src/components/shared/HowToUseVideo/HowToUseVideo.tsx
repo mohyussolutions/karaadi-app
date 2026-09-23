@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
 import { useAppTranslation } from "../../../hooks/useAppTranslation";
 import { createStyles } from "../../../util/styles/shared/howToUseVideo.styles";
-import { ROUTES } from "../../../constants/constants";
+import { ROUTES } from "../../../constants";
 
 export default function HowToUseVideo() {
   const { t } = useAppTranslation();

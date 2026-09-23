@@ -3,7 +3,7 @@ import { Linking } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuthStore } from '../store/hooks/authStore';
 import { getSubscriptionById } from '../actions/categories/subscription.actions';
-import { ROUTES } from '../constants/constants';
+import { ROUTES } from '../constants';
 
 import type { Subscription } from '../util/types/listing.types';
 

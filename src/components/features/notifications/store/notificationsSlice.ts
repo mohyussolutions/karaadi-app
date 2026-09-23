@@ -2,6 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { Notification } from '../../../../util/types/notification.types';
 import type { NotificationsState } from '../../../../util/types/redux.types';
 
+const countUnread = (items: Notification[]) => items.filter((n) => !n.read).length;
+
 const initialState: NotificationsState = {
   items: [],
   unreadCount: 0,
@@ -11,9 +13,13 @@ const notificationsSlice = createSlice({
   name: 'notifications',
   initialState,
   reducers: {
-    setNotifications: (state, action: PayloadAction<Notification[]>) => {
-      state.items = action.payload;
-      state.unreadCount = action.payload.filter((n) => !n.read).length;
+    mergeServerNotifications: (state, action: PayloadAction<Notification[]>) => {
+      const serverIds = new Set(action.payload.map((n) => n._id));
+      const localOnly = state.items.filter((n) => n.local && !serverIds.has(n._id));
+      state.items = [...action.payload, ...localOnly].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      );
+      state.unreadCount = countUnread(state.items);
     },
     addNotification: (state, action: PayloadAction<Notification>) => {
       const exists = state.items.some((n) => n._id === action.payload._id);
@@ -60,7 +66,7 @@ const notificationsSlice = createSlice({
 });
 
 export const {
-  setNotifications,
+  mergeServerNotifications,
   addNotification,
   markChatNotificationsRead,
   setUnreadCount,

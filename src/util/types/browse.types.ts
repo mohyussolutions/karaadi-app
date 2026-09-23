@@ -16,19 +16,6 @@ export interface GeoRegion extends GeoEntityBase {
   cities?: GeoCity[];
 }
 
-interface NamedEntity {
-  _id: string;
-  name: string;
-}
-
-export interface Region extends NamedEntity {
-  nameEn?: string;
-  nameSo?: string;
-}
-
-export interface City extends NamedEntity {
-  region?: string;
-}
 
 export interface CityPickerItem {
   id: string;

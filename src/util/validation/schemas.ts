@@ -24,7 +24,6 @@ import {
   REGEX_YEAR,
   USERNAME_MAX_LENGTH,
   USERNAME_MIN_LENGTH,
-  WEBSITE_MAX_LENGTH,
 } from "../../constants";
 import type { FieldDef } from "../types";
 
@@ -79,29 +78,10 @@ export const somaliPhoneSchema = z
   .string()
   .trim()
   .refine(isSomaliPhone, { message: "Enter a valid Somali phone number" });
-
-export const optionalSomaliPhoneSchema = z
-  .string()
-  .trim()
-  .refine((v) => v === "" || isSomaliPhone(v), {
-    message: "Enter a valid Somali phone number",
-  });
-
 export const confirmationCodeSchema = z
   .string()
   .trim()
   .regex(REGEX_CONFIRMATION_CODE, { message: "Enter the 6-digit code" });
-
-export const optionalWebsiteSchema = z
-  .string()
-  .trim()
-  .max(WEBSITE_MAX_LENGTH, {
-    message: `Must be ${WEBSITE_MAX_LENGTH} characters or fewer`,
-  })
-  .refine((v) => v === "" || isValidWebsite(v), {
-    message: "Enter a valid website (e.g. example.com)",
-  });
-
 export const maxLenSchema = (
   max: number,
   message = `Must be ${max} characters or fewer`,

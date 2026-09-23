@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useAppTranslation } from './useAppTranslation';
-import { BIZ_STEPS } from '../navigation/config/navConfig';
 import type { StepItem } from '../util/types';
+import { BIZ_STEPS } from "../constants";
 
 export function useBizSteps(): StepItem[] {
   const { t } = useAppTranslation();

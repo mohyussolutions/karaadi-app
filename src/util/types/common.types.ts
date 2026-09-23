@@ -1,6 +1,6 @@
 import type { store } from '../../store/store';
 import type { ItemRef } from './generic.types';
-import { ROUTES } from '../../constants/constants';
+import { ROUTES } from '../../constants';
 
 export type Lang = 'en' | 'so';
 

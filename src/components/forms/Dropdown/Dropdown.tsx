@@ -67,7 +67,7 @@ export function Dropdown({ label, value, options, onChange, placeholder, require
                 />
               </View>
             )}
-            <FlatList
+            <FlatList overScrollMode="never"
               data={filtered}
               keyExtractor={item => item.value}
               keyboardShouldPersistTaps="handled"

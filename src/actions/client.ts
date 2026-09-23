@@ -16,16 +16,13 @@ import {
   RETRY_BASE_DELAY_MS,
   RETRY_MAX_DELAY_MS,
   RETRY_STATUS_CODES,
-} from "../constants/constants";
+} from "../constants";
 import type {
   ExtraHeaders,
   Params,
   RequestOptions,
 } from "../util/types/common.types";
 import type { ApiData, ApiResponse } from "../util/types/generic.types";
-
-export type { ApiResponse } from "../util/types/generic.types";
-export type { RequestOptions } from "../util/types/common.types";
 
 function buildUrl(path: string, params?: Params): string {
   const base = `${API_BASE_URL}${path}`;
@@ -169,14 +166,14 @@ async function request<T>(
   return { data: await parseBody<T>(res) };
 }
 
-export function apiGet<T = ApiData>(
+function apiGet<T = ApiData>(
   path: string,
   options?: RequestOptions,
 ): Promise<ApiResponse<T>> {
   return request<T>("GET", path, undefined, options);
 }
 
-export function apiPost<T = ApiData>(
+function apiPost<T = ApiData>(
   path: string,
   body?: unknown,
   options?: RequestOptions,
@@ -184,7 +181,7 @@ export function apiPost<T = ApiData>(
   return request<T>("POST", path, body, options);
 }
 
-export function apiPut<T = ApiData>(
+function apiPut<T = ApiData>(
   path: string,
   body?: unknown,
   options?: RequestOptions,
@@ -192,7 +189,7 @@ export function apiPut<T = ApiData>(
   return request<T>("PUT", path, body, options);
 }
 
-export function apiPatch<T = ApiData>(
+function apiPatch<T = ApiData>(
   path: string,
   body?: unknown,
   options?: RequestOptions,
@@ -200,7 +197,7 @@ export function apiPatch<T = ApiData>(
   return request<T>("PATCH", path, body, options);
 }
 
-export function apiDelete<T = ApiData>(
+function apiDelete<T = ApiData>(
   path: string,
   options?: RequestOptions,
 ): Promise<ApiResponse<T>> {

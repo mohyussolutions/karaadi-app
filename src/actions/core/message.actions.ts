@@ -17,17 +17,6 @@ export async function createOrFindChat(payload: {
   return data;
 }
 
-export async function findConversation(userId: string, otherUserId: string): Promise<Chat | null> {
-  try {
-    const { data } = await apiClient.get(CHATS_ENDPOINTS.FIND, {
-      params: { userId, otherUserId },
-    });
-    return data;
-  } catch {
-    return null;
-  }
-}
-
 export async function getChatMessages(chatId: number, userId: string): Promise<ChatMessage[]> {
   const { data } = await apiClient.get(CHATS_ENDPOINTS.MESSAGES(chatId), {
     params: { userId },
@@ -49,11 +38,6 @@ export async function sendMessage(payload: {
     chatId: String(payload.chatId),
   });
   return data;
-}
-
-export async function getUnreadCount(userId: string): Promise<number> {
-  const { data } = await apiClient.get(MESSAGES_ENDPOINTS.UNREAD_COUNT(userId));
-  return data?.count ?? 0;
 }
 
 export async function markChatRead(chatId: number): Promise<void> {

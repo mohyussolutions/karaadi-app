@@ -9,7 +9,7 @@ import { registerForPushNotifications } from "../components/features/notificatio
 import { checkAlertsForMatches } from "../actions/categories/subscription.actions";
 import { getUnreadNotificationCount } from "../actions/core/notifications.actions";
 import { trackVisitor } from "../actions/core/visitor.actions";
-import { ALERTS_POLL_INTERVAL_MS } from "../constants/constants";
+import { ALERTS_POLL_INTERVAL_MS } from "../constants";
 
 export function useAppInit() {
   const { loadFromStorage } = useAuthStore();

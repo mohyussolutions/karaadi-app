@@ -1,4 +1,4 @@
-export const marketplaceCategories = {
+const marketplaceCategories = {
   categories: {
     antiques: "Qadiimi & Farshaxan",
     electronics: "Elektarooniga",
@@ -62,255 +62,13 @@ export const marketplaceCategories = {
   },
 } as const;
 
-export const realEstateCategories = {
-  categories: {
-    forRent: "Kirada",
-    forSale: "Iibka",
-    landForSale: "Dhulka",
-    farmForSale: "Beeraha",
-    commercial: "Ganacsiga",
-  },
-  subcategories: {
-    forRent: {
-      apartmentFlat: "Guri Dabaq",
-      houseVilla: "Guri Gooni",
-      commercialOffice: "Xafiis",
-      warehouseStorage: "Bakhaar/Keyd",
-      singleRoom: "Qol Keli",
-    },
-    forSale: {
-      newHouseVilla: "Guri Cusub",
-      usedHouseVilla: "Guri La Isticmaalay",
-      apartmentFlatForSale: "Guri Dabaq Iibka",
-      completedBuilding: "Dhisme Dhameystiran",
-    },
-    landForSale: {
-      residentialLand: "Dhul Degganaan",
-      commercialLand: "Dhul Ganacsi",
-      industrialLand: "Dhul Warshad",
-    },
-    farmForSale: {
-      agriculturalLand: "Dhul Beereed",
-      livestockFarm: "Beerta Xoolaha",
-      treeForestFarms: "Beeraha Geedaha",
-    },
-    commercial: {
-      retailSpaceShop: "Goob Tafaariiq",
-      hotelGuesthouse: "Huteel",
-      commercialBuilding: "Dhisme Ganacsi",
-      largeWarehouse: "Bakhaar Weyn",
-    },
-  },
-} as const;
 
-export const carsCategories = {
-  categories: {
-    carsForSale: "Gawaari Iibka",
-    leaseCars: "Gawaari Kirada",
-    trailers: "Rimoor",
-    carParts: "Qaybaha",
-    truck: "Xamuulka",
-    electricCars: "Korontada",
-    buses: "Basaska",
-  },
-  subcategories: {
-    carsForSale: {
-      sedan: "Sedan",
-      suv: "SUV/4x4",
-      hatchback: "Hatchback",
-      convertible: "Convertible",
-      minivan: "Minivan",
-    },
-    leaseCars: {
-      sedanLease: "Sedan Kiro",
-      suvLease: "SUV Kiro",
-      vanMinibusLease: "Van Kiro",
-      truckPickupLease: "Xamuul Kiro",
-      otherLeaseVehicles: "Gawaari Kale",
-    },
-    carParts: {
-      engines: "Matoorrada",
-      tiresRims: "Taayirada",
-      bodyParts: "Qaybaha Jidhka",
-    },
-    truck: {
-      pickupTruck: "Pickup",
-      heavyTruck: "Xamuul Culus",
-      truckSpareParts: "Qaybaha Xamuulka",
-      flatbedTankTruck: "Flatbed/Tank",
-      otherTrucks: "Xamuul Kale",
-    },
-    electricCars: {
-      electricSedan: "Sedan Koronto",
-      electricSUV: "SUV Koronto",
-      otherElectricCar: "Gawaari Koronto Kale",
-    },
-    trailers: {
-      trailerSpareParts: "Qaybaha Rimoor",
-      heavyDutyTrailer: "Rimoor Culus",
-      otherTrailers: "Rimoor Kale",
-    },
-    buses: {
-      coachBuses: "Basas Waaweyn",
-      minibuses: "Basas Yar-yar",
-      schoolBuses: "Basas Dugsi",
-      cityBuses: "Basas Magaalada",
-    },
-  },
-} as const;
 
-export const motorcyclesCategories = {
-  categories: {
-    forSale: "Iibka",
-    forRent: "Kirada",
-    spareParts: "Qaybaha",
-    other: "Kale",
-  },
-  subcategories: {
-    forSale: {
-      motorcycle: "Mooto",
-      vespa: "Vespa",
-      bajaj: "Bajaaj",
-      sportBikes: "Mootooyin Ciyaar",
-      cargo: "Xamuul",
-    },
-    forRent: {
-      motorcycleRental: "Mootooyin Kiro",
-      vespaRental: "Vespa Kiro",
-      cargoMotorcycleRental: "Mooto Xamuul Kiro",
-      bajajForRent: "Bajaaj Kiro",
-      cargoBajajRental: "Bajaaj Xamuul Kiro",
-      dailyBajajRental: "Bajaaj Kiro Maalinle",
-    },
-    spareParts: {
-      motorcycleEngines: "Matoorrada Mootooyinka",
-      tiresRims: "Taayirada",
-      protectiveGear: "Qalabka Ilaalinta",
-      bajajEngines: "Matoorrada Bajaaj",
-      bajajBodyParts: "Qaybaha Jidhka Bajaaj",
-    },
-    other: {
-      miscellaneousEquipment: "Qalabka Kale",
-    },
-  },
-} as const;
 
-export const boatsCategories = {
-  categories: {
-    boatsForSale: "Doomaha Iibka",
-    boatsForRent: "Doomaha Kirada",
-    boatEnginesForSale: "Matoorada Doomaha",
-    boatParts: "Qaybaha Doomaha",
-  },
-  subcategories: {
-    boatsForSale: {
-      fishingBoat: "Doon Kalluumaysi",
-      leisureYacht: "Doon Raaxo",
-      sailboat: "Doon Shiraac",
-      speedboat: "Doon Xawaare",
-    },
-    boatsForRent: {
-      fishingBoatRental: "Kiro Doon Kalluumaysi",
-      yachtCharter: "Kiro Doon Raaxo",
-    },
-    boatEnginesForSale: {
-      outboardEngine: "Matoor Dibadda",
-      inboardEngine: "Matoor Gudaha",
-      usedEngine: "Matoor La Isticmaalay",
-    },
-    boatParts: {
-      engineParts: "Qaybaha Matoorrada",
-      navigationEquipment: "Qalabka Navigashanka",
-      safetyGear: "Qalabka Badbaadada",
-    },
-  },
-} as const;
 
-export const farmEquipmentCategories = {
-  categories: {
-    tractor: "Cagaf",
-    tools: "Qalabka Beeraha",
-    fertilizerSpreader: "Faafiyaha Bacriminta",
-    harvester: "Makiinada Goosashada",
-    plow: "Qalabka Qodista",
-    irrigation: "Nidaamka Waraabka",
-  },
-  subcategories: {
-    tractor: {
-      newTractor: "Cagaf Cusub",
-      usedTractor: "Cagaf La Isticmaalay",
-    },
-    tools: {
-      plowTillageEquipment: "Qalabka Wax Laguu Qoto",
-      seedingEquipment: "Qalabka Abuuritaanka",
-      harvestingEquipment: "Qalabka Goosashada",
-    },
-    fertilizerSpreader: {
-      mountedSpreader: "Faafiyaha Mounted",
-      towedSpreader: "Faafiyaha Towed",
-    },
-    harvester: {
-      selfPropelledHarvester: "Harvester Isu Wada",
-      pullTypeHarvester: "Harvester Jiidan",
-    },
-    plow: {
-      moldboardPlow: "Qalabka Moldboard",
-      discPlow: "Qalabka Disc",
-      subsoilPlow: "Qalabka Subsoil",
-    },
-    irrigation: {
-      dripIrrigation: "Waraabinta Dhibicda",
-      sprinklerIrrigation: "Waraabinta Sprinkler",
-      floodIrrigation: "Waraabinta Roobka",
-      waterPumps: "Bambooyin Biyo",
-    },
-  },
-} as const;
 
-export const jobsCategories = {
-  categories: {
-    fullTime: "Waqti Buuxa",
-    partTime: "Waqti Kooban",
-    physical: "Shaqo Jidheed",
-    internship: "Tababar",
-    remote: "Shaqo Fog",
-    tech: "Tiknooloji",
-    finance: "Maaliyadda",
-    education: "Waxbarashada",
-    healthcare: "Caafimaadka",
-    hospitality: "Marti-qaadashada",
-  },
-  subcategories: {
-    fullTime: {
-      administrationOffice: "Maamulka",
-      itTechnology: "IT",
-      healthcare: "Caafimaadka",
-      salesMarketing: "Iibka",
-      engineeringConstruction: "Injineernimo",
-    },
-    partTime: {
-      officeAssistant: "Kaaliye",
-      studentEmployment: "Shaqo Ardayeed",
-      foodDeliveryRunner: "Bixinta Cuntada",
-    },
-    freelance: {
-      graphicDesigner: "Naqshadeeye",
-      webDeveloper: "Web Developer",
-      freelanceWriter: "Qoraa",
-    },
-  },
-  quickLinks: {
-    it: "Shaqooyinka IT",
-    airport: "Shaqooyinka Garoomada",
-    public: "Shaqooyinka Dadweynaha",
-    seaport: "Shaqooyinka Dekedda",
-    construction: "Dhismaha",
-    agriculture: "Beeraha",
-    transportation: "Gaadiidka",
-  },
-} as const;
 
-export const checkout = {
+const checkout = {
   title: "Bixinta",
   description: "Dhameystir habka bixintaada",
   signIn: "Gelid",
@@ -324,7 +82,7 @@ export const checkout = {
   },
 } as const;
 
-export const plan = {
+const plan = {
   selectHeading: "Dooro",
   plan: "Qorshe",
   itemFee: "Lacagta Shayga",
@@ -341,7 +99,7 @@ export const plan = {
   recommended: "Lagula Talinayo",
 } as const;
 
-export const common = {
+const common = {
   back: "Dib u noqo",
   continue: "Sii wad",
   loading: "Soo dejinta...",
@@ -371,17 +129,17 @@ export const common = {
   close: "Xir",
 } as const;
 
-export const summary = {
+const summary = {
   review: "Dib u eegis",
   verifyDetails: "Hubi xayeysiiskaaga oo dhameystir bixinta",
   listingSummary: "Faahfaahinta Xayeysiiska",
 } as const;
 
-export const payment = {
+const payment = {
   payment: "Bixinta",
 } as const;
 
-export const postAd = {
+const postAd = {
   steps: {
     type: "Nooca",
     category: "Qaybta",
@@ -446,9 +204,21 @@ export const postAd = {
   payVia: "Bixi ${{total}} adigoo isticmaalaya {{method}}",
   securedCheckout: "Waa la ilaaliyay · SSL encrypted · Bixin Ammaan ah",
   paymentMethod: "Habka Lacag-bixinta",
+  choosePaymentMethod: "Dooro sida aad u bixinayso",
+  choosePaymentMethodSub: "Dooro akoonka lacagta mobile-ka ee aad ku bixinayso",
+  enterPhoneTitle: "Geli lambarkaaga",
+  phoneSecureNote: "Lambarkaaga waxaa kaliya loo isticmaalaa codsigan lacag-bixinta. Waa la sir-qariyaa lagumana kaydiyo taleefankaaga.",
+  phoneRequired: "Geli lambarka telefoonkaaga",
+  phoneInvalid: "Geli lambar Soomaali ah oo sax ah, tusaale 061XXXXXXX ama +252 61XXXXXXX",
+  phoneWrongPrefix: "{{method}} wuxuu u baahan yahay lambar ku bilaabma {{prefix}}",
+  paymentDeclined: "Lacag-bixinta waa la diiday. Fadlan isku day mar kale.",
+  paymentTimedOut: "Xaqiijinta lacag-bixinta waqti ayay ka dhacday. Fadlan isku day mar kale.",
+  paymentInitFailed: "Lacag-bixinta lama bilaabi karin. Fadlan isku day mar kale.",
+  activationFailed: "Xayeysiiskaaga lama firfircoon karin. Fadlan isku day mar kale.",
   phoneNumberForMethod: "Lambarka Telefoonka {{method}}",
   enterPhoneForMethod: "Geli lambarka ku xiran akoonkaaga {{method}}",
   paymentRequestNote: "Waxaad ka heli doontaa codsi lacag-bixin app-kaaga {{method}} si aad u ansixiso.",
+  changeMethod: "Beddel",
   waitingConfirmation: "Sugitaanka Xaqiijinta",
   approveOnApp: "Fadlan ku ansixi codsiga lacag-bixinta app-kaaga lacagta mobile-ka.",
   attrMake: "Sameeyaha",
@@ -477,9 +247,11 @@ export const postAd = {
   socialFbLoading: "Waxaa lagu dirayaa bogga Facebook ee Karaadi…",
   socialFbDone: "Waxaa lagu diray bogga Facebook ee Karaadi!",
   socialFbError: "Lama dirin — isku day mar kale",
+  socialFbPremiumOnly: "Ku dirista bogga Karaadi waxay u baahan tahay Premium 90-Maalmood",
+  socialShareOwnFacebook: "Ku wadaag Facebook-kayga",
 } as const;
 
-export const about = {
+const about = {
   title: "Ku Saabsan Karaadi",
   heading: "Ku Saabsan Karaadi",
   description: "Wax badan ka baro Karaadi, hadafkeena iyo qiyamka.",
@@ -508,7 +280,7 @@ export const about = {
   },
 } as const;
 
-export const terms = {
+const terms = {
   title: "Shuruudaha iyo Xaaladaha",
   heading: "Shuruudaha & Xaaladaha",
   description: "Akhriso shuruudaha iyo xaaladaha isticmaalka Karaadi.",
@@ -524,7 +296,7 @@ export const terms = {
   metaDescription: "Shuruudaha sharciga ah ee isticmaaleyaasha Karaadi.",
 } as const;
 
-export const contact = {
+const contact = {
   title: "Nala Soo Xiriir",
   heading: "Nala Soo Xiriir Karaadi",
   description: "La xidhiidh kooxda Karaadi wixii taageero ama su'aalo ah.",
@@ -539,7 +311,7 @@ export const contact = {
     "Faahfaahinta xiriirka iyo taageerada isticmaalayaasha Karaadi.",
 } as const;
 
-export const nav = {
+const nav = {
   home: "Hoyga",
   about: "Nagu Saabsan",
   contact: "Laxiriir",
@@ -554,11 +326,11 @@ export const nav = {
   createBusiness: "Ganacsi Samee",
 } as const;
 
-export const welcome = "Ku soo dhawaada Karaadi" as const;
+const welcome = "Ku soo dhawaada Karaadi" as const;
 
-export const search = "Baar Xamar, guri, baabuur, 45 000..." as const;
+const search = "Baar Xamar, guri, baabuur, 45 000..." as const;
 
-export const filters = {
+const filters = {
   location: {
     title: "Gobolada",
     mobileFilter: "Sifeeyaha Goobta",
@@ -566,7 +338,7 @@ export const filters = {
   },
 } as const;
 
-export const auth = {
+const auth = {
   login: {
     title: "Ku soo dhawaaw!",
     subtitle: "Gelid akoonkaaga",
@@ -669,19 +441,21 @@ export const auth = {
   },
 } as const;
 
-export const lang = {
+const lang = {
   en: "Ingiriisi",
   so: "Soomaali",
 } as const;
 
-export const notifications = {
+const notifications = {
   title: "Ogeysiisyo",
   tabs: {
     unread: "Aan la akhriyin",
     all: "Dhammaan",
+    read: "La akhriyay",
   },
   empty: {
     unread: "Ma jiraan ogeysiisyo aan la akhriyin",
+    read: "Ma jiraan ogeysiisyo la akhriyay",
     all: "Weli wax ogeysiis ah ma jiraan",
     allSub: "Halkan waxaad ka arki doontaa wararka xayeysiisyadaada, fariimaha, iyo dalabyada.",
   },
@@ -727,7 +501,7 @@ export const notifications = {
   },
 } as const;
 
-export const footer = {
+const footer = {
   company: "Shirkad",
   support: "Taageero",
   categories: "Qeybaha",
@@ -748,7 +522,7 @@ export const footer = {
   developedBy: "Waxaa sameeyay",
 } as const;
 
-export const support = {
+const support = {
   links: {
     home: "Hoyga",
     users: "Isticmaaleyaal",
@@ -762,7 +536,7 @@ export const support = {
   },
 } as const;
 
-export const categories = {
+const categories = {
   Marketplace: "Suuq",
   RealEstate: "hantida maguurtada ah",
   Cars: "Gawaarida",
@@ -772,7 +546,7 @@ export const categories = {
   Smartsuuq: "Smartsuuq",
 } as const;
 
-export const createAd = {
+const createAd = {
   categories: "Qeybaha",
   public: "Shirkad",
   private: "Shaqsi",
@@ -794,7 +568,7 @@ export const createAd = {
   submitting: "Gudbinaya...",
 } as const;
 
-export const createMarketplace = {
+const createMarketplace = {
   heading: "Abuur Xayeysiis Suuq",
   mainCategoryLabel: "Qaybta Ugu Weyn",
   categoryLabel: "Summada Qaybta",
@@ -827,7 +601,7 @@ export const createMarketplace = {
   submit: "Gudbi Xayeysiiska",
 } as const;
 
-export const createRealEstate = {
+const createRealEstate = {
   title: "Guryaha, hantida maguurtada ah",
   mainCategory: "Qaybta Ugu Muhiimsan",
   category: "Qaybta",
@@ -909,7 +683,7 @@ export const createRealEstate = {
   },
 } as const;
 
-export const createCars = {
+const createCars = {
   pageTitle: "Samee Xayeysiis Baabuur",
   mainCategoryLabel: "Qaybta Weyn",
   categoryLabel: "Qaybta",
@@ -984,7 +758,7 @@ export const createCars = {
   },
 } as const;
 
-export const createMotorcycle = {
+const createMotorcycle = {
   heading: "Xayaysiiso Mooto",
   mainCategoryLabel: "Qaybta Weyn",
   categoryLabel: "Qaybta",
@@ -1063,7 +837,7 @@ export const createMotorcycle = {
   },
 } as const;
 
-export const createFarmequipment = {
+const createFarmequipment = {
   pageTitle: "Abuur Xayeysiis Qalabka Beeraha",
   mainCategoryLabel: "Qaybta Ugu Muhiimsan",
   categoryLabel: "Qaybta",
@@ -1118,7 +892,7 @@ export const createFarmequipment = {
   },
 } as const;
 
-export const createJobs = {
+const createJobs = {
   titleLabel: "Cinwaanka Shaqada",
   jobTypeLabel: "Nooca Shaqada",
   companyLabel: "Shirkadda",
@@ -1128,7 +902,7 @@ export const createJobs = {
   applicationDeadlineLabel: "Taariikhda Dhammaadka Codsiga",
 } as const;
 
-export const createBoats = {
+const createBoats = {
   title: "Xayeysiis Doomaha",
   pageTitle: "Doomaha",
   mainCategory: "Qaybta Weyn",
@@ -1162,11 +936,11 @@ export const createBoats = {
   submitting: "Gudbinaya...",
 } as const;
 
-export const mohyusLogoAlt = "Mohyus Logo" as const;
+const mohyusLogoAlt = "Mohyus Logo" as const;
 
 
 
-export const subcategories = {
+const subcategories = {
   marketplace: {
     antiques: "Qadiimi & Farshaxan",
     electronics: "Elektarooniga",
@@ -1505,11 +1279,11 @@ export const subcategories = {
   },
 } as const;
 
-export const marketplace = {
+const marketplace = {
   displaying: "Waxaa la soo bandhigayaa {{count}} {{category}}.",
 } as const;
 
-export const mine = {
+const mine = {
   nav: {
     myAds: "Xayeysiisyadayda",
     favorites: "Ku-dhaw",
@@ -1520,6 +1294,21 @@ export const mine = {
   },
   noData: "Ma jirto xog",
   noDataDesc: "Ma jiraan wax diiwaan ah",
+  cart: {
+    draftBadge: "Xayeysiisyada Sugaya",
+    itemsCount: "{{count}} shay oo gaarigaaga ku jira",
+    yourItems: "Alaabtaada",
+    addAnother: "Ku dar Mid Kale",
+    remove: "Ka saar",
+    summary: "Soo Koobidda Dalabka",
+    selectedItem: "Shayga La Doortay",
+    itemPrice: "Qiimaha Shayga",
+    noPlanSelected: "Weli lama dooran qorshe muuqaal",
+    selectPlanAndPay: "Dooro Qorshe & Bixi",
+    empty: "Gaarigaagu Waa Madhan Yahay",
+    emptyDesc: "Xayeysiisyada aad sameysay ee aadan weli bixin lacagtooda halkan ayay ka muuqan doonaan",
+    createAd: "Samee Xayeysiis",
+  },
   settings: {
     privacy: "Asturnaanta",
     security: "Amniga",
@@ -1536,11 +1325,6 @@ export const mine = {
     savedSearches: "Raadinta La Keydiyay",
     badge: "Badge",
     pendingPayments: "Lacagaha Sugaya",
-    badgeDescription:
-      "Boggan wuxuu muujinayaa calaamaddaada iyo tirakoobyada la xiriira.",
-    badgeVisits: "Booqo",
-    badgeContacts: "Xiriiriyeyaal",
-    badgeResponses: "Jawaabo",
     forBusinesses: "Shirkadaha",
     contactHistory: "Taariikhda Xiriirka",
     mySubscriptions: "Ku Biiritaankayga",
@@ -1919,7 +1703,7 @@ export const mine = {
   },
 } as const;
 
-export const descriptions = {
+const descriptions = {
   myAdsDesc: "Eeg dhammaan xayeysiisyadaada iyo tirakoobka",
   myAccountDesc: "Eeg faahfaahintaada KARAADI iyo Smartsuuq",
   settingsDesc: "Maamul dejinta akoonkaaga KARAADI",
@@ -1929,12 +1713,12 @@ export const descriptions = {
   forBusinessesDesc: "Eeg shirkadaha aad u leedahay ogolaansho",
   contactHistoryDesc: "La soco codsiyadaaga taageero iyo fariimaha",
   mySubscriptionsDesc: "Maamul ku biiritaankaaga iyo qorshooyaha lacag bixinta",
-  badgeDesc: "Eeg calaamaddaada iyo tirakoobyadaada",
+  badgeDesc: "Xayeysiisyada sugaya lacag bixinta",
   tutorialsDesc: "Daawo muuqaallo gaagaaban oo ku saabsan sida loo isticmaalo Karaadi",
   identityVerificationDesc: "Xaqiiji aqoonsigaaga adigoo isticmaalaya kaarka aqoonsiga iyo sawir weji",
 } as const;
 
-export const messages = {
+const messages = {
   title: "Farriimo",
   noConversationsTitle: "Wax xadiith ah ma jiraan",
   noConversationsMessage: "Markaad xiriiriso iibiye, xadiithkaaga halkan ayuu ka muuqan doonaa.",
@@ -1942,7 +1726,7 @@ export const messages = {
   noMessagesPreview: "Farriimo ma jiraan",
 } as const;
 
-export const chats = {
+const chats = {
   yourChats: "Wadahadaladaada",
   conversations: "wadahadal",
   noMessagesYet: "Weli wax fariin ah ma jiraan",
@@ -1975,7 +1759,7 @@ export const chats = {
   cancel: "Jooji",
 } as const;
 
-export const supportModule = {
+const supportModule = {
   loginRequired: "Fadlan gelid si aad u gudbiso tigidh taageero.",
   title: "Taageero",
   subtitle: "Gudbi tigidh si aad u hesho caawimaad.",
@@ -1991,7 +1775,7 @@ export const supportModule = {
   },
 } as const;
 
-export const ticketHistory = {
+const ticketHistory = {
   loginRequired: "Fadlan gelid si aad u aragto taariikhda tigidhyadaada.",
   title: "Tigidhyadayda",
   noTickets: "Wax tigidh ah lama helin.",
@@ -2009,7 +1793,7 @@ export const ticketHistory = {
   },
 } as const;
 
-export const helpPage = {
+const helpPage = {
   faqsTitle: "Su'aalaha Badanaa La Is Weydiiyo",
   hero: {
     title: "Caawimaad - Karaadi",
@@ -2062,7 +1846,7 @@ export const helpPage = {
     "Karaadi SmartSuuq - Suuqa internetka ee ugu horreeya ee Soomaaliya",
 } as const;
 
-export const cookiesPage = {
+const cookiesPage = {
   heading: "Ilaalinta Xogta & Asturnaanta",
   paragraphs: [
     "Asturnaantaadu waa mudnaantayada. Websaydhkani wuxuu isticmaalaa cookies iyo kaydinta gudaha si uu u shakhsiyeeyo khibradaadu, u falanqeeyo booqashooyinka, iyo inuu bixiyo macluumaad kuu habboon.",
@@ -2070,7 +1854,7 @@ export const cookiesPage = {
   ],
 } as const;
 
-export const privacyPage = {
+const privacyPage = {
   title: "Nidaamka Sirta iyo Ilaalinta Xogta ee Karaadi",
   sections: {
     collectionTitle: "Ururinta Xogta",
@@ -2088,11 +1872,11 @@ export const privacyPage = {
   },
 } as const;
 
-export const wantSell = {
+const wantSell = {
   title: "Iibi Wax",
 } as const;
 
-export const jobsPage = {
+const jobsPage = {
   title: "Shaqooyinka",
   heading: "Liiska Shaqooyinka",
   foundCount: "Waxaa laga helay {{count}} fursado",
@@ -2147,7 +1931,7 @@ export const jobsPage = {
   },
 } as const;
 
-export const paymentPage = {
+const paymentPage = {
   pageTitle: "Lacag-bixin",
   heading: "Dhameystir Bixintaada",
   subheading: "Dooro habka lacag-bixinta oo xaqiiji",
@@ -2163,7 +1947,7 @@ export const paymentPage = {
   total: "WADARTA",
 } as const;
 
-export const subscription = {
+const subscription = {
   title: "Dejinta Ku Biiritaanka",
   liveScanner: "Raadinta Tooska ah Firfircoon",
   createNewAlert: "Samee Digniin Cusub",
@@ -2316,7 +2100,7 @@ export const subscription = {
 
 
 
-export const citySelect = {
+const citySelect = {
   search: "Raadi magaalo...",
   noResults: "Magaalo lama helin",
   addNew: "KU DAR MAGAALO CUSUB",
@@ -2327,11 +2111,11 @@ export const citySelect = {
   saving: "Magaalada waa la kaydinayaa...",
 } as const;
 
-export const homeScreen = {
+const homeScreen = {
   howToUseKaraadi: "Sida loo isticmaalo Karaadi",
 } as const;
 
-export const tutorials = {
+const tutorials = {
   title: "Casharrada",
   subtitle: "Muuqaallo gaagaaban oo kaa caawinaya inaad si fiican u isticmaasho Karaadi",
   video1: "Bilowga Karaadi",
@@ -2340,7 +2124,7 @@ export const tutorials = {
   play: "Taabo si aad u daawato",
 } as const;
 
-export const aboutKaraadiPage = {
+const aboutKaraadiPage = {
   title: "Ku Saabsan Karaadi",
   subtitle: "Wax kasta oo aad u baahan tahay ku saabsan suuqa Karaadi",
   open: "Taabo si aad u aragto",
@@ -2349,7 +2133,7 @@ export const aboutKaraadiPage = {
   developedBy: "Waxaa sameeyay",
 } as const;
 
-export const recommendations = {
+const recommendations = {
   title: "Talooyin Ku Saabsan Adiga",
   subtitleLoggedIn:
     "Waxaan kuu talinaynaa iyadoo lagu salaynayo waxaad danaynayso",
@@ -2360,11 +2144,11 @@ export const recommendations = {
   retry: "Isku Day Mar Kale",
 } as const;
 
-export const recommended = {
+const recommended = {
   title: "Waxyaabaha kale ee aad jeclaan karto",
 } as const;
 
-export const realEstateDetail = {
+const realEstateDetail = {
   propertyDetails: "Faahfaahinta Hantida",
   bedroomsLabel: "Qolalka Jiifka",
   bathroomsLabel: "Musqusha",
@@ -2406,7 +2190,7 @@ export const realEstateDetail = {
   waaLaGatay: "WAA LA GATAY",
 } as const;
 
-export const report = {
+const report = {
   goBack: "Ku noqo Shayga",
   heading: "Dacwad",
   intro: "fadlan faahfaahin ku bixi sababta aad u aragto in shaygan la baadho.",
@@ -2433,7 +2217,7 @@ export const report = {
   errorFailed: "Gudbinta warbixinta way ku guul-darreysatay",
 } as const;
 
-export const subscriptionDetail = {
+const subscriptionDetail = {
   notFound:      "Qorshaha la raadinayay lama helin",
   category:      "Qaybta",
   subCategory:   "Qaybta Hoose",
@@ -2449,7 +2233,7 @@ export const subscriptionDetail = {
   priceFrom:     "Laga bilaabo",
 } as const;
 
-export const vehicleDetail = {
+const vehicleDetail = {
   techSpecs:    "Faahfaahinta Farsamada",
   description:  "Sharaxaad",
   make:         "Nooca",
@@ -2472,7 +2256,7 @@ export const vehicleDetail = {
   goBack:       "Dib u noqo",
 } as const;
 
-export const hage = {
+const hage = {
   title:       "Kaaliyaha Hage",
   placeholder: "Qor farriintaada...",
   send:        "Dir",

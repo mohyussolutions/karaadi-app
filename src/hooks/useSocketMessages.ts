@@ -5,7 +5,7 @@ import { getSocket } from "../actions/sockets/socket.actions";
 import { scheduleLocalNotification } from "../components/features/notifications/services/notificationService";
 import { playNotificationSound } from "../components/features/notifications/services/soundService";
 import { isViewingChat, getCachedUserName } from "../components/features/chat/services/chatState";
-import { MESSAGE_DEDUPE_MAX } from "../constants/constants";
+import { MESSAGE_DEDUPE_MAX } from "../constants";
 import type { MessageBanner } from "../util/types";
 import type { ChatMessage } from "../util/types/chat.types";
 
@@ -85,6 +85,7 @@ export function useSocketMessages(showBanner: (data: MessageBanner) => void) {
             read: !!alreadyViewing,
             data: { chatId, senderId: msg.senderId },
             createdAt: new Date().toISOString(),
+            local: true,
           }),
         );
       }

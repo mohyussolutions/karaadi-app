@@ -15,7 +15,7 @@ import { fetchMySubscriptions, deleteSubscription } from '../../actions/categori
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles, createSheetInlineStyles } from '../../util/styles/profile/wantedAlerts.styles';
 import type { Subscription } from '../../util/types';
-import { ROUTES } from '../../constants/constants';
+import { ROUTES } from '../../constants';
 
 export default function WantedScreen() {
   const { t } = useAppTranslation();
@@ -102,7 +102,7 @@ export default function WantedScreen() {
 
       <Text style={sheetInline.hint}>{t('subscription.notifyHint')}</Text>
 
-      <FlatList
+      <FlatList overScrollMode="never"
         data={rows}
         keyExtractor={keyExtractor}
         numColumns={2}

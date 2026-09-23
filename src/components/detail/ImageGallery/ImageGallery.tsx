@@ -126,7 +126,7 @@ export default function ImageGallery({
       )}
 
       {images.length > 1 && (
-        <ScrollView
+        <ScrollView overScrollMode="never"
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.thumbStrip}

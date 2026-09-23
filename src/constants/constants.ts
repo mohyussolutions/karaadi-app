@@ -1,35 +1,28 @@
-import { Image, type ViewStyle } from 'react-native';
-import type { PaymentMethod, PaymentStatus, PaymentMethodOption } from '../util/types/new-ad.types';
+import { Image, type ViewStyle, Platform, StatusBar, Dimensions } from 'react-native';
+import type { PaymentMethodOption, Step } from '../util/types/new-ad.types';
 import type { Language } from '../util/types/navigation.types';
 import type { CategorySpecField, CategoryTypeConfig } from '../util/types/listing.types';
 import type { NestedSubCategory, SubCategory, MainCategory } from '../util/types/browse.types';
 import type { RouteBuilder } from '../util/types/common.types';
-import { CAT_COLORS } from '../util/colors/colors';
+import { CAT_COLORS, COLORS, SPACING } from '../util/colors/colors';
 import { formatDate } from '../util/helpers/ui.format';
 import { CAT_PATHS } from '../api/paths';
 import { MARKETPLACE_ENDPOINTS, REAL_ESTATE_ENDPOINTS, JOBS_ENDPOINTS } from '../api/endpoints';
-
-export type { PaymentMethod, PaymentStatus, PaymentMethodOption };
-
+import type { FeeArrayKey } from "../util/types/fee.types";
+import type { VideoSource } from "expo-video";
+import type { TabItem, MenuItem, SettingsRow, BizStepDef, NotificationFilter } from "../util/types";
+import { NAV_ICONS } from "../util/icons/icons";
+import type { FeedTierKey } from "../util/types/feedTier.types";
+import type { PlanDefinition } from "../util/types/planCatalog.types";
+import type { MCIcon } from "../util/icons/icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import type { BusinessApplyFormState } from "../util/types/business.types";
+import type { BusinessScreen } from "../management/create/business/helpers/business.helpers";
 const NO_IMAGE_URI = Image.resolveAssetSource(require('../../assets/icon.png')).uri;
 
 export const PLACEHOLDER_IMAGE = NO_IMAGE_URI;
-
-export const PLACEHOLDER = NO_IMAGE_URI;
-
-export const INITIAL_DISPLAY = 50;
-export const DISPLAY_INCREMENT = 20;
-export const INITIAL_COUNT = 52;
-export const INCREMENT = 20;
-export const MAX_COUNT = 120;
-export const LISTING_PAGE_SIZE = 12;
 export const CATEGORY_FEED_LIMIT = 200;
-
-export const BADGE_MAX_COUNT = 9;
-export const BADGE_MAX_LABEL = '9+';
-
-export const SITE_URL = 'https://karaadi.com';
-// Website page that opens the plan/payment flow for one unpaid ad (login redirects back).
+export const SITE_URL = 'https://www.karaadi.com';
 export const getSitePayUrl = (listingId: string) =>
   `${SITE_URL}/mine/pay/${encodeURIComponent(listingId)}`;
 
@@ -38,13 +31,11 @@ export const DETAIL_PLACEHOLDER = NO_IMAGE_URI;
 export const DESCRIPTION_TRUNCATE = 300;
 
 export {
-  FEED_BASE_PATH,
   FEED_GROUPS,
   FEED_DEFAULT_PAGE,
-  FEED_DEFAULT_PAGE_SIZE,
   FEED_MAX_ITEMS,
   type FeedGroup,
-} from './feed';
+} from '../api/paths';
 
 export const INITIAL_VISIBLE = 20;
 export const FEED_REVEAL_STEPS = [40, 20] as const;
@@ -83,7 +74,6 @@ export const IMAGE_COMPRESSION_STEPS = [
   { maxDimension: 1280, quality: 0.6 },
   { maxDimension: 1024, quality: 0.5 },
 ] as const;
-export const WEBSITE_MAX_LENGTH = 200;
 export const PASSWORD_MIN_LENGTH = 8;
 export const USERNAME_MIN_LENGTH = 3;
 export const USERNAME_MAX_LENGTH = 30;
@@ -122,14 +112,12 @@ export const AUTH_TOKEN_HEADER = 'x-auth-token';
 export const BEARER_PREFIX = 'Bearer ';
 
 export const PAYMENT_METHODS: PaymentMethodOption[] = [
-  { key: 'waafi',  label: 'Waafi',    sublabel: 'Hormuud (+252 61)',  prefix: '61', color: '#1A6FB0' },
-  { key: 'evc',    label: 'EVC Plus', sublabel: 'Hormuud (+252 61)',  prefix: '61', color: '#E53935' },
-  { key: 'zaad',   label: 'Zaad',     sublabel: 'Telesom (+252 63)',  prefix: '63', color: '#1976D2' },
-  { key: 'sahal',  label: 'Sahal',    sublabel: 'Somtel (+252 90)',   prefix: '90', color: '#388E3C' },
+  { key: 'evc',    label: 'EVC Plus', sublabel: 'Hormuud (+252 61)', prefix: '61', color: COLORS.providerEvc },
+  { key: 'waafi',  label: 'Waafi',    sublabel: 'Hormuud (+252 61)', prefix: '61', color: COLORS.providerWaafi },
+  { key: 'zaad',   label: 'Zaad',     sublabel: 'Telesom (+252 63)', prefix: '63', color: COLORS.providerZaad },
+  { key: 'sahal',  label: 'Sahal',    sublabel: 'Somtel (+252 90)',  prefix: '90', color: COLORS.providerSahal },
 ];
 
-// true = iOS sends users to karaadi.com to pay (the flow Apple approved).
-// false = iOS uses the in-app EVC/Zaad/Sahal screen, same as Android.
 export const IOS_PAY_ON_WEBSITE = false;
 
 export const MAX_POLL_ATTEMPTS = 30;
@@ -139,11 +127,11 @@ export const ACTIVATE_RETRY_ATTEMPTS = 3;
 export const ACTIVATE_RETRY_DELAY_MS = 1500;
 
 export const PHONE_REGEX = /^(\+?252|0)?(61|63|90)\d{7}$/;
-export const PHONE_ERROR  = 'Enter a valid Somali number: 061XXXXXXX, +252 61XXXXXXX (EVC/Waafi), 063XXXXXXX (Zaad), 090XXXXXXX (Sahal)';
+export const PHONE_LOCAL_MAX_LENGTH = 10;
+export const SOMALI_DIAL_CODE = '+252';
 
 export const AUTH_RE = /\/(login|register|confirm|forgot-password|reset-password)/;
 export const CHAT_RE = /^\/profile\/chat/;
-export const DETAIL_RE = /^\/listing/;
 export const TAB_PATHS = new Set(['/home', '/messages', '/profile', '/new-ad', '/businesses', '/notifications']);
 
 export const LANGS: Language[] = [
@@ -177,27 +165,14 @@ export const ROUTES = {
   browseCategory: '/browse/[category]',
   browseSubcategory: '/browse/[category]/[subcategory]',
 } as const;
-
-export const REGEX_HTTP_URL = /^https?:\/\//;
-export const REGEX_URL_STRIP_PROTOCOL = /^https?:\/\/(www\.)?/i;
-export const REGEX_WWW_PREFIX = /^www\./i;
-export const REGEX_DOMAIN_CHARS = /[^a-zA-Z0-9.\-]/g;
-export const REGEX_LINK_IN_TEXT = /https?:\/\/|www\./i;
-export const REGEX_WHITESPACE = /\s/g;
 export const REGEX_NON_DIGITS = /[^0-9]/g;
-export const REGEX_HTML_TAGS = /<[^>]*>/g;
 export const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-export const REGEX_UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-export const REGEX_MONGO_ID = /^[0-9a-f]{24}$/i;
-export const REGEX_DATA_IMAGE = /^data:image\//;
-export const REGEX_BASE64_LONG = /^[A-Za-z0-9+/=]{100,}$/;
 export const REGEX_PASSWORD_LOWERCASE = /[a-z]/;
 export const REGEX_PASSWORD_UPPERCASE = /[A-Z]/;
 export const REGEX_PASSWORD_DIGIT = /[0-9]/;
 export const REGEX_PASSWORD_SPECIAL = /[@$!%*?&#_\-]/;
 export const REGEX_SOMALI_PHONE_FULL = /^\+252\d{9}$/;
 export const REGEX_SOMALI_PHONE_LOCAL = /^[69]\d{8}$/;
-export const REGEX_ALPHANUMERIC_ID = /^[a-zA-Z0-9]+$/;
 export const REGEX_WEBSITE = /^(https?:\/\/)?([\w-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
 export const REGEX_USERNAME = /^[a-zA-Z0-9_.]+$/;
 export const REGEX_PHONE_INPUT_FILTER = /[^0-9+\-()\s]/g;
@@ -213,8 +188,6 @@ export const REGEX_YEAR = /^\d{4}$/;
 export const BP_SMALL = 400;
 export const BP_TABLET = 768;
 export const BOTTOM_PAD = 120;
-export const TAB_SIDE_SM = 12;
-export const TAB_SIDE_MD = 24;
 export const FAB_SIZE = 56;
 
 export const TABLET_HEADER_ICON_SIZES = {
@@ -252,71 +225,20 @@ export const FAVORITES_H_PAD = 16;
 export const FAVORITES_COL_GAP = 12;
 
 export type { NestedSubCategory, SubCategory, MainCategory };
-export { CAT_COLORS };
-
-export const PRIORITY_CONFIG = {
-  PREMIUM:  { label: 'PREMIUM' },
-  STANDARD: { label: 'STANDARD' },
-  BASIC:    { label: 'BASIC' },
-} as const;
-
-export const GRID_CONFIG = {
-  PAGE_SIZE:      20,
-  INITIAL_PAGE:   1,
-  INITIAL_LOAD:   60,
-  ITEMS_PER_LOAD: 10,
-  MAX_ITEMS:      120,
-  MAX_LOADS:      3,
-} as const;
-
-export const OPTION = {
-  Public:  'Public',
-  Private: 'Private',
-} as const;
-
-export const TOAST_TIMINGS = {
-  FADE_IN: 250,
-  DISPLAY: 2200,
-  FADE_OUT: 300,
-} as const;
-
-export const LANGUAGES: Language[] = [
-  { code: 'so', label: 'SOMALI' },
-  { code: 'en', label: 'ENGLISH' },
+const WEB_DETAIL_PATHS: Array<[RegExp, string]> = [
+  [/farm|tractor|traktor|equipment/, 'vehicles/Farmequipment'],
+  [/motor|matooro/, 'vehicles/motorcycles'],
+  [/boat|doon/, 'vehicles/boats'],
+  [/car|gawaari|vehicle/, 'vehicles/cars'],
+  [/real|guryo|property/, 'real-estate'],
+  [/job|shaqo/, 'jobs'],
 ];
 
-export const SOCKET_EVENTS = {
-  EMIT: {
-    JOIN_CHAT:                  'joinChat',
-    LEAVE_CHAT:                 'leaveChat',
-    SEND_MESSAGE:               'sendMessage',
-    TYPING:                     'typing',
-    MARK_AS_READ:               'markAsRead',
-    MARK_MULTIPLE_AS_READ:      'markMultipleAsRead',
-    GET_ONLINE_STATUS:          'getOnlineStatus',
-    SUBSCRIBE_NOTIFICATION:     'subscribeNotification',
-    UNSUBSCRIBE_NOTIFICATION:   'unsubscribeNotification',
-  },
-  ON: {
-    CHAT_HISTORY:               'chatHistory',
-    RECEIVE_MESSAGE:            'receiveMessage',
-    NEW_MESSAGE:                'newMessage',
-    MESSAGE_SENT:                'messageSent',
-    USER_TYPING:                'userTyping',
-    MESSAGE_READ:                'messageRead',
-    MESSAGES_READ:              'messagesRead',
-    MESSAGES_MARKED_AS_READ:    'messagesMarkedAsRead',
-    ONLINE_STATUS:              'onlineStatus',
-    UNREAD_COUNT_UPDATE:        'unreadCountUpdate',
-    SEND_MESSAGE_ERROR:         'sendMessageError',
-    CHAT_ERROR:                 'chatError',
-    ERROR:                      'error',
-    MESSAGE_DELETED:            'messageDeleted',
-    MESSAGE_UPDATED:            'messageUpdated',
-  },
-} as const;
-
-export const getListingShareUrl = (listingId: string) => `${SITE_URL}/listing/${listingId}`;
+export const getListingShareUrl = (listingId: string, category?: string) => {
+  const key = (category ?? '').toLowerCase();
+  const path = WEB_DETAIL_PATHS.find(([re]) => re.test(key))?.[1] ?? 'item-details';
+  return `${SITE_URL}/${path}/${encodeURIComponent(listingId)}`;
+};
 
 export const placeholderAvatar = (size: number, bgColor: string, text: string) =>
   `https://placehold.co/${size}x${size}/${bgColor}/ffffff?text=${encodeURIComponent(text)}`;
@@ -1427,31 +1349,6 @@ export const CONDITION_COLORS: Record<string, string> = {
   used: '#D97706',
   refurbished: '#2563EB',
 };
-
-export function getConditionColor(condition?: string): string | null {
-  if (!condition) return null;
-  return CONDITION_COLORS[condition.toLowerCase()] ?? null;
-}
-
-export const ITEM_MODEL_MAP: Record<string, string> = {
-  cars: 'Car',
-  boats: 'Boat',
-  motorcycles: 'Motorcycle',
-  farmequipment: 'Traktor',
-  'farm-equipment': 'Traktor',
-  traktor: 'Traktor',
-  realestate: 'RealEstate',
-  'real-estate': 'RealEstate',
-  jobs: 'Job',
-  job: 'Job',
-  marketplace: 'Marketplace',
-  subscription: 'Subscription',
-};
-
-export function getItemModel(category?: string): string {
-  return ITEM_MODEL_MAP[category?.toLowerCase() ?? ''] ?? 'Marketplace';
-}
-
 const VEHICLE_SPEC_FIELDS: CategorySpecField[] = [
   { key: 'brand', labelKey: 'vehicleDetail.make' },
   { key: 'model', labelKey: 'vehicleDetail.model' },
@@ -1469,7 +1366,7 @@ const VEHICLE_SPEC_FIELDS: CategorySpecField[] = [
   { key: 'length', labelKey: 'vehicleDetail.length', format: (v) => `${v} ft` },
 ];
 
-export const VEHICLE_CONFIG: Record<string, CategoryTypeConfig> = {
+const VEHICLE_CONFIG: Record<string, CategoryTypeConfig> = {
   cars: { label: 'Car Details', endpoint: CAT_PATHS.cars, fields: VEHICLE_SPEC_FIELDS },
   boats: { label: 'Boat Details', endpoint: CAT_PATHS.boats, fields: VEHICLE_SPEC_FIELDS },
   motorcycles: { label: 'Motorcycle Details', endpoint: CAT_PATHS.motorcycles, fields: VEHICLE_SPEC_FIELDS },
@@ -1493,11 +1390,6 @@ export const MARKETPLACE_CONFIG: CategoryTypeConfig = {
   endpoint: MARKETPLACE_ENDPOINTS.LIST,
   fields: MARKETPLACE_SPEC_FIELDS,
 };
-
-export function getMarketplaceConfig(): CategoryTypeConfig {
-  return MARKETPLACE_CONFIG;
-}
-
 const REAL_ESTATE_SPEC_FIELDS: CategorySpecField[] = [
   { key: 'propertyType', labelKey: 'realEstateDetail.propertyTypeLabel' },
   { key: 'category', labelKey: 'realEstateDetail.categoryLabel' },
@@ -1519,11 +1411,6 @@ export const REAL_ESTATE_CONFIG: CategoryTypeConfig = {
   endpoint: REAL_ESTATE_ENDPOINTS.LIST,
   fields: REAL_ESTATE_SPEC_FIELDS,
 };
-
-export function getRealEstateConfig(): CategoryTypeConfig {
-  return REAL_ESTATE_CONFIG;
-}
-
 const JOBS_SPEC_FIELDS: CategorySpecField[] = [
   { key: 'company', labelKey: 'jobsPage.labelCompany' },
   { key: 'employmentType', labelKey: 'jobsPage.labelJobType' },
@@ -1538,10 +1425,6 @@ export const JOBS_CONFIG: CategoryTypeConfig = {
   endpoint: JOBS_ENDPOINTS.LIST,
   fields: JOBS_SPEC_FIELDS,
 };
-
-export function getJobsConfig(): CategoryTypeConfig {
-  return JOBS_CONFIG;
-}
 
 export function buildSpecItems(
   item: any,
@@ -1565,3 +1448,317 @@ export function buildSpecItems(
   }
   return result;
 }
+export const DEFAULT_HEADER_CONTENT_HEIGHT = 104;
+export const AUTH_HEADER_CONTENT_HEIGHT = 60;
+export const PREFETCH_LIMIT = 20;
+export const USE_NOTIFICATION_TAP_ROUTES = {
+  chat: "/profile/chat",
+  wanted: "/profile/wanted",
+  subscription: "/profile/subscription",
+  messages: "/(tabs)/messages",
+  notifications: "/profile/notifications",
+} as const;
+export const TAB_BAR_ITEM_HEIGHT = 54;
+export const TAB_BAR_GLASS_VERTICAL_PADDING = SPACING.xs * 2;
+export const TAB_BAR_TOP_GAP = SPACING.xl;
+export const MAX_STYLE_VARIANTS = 24;
+export const CATEGORY_FEE_KEY: Record<string, FeeArrayKey> = {
+  Cars: 'cars',
+  Marketplace: 'marketplace',
+  RealEstate: 'realEstate',
+  Motorcycles: 'motorcycles',
+  Boats: 'boats',
+  farmequipment: 'equipment',
+  Jobs: 'marketplace',
+};
+export const SUBCATEGORY_FEE_FIELD: Record<string, Record<string, string>> = {
+  Marketplace: {
+    antiques: 'art',
+    electronics: 'electronics',
+    animalAndSupplies: 'animal',
+    sportsAndOutdoors: 'sports',
+    furniture: 'furniture',
+    fashion: 'fashion',
+    education: 'other',
+  },
+  Cars: {
+    carsForSale: 'carSale',
+    leaseCars: 'carRent',
+    trailers: 'trailer',
+    carParts: 'carParts',
+    truck: 'truck',
+    electricCars: 'electricCar',
+    buses: 'carSale',
+  },
+  RealEstate: {
+    forRent: 'rent',
+    forSale: 'sale',
+    landForSale: 'land',
+    farmForSale: 'farm',
+    commercial: 'business',
+  },
+  Motorcycles: {
+    forSale: 'motoSale',
+    forRent: 'motoRent',
+    spareParts: 'motoParts',
+    other: 'other',
+  },
+  Boats: {
+    boatsForSale: 'boatSale',
+    boatsForRent: 'boatRent',
+    boatEnginesForSale: 'boatEngine',
+    boatParts: 'boatParts',
+  },
+  farmequipment: {
+    tractor: 'tractorSale',
+    tools: 'agriTool',
+    harvester: 'harvester',
+    fertilizerSpreader: 'other',
+    plow: 'other',
+    irrigation: 'other',
+  },
+};
+export const SUB_PLANS_TTL = 60_000;
+export const NOTIFICATIONS_FETCH_LIMIT = 100;
+export const VISITOR_ID_KEY = 'karaadi_visitor_id_v1';
+export const SKELETON_COUNT = 6;
+export const STEP_INDEX: Record<Step, number> = {
+  login: 0,
+  type: 0,
+  category: 1,
+  form: 2,
+  plan: 3,
+  summary: 4,
+  payment: 5,
+};
+export const STATUS_COLOR_KEY: Record<string, 'success' | 'primary' | 'error' | 'textMuted'> = {
+  DONE: 'success',
+  RESOLVED: 'success',
+  IN_PROGRESS: 'primary',
+  NEW: 'error',
+};
+export const DELETE_CONFIRM_TEXT = 'delete account';
+export const NUM_COLUMNS = 2;
+export const COLUMN_GAP = 10;
+export const SUBSCRIPTION_H_PAD = 14;
+export const TUTORIALS: { id: string; titleKey: string; source: VideoSource }[] = [
+  { id: '1', titleKey: 'tutorials.video1', source: require('../../assets/videos/karaadi-tutorial-1.mp4') },
+  { id: '2', titleKey: 'tutorials.video2', source: require('../../assets/videos/karaadi-tutorial-post-ad.mp4') },
+  { id: '3', titleKey: 'tutorials.video3', source: require('../../assets/videos/karaadi-tutorial-business-account.mp4') },
+];
+export const TAB_ITEMS: TabItem[] = [
+  {
+    name: "home",
+    labelKey: "nav.home",
+    icon: NAV_ICONS.home.filled,
+    iconOutline: NAV_ICONS.home.outline,
+  },
+  {
+    name: "businesses",
+    labelKey: "nav.business",
+    icon: NAV_ICONS.business.filled,
+    iconOutline: NAV_ICONS.business.outline,
+  },
+  {
+    name: "new-ad",
+    labelKey: "nav.newAd",
+    icon: NAV_ICONS.newAd.filled,
+    iconOutline: NAV_ICONS.newAd.outline,
+  },
+  {
+    name: "messages",
+    labelKey: "nav.messages",
+    icon: NAV_ICONS.messages.filled,
+    iconOutline: NAV_ICONS.messages.outline,
+  },
+  {
+    name: "profile",
+    labelKey: "nav.mine",
+    icon: NAV_ICONS.profile.filled,
+    iconOutline: NAV_ICONS.profile.outline,
+  },
+];
+export const LOGIN_TAB_ITEM: TabItem = {
+  name: "login",
+  labelKey: "nav.login",
+  icon: NAV_ICONS.login.filled,
+  iconOutline: NAV_ICONS.login.outline,
+};
+export const PROFILE_MENU_ITEMS: MenuItem[] = [
+  { icon: "tag-outline",              labelKey: "mine.account.myAds",           descKey: "descriptions.myAdsDesc",           route: "/profile/my-ads" },
+  { icon: "account-circle-outline",   labelKey: "mine.account.myAccount",       descKey: "descriptions.myAccountDesc",       route: "/profile/edit" },
+  { icon: "tune-variant",             labelKey: "mine.account.settings",        descKey: "descriptions.settingsDesc",        route: "/profile/settings" },
+  { icon: "bookmark-outline",         labelKey: "mine.account.favorites",       descKey: "descriptions.favoritesDesc",       route: "/profile/favorites" },
+  { icon: "text-search",              labelKey: "mine.account.savedSearches",   descKey: "descriptions.savedSearchesDesc",   route: "/profile/saved-searches" },
+  { icon: "store-outline",            labelKey: "mine.account.forBusinesses",   descKey: "descriptions.forBusinessesDesc",   route: "/profile/businesses" },
+  { icon: "clock-outline",            labelKey: "mine.account.contactHistory",  descKey: "descriptions.contactHistoryDesc",  route: "/profile/contact-history" },
+  { icon: "crown-outline",            labelKey: "mine.account.mySubscriptions", descKey: "descriptions.mySubscriptionsDesc", route: "/profile/subscription" },
+  { icon: "shield-check-outline",     labelKey: "mine.account.identityVerification", descKey: "descriptions.identityVerificationDesc", route: "/profile/verify-identity" },
+  { icon: "certificate-outline",      labelKey: "mine.account.badge",           descKey: "descriptions.badgeDesc",           route: "/profile/badge" },
+  { icon: "school-outline",           labelKey: "mine.account.tutorials",       descKey: "descriptions.tutorialsDesc",       route: "/profile/tutorials" },
+];
+export const SETTINGS_ROWS: SettingsRow[] = [
+  {
+    icon: "shield-lock-outline",
+    labelKey: "mine.settings.security",
+    route: "/profile/settings/Security",
+  },
+  {
+    icon: "eye-off-outline",
+    labelKey: "mine.settings.privacy",
+    route: "/profile/settings/Privacy",
+  },
+  {
+    icon: "credit-card-outline",
+    labelKey: "mine.settingsPage.payments",
+    route: "/profile/settings/Payment",
+  },
+  {
+    icon: "crown-outline",
+    labelKey: "mine.settings.subscription",
+    route: "/profile/wanted",
+  },
+  {
+    icon: "information-outline",
+    labelKey: "mine.account.aboutKaraadi",
+    route: "/profile/about-karaadi",
+  },
+];
+export const BIZ_STEPS: BizStepDef[] = [
+  { key: 'plan', labelKey: 'mine.businesses.stepPlan' },
+  { key: 'apply', labelKey: 'mine.businesses.stepApply' },
+  { key: 'approval', labelKey: 'mine.businesses.stepApproval' },
+  { key: 'categories', labelKey: 'mine.businesses.stepCategories' },
+  { key: 'post', labelKey: 'mine.businesses.stepPost' },
+];
+export const MODAL_ANIMATION = Platform.OS === "ios" ? "slide_from_bottom" : "none";
+export const HIDDEN_TAB_BAR_ROUTES = ["/(auth)", "/profile/chat"];
+export const NEW_AD_ROUTES = ["/(tabs)/new-ad", "/new-ad"];
+export const GEO_CACHE_TTL = 3600_000;
+export const NATIVE_DRIVER = Platform.OS !== 'web';
+export const IGNORED_WARNS = [
+  'expo-notifications: Android Push notifications',
+  '`expo-notifications` functionality is not fully supported in Expo Go',
+  '[expo-notifications] Listening to push token changes is not yet fully supported on web',
+  '"shadow*" style props are deprecated. Use "boxShadow"',
+  'props.pointerEvents is deprecated. Use style.pointerEvents',
+  'bundle scheme is file - unable to connect to sharedPackageConnection',
+];
+export const TIER_ORDER: FeedTierKey[] = ['premium90', 'standard60', 'basic30', 'rest'];
+export const PLAN_CATALOG: PlanDefinition[] = [
+  {
+    key: 'premium90',
+    label: 'Premium',
+    days: 90,
+    popular: false,
+    features: ['90 Maalmood', 'Social Media Boost', 'Safka hore (Top)', 'Taageero 24/7 ah'],
+  },
+  {
+    key: 'standard60',
+    label: 'Standard',
+    days: 60,
+    popular: true,
+    features: ['60 Maalmood', 'Raadinta sare', 'Sawirro & Muuqaal', 'Taageero chat'],
+  },
+  {
+    key: 'basic30',
+    label: 'Basic',
+    days: 30,
+    popular: false,
+    features: ['30 Maalmood', 'Raadinta aasaasiga ah', 'Taageero email'],
+  },
+];
+export const REASON_OPTIONS = [
+  { value: 'scam', labelKey: 'report.reasonScam' },
+  { value: 'sold', labelKey: 'report.reasonSold' },
+  { value: 'misleading', labelKey: 'report.reasonMisleading' },
+  { value: 'prohibited', labelKey: 'report.reasonProhibited' },
+  { value: 'offensive', labelKey: 'report.reasonOffensive' },
+  { value: 'other', labelKey: 'report.reasonOther' },
+] as const;
+export const VEHICLE_REPORT_TYPES: Record<string, string> = {
+  cars: 'CAR',
+  boats: 'BOAT',
+  motorcycles: 'MOTORCYCLE',
+  'farm-equipment': 'TRAKTOR',
+  farmequipment: 'TRAKTOR',
+  traktor: 'TRAKTOR',
+};
+export const WHAT_ITEM_KEYS = [
+  'about.items.realEstate',
+  'about.items.vehicles',
+  'about.items.marketplace',
+  'about.items.jobs',
+  'about.items.services',
+];
+export const PAGES: { id: string; icon: MCIcon; titleKey: string; route: string }[] = [
+  { id: 'about', icon: 'information-outline', titleKey: 'about.heading', route: '/profile/about-karaadi/about' },
+  { id: 'terms', icon: 'file-document-outline', titleKey: 'terms.heading', route: '/profile/about-karaadi/terms' },
+  { id: 'contact', icon: 'email-outline', titleKey: 'contact.heading', route: '/profile/about-karaadi/contact' },
+];
+export const TERMS_ITEM_INDICES = [0, 1, 2, 3, 4, 5];
+export const GRID_COLUMNS = 2;
+export const GRID_H_PAD = 8;
+export const MY_ADS_GRID_GAP = 8;
+export const SECTIONS = [
+  {
+    title: 'Dejinta Karaadi',
+    body: 'Xogta aan ka aruurinay adiga waxaa loo isticmaalaa in lagu habeeyo khibradaada Karaadi ee bogga iyo app-ka. Dejintan waxay khusaysaa macluumaadka akoonkaaga.',
+  },
+  {
+    title: 'Fariimaha iyo Cusboonaysiinta',
+    body: 'Karaadi waxay kuu soo diri doontaa wargeysyo, talooyin safar, tartamo iyo xog kale oo ku saabsan adeegyada iyo alaabta aad xiisaynayso.',
+  },
+  {
+    title: 'Macluumaadkaaga Gaarka ah',
+    body: "Xogtaada waxaa loo isticmaalaa in lagu tuso waxyaabaha aad xiisaynayso, laguugu soo bandhigo xayaysiisyo ku habboon, iyo inaad hesho macluumaad muhiim ah oo ku saabsan adeegyada Karaadi.",
+  },
+  {
+    title: 'Xayeysiiska iyo Koontaroolka',
+    body: "Xogtaada waxaa loo isticmaalaa in lagu habeeyo xayeysiiska aad aragto. Waxaad dooran kartaa in xayeysiiska lagu habeeyo da'da, jinsiga, danaha ama goobta aad ku sugan tahay.",
+  },
+];
+const STATUSBAR_H =
+  Platform.OS === "android" ? (StatusBar.currentHeight ?? 24) : 0;
+export const DRAG_THRESHOLD = 80;
+export const MD_LINK = /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g;
+export const SCREEN_HEIGHT = Dimensions.get('window').height;
+export const SCREEN_WIDTH = Dimensions.get('window').width;
+export const DISMISS_DISTANCE = 120;
+export const DISMISS_VELOCITY = 800;
+export const MAX_DIMENSION = 1080;
+export const JPEG_QUALITY = 0.8;
+export const PUSH_TOKEN_CACHE_KEY = 'karaadi_push_token_v1';
+export const FILTERS: NotificationFilter[] = ['all', 'unread', 'read'];
+export const ICON_BY_TYPE: Record<string, keyof typeof MaterialCommunityIcons.glyphMap> = {
+  message: 'message-text',
+  subscription_alert: 'bell-ring',
+  subscription_match: 'bell-ring',
+};
+export const APPROVAL_POLL_INTERVAL_MS = 5000;
+export const EMPTY: BusinessApplyFormState = {
+  name: '', orgNumber: '', email: '', phone: '',
+  contactName: '', website: '', address: '', description: '',
+};
+export const CHECKUP_INDEX: Record<BusinessScreen, number> = {
+  plan: 0, apply: 1, approval: 2, categories: 3, post: 4,
+};
+export const STEP_CATEGORY_NUM_COLUMNS = 3;
+export const MAX_IMAGES = 3;
+export const CATEGORY_MAIN_LABEL: Record<string, string> = {
+  Marketplace: 'Marketplace',
+  Cars: 'Cars',
+  RealEstate: 'Real Estate',
+  Motorcycles: 'Motorcycles',
+  Boats: 'Boats',
+  farmequipment: 'Farm Equipment',
+  Jobs: 'Jobs',
+};
+export const NUMERIC_KEYS = [
+  'price', 'year', 'mileage', 'bedrooms', 'bathrooms', 'sizeSqm',
+  'hoursUsed', 'floor', 'totalFloors', 'doors',
+];
+export const BOOLEAN_KEYS = ['furnished', 'parking', 'hasGarage', 'hasGarden'];
+export const SHEET_TOP = STATUSBAR_H + 48;
+export const FAB_INIT_X = SCREEN_WIDTH - FAB_SIZE - 20;
+export const FAB_INIT_Y = SCREEN_HEIGHT - FAB_SIZE - 100;

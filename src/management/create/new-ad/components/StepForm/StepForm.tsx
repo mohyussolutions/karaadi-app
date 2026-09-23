@@ -10,7 +10,6 @@ import {
 import { useTranslation } from "react-i18next";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useThemeColors, useThemedStyles } from "../../../../../hooks/useTheme";
-import { KEYBOARD_AVOIDING_BEHAVIOR } from "../../../../../platform/common-for-ios-andriod";
 import { useTabBarClearance } from "../../../../../hooks/useTabBarClearance";
 import RegionCityPicker from "../../../../../components/geo/RegionCityPicker";
 import { MAIN_CATEGORIES } from "../../../../../constants";
@@ -25,6 +24,7 @@ import { createStyles } from "../../../../../util/styles/newAd/stepForm.styles";
 import { validateStepForm } from "../../../../../util/validation/schemas";
 import { useSubmitListing } from "./useSubmitListing";
 import { NestedSubcategoryPicker } from "./NestedSubcategoryPicker";
+import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../../../util/platform/common-for-ios-andriod';
 
 export function StepForm({
   categoryKey,
@@ -130,7 +130,7 @@ export function StepForm({
         style={s.flexFull}
         behavior={KEYBOARD_AVOIDING_BEHAVIOR}
       >
-        <ScrollView
+        <ScrollView overScrollMode="never"
           ref={scrollRef}
           style={s.flexFull}
           contentContainerStyle={s.scroll}

@@ -1,7 +1,7 @@
-import { PLAN_CATALOG } from '../../policy/planCatalog';
 import type { Plan } from '../../util/types/new-ad.types';
 import type { SubPlanConfig } from '../../util/types/fee.types';
 import { getSubPlans } from './fee.actions';
+import { PLAN_CATALOG } from "../../constants";
 
 export async function fetchPlansFromAPI(): Promise<Plan[]> {
   const data = await getSubPlans();

@@ -1,13 +1,12 @@
 import type { ComponentProps } from "react";
 import type { Stack } from "expo-router";
-import { ROUTES } from "../../constants/constants";
-
+import { ROUTES, MODAL_ANIMATION } from "../../constants";
 type StackScreenOptions = ComponentProps<typeof Stack.Screen>["options"];
 const bare = (route: string) => route.slice(1);
 
-export type ContentPadding = "default" | "zero" | "auth";
+type ContentPadding = "default" | "zero" | "auth";
 
-export interface RootStackScreenConfig {
+interface RootStackScreenConfig {
   name: string;
   options: Omit<StackScreenOptions, "contentStyle">;
   contentPadding?: ContentPadding;
@@ -16,7 +15,7 @@ export interface RootStackScreenConfig {
 const MODAL_DETAIL_OPTIONS: Omit<StackScreenOptions, "contentStyle"> = {
   headerShown: false,
   presentation: "modal",
-  animation: "slide_from_bottom",
+  animation: MODAL_ANIMATION,
   gestureEnabled: true,
   gestureDirection: "vertical",
 };
@@ -32,7 +31,7 @@ export const ROOT_STACK_SCREENS: RootStackScreenConfig[] = [
   { name: bare(ROUTES.subscriptionDetail), options: MODAL_DETAIL_OPTIONS, contentPadding: "zero" },
   {
     name: bare(ROUTES.report),
-    options: { headerShown: false, presentation: "modal", animation: "slide_from_bottom" },
+    options: { headerShown: false, presentation: "modal", animation: MODAL_ANIMATION },
     contentPadding: "zero",
   },
   { name: "browse/[category]/index", options: { headerShown: false } },

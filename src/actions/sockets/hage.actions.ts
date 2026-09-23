@@ -1,4 +1,4 @@
-import { HAGE_SEARCH_LIMIT } from '../../constants/constants';
+import { HAGE_SEARCH_LIMIT } from '../../constants';
 import { HAGE_ENDPOINTS, SEARCH_ENDPOINTS } from '../../api/endpoints';
 import { apiClient } from '../client';
 import { extractList } from '../../util/helpers';

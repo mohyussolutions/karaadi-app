@@ -21,7 +21,6 @@ const hageSlice = createSlice({
   initialState,
   reducers: {
     toggleHage(state) { state.open = !state.open; },
-    openHage(state) { state.open = true; },
     closeHage(state) { state.open = false; },
     addUserMessage(state, action: PayloadAction<string>) {
       state.messages.push({ id: Date.now(), content: action.payload, fromAI: false });
@@ -51,5 +50,5 @@ const hageSlice = createSlice({
   },
 });
 
-export const { toggleHage, openHage, closeHage, addUserMessage, clearHage } = hageSlice.actions;
+export const { toggleHage, closeHage, addUserMessage, clearHage } = hageSlice.actions;
 export default hageSlice.reducer;

@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { matchesCategoryKey, toRegionPickerItems } from '../util/helpers';
-import { fetchGeoRegions, GEO_CACHE_TTL } from '../store/slices/geoSlice';
+import { fetchGeoRegions } from '../store/slices/geoSlice';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import type { ListingBase } from '../util/types/listing.types';
+import { GEO_CACHE_TTL } from "../constants";
 
 export function useLocationFilter(allListings: ListingBase[], subcategoryKey: string) {
   const dispatch = useAppDispatch();

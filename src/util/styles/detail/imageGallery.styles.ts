@@ -1,7 +1,7 @@
 import { StyleSheet, Platform } from "react-native";
 import { RADII } from "../../colors/colors";
 import type { ColorPalette } from "../../../hooks/useTheme";
-import { IMG_H } from "../../../constants/constants";
+import { IMG_H } from "../../../constants";
 import { shadow } from "../../helpers/shadow";
 
 const centered = { alignItems: "center", justifyContent: "center" } as const;

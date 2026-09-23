@@ -7,32 +7,13 @@ import {
   ALERTS_SEEN_IDS_KEY,
   ALERTS_SEEN_IDS_MAX,
   ALERTS_MIN_CHECK_INTERVAL_MS,
-} from '../../constants/constants';
+} from '../../constants';
 import { storeRef } from '../../store/internal/storeRef';
 import { addNotification } from '../../components/features/notifications/store/notificationsSlice';
 import { searchCategory } from '../search/globalSearch';
 import { scheduleLocalNotification } from '../../components/features/notifications/services/notificationService';
-import type { Subscription, SubscriptionPayload, SubscriptionEnvelope, Plan } from '../../util/types';
+import type { Subscription, SubscriptionPayload, SubscriptionEnvelope } from '../../util/types';
 import type { RawItem } from '../../util/types/common.types';
-
-
-export async function fetchSubscriptionPlans(): Promise<Plan[]> {
-  try {
-    const { data } = await apiClient.get<Plan[] | { plans?: Plan[] }>(SUBSCRIPTION_ENDPOINTS.PLANS);
-    return Array.isArray(data) ? data : data?.plans ?? [];
-  } catch {
-    return [];
-  }
-}
-
-export async function fetchMyPlan(): Promise<{ success?: boolean; subscriptions?: Subscription[] } | null> {
-  try {
-    const { data } = await apiClient.get<{ success?: boolean; subscriptions?: Subscription[] }>(SUBSCRIPTION_ENDPOINTS.MY);
-    return data ?? null;
-  } catch {
-    return null;
-  }
-}
 
 export async function fetchMySubscriptions(): Promise<Subscription[]> {
   try {
@@ -136,6 +117,7 @@ export async function checkAlertsForMatches(): Promise<void> {
             read: false,
             data,
             createdAt: new Date().toISOString(),
+            local: true,
           }),
         );
         if (fresh.length === 1) await scheduleLocalNotification(title, `${body} — tap to view`, data);

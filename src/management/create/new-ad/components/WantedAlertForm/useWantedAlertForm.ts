@@ -4,13 +4,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { useAuthStore } from '../../../../../store/hooks/authStore';
 import { useAppTranslation } from '../../../../../hooks/useAppTranslation';
 import { createSubscription } from '../../../../../actions/categories/subscription.actions';
-import { MAIN_CATEGORIES, getCategoryByKey, SUB_I18N_GROUP } from '../../../../../constants';
+import { MAIN_CATEGORIES, getCategoryByKey, SUB_I18N_GROUP, MAX_IMAGES } from '../../../../../constants';
 import type { SubscriptionPayload, WantedFormState, UseWantedAlertFormArgs } from '../../../../../util/types';
 import { maxLenSchema } from '../../../../../util/validation/schemas';
 import { compressImageToDataUri } from '../../../../../util/helpers/imageCompression';
-
-const MAX_IMAGES = 3;
-
 const EMPTY_FORM: WantedFormState = {
   title: '',
   category: MAIN_CATEGORIES[0].key,

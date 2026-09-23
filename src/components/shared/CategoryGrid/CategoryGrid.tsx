@@ -1,15 +1,13 @@
 import { memo, useCallback } from "react";
 import { View, Platform } from "react-native";
 import { useRouter } from "expo-router";
-import { MAIN_CATEGORIES, MainCategory } from "../../../constants";
+import { MAIN_CATEGORIES, MainCategory, H_PAD, GRID_GAP, ROUTES } from "../../../constants";
 import { useAppTranslation } from "../../../hooks/useAppTranslation";
 import { useThemedStyles } from "../../../hooks/useTheme";
 import { useResponsive } from "../../../hooks/useResponsive";
-import { H_PAD, GRID_GAP } from "../../../constants/constants";
 import { createStyles } from "../../../util/styles/shared/categoryGrid.styles";
 import type { CategoryGridProps } from "../../../util/types";
 import { CategoryCell } from "./CategoryCell";
-import { ROUTES } from "../../../constants/constants";
 
 function CategoryGrid({ onPress }: CategoryGridProps) {
   const router = useRouter();

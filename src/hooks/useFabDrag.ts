@@ -1,8 +1,7 @@
 import { useRef } from 'react';
 import { Animated, PanResponder } from 'react-native';
 import type { EdgeInsets } from 'react-native-safe-area-context';
-import { W, H, SHEET_TOP, FAB_INIT_X, FAB_INIT_Y } from '../components/ai-assistant/constants';
-import { FAB_SIZE } from '../constants/constants';
+import { FAB_INIT_X, FAB_INIT_Y, FAB_SIZE, SCREEN_HEIGHT, SCREEN_WIDTH, SHEET_TOP } from '../constants';
 
 export function useFabDrag(insets: EdgeInsets) {
   const fabPosRef = useRef({ x: FAB_INIT_X, y: FAB_INIT_Y });
@@ -24,8 +23,8 @@ export function useFabDrag(insets: EdgeInsets) {
       ),
       onPanResponderRelease: (_, g) => {
         fabPan.flattenOffset();
-        const nx = Math.max(0, Math.min(fabPosRef.current.x + g.dx, W - FAB_SIZE));
-        const ny = Math.max(SHEET_TOP, Math.min(fabPosRef.current.y + g.dy, H - FAB_SIZE - insetsRef.current.bottom));
+        const nx = Math.max(0, Math.min(fabPosRef.current.x + g.dx, SCREEN_WIDTH - FAB_SIZE));
+        const ny = Math.max(SHEET_TOP, Math.min(fabPosRef.current.y + g.dy, SCREEN_HEIGHT - FAB_SIZE - insetsRef.current.bottom));
         fabPosRef.current = { x: nx, y: ny };
         Animated.spring(fabPan, {
           toValue: { x: nx, y: ny },

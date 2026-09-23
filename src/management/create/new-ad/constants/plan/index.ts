@@ -8,7 +8,7 @@ export function getPlanCardColors(Colors: ColorPalette) {
   } as const;
 }
 
-export function getPlanStyle(Colors: ColorPalette): Record<string, PlanStyle> {
+function getPlanStyle(Colors: ColorPalette): Record<string, PlanStyle> {
   return {
     basic:    { color: Colors.gray500, icon: 'shield-outline',  bg: Colors.gray100 },
     standard: { color: Colors.primary, icon: 'lightning-bolt', bg: Colors.primaryGhost },

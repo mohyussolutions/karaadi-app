@@ -9,7 +9,7 @@ import { useAuthStore } from '../../../store/hooks/authStore';
 import { createTicket } from '../../../actions/core/support.actions';
 import { createDetailStyles } from '../../../util/styles/profile/aboutKaraadi.styles';
 import { maxLenSchema } from '../../../util/validation/schemas';
-import { ROUTES } from '../../../constants/constants';
+import { ROUTES } from '../../../constants';
 
 export default function ContactScreen() {
   const { t } = useAppTranslation();
@@ -62,7 +62,7 @@ export default function ContactScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
-      <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }]}>
+      <ScrollView overScrollMode="never" contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }]}>
         <View style={styles.headerRow}>
           <View style={styles.headerBody}>
             <Text style={styles.title}>{t('supportModule.title')}</Text>

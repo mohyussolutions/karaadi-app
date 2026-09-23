@@ -50,7 +50,7 @@ export function CategoriesStep({
   }
 
   return (
-    <ScrollView contentContainerStyle={[s.scroll, { paddingBottom: insets.bottom + 84 }]} keyboardShouldPersistTaps="handled">
+    <ScrollView overScrollMode="never" contentContainerStyle={[s.scroll, { paddingBottom: insets.bottom + 84 }]} keyboardShouldPersistTaps="handled">
       <Text style={s.heading}>{t('mine.businesses.selectCategoriesTitle')}</Text>
       <Text style={s.statusMessage}>{t('mine.businesses.selectCategoriesDesc')}</Text>
 

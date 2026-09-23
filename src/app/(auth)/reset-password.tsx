@@ -50,7 +50,7 @@ export default function ResetPasswordScreen() {
 
   return (
     <KeyboardAvoidingView style={styles.root} behavior="padding">
-      <ScrollView
+      <ScrollView overScrollMode="never"
         contentContainerStyle={[styles.scroll, isMobileLandscape && styles.scrollLandscape]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}

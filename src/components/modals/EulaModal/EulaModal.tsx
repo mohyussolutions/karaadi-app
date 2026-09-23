@@ -17,7 +17,7 @@ export function EulaModal({ visible, onAccept }: EulaModalProps) {
           </Text>
         </View>
 
-        <ScrollView
+        <ScrollView overScrollMode="never"
           style={styles.scroll}
           contentContainerStyle={styles.scrollContent}
         >

@@ -32,6 +32,13 @@ export function createStyles(Colors: ColorPalette) {
       backgroundColor: Colors.primary, borderRadius: 14, paddingVertical: 13,
     },
     confirmBtnText: { color: Colors.white, fontSize: 14, fontWeight: '700' },
+    lockedRow: { opacity: 0.5 },
+    secondaryBtn: {
+      flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+      marginTop: 10, borderRadius: 14, paddingVertical: 12,
+      borderWidth: 1.5, borderColor: Colors.border, backgroundColor: Colors.background,
+    },
+    secondaryBtnText: { color: Colors.textPrimary, fontSize: 14, fontWeight: '700' },
     postingBanner: {
       flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
       backgroundColor: Colors.primaryGhost, borderRadius: 12, paddingVertical: 13,

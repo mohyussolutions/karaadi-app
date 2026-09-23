@@ -18,34 +18,9 @@ const microLabel = (Colors: ColorPalette, marginBottom: number) =>
     marginBottom,
   }) as const;
 
-const headerStyles = (Colors: ColorPalette) =>
-  ({
-    wrap: { marginBottom: 20 },
-    header: {
-      ...rowCentered,
-      gap: 10,
-      backgroundColor: Colors.card,
-      borderRadius: 16,
-      borderWidth: 1,
-      borderColor: Colors.border,
-      paddingHorizontal: 14,
-      paddingVertical: 12,
-      marginBottom: 10,
-    },
-    headerIconWrap: {
-      width: 30,
-      height: 30,
-      borderRadius: 10,
-      ...centered,
-      backgroundColor: Colors.primary,
-    },
-    headerTitle: { fontSize: 13, fontWeight: '800', color: Colors.textPrimary },
-    headerSub: { fontSize: 11, color: Colors.textMuted, marginTop: 1 },
-  }) as const;
-
 const imageStyles = (Colors: ColorPalette, imgH: number) =>
   ({
-    imgBox: { borderRadius: 18, overflow: 'hidden', marginBottom: 14, height: imgH },
+    imgBox: { borderRadius: 18, overflow: 'hidden', marginBottom: 12, height: imgH },
     img: { width: '100%', height: '100%' },
     arrow: {
       position: 'absolute',
@@ -98,9 +73,12 @@ const imageStyles = (Colors: ColorPalette, imgH: number) =>
 
 const listingCardStyles = (Colors: ColorPalette) =>
   ({
+    wrap: { marginBottom: 20 },
     card: {
       backgroundColor: Colors.card,
-      borderRadius: 22,
+      borderRadius: 18,
+      borderWidth: 1,
+      borderColor: Colors.border,
       overflow: 'hidden',
       ...shadow({
         color: Colors.shadow,
@@ -206,7 +184,6 @@ const totalStyles = (Colors: ColorPalette) =>
 export const createStyles = (Colors: ColorPalette, width = 390) => {
   const imgH = Math.round((width - 32) * 0.56);
   return StyleSheet.create({
-    ...headerStyles(Colors),
     ...imageStyles(Colors, imgH),
     ...listingCardStyles(Colors),
     ...detailStyles(Colors),

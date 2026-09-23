@@ -133,15 +133,15 @@ export default function JobDetailScreen() {
       <SafeAreaView style={styles.safe} edges={['bottom']}>
         {isTabletLandscape ? (
           <View style={tabletSplit.row}>
-            <ScrollView style={tabletSplit.leftCol} showsVerticalScrollIndicator={false}>
+            <ScrollView overScrollMode="never" style={tabletSplit.leftCol} showsVerticalScrollIndicator={false}>
               {galleryContent}
             </ScrollView>
-            <ScrollView style={tabletSplit.rightCol} showsVerticalScrollIndicator={false}>
+            <ScrollView overScrollMode="never" style={tabletSplit.rightCol} showsVerticalScrollIndicator={false}>
               {bodyContent}
             </ScrollView>
           </View>
         ) : (
-          <ScrollView
+          <ScrollView overScrollMode="never"
             showsVerticalScrollIndicator={false}
             contentContainerStyle={isTablet ? tabletPortrait.scrollContent : undefined}
           >

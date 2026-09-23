@@ -81,6 +81,7 @@ const bodyStyles = (Colors: ColorPalette) =>
     infoValueMuted: { color: Colors.gray300 },
     infoValueWarning: { color: Colors.warning },
     infoValueDanger: { color: Colors.error },
+    infoStatus: { fontWeight: "400", opacity: 0.75 },
   }) as const;
 
 const priceStyles = (Colors: ColorPalette) =>

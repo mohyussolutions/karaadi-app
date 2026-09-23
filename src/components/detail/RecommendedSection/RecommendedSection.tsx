@@ -7,8 +7,7 @@ import { useGlobal } from '../../../hooks/useGlobal';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { getRecommendedByEndpoint } from '../../../actions/categories/feed.actions';
-import { prefetchImages } from '../../../util/helpers';
-import { getListingDetailRoute } from '../../../util/helpers';
+import { prefetchImages, getListingDetailRoute } from '../../../util/helpers';
 import { useThemedStyles } from '../../../hooks/useTheme';
 import type { ListingBase, RecommendedSectionProps } from '../../../util/types';
 import { createStyles } from '../../../util/styles/detail/recommendedSection.styles';
@@ -49,7 +48,7 @@ function RecommendedSection({ endpoint, excludeId, title, categoryKey }: Recomme
   return (
     <View style={styles.wrap}>
       <Text style={styles.heading}>{title ?? t('recommended.title')}</Text>
-      <FlashList
+      <FlashList overScrollMode="never"
         data={items}
         horizontal
         showsHorizontalScrollIndicator={false}

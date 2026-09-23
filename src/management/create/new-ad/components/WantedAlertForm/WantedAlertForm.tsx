@@ -5,18 +5,16 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Dropdown } from '../../../../../components/forms';
-import { REGEX_NON_DIGITS } from '../../../../../constants';
+import { REGEX_NON_DIGITS, MAX_IMAGES } from '../../../../../constants';
 import RegionCityPicker from '../../../../../components/geo/RegionCityPicker';
 import { useAppTranslation } from '../../../../../hooks/useAppTranslation';
-import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../../../platform/common-for-ios-andriod';
 import { useThemeColors, useThemedStyles } from '../../../../../hooks/useTheme';
 import {
   createStyles, createSheetInlineStyles, createImagePickerStyles,
 } from '../../../../../util/styles/profile/wantedAlerts.styles';
 import type { WantedAlertFormProps } from '../../../../../util/types/new-ad.types';
 import { useWantedAlertForm } from './useWantedAlertForm';
-
-const MAX_IMAGES = 3;
+import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../../../util/platform/common-for-ios-andriod';
 
 function SectionTitle({ label }: { label: string }) {
   const sheetInline = useThemedStyles(createSheetInlineStyles);
@@ -39,7 +37,7 @@ function ImagePickerRow({
   const Colors = useThemeColors();
   const imageStyles = useThemedStyles(createImagePickerStyles);
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={imageStyles.row}>
+    <ScrollView overScrollMode="never" horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={imageStyles.row}>
       {images.length < MAX_IMAGES && (
         <TouchableOpacity style={imageStyles.addBtn} onPress={onPick} activeOpacity={0.75}>
           <MaterialCommunityIcons name="camera-plus-outline" size={26} color={Colors.primary} />
@@ -96,7 +94,7 @@ export function WantedAlertForm({ visible, onClose, onCreated }: WantedAlertForm
             </TouchableOpacity>
           </View>
 
-          <ScrollView
+          <ScrollView overScrollMode="never"
             ref={scrollRef}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={sheetInline.scrollContent}

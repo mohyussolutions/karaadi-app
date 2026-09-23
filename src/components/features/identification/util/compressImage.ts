@@ -1,8 +1,6 @@
 import { Image } from 'react-native';
 import * as ImageManipulator from 'expo-image-manipulator';
-
-const MAX_DIMENSION = 1080;
-const JPEG_QUALITY = 0.8;
+import { MAX_DIMENSION, JPEG_QUALITY } from "../../../../constants";
 
 function getImageSize(uri: string): Promise<{ width: number; height: number }> {
   return new Promise((resolve, reject) => {

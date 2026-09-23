@@ -80,7 +80,7 @@ export default function BusinessDetailScreen() {
   return (
     <View style={s.safe}>
       <SafeAreaView style={s.flexFull} edges={[]}>
-      <ScrollView
+      <ScrollView overScrollMode="never"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[isTablet ? tabletPortrait.scrollContent : null, { paddingBottom: insets.bottom + 84 }]}
       >
@@ -155,7 +155,7 @@ export default function BusinessDetailScreen() {
         {business.images && business.images.length > 0 && (
           <View style={s.section}>
             <Text style={s.sectionTitle}>Photos</Text>
-            <ScrollView
+            <ScrollView overScrollMode="never"
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={s.photoRow}

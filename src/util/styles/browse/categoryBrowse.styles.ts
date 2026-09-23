@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import type { ColorPalette } from "../../../hooks/useTheme";
-import { H_PAD, GRID_GAP } from "../../../constants/constants";
+import { H_PAD, GRID_GAP } from "../../../constants";
 import { createCommonStyles } from "../common/common.styles";
 
 const centered = { alignItems: "center", justifyContent: "center" } as const;

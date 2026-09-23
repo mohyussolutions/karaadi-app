@@ -175,15 +175,15 @@ export default function RealEstateDetailScreen() {
       <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
         {isTabletLandscape ? (
           <View style={tabletSplit.row}>
-            <ScrollView style={tabletSplit.leftCol} showsVerticalScrollIndicator={false}>
+            <ScrollView overScrollMode="never" style={tabletSplit.leftCol} showsVerticalScrollIndicator={false}>
               {leftContent}
             </ScrollView>
-            <ScrollView style={tabletSplit.rightCol} showsVerticalScrollIndicator={false}>
+            <ScrollView overScrollMode="never" style={tabletSplit.rightCol} showsVerticalScrollIndicator={false}>
               {rightContent}
             </ScrollView>
           </View>
         ) : (
-          <ScrollView
+          <ScrollView overScrollMode="never"
             showsVerticalScrollIndicator={false}
             contentContainerStyle={isTablet ? tabletPortrait.scrollContent : undefined}
           >

@@ -1,4 +1,4 @@
-import { Platform, View, Dimensions } from 'react-native';
+import { Platform, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -8,10 +8,8 @@ import Animated, {
 import { useThemedStyles } from '../../../hooks/useTheme';
 import { createStyles } from '../../../util/styles/detail/swipeDownToClose.styles';
 import type { SwipeDownToCloseProps } from '../../../util/types';
-
-const SCREEN_HEIGHT = Dimensions.get('window').height;
-const DISMISS_DISTANCE = 120;
-const DISMISS_VELOCITY = 800;
+import { useHideGlobalChrome } from '../../../navigation/headerVisibility';
+import { SCREEN_HEIGHT, DISMISS_DISTANCE, DISMISS_VELOCITY } from "../../../constants";
 
 export default function SwipeDownToClose({ children }: SwipeDownToCloseProps) {
   const router = useRouter();
@@ -19,6 +17,7 @@ export default function SwipeDownToClose({ children }: SwipeDownToCloseProps) {
   const insets = useSafeAreaInsets();
   const translateY = useSharedValue(0);
   const startY = useSharedValue(0);
+  useHideGlobalChrome();
 
   const close = () => router.back();
 

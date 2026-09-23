@@ -20,7 +20,7 @@ export function StepType({ onSelect }: StepTypeProps) {
   const OPTIONS = getOptions(Colors);
   const clearance = useTabBarClearance();
   return (
-    <ScrollView contentContainerStyle={s.scroll}>
+    <ScrollView overScrollMode="never" contentContainerStyle={s.scroll}>
       <Text style={s.title}>{t('createAd.selectListingType')}</Text>
       <View style={s.cards}>
         {OPTIONS.map(opt => (

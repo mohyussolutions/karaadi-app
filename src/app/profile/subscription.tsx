@@ -12,16 +12,13 @@ import { createSubscriptionListStyles } from '../../util/styles/profile/mySubscr
 import { fetchMySubscriptions, deleteSubscription } from '../../actions/categories/subscription.actions';
 import { subscriptionToListingItem, subscriptionPriceLabel } from '../../util/helpers';
 import type { Subscription } from '../../util/types/listing.types';
-import { ROUTES } from '../../constants/constants';
-
-const COLUMN_GAP = 10;
-const H_PAD = 14;
+import { ROUTES, COLUMN_GAP, SUBSCRIPTION_H_PAD } from '../../constants';
 
 export default function SubscriptionScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { twoColCardW } = useGlobal();
-  const CARD_WIDTH = twoColCardW(H_PAD, COLUMN_GAP);
+  const CARD_WIDTH = twoColCardW(SUBSCRIPTION_H_PAD, COLUMN_GAP);
   const styles = useThemedStyles(createSubscriptionListStyles);
   const insets = useSafeAreaInsets();
 
@@ -59,7 +56,7 @@ export default function SubscriptionScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
-      <FlatList
+      <FlatList overScrollMode="never"
         data={subs}
         keyExtractor={(item) => item.id || item._id || ''}
         numColumns={2}

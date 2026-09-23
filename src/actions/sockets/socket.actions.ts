@@ -7,7 +7,7 @@ import {
   SOCKET_RECONNECT_DELAY_MS,
   SOCKET_RECONNECT_DELAY_MAX_MS,
   SOCKET_RECONNECT_JITTER,
-} from '../../constants/constants';
+} from '../../constants';
 
 let socket: Socket | null = null;
 const pendingReads = new Set<number>();

@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import type { ColorPalette } from "../../colors/colors";
-import { BOTTOM_PAD } from '../../../constants/constants';
+import { BOTTOM_PAD } from '../../../constants';
 
 export function createCommonStyles(Colors: ColorPalette) {
   return StyleSheet.create({

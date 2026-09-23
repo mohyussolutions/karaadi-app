@@ -4,7 +4,6 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../platform/common-for-ios-andriod';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
@@ -14,21 +13,16 @@ import { createReport } from '../../../actions/core/report.actions';
 import { getApiErrorMessage } from '../../../util/helpers';
 import { createStyles } from '../../../util/styles/listing/reportListing.styles';
 import { maxLenSchema } from '../../../util/validation/schemas';
-
-const REASON_OPTIONS = [
-  { value: 'scam', labelKey: 'report.reasonScam' },
-  { value: 'sold', labelKey: 'report.reasonSold' },
-  { value: 'misleading', labelKey: 'report.reasonMisleading' },
-  { value: 'prohibited', labelKey: 'report.reasonProhibited' },
-  { value: 'offensive', labelKey: 'report.reasonOffensive' },
-  { value: 'other', labelKey: 'report.reasonOther' },
-] as const;
+import { useHideGlobalChrome } from '../../../navigation/headerVisibility';
+import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../util/platform/common-for-ios-andriod';
+import { REASON_OPTIONS } from "../../../constants";
 
 export default function ReportScreen() {
   const { id, itemType } = useLocalSearchParams<{ id: string; itemType?: string }>();
   const router = useRouter();
   const { t } = useTranslation();
   const { user } = useAuthStore();
+  useHideGlobalChrome();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
 
@@ -92,7 +86,7 @@ export default function ReportScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <KeyboardAvoidingView style={styles.flexFull} behavior={KEYBOARD_AVOIDING_BEHAVIOR}>
-        <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+        <ScrollView overScrollMode="never" contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
           <View style={styles.header}>
             <TouchableOpacity onPress={() => router.back()} hitSlop={10} style={styles.backBtn}>
               <MaterialCommunityIcons name="chevron-left" size={28} color={Colors.text} />

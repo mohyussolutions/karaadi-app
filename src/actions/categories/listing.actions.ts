@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { CATEGORY_ENDPOINTS } from '../../management/create/new-ad/constants/config';
+import { CATEGORY_ENDPOINTS } from '../../api/endpoints';
 import type { VehicleListing, CreateListingResponse } from '../../util/types/listing.types';
 
 export async function createListing(categoryKey: string, body: Record<string, unknown>, businessId?: string | null) {

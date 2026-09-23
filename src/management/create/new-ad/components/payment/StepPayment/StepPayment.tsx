@@ -1,100 +1,53 @@
-import { memo } from 'react';
-import { Platform } from 'react-native';
-import { View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
+import { useState } from 'react';
+import { Platform, View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter, type Href } from 'expo-router';
 import { useThemeColors, useThemedStyles } from '../../../../../../hooks/useTheme';
 import { useAppTranslation } from '../../../../../../hooks/useAppTranslation';
-import { useTabBarClearance } from '../../../../../../hooks/useTabBarClearance';
+import { usePaymentFlow } from '../../../../../../hooks/usePaymentFlow';
 import { LoadingSpinner } from '../../../../../../components/loading';
 import { useAppSelector } from '../../../../../../store/store';
 import type { StepPaymentProps } from '../../../../../../util/types';
-import type { TopBarProps, ErrorBannerProps, PayFooterProps } from '../../../../../../util/types/new-ad.types';
-import { IOS_PAY_ON_WEBSITE, MAX_POLL_ATTEMPTS } from '../../../../../../constants/constants';
-import { getSitePayUrl } from '../../../../../../constants';
-import { PaymentMethodSelector } from './PaymentMethodSelector';
-import { PhoneInput } from './PhoneInput';
-import { PollingOverlay } from '../../../../../../components/modals/PollingOverlay/PollingOverlay';
-import { SuccessScreen } from './SuccessScreen';
-import { usePaymentFlow } from './usePaymentFlow';
+import type { IOSPaymentScreenProps } from '../../../../../../util/types/new-ad.types';
+import { IOS_PAY_ON_WEBSITE, MAX_POLL_ATTEMPTS, getSitePayUrl } from '../../../../../../constants';
+import { CheckoutErrorBanner, CheckoutFooter, CheckoutHeader, CheckoutTopBar } from '../components/Checkout/Checkout';
+import { PaymentMethodSelector } from '../components/PaymentMethodSelector/PaymentMethodSelector';
+import { PhoneInput } from '../components/PhoneInput/PhoneInput';
+import { SelectedMethodCard } from '../components/SelectedMethodCard/SelectedMethodCard';
+import { PollingOverlay } from '../components/PollingOverlay/PollingOverlay';
+import { SuccessScreen } from '../components/SuccessScreen/SuccessScreen';
+import { createStyles as createCheckoutStyles } from '../../../../../../util/styles/payment/checkout.styles';
 import { createStyles } from '../../../../../../util/styles/payment/stepPayment.styles';
 
 function ActivatingScreen() {
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
   return (
-    <View style={s.root}>
-      <View style={s.activatingWrap}>
-        <LoadingSpinner />
-        <Text style={s.activatingText}>{t('postAd.activatingListing')}</Text>
-      </View>
+    <View style={s.activatingWrap}>
+      <LoadingSpinner />
+      <Text style={s.activatingText}>{t('postAd.activatingListing')}</Text>
     </View>
   );
 }
 
-const TopBar = memo(function TopBar({ onBack }: TopBarProps) {
+function IOSPaymentScreen({ onBack, listingId }: IOSPaymentScreenProps) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
-  return (
-    <View style={s.topBar}>
-      <TouchableOpacity style={s.backBtn} onPress={onBack} hitSlop={8}>
-        <MaterialCommunityIcons name="arrow-left" size={20} color={Colors.textPrimary} />
-      </TouchableOpacity>
-    </View>
-  );
-});
-
-const ErrorBanner = memo(function ErrorBanner({ message }: ErrorBannerProps) {
-  const Colors = useThemeColors();
-  const s = useThemedStyles(createStyles);
-  return (
-    <View style={s.errBanner}>
-      <MaterialCommunityIcons name="alert-circle" size={18} color={Colors.error} />
-      <Text style={s.errBannerText}>{message}</Text>
-    </View>
-  );
-});
-
-const PayFooter = memo(function PayFooter({ total, methodMeta, onPay }: PayFooterProps) {
-  const Colors = useThemeColors();
-  const s = useThemedStyles(createStyles);
-  const { t } = useAppTranslation();
-  const clearance = useTabBarClearance();
-  return (
-    <View style={[s.footer, { bottom: clearance }]}>
-      <TouchableOpacity style={[s.payBtn, { backgroundColor: methodMeta.color }]} onPress={onPay} activeOpacity={0.88}>
-        <MaterialCommunityIcons name="lock" size={18} color={Colors.white} />
-        <Text style={s.payBtnText}>{t('postAd.payVia', { total, method: methodMeta.label })}</Text>
-      </TouchableOpacity>
-      <View style={s.secRow}>
-        <MaterialCommunityIcons name="shield-check-outline" size={13} color={Colors.success} />
-        <Text style={s.secText}>{t('postAd.securedCheckout')}</Text>
-      </View>
-    </View>
-  );
-});
-
-function IOSPaymentScreen({ onBack, listingId }: TopBarProps & { listingId: string }) {
-  const Colors = useThemeColors();
-  const s = useThemedStyles(createStyles);
+  const c = useThemedStyles(createCheckoutStyles);
   const { t } = useAppTranslation();
   return (
-    <View style={s.root}>
-      <TopBar onBack={onBack} />
-      <View style={[s.root, s.iosPaymentRoot]}>
+    <View style={c.root}>
+      <CheckoutTopBar onBack={onBack} />
+      <View style={s.iosPaymentRoot}>
         <MaterialCommunityIcons name="web" size={56} color={Colors.primary} />
-        <Text style={s.iosPaymentTitle}>
-          {t('postAd.iosPaymentTitle')}
-        </Text>
-        <Text style={s.iosPaymentBody}>
-          {t('postAd.iosPaymentBody')}
-        </Text>
+        <Text style={s.iosPaymentTitle}>{t('postAd.iosPaymentTitle')}</Text>
+        <Text style={s.iosPaymentBody}>{t('postAd.iosPaymentBody')}</Text>
         <TouchableOpacity
-          style={s.iosPaymentBtn}
+          style={[c.primaryBtn, s.iosPaymentBtn]}
           onPress={() => Linking.openURL(getSitePayUrl(listingId))}
-          activeOpacity={0.85}
+          activeOpacity={0.88}
         >
-          <Text style={s.iosPaymentBtnText}>{t('postAd.iosPaymentBtn')}</Text>
+          <Text style={c.primaryBtnText}>{t('postAd.iosPaymentBtn')}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -106,9 +59,11 @@ export function StepPayment({
   successRoute = '/profile/my-ads', onBack,
 }: StepPaymentProps) {
   const router = useRouter();
-  const s = useThemedStyles(createStyles);
+  const c = useThemedStyles(createCheckoutStyles);
+  const { t } = useAppTranslation();
   const createdItem = useAppSelector((state) => state.newAd.createdItem);
   const payment = usePaymentFlow({ plan, listingId, categoryKey });
+  const [methodChosen, setMethodChosen] = useState(false);
 
   if (payment.autoActivating) return <ActivatingScreen />;
 
@@ -122,6 +77,7 @@ export function StepPayment({
         plan={plan}
         listingTitle={listingTitle}
         listingId={listingId}
+        categoryKey={categoryKey}
         createdItem={createdItem}
         onDone={() => router.replace(successRoute as Href)}
       />
@@ -130,22 +86,64 @@ export function StepPayment({
 
   return (
     <>
-      <View style={s.root}>
-        <TopBar onBack={onBack} />
+      <View style={c.root}>
+        <CheckoutTopBar
+          onBack={methodChosen ? () => setMethodChosen(false) : onBack}
+          title={t('postAd.paymentMethod')}
+        />
 
-        <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-          <PaymentMethodSelector selected={payment.method} onChange={payment.selectMethod} />
-          <PhoneInput method={payment.method} value={payment.phone} onChange={payment.updatePhone} error={payment.phoneError} />
+        <ScrollView
+          overScrollMode="never"
+          contentContainerStyle={c.scroll}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          {methodChosen ? (
+            <>
+              <CheckoutHeader
+                icon="cellphone-lock"
+                title={t('postAd.enterPhoneTitle')}
+                subtitle={t('postAd.enterPhoneForMethod', { method: payment.methodMeta.label })}
+              />
+              <SelectedMethodCard method={payment.method} onChange={() => setMethodChosen(false)} />
+              <PhoneInput
+                method={payment.method}
+                value={payment.phone}
+                onChange={payment.updatePhone}
+                error={payment.phoneError}
+              />
+            </>
+          ) : (
+            <>
+              <CheckoutHeader
+                icon="wallet-outline"
+                title={t('postAd.choosePaymentMethod')}
+                subtitle={t('postAd.choosePaymentMethodSub')}
+              />
+              <PaymentMethodSelector
+                selected={payment.method}
+                onChange={(m) => { payment.selectMethod(m); setMethodChosen(true); }}
+              />
+            </>
+          )}
 
-          {payment.payStatus === 'failed' && !!payment.errorMsg && <ErrorBanner message={payment.errorMsg} />}
-          <View style={s.bottomSpacer} />
+          {payment.payStatus === 'failed' && !!payment.errorMsg && <CheckoutErrorBanner message={payment.errorMsg} />}
+          <View style={c.bottomSpacer} />
         </ScrollView>
 
-        <PayFooter total={payment.total} methodMeta={payment.methodMeta} onPay={payment.handlePay} />
+        {methodChosen && (
+          <CheckoutFooter
+            label={t('postAd.payVia', { total: payment.total, method: payment.methodMeta.label })}
+            icon="lock"
+            onPress={payment.handlePay}
+            disabled={payment.isPaying}
+            showSecureNote
+          />
+        )}
       </View>
 
       <PollingOverlay
-        visible={payment.payStatus === 'polling'}
+        visible={payment.isPaying}
         attempt={payment.pollAttempt}
         maxAttempts={MAX_POLL_ATTEMPTS}
         onCancel={payment.handleCancel}

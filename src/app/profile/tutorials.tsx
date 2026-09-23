@@ -7,12 +7,7 @@ import { useAppTranslation } from '../../hooks/useAppTranslation';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import VideoPopupModal from '../../components/modals/VideoPopupModal/VideoPopupModal';
 import { createStyles } from '../../util/styles/profile/tutorials.styles';
-
-const TUTORIALS: { id: string; titleKey: string; source: VideoSource }[] = [
-  { id: '1', titleKey: 'tutorials.video1', source: require('../../../assets/videos/karaadi-tutorial-1.mp4') },
-  { id: '2', titleKey: 'tutorials.video2', source: require('../../../assets/videos/karaadi-tutorial-post-ad.mp4') },
-  { id: '3', titleKey: 'tutorials.video3', source: require('../../../assets/videos/karaadi-tutorial-business-account.mp4') },
-];
+import { TUTORIALS } from "../../constants";
 
 export default function TutorialsScreen() {
   const { t } = useAppTranslation();
@@ -23,7 +18,7 @@ export default function TutorialsScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
-      <FlatList
+      <FlatList overScrollMode="never"
         data={TUTORIALS}
         keyExtractor={(item) => item.id}
         contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }]}

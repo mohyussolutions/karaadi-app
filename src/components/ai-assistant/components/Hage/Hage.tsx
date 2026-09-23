@@ -10,14 +10,12 @@ import { useAppTranslation } from '../../../../hooks/useAppTranslation';
 import { useThemeColors, useThemedStyles } from '../../../../hooks/useTheme';
 import { getListingDetailRoute, type ListingRoute } from '../../../../util/helpers/nav.routing';
 import { createStyles } from '../../../../util/styles/layout/hageAssistant.styles';
-import { NATIVE_DRIVER } from '../../../../util/helpers/animation';
 import type { HageMessage, ListingRef } from '../../../../util/types/chat.types';
-import { SHEET_TOP } from '../../constants';
+import { SHEET_TOP, ROUTES, NATIVE_DRIVER } from '../../../../constants';
 import { useFabDrag } from '../../../../hooks/useFabDrag';
 import { useSheetDrag } from '../../../../hooks/useSheetDrag';
 import { HageMessageList } from '../HageMessageList/HageMessageList';
 import { HageInputBar } from '../HageInputBar/HageInputBar';
-import { ROUTES } from '../../../../constants/constants';
 
 export default function Hage() {
   const insets = useSafeAreaInsets();

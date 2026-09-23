@@ -30,7 +30,7 @@ export function IdentityGate({ visible, idCardRequired, selfieRequired, onVerifi
   return (
     <Modal visible={visible} transparent={false} animationType="fade" onRequestClose={() => {}}>
       <SafeAreaView style={s.safe} edges={['top', 'bottom']}>
-        <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
+        <ScrollView overScrollMode="never" contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
           <View style={[s.banner, s.bannerRequired]}>
             <MaterialCommunityIcons name="shield-lock-outline" size={22} color={Colors.warning} />
             <View style={s.flexFull}>

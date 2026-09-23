@@ -8,14 +8,6 @@ export interface ApiError extends Error {
   response?: { status: number; data?: { message?: string } };
 }
 
-export interface PaginatedResponse<T> {
-  data: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-  hasMore: boolean;
-}
-
 export interface ModalProps {
   visible: boolean;
   onClose: () => void;

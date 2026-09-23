@@ -11,14 +11,7 @@ import { EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
 import { createStyles } from '../../util/styles/profile/contactHistory.styles';
 import type { Ticket } from '../../util/types';
-import { ROUTES } from '../../constants/constants';
-
-const STATUS_COLOR_KEY: Record<string, 'success' | 'primary' | 'error' | 'textMuted'> = {
-  DONE: 'success',
-  RESOLVED: 'success',
-  IN_PROGRESS: 'primary',
-  NEW: 'error',
-};
+import { ROUTES, STATUS_COLOR_KEY } from '../../constants';
 
 export default function ContactHistoryScreen() {
   const { t } = useAppTranslation();
@@ -116,7 +109,7 @@ export default function ContactHistoryScreen() {
           <EmptyState icon="history" title={t('mine.noData')} message={t('ticketHistory.noTickets')} />
         </View>
       ) : (
-        <ScrollView contentContainerStyle={styles.content}>
+        <ScrollView overScrollMode="never" contentContainerStyle={styles.content}>
           {tickets.map((ticket) => {
             const isDone = ticket.status === 'DONE' || ticket.status === 'RESOLVED';
             const isExpanded = expandedId === ticket.id;

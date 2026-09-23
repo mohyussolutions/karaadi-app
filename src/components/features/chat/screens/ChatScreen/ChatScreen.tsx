@@ -4,7 +4,6 @@ import {
   KeyboardAvoidingView, ActivityIndicator,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../../../platform/common-for-ios-andriod';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +16,7 @@ import { createStyles } from '../../../../../util/styles/profile/chatScreen.styl
 import { ChatHeader } from '../../components/ChatHeader/ChatHeader';
 import { ChatComposer } from '../../components/ChatComposer/ChatComposer';
 import { MessageBubble } from '../../components/MessageBubble/MessageBubble';
+import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../../../util/platform/common-for-ios-andriod';
 
 export default function ChatScreen() {
   const { chatId: chatIdParam, userId, username, listingId, listingType } =
@@ -73,7 +73,7 @@ export default function ChatScreen() {
         style={styles.flexFull}
         behavior={KEYBOARD_AVOIDING_BEHAVIOR}
       >
-        <FlatList
+        <FlatList overScrollMode="never"
           ref={listRef}
           data={messages}
           keyExtractor={(item) => String(item.id)}

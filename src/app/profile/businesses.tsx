@@ -10,11 +10,9 @@ import { LoadingSpinner } from '../../components/loading';
 import RemoteImage from '../../components/shared/RemoteImage/RemoteImage';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useMyBusinesses } from '../../hooks/useMyBusinesses';
-import { placeholderAvatar } from '../../constants';
+import { placeholderAvatar, ROUTES } from '../../constants';
 import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL, BUSINESS_CATEGORY_KEY_REVERSE } from '../../util/types';
 import { createStyles } from '../../util/styles/profile/businesses.styles';
-import { ROUTES } from '../../constants/constants';
-
 const PLACEHOLDER = placeholderAvatar(80, '2563eb', 'B');
 
 export default function BusinessesScreen() {
@@ -29,7 +27,7 @@ export default function BusinessesScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
-      <FlatList
+      <FlatList overScrollMode="never"
         data={businesses}
         keyExtractor={item => item._id || item.id || ''}
         contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 84 }, businesses.length === 0 && styles.listEmpty]}

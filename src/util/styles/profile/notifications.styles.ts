@@ -6,11 +6,20 @@ export function createStyles(Colors: ColorPalette) {
   const common = createCommonStyles(Colors);
   return StyleSheet.create({
     safe: common.safeBase,
-    markAllBtn: {
-      backgroundColor: Colors.card, padding: 14,
+    toolbar: {
+      flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8,
+      backgroundColor: Colors.card, paddingHorizontal: 16, paddingVertical: 10,
       borderBottomWidth: 1, borderBottomColor: Colors.border,
     },
-    markAllText: { color: Colors.primary, fontWeight: '600', fontSize: 14, textAlign: 'right' },
+    tabs: { flexDirection: 'row', gap: 6, flexShrink: 1, flexWrap: 'wrap' },
+    tab: {
+      paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16,
+      borderWidth: 1, borderColor: Colors.border, backgroundColor: Colors.inputBg,
+    },
+    tabActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
+    tabText: { fontSize: 13, fontWeight: '600', color: Colors.textSecondary },
+    tabTextActive: { color: Colors.white },
+    markAllText: { color: Colors.primary, fontWeight: '600', fontSize: 14 },
     list: { flexGrow: 1 },
     item: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: Colors.card, padding: 16 },
     unread: { backgroundColor: Colors.primaryLight + '25' },

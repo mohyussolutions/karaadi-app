@@ -1,25 +1,28 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAuthStore } from '../store/hooks/authStore';
 import { getNotifications, markNotificationRead, markAllNotificationsRead } from '../actions/core/notifications.actions';
-import type { Notification } from '../util/types/notification.types';
-import { useAppDispatch } from '../store/store';
-import { markAllRead as markAllReadAction, markOneRead as markOneReadAction } from '../components/features/notifications/store/notificationsSlice';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import {
+  markAllRead as markAllReadAction,
+  markOneRead as markOneReadAction,
+  mergeServerNotifications,
+} from '../components/features/notifications/store/notificationsSlice';
 
 export function useNotificationsData() {
   const { user } = useAuthStore();
   const dispatch = useAppDispatch();
   const uid = user?._id || user?.id;
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const notifications = useAppSelector((s) => s.notifications.items);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const load = useCallback((signal?: AbortSignal) => {
     if (!uid) { setLoading(false); return; }
     getNotifications(uid, signal)
-      .then((data) => setNotifications(data))
+      .then((data) => dispatch(mergeServerNotifications(data)))
       .catch(() => {})
       .finally(() => { setLoading(false); setRefreshing(false); });
-  }, [uid]);
+  }, [uid, dispatch]);
 
   useEffect(() => {
     const ctrl = new AbortController();
@@ -31,16 +34,15 @@ export function useNotificationsData() {
 
   const markAllRead = useCallback(async () => {
     if (!uid) return;
-    await markAllNotificationsRead(uid).catch(() => {});
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
     dispatch(markAllReadAction());
+    await markAllNotificationsRead(uid).catch(() => {});
   }, [uid, dispatch]);
 
   const markOneRead = useCallback(async (id: string) => {
-    await markNotificationRead(id).catch(() => {});
-    setNotifications((prev) => prev.map((n) => (n._id === id ? { ...n, read: true } : n)));
+    const target = notifications.find((n) => n._id === id);
     dispatch(markOneReadAction(id));
-  }, [dispatch]);
+    if (target && !target.local) await markNotificationRead(id).catch(() => {});
+  }, [notifications, dispatch]);
 
   return { user, notifications, loading, refreshing, onRefresh, markAllRead, markOneRead };
 }

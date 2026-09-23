@@ -49,7 +49,7 @@ export default function PaymentSettings() {
 
   return (
     <SafeAreaView style={s.safe} edges={['bottom']}>
-      <ScrollView contentContainerStyle={[s.content, { paddingBottom: insets.bottom + 84 }]} showsVerticalScrollIndicator={false}>
+      <ScrollView overScrollMode="never" contentContainerStyle={[s.content, { paddingBottom: insets.bottom + 84 }]} showsVerticalScrollIndicator={false}>
 
         <View style={s.summaryRow}>
           <View style={s.summaryCard}>

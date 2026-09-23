@@ -9,10 +9,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useResponsive } from '../../../hooks/useResponsive';
-import { getModalHeaderPaddingTop } from '../../../platform/common-for-ios-andriod';
+import { getModalHeaderPaddingTop } from '../../../util/platform/common-for-ios-andriod';
 import { tabletModalStyles } from '../../../util/styles/shared/tablet.styles';
 import { createStyles } from '../../../util/styles/detail/zoomModal.styles';
-import { TABLET_MODAL_ICON_SIZES } from '../../../constants/constants';
+import { TABLET_MODAL_ICON_SIZES } from '../../../constants';
 
 export default function ZoomModal({ visible, images, startIndex, title, onClose }: ZoomModalProps) {
   const { width, height } = useGlobal();
@@ -56,7 +56,7 @@ export default function ZoomModal({ visible, images, startIndex, title, onClose 
           </View>
         </View>
 
-        <FlatList
+        <FlatList overScrollMode="never"
           ref={flatRef}
           data={images}
           horizontal
@@ -78,7 +78,7 @@ export default function ZoomModal({ visible, images, startIndex, title, onClose 
 
         {images.length > 1 && (
           <View style={[styles.thumbBar, { paddingBottom: insets.bottom + 10 }]}>
-            <FlatList
+            <FlatList overScrollMode="never"
               data={images}
               horizontal
               keyExtractor={(_, i) => `zt-${i}`}

@@ -9,7 +9,7 @@ import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { useIdentification } from '../../hooks/useIdentification';
 import { IdentityCaptureForm } from '../../components/features/identification/components/IdentityCaptureForm/IdentityCaptureForm';
 import { createStyles } from '../../util/styles/profile/verifyIdentity.styles';
-import { ROUTES } from '../../constants/constants';
+import { ROUTES } from '../../constants';
 
 export default function VerifyIdentityScreen() {
   const { t } = useTranslation();
@@ -60,7 +60,7 @@ export default function VerifyIdentityScreen() {
 
   return (
     <SafeAreaView style={s.safe} edges={['bottom']}>
-      <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
+      <ScrollView overScrollMode="never" contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
         <View style={[s.banner, status.submitted ? s.bannerSubmitted : status.required ? s.bannerRequired : null]}>
           <MaterialCommunityIcons
             name={status.submitted ? 'check-decagram' : status.required ? 'alert-circle-outline' : 'shield-check-outline'}

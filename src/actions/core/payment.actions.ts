@@ -1,5 +1,6 @@
 import { apiClient } from '../client';
 import { PAYMENT_ENDPOINTS, MY_ADS_ENDPOINTS } from '../../api/endpoints';
+import { ACTIVATE_RETRY_ATTEMPTS, ACTIVATE_RETRY_DELAY_MS } from '../../constants';
 import type { PaymentItem, InitiatePaymentPayload, ActivateListingPayload } from '../../util/types/new-ad.types';
 
 export async function getPaymentHistory(signal?: AbortSignal): Promise<PaymentItem[]> {
@@ -17,6 +18,20 @@ export async function getPaymentStatus(paymentRef: string, signal?: AbortSignal)
   return data?.status || '';
 }
 
-export async function activateListing(listingId: string, payload: ActivateListingPayload): Promise<void> {
+async function activateListing(listingId: string, payload: ActivateListingPayload): Promise<void> {
   await apiClient.patch(MY_ADS_ENDPOINTS.PATCH(listingId), payload);
+}
+
+const wait = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+export async function activateListingWithRetry(listingId: string, payload: ActivateListingPayload): Promise<boolean> {
+  for (let attempt = 1; attempt <= ACTIVATE_RETRY_ATTEMPTS; attempt++) {
+    try {
+      await activateListing(listingId, payload);
+      return true;
+    } catch {
+      if (attempt < ACTIVATE_RETRY_ATTEMPTS) await wait(ACTIVATE_RETRY_DELAY_MS);
+    }
+  }
+  return false;
 }

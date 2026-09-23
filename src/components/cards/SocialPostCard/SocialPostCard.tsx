@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, Linking } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { useAppTranslation } from '../../../hooks/useAppTranslation';
 import { getSocialStatus, postSocialUpdate } from '../../../actions/core/social.actions';
-import { SOCIAL_BRAND_COLORS } from '../../../constants';
+import { SOCIAL_BRAND_COLORS, SOCIAL_SHARE_URLS } from '../../../constants';
 import { SOCIAL_ICONS } from '../../../util/icons/icons';
 import type { SocialPostCardProps, PostOutcome } from '../../../util/types';
 import { createStyles } from '../../../util/styles/social/socialPostCard.styles';
 
-export default function SocialPostCard({ title, description, price, images, listingUrl, isPremium90 }: SocialPostCardProps) {
+export default function SocialPostCard({ title, description, price, images, listingUrl, listingId, isPremium90 }: SocialPostCardProps) {
   const { t } = useAppTranslation();
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
@@ -26,8 +26,15 @@ export default function SocialPostCard({ title, description, price, images, list
 
   const posted = isLoading || outcome !== 'idle';
 
+  function shareOnOwnFacebook() {
+    Linking.openURL(SOCIAL_SHARE_URLS.facebook(listingUrl)).catch(() => {});
+  }
+
   async function handlePost() {
-    if (!avail) return;
+    if (!avail) {
+      shareOnOwnFacebook();
+      return;
+    }
     setIsLoading(true);
 
     const imageUrl = (images ?? []).find((u) => u?.startsWith('http'));
@@ -37,6 +44,7 @@ export default function SocialPostCard({ title, description, price, images, list
       price: Number(price) || 0,
       imageUrl,
       listingUrl,
+      listingId,
       platforms: { facebook: true },
     };
 
@@ -56,33 +64,53 @@ export default function SocialPostCard({ title, description, price, images, list
       </Text>
 
       {!isPremium90 ? (
-        <View style={[s.platformRow, { opacity: 0.5, backgroundColor: Colors.background }]}>
-          <View style={[s.platformIconBadge, { backgroundColor: SOCIAL_BRAND_COLORS.facebook.color }]}>
-            <MaterialCommunityIcons name={SOCIAL_ICONS.facebook as never} size={18} color={Colors.white} />
+        <>
+          <View style={[s.platformRow, s.lockedRow]}>
+            <View style={[s.platformIconBadge, { backgroundColor: SOCIAL_BRAND_COLORS.facebook.color }]}>
+              <MaterialCommunityIcons name={SOCIAL_ICONS.facebook as never} size={18} color={Colors.white} />
+            </View>
+            <View style={s.platformInfo}>
+              <Text style={s.platformName}>Facebook</Text>
+              <Text style={s.platformStatus}>{t('postAd.socialFbPremiumOnly')}</Text>
+            </View>
+            <MaterialCommunityIcons name="lock" size={16} color={Colors.textMuted} />
           </View>
-          <View style={s.platformInfo}>
-            <Text style={s.platformName}>Facebook</Text>
-            <Text style={s.platformStatus}>{t('postAd.socialFbPremiumOnly', '90-Day Premium required')}</Text>
-          </View>
-          <MaterialCommunityIcons name="lock" size={16} color={Colors.textMuted} />
-        </View>
+          <OwnShareButton onPress={shareOnOwnFacebook} />
+        </>
       ) : isLoading ? (
         <View style={s.postingBanner}>
           <ActivityIndicator size="small" color={Colors.primary} />
           <Text style={s.postingBannerText}>{t('postAd.socialFbLoading')}</Text>
         </View>
       ) : outcome === 'done' ? (
-        <View style={s.doneBanner}>
-          <Text style={s.doneBannerText}>{t('postAd.socialFbDone')}</Text>
-        </View>
+        <>
+          <View style={s.doneBanner}>
+            <Text style={s.doneBannerText}>{t('postAd.socialFbDone')}</Text>
+          </View>
+          <OwnShareButton onPress={shareOnOwnFacebook} />
+        </>
       ) : (
-        <TouchableOpacity style={s.confirmBtn} onPress={handlePost} disabled={!avail} activeOpacity={0.88}>
-          <MaterialCommunityIcons name={SOCIAL_ICONS.facebook as never} size={18} color={Colors.white} style={s.confirmBtnIcon} />
-          <Text style={s.confirmBtnText}>
-            {outcome === 'error' ? t('postAd.socialFbError') : t('postAd.socialPostToFacebook', 'Post to Facebook')}
-          </Text>
-        </TouchableOpacity>
+        <>
+          <TouchableOpacity style={s.confirmBtn} onPress={handlePost} activeOpacity={0.88}>
+            <MaterialCommunityIcons name={SOCIAL_ICONS.facebook as never} size={18} color={Colors.white} style={s.confirmBtnIcon} />
+            <Text style={s.confirmBtnText}>
+              {outcome === 'error' ? t('postAd.socialFbError') : t('postAd.socialPostToFacebook', 'Post to Facebook')}
+            </Text>
+          </TouchableOpacity>
+          {outcome === 'error' && <OwnShareButton onPress={shareOnOwnFacebook} />}
+        </>
       )}
     </View>
+  );
+}
+
+function OwnShareButton({ onPress }: { onPress: () => void }) {
+  const { t } = useAppTranslation();
+  const s = useThemedStyles(createStyles);
+  return (
+    <TouchableOpacity style={s.secondaryBtn} onPress={onPress} activeOpacity={0.88}>
+      <MaterialCommunityIcons name="share-variant" size={16} color={SOCIAL_BRAND_COLORS.facebook.color} style={s.confirmBtnIcon} />
+      <Text style={s.secondaryBtnText}>{t('postAd.socialShareOwnFacebook')}</Text>
+    </TouchableOpacity>
   );
 }

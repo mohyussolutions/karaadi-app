@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import type { ColorPalette } from '../../../hooks/useTheme';
-import { H_PAD, GRID_GAP } from '../../../constants/constants';
+import { H_PAD, GRID_GAP } from '../../../constants';
 
 export function createStyles(Colors: ColorPalette) {
   return StyleSheet.create({

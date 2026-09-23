@@ -58,7 +58,7 @@ export function SidebarNested({ items, selectedKey, counts, onPress, subLabel, s
   );
 
   return (
-    <FlashList
+    <FlashList overScrollMode="never"
       data={items}
       keyExtractor={(item) => item.key}
       renderItem={renderItem}

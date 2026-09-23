@@ -9,10 +9,9 @@ import {
 } from "../../../../../hooks/useTheme";
 import { useAppTranslation } from "../../../../../hooks/useAppTranslation";
 import { useTabBarClearance } from "../../../../../hooks/useTabBarClearance";
-import { MAIN_CATEGORIES, type MainCategory } from "../../../../../constants";
+import { MAIN_CATEGORIES, type MainCategory, STEP_CATEGORY_NUM_COLUMNS } from "../../../../../constants";
 import { createStyles } from "../../../../../util/styles/newAd/stepCategory.styles";
 import { CategoryCard } from "./CategoryCard";
-const NUM_COLUMNS = 3;
 
 export function StepCategory({
   selected,
@@ -62,10 +61,10 @@ export function StepCategory({
           />
         </TouchableOpacity>
       </View>
-      <FlashList
+      <FlashList overScrollMode="never"
         data={MAIN_CATEGORIES}
         keyExtractor={(item) => item.key}
-        numColumns={NUM_COLUMNS}
+        numColumns={STEP_CATEGORY_NUM_COLUMNS}
         renderItem={renderItem}
         style={s.list}
         ListFooterComponent={footer}

@@ -2,7 +2,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ExpoRoot } from 'expo-router/build/ExpoRoot';
 import { ctx } from 'expo-router/_ctx';
-import { I18nProvider } from '../../../providers';
+import { I18nProvider } from '../../providers';
 import { rootStyles } from '../../../util/styles/layout/appShell.styles';
 
 export default function AppShell() {

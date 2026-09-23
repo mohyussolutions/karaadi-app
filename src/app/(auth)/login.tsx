@@ -11,7 +11,7 @@ import { useLogin } from '../../hooks/useLogin';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
 import { createStyles } from '../../util/styles/auth/login.styles';
-import { ROUTES } from '../../constants/constants';
+import { ROUTES } from '../../constants';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -33,7 +33,7 @@ export default function LoginScreen() {
   return (
     <KeyboardAvoidingView style={styles.root} behavior="padding">
       <StatusBar style="dark" />
-      <ScrollView
+      <ScrollView overScrollMode="never"
         contentContainerStyle={[styles.scroll, isMobileLandscape && styles.scrollLandscape]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}

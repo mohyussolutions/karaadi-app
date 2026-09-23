@@ -1,8 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiClient } from '../client';
 import { VISITOR_ENDPOINTS } from '../../api/endpoints';
-
-const VISITOR_ID_KEY = 'karaadi_visitor_id_v1';
+import { VISITOR_ID_KEY } from "../../constants";
 
 function generateVisitorId(): string {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {

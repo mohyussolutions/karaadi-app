@@ -1,4 +1,4 @@
-export const marketplaceCategories = {
+const marketplaceCategories = {
   categories: {
     antiques: "Antiques & Art",
     electronics: "Electronics",
@@ -62,255 +62,13 @@ export const marketplaceCategories = {
   },
 } as const;
 
-export const realEstateCategories = {
-  categories: {
-    forRent: "For Rent",
-    forSale: "For Sale",
-    landForSale: "Land For Sale",
-    farmForSale: "Farms For Sale",
-    commercial: "Commercial",
-  },
-  subcategories: {
-    forRent: {
-      apartmentFlat: "Apartment/Flat",
-      houseVilla: "House/Villa",
-      commercialOffice: "Commercial Office",
-      warehouseStorage: "Warehouse/Storage",
-      singleRoom: "Single Room",
-    },
-    forSale: {
-      newHouseVilla: "New House/Villa",
-      usedHouseVilla: "Used House/Villa",
-      apartmentFlatForSale: "Apartment/Flat For Sale",
-      completedBuilding: "Completed Building",
-    },
-    landForSale: {
-      residentialLand: "Residential Land",
-      commercialLand: "Commercial Land",
-      industrialLand: "Industrial Land",
-    },
-    farmForSale: {
-      agriculturalLand: "Agricultural Land",
-      livestockFarm: "Livestock Farm",
-      treeForestFarms: "Tree/Forest Farms",
-    },
-    commercial: {
-      retailSpaceShop: "Retail Space/Shop",
-      hotelGuesthouse: "Hotel/Guesthouse",
-      commercialBuilding: "Commercial Building",
-      largeWarehouse: "Large Warehouse",
-    },
-  },
-} as const;
 
-export const carsCategories = {
-  categories: {
-    carsForSale: "Cars For Sale",
-    leaseCars: "Lease Cars",
-    trailers: "Trailers",
-    carParts: "Car Parts",
-    truck: "Trucks",
-    electricCars: "Electric Cars",
-    buses: "Buses",
-  },
-  subcategories: {
-    carsForSale: {
-      sedan: "Sedan",
-      suv: "SUV/4x4",
-      hatchback: "Hatchback",
-      convertible: "Convertible",
-      minivan: "Minivan",
-    },
-    leaseCars: {
-      sedanLease: "Sedan Lease",
-      suvLease: "SUV/4x4 Lease",
-      vanMinibusLease: "Van/Minibus Lease",
-      truckPickupLease: "Truck/Pickup Lease",
-      otherLeaseVehicles: "Other Lease Vehicles",
-    },
-    carParts: {
-      engines: "Engines",
-      tiresRims: "Tires & Rims",
-      bodyParts: "Body Parts",
-    },
-    truck: {
-      pickupTruck: "Pickup Truck",
-      heavyTruck: "Heavy Truck",
-      truckSpareParts: "Truck Spare Parts",
-      flatbedTankTruck: "Flatbed/Tank Truck",
-      otherTrucks: "Other Trucks",
-    },
-    electricCars: {
-      electricSedan: "Electric Sedan",
-      electricSUV: "Electric SUV",
-      otherElectricCar: "Other Electric Car",
-    },
-    trailers: {
-      trailerSpareParts: "Trailer Spare Parts",
-      heavyDutyTrailer: "Heavy Duty Trailer",
-      otherTrailers: "Other Trailers",
-    },
-    buses: {
-      coachBuses: "Coach Buses",
-      minibuses: "Minibuses",
-      schoolBuses: "School Buses",
-      cityBuses: "City Buses",
-    },
-  },
-} as const;
 
-export const motorcyclesCategories = {
-  categories: {
-    forSale: "For Sale",
-    forRent: "For Rent",
-    spareParts: "Spare Parts",
-    other: "Other",
-  },
-  subcategories: {
-    forSale: {
-      motorcycle: "Motorcycle",
-      vespa: "Vespa",
-      bajaj: "Bajaj",
-      sportBikes: "Sport Bikes",
-      cargo: "Cargo",
-    },
-    forRent: {
-      motorcycleRental: "Motorcycle Rental",
-      vespaRental: "Vespa Rental",
-      cargoMotorcycleRental: "Cargo Motorcycle Rental",
-      bajajForRent: "Bajaj For Rent",
-      cargoBajajRental: "Cargo Bajaj Rental",
-      dailyBajajRental: "Daily Bajaj Rental",
-    },
-    spareParts: {
-      motorcycleEngines: "Motorcycle Engines",
-      tiresRims: "Tires & Rims",
-      protectiveGear: "Protective Gear",
-      bajajEngines: "Bajaj Engines",
-      bajajBodyParts: "Bajaj Body Parts",
-    },
-    other: {
-      miscellaneousEquipment: "Miscellaneous Equipment",
-    },
-  },
-} as const;
 
-export const boatsCategories = {
-  categories: {
-    boatsForSale: "Boats For Sale",
-    boatsForRent: "Boats For Rent",
-    boatEnginesForSale: "Boat Engines For Sale",
-    boatParts: "Boat Parts",
-  },
-  subcategories: {
-    boatsForSale: {
-      fishingBoat: "Fishing Boat",
-      leisureYacht: "Leisure Yacht",
-      sailboat: "Sailboat",
-      speedboat: "Speedboat",
-    },
-    boatsForRent: {
-      fishingBoatRental: "Fishing Boat Rental",
-      yachtCharter: "Yacht Charter",
-    },
-    boatEnginesForSale: {
-      outboardEngine: "Outboard Engine",
-      inboardEngine: "Inboard Engine",
-      usedEngine: "Used Engine",
-    },
-    boatParts: {
-      engineParts: "Engine Parts",
-      navigationEquipment: "Navigation Equipment",
-      safetyGear: "Safety Gear",
-    },
-  },
-} as const;
 
-export const farmEquipmentCategories = {
-  categories: {
-    tractor: "Tractors",
-    tools: "Farm Tools",
-    fertilizerSpreader: "Fertilizer Spreaders",
-    harvester: "Grain Harvesters",
-    plow: "Plows",
-    irrigation: "Irrigation Systems",
-  },
-  subcategories: {
-    tractor: {
-      newTractor: "New Tractor",
-      usedTractor: "Used Tractor",
-    },
-    tools: {
-      plowTillageEquipment: "Plow/Tillage Equipment",
-      seedingEquipment: "Seeding Equipment",
-      harvestingEquipment: "Harvesting Equipment",
-    },
-    fertilizerSpreader: {
-      mountedSpreader: "Mounted Spreader",
-      towedSpreader: "Towed Spreader",
-    },
-    harvester: {
-      selfPropelledHarvester: "Self-Propelled Harvester",
-      pullTypeHarvester: "Pull-Type Harvester",
-    },
-    plow: {
-      moldboardPlow: "Moldboard Plow",
-      discPlow: "Disc Plow",
-      subsoilPlow: "Subsoil Plow",
-    },
-    irrigation: {
-      dripIrrigation: "Drip Irrigation",
-      sprinklerIrrigation: "Sprinkler Irrigation",
-      floodIrrigation: "Flood Irrigation",
-      waterPumps: "Water Pumps",
-    },
-  },
-} as const;
 
-export const jobsCategories = {
-  categories: {
-    fullTime: "Full Time",
-    partTime: "Part Time",
-    physical: "Physical Labor",
-    internship: "Internship",
-    remote: "Remote",
-    tech: "Technology",
-    finance: "Finance",
-    education: "Education",
-    healthcare: "Healthcare",
-    hospitality: "Hospitality",
-  },
-  subcategories: {
-    fullTime: {
-      administrationOffice: "Administration/Office",
-      itTechnology: "IT/Technology",
-      healthcare: "Healthcare",
-      salesMarketing: "Sales/Marketing",
-      engineeringConstruction: "Engineering/Construction",
-    },
-    partTime: {
-      officeAssistant: "Office Assistant",
-      studentEmployment: "Student Employment",
-      foodDeliveryRunner: "Food Delivery Runner",
-    },
-    freelance: {
-      graphicDesigner: "Graphic Designer",
-      webDeveloper: "Web Developer",
-      freelanceWriter: "Freelance Writer",
-    },
-  },
-  quickLinks: {
-    it: "IT Jobs",
-    airport: "Airport Jobs",
-    public: "Public Sector",
-    seaport: "Seaport Jobs",
-    construction: "Construction",
-    agriculture: "Agriculture",
-    transportation: "Transportation",
-  },
-} as const;
 
-export const about = {
+const about = {
   title: "About Karaadi",
   heading: "About Karaadi",
   description: "Learn more about Karaadi, our mission and values.",
@@ -338,7 +96,7 @@ export const about = {
   },
 } as const;
 
-export const terms = {
+const terms = {
   title: "Terms and Conditions",
   heading: "Terms & Conditions",
   description: "Read the terms and conditions for using Karaadi.",
@@ -354,7 +112,7 @@ export const terms = {
   metaDescription: "Legal terms and conditions for Karaadi users.",
 } as const;
 
-export const contact = {
+const contact = {
   title: "Contact Us",
   heading: "Contact Karaadi",
   description: "Get in touch with the Karaadi team for support or inquiries.",
@@ -368,7 +126,7 @@ export const contact = {
   metaDescription: "Support and contact information for Karaadi.",
 } as const;
 
-export const nav = {
+const nav = {
   home: "Home",
   about: "About Us",
   contact: "Contact",
@@ -383,11 +141,11 @@ export const nav = {
   createBusiness: "Create Business",
 } as const;
 
-export const welcome = "Welcome to Karaadi" as const;
+const welcome = "Welcome to Karaadi" as const;
 
-export const search = "Search Xamar, house, car, 45 000..." as const;
+const search = "Search Xamar, house, car, 45 000..." as const;
 
-export const filters = {
+const filters = {
   location: {
     title: "Regions",
     mobileFilter: "Location Filter",
@@ -395,7 +153,7 @@ export const filters = {
   },
 } as const;
 
-export const auth = {
+const auth = {
   login: {
     title: "Welcome Back!",
     subtitle: "Login to your account",
@@ -498,19 +256,21 @@ export const auth = {
   },
 } as const;
 
-export const lang = {
+const lang = {
   en: "English",
   so: "Somali",
 } as const;
 
-export const notifications = {
+const notifications = {
   title: "Notifications",
   tabs: {
     unread: "Unread",
     all: "All",
+    read: "Read",
   },
   empty: {
     unread: "No unread notifications",
+    read: "No read notifications",
     all: "No notifications yet",
     allSub: "You'll see updates about your listings, messages, and offers here.",
   },
@@ -556,7 +316,7 @@ export const notifications = {
   },
 } as const;
 
-export const footer = {
+const footer = {
   company: "Company",
   support: "Support",
   categories: "Categories",
@@ -576,7 +336,7 @@ export const footer = {
   developedBy: "Developed by",
 } as const;
 
-export const support = {
+const support = {
   links: {
     home: "Home",
     users: "Users",
@@ -590,7 +350,7 @@ export const support = {
   },
 } as const;
 
-export const categories = {
+const categories = {
   Marketplace: "Marketplace",
   RealEstate: "Real Estate",
   Cars: "Cars",
@@ -600,9 +360,9 @@ export const categories = {
   Smartsuuq: "Smartsuuq",
 } as const;
 
-export const mohyusLogoAlt = "Mohyus Logo" as const;
+const mohyusLogoAlt = "Mohyus Logo" as const;
 
-export const createAd = {
+const createAd = {
   categories: "Categories",
   public: "Public",
   private: "Private",
@@ -624,7 +384,7 @@ export const createAd = {
   submitting: "Submitting...",
 } as const;
 
-export const createMarketplace = {
+const createMarketplace = {
   heading: "Create Marketplace Listing",
   mainCategoryLabel: "Main Category",
   categoryLabel: "Category Tag",
@@ -657,7 +417,7 @@ export const createMarketplace = {
   submit: "Submit Listing",
 } as const;
 
-export const createRealEstate = {
+const createRealEstate = {
   title: "Real Estate",
   mainCategory: "Main Category",
   category: "Category",
@@ -739,7 +499,7 @@ export const createRealEstate = {
   },
 } as const;
 
-export const createCars = {
+const createCars = {
   pageTitle: "Create Car Listing",
   mainCategoryLabel: "Main Category",
   categoryLabel: "Category",
@@ -813,7 +573,7 @@ export const createCars = {
   },
 } as const;
 
-export const createMotorcycle = {
+const createMotorcycle = {
   heading: "Create Motorcycle Ad",
   mainCategoryLabel: "Main Category",
   categoryLabel: "Category",
@@ -891,7 +651,7 @@ export const createMotorcycle = {
   },
 } as const;
 
-export const createFarmequipment = {
+const createFarmequipment = {
   pageTitle: "Create Farm Equipment Listing",
   mainCategoryLabel: "Main Category",
   categoryLabel: "Category",
@@ -944,7 +704,7 @@ export const createFarmequipment = {
   },
 } as const;
 
-export const createJobs = {
+const createJobs = {
   titleLabel: "Job Title",
   jobTypeLabel: "Job Type",
   companyLabel: "Company",
@@ -954,7 +714,7 @@ export const createJobs = {
   applicationDeadlineLabel: "Application Deadline",
 } as const;
 
-export const createBoats = {
+const createBoats = {
   title: "Boats Listing",
   pageTitle: "Boats",
   mainCategory: "Main Category",
@@ -991,7 +751,7 @@ export const createBoats = {
 
 
 
-export const subcategories = {
+const subcategories = {
   marketplace: {
     antiques: "Antiques & Art",
     electronics: "Electronics",
@@ -1330,11 +1090,11 @@ export const subcategories = {
   },
 } as const;
 
-export const marketplace = {
+const marketplace = {
   displaying: "Displaying {{count}} {{category}}.",
 } as const;
 
-export const common = {
+const common = {
   loading: "Loading...",
   noResults: "No results found in this area.",
   back: "Back",
@@ -1364,7 +1124,7 @@ export const common = {
   close: "Close",
 } as const;
 
-export const mine = {
+const mine = {
   nav: {
     myAds: "My Ads",
     favorites: "Favorites",
@@ -1375,6 +1135,21 @@ export const mine = {
   },
   noData: "No data",
   noDataDesc: "No records available",
+  cart: {
+    draftBadge: "Pending Listings",
+    itemsCount: "{{count}} items in cart",
+    yourItems: "Your Items",
+    addAnother: "Add Another",
+    remove: "Remove",
+    summary: "Order Summary",
+    selectedItem: "Selected Item",
+    itemPrice: "Item Price",
+    noPlanSelected: "No visibility plan selected yet",
+    selectPlanAndPay: "Select Plan & Pay",
+    empty: "Your Cart is Empty",
+    emptyDesc: "Ads you create but haven't paid for will appear here",
+    createAd: "Create an Ad",
+  },
   settings: {
     privacy: "Privacy",
     security: "Security",
@@ -1390,10 +1165,6 @@ export const mine = {
     savedSearches: "Saved Searches",
     badge: "Badge",
     pendingPayments: "Pending Payments",
-    badgeDescription: "This page shows your badge and related statistics.",
-    badgeVisits: "Visits",
-    badgeContacts: "Contacts",
-    badgeResponses: "Responses",
     forBusinesses: "For Businesses",
     contactHistory: "Contact History",
     mySubscriptions: "My Subscriptions",
@@ -1771,7 +1542,7 @@ export const mine = {
   },
 } as const;
 
-export const descriptions = {
+const descriptions = {
   myAdsDesc: "See all your ads and track statistics",
   myAccountDesc: "View your details on KARAADI and Smartsuuq",
   settingsDesc: "Manage your account settings on KARAADI",
@@ -1780,12 +1551,12 @@ export const descriptions = {
   forBusinessesDesc: "View companies you have access to",
   contactHistoryDesc: "Track your support requests and messages",
   mySubscriptionsDesc: "Manage your subscriptions and payment plans",
-  badgeDesc: "View your badge and stats",
+  badgeDesc: "Ads waiting for payment",
   tutorialsDesc: "Watch short videos on how to use Karaadi",
   identityVerificationDesc: "Verify your identity with an ID card and selfie",
 } as const;
 
-export const messages = {
+const messages = {
   title: "Messages",
   noConversationsTitle: "No conversations yet",
   noConversationsMessage: "When you contact a seller, your chat will appear here.",
@@ -1793,7 +1564,7 @@ export const messages = {
   noMessagesPreview: "No messages yet",
 } as const;
 
-export const chats = {
+const chats = {
   yourChats: "Your Chats",
   conversations: "conversation",
   noMessagesYet: "No messages yet",
@@ -1826,7 +1597,7 @@ export const chats = {
   cancel: "Cancel",
 } as const;
 
-export const checkout = {
+const checkout = {
   title: "Checkout",
   description: "Complete your checkout process",
   signIn: "Sign In",
@@ -1834,7 +1605,7 @@ export const checkout = {
   payment: "Payment",
 } as const;
 
-export const plan = {
+const plan = {
   selectHeading: "Choose Your",
   plan: "Plan",
   itemFee: "Listing Fee",
@@ -1851,17 +1622,17 @@ export const plan = {
   recommended: "Recommended",
 } as const;
 
-export const summary = {
+const summary = {
   review: "Review",
   verifyDetails: "Verify your listing and complete payment",
   listingSummary: "Listing Summary",
 } as const;
 
-export const payment = {
+const payment = {
   payment: "Payment",
 } as const;
 
-export const postAd = {
+const postAd = {
   steps: {
     type: "Type",
     category: "Category",
@@ -1926,9 +1697,21 @@ export const postAd = {
   payVia: "Pay ${{total}} via {{method}}",
   securedCheckout: "Secured · SSL encrypted · Safe checkout",
   paymentMethod: "Payment Method",
+  choosePaymentMethod: "Choose how to pay",
+  choosePaymentMethodSub: "Pick the mobile money account you'll pay with",
+  enterPhoneTitle: "Enter your number",
+  phoneSecureNote: "Your number is only used to send this payment request. It is sent encrypted and never saved on your device.",
+  phoneRequired: "Enter your phone number",
+  phoneInvalid: "Enter a valid Somali number, e.g. 061XXXXXXX or +252 61XXXXXXX",
+  phoneWrongPrefix: "{{method}} needs a number starting with {{prefix}}",
+  paymentDeclined: "Payment was declined. Please try again.",
+  paymentTimedOut: "Payment confirmation timed out. Please try again.",
+  paymentInitFailed: "Payment could not be started. Please try again.",
+  activationFailed: "Could not activate your listing. Please try again.",
   phoneNumberForMethod: "{{method}} Phone Number",
   enterPhoneForMethod: "Enter the number linked to your {{method}} account",
   paymentRequestNote: "You'll receive a payment request on your {{method}} app to approve.",
+  changeMethod: "Change",
   waitingConfirmation: "Waiting for Confirmation",
   approveOnApp: "Please approve the payment request on your mobile money app.",
   attrMake: "Make",
@@ -1957,9 +1740,11 @@ export const postAd = {
   socialFbLoading: "Posting to Karaadi's Facebook page…",
   socialFbDone: "Posted to Karaadi's Facebook page!",
   socialFbError: "Could not post — try again",
+  socialFbPremiumOnly: "Posting on Karaadi's page needs 90-Day Premium",
+  socialShareOwnFacebook: "Share on my Facebook",
 } as const;
 
-export const paymentPage = {
+const paymentPage = {
   pageTitle: "Payment",
   heading: "Payment",
   subheading: "Complete Your Payment",
@@ -1975,7 +1760,7 @@ export const paymentPage = {
   total: "TOTAL",
 } as const;
 
-export const subscription = {
+const subscription = {
   title: "Subscription Settings",
   liveScanner: "Live Scanner Active",
   createNewAlert: "Create New Alert",
@@ -2125,7 +1910,7 @@ export const subscription = {
   conditionFair: "Used – Fair",
 } as const;
 
-export const supportModule = {
+const supportModule = {
   loginRequired: "Please log in to submit a support ticket.",
   title: "Support",
   subtitle: "Submit a ticket to get help.",
@@ -2141,7 +1926,7 @@ export const supportModule = {
   },
 } as const;
 
-export const ticketHistory = {
+const ticketHistory = {
   loginRequired: "Please log in to view your ticket history.",
   title: "My Tickets",
   noTickets: "No tickets found.",
@@ -2159,7 +1944,7 @@ export const ticketHistory = {
   },
 } as const;
 
-export const helpPage = {
+const helpPage = {
   faqsTitle: "Frequently Asked Questions",
   hero: {
     title: "Help - Karaadi",
@@ -2211,11 +1996,11 @@ export const helpPage = {
   footerNote: "Karaadi SmartSuuq - Somalia's first online marketplace",
 } as const;
 
-export const wantSell = {
+const wantSell = {
   title: "Sell Item",
 } as const;
 
-export const jobsPage = {
+const jobsPage = {
   title: "Jobs",
   heading: "Job Listings",
   foundCount: "Found {{count}} opportunities",
@@ -2271,7 +2056,7 @@ export const jobsPage = {
 } as const;
 
 
-export const cookiesPage = {
+const cookiesPage = {
   heading: "Cookies Policy",
   paragraphs: [
     "This website uses cookies to ensure you get the best experience on our website.",
@@ -2281,7 +2066,7 @@ export const cookiesPage = {
   ],
 } as const;
 
-export const privacyPage = {
+const privacyPage = {
   title: "Karaadi Privacy & Data Protection Policy",
   sections: {
     collectionTitle: "Data Collection",
@@ -2300,7 +2085,7 @@ export const privacyPage = {
 } as const;
 
 
-export const citySelect = {
+const citySelect = {
   search: "Search city...",
   noResults: "No cities found",
   addNew: "ADD NEW CITY",
@@ -2311,11 +2096,11 @@ export const citySelect = {
   saving: "Saving city...",
 } as const;
 
-export const homeScreen = {
+const homeScreen = {
   howToUseKaraadi: "How to use Karaadi",
 } as const;
 
-export const tutorials = {
+const tutorials = {
   title: "Tutorials",
   subtitle: "Short videos to help you get the most out of Karaadi",
   video1: "Getting Started with Karaadi",
@@ -2324,7 +2109,7 @@ export const tutorials = {
   play: "Tap to play",
 } as const;
 
-export const aboutKaraadiPage = {
+const aboutKaraadiPage = {
   title: "About Karaadi",
   subtitle: "Everything you need to know about the Karaadi marketplace",
   open: "Tap to view",
@@ -2333,7 +2118,7 @@ export const aboutKaraadiPage = {
   developedBy: "Developed by",
 } as const;
 
-export const recommendations = {
+const recommendations = {
   title: "Recommended for You",
   subtitleLoggedIn: "Recommended based on your interests",
   subtitleGuest: "Log in for personalized recommendations",
@@ -2343,11 +2128,11 @@ export const recommendations = {
   retry: "Try Again",
 } as const;
 
-export const recommended = {
+const recommended = {
   title: "You may also like",
 } as const;
 
-export const realEstateDetail = {
+const realEstateDetail = {
   propertyDetails: "Property Details",
   bedroomsLabel: "Bedrooms",
   bathroomsLabel: "Bathrooms",
@@ -2389,7 +2174,7 @@ export const realEstateDetail = {
   waaLaGatay: "SOLD OUT",
 } as const;
 
-export const report = {
+const report = {
   goBack: "Go Back to Item",
   heading: "Report Listing",
   intro: "please let us know why this listing should be reviewed.",
@@ -2415,7 +2200,7 @@ export const report = {
   errorFailed: "Failed to submit report",
 } as const;
 
-export const subscriptionDetail = {
+const subscriptionDetail = {
   notFound:      "Subscription not found",
   category:      "Category",
   subCategory:   "Sub-category",
@@ -2431,7 +2216,7 @@ export const subscriptionDetail = {
   priceFrom:     "From",
 } as const;
 
-export const vehicleDetail = {
+const vehicleDetail = {
   techSpecs:    "Technical Specifications",
   description:  "Description",
   make:         "Make",
@@ -2454,7 +2239,7 @@ export const vehicleDetail = {
   goBack:       "Go back",
 } as const;
 
-export const hage = {
+const hage = {
   title:       "Hage Assistant",
   placeholder: "Type your message...",
   send:        "Send",

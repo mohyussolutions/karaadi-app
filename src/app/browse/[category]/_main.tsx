@@ -12,7 +12,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
-import { getCategoryByKey, SUB_I18N_GROUP } from "../../../constants";
+import { getCategoryByKey, SUB_I18N_GROUP, H_PAD, GAP, GRID_GAP, ROUTES, SKELETON_COUNT } from "../../../constants";
 import { EmptyState, AppIcon } from "../../../components/shared";
 import ListingCard from "../../../components/cards/ListingCard/ListingCard";
 import { ListingCardSkeleton } from "../../../components/loading";
@@ -25,11 +25,7 @@ import { useAppSelector } from "../../../store/store";
 import type { SubCategory } from "../../../constants";
 import type { ListingBase } from "../../../util/types/listing.types";
 import type { GridProps, SidebarProps } from "../../../util/types";
-import { H_PAD, GAP, GRID_GAP } from "../../../constants/constants";
 import { createStyles } from "../../../util/styles/browse/categoryBrowse.styles";
-import { ROUTES } from "../../../constants/constants";
-
-const SKELETON_COUNT = 6;
 
 function SubcategoryGrid({ subs, group, onPress }: GridProps) {
   const { t } = useAppTranslation();
@@ -77,7 +73,7 @@ function SubcategorySidebar({ subs, group, onPress, onPost }: SidebarProps) {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView overScrollMode="never" showsVerticalScrollIndicator={false}>
       {subs.map((sub) => {
         const label = t(`subcategories.${group}.${sub.key}`, { defaultValue: sub.name });
         return (

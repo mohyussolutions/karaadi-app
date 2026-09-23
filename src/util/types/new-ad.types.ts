@@ -216,6 +216,7 @@ export interface SuccessScreenProps {
   plan: Plan;
   listingTitle: string;
   listingId: string;
+  categoryKey?: string;
   createdItem: CreatedItemSummary | null;
   onDone: () => void;
   isPremium90?: boolean;
@@ -226,6 +227,18 @@ export interface PhoneInputProps {
   value: string;
   onChange: (v: string) => void;
   error: string;
+}
+
+export type PhoneErrorKey = 'postAd.phoneRequired' | 'postAd.phoneInvalid' | 'postAd.phoneWrongPrefix';
+
+export interface PhoneValidationError {
+  key: PhoneErrorKey;
+  params?: Record<string, string>;
+}
+
+export interface SelectedMethodCardProps {
+  method: PaymentMethod;
+  onChange: () => void;
 }
 
 export interface PaymentMethodSelectorProps {
@@ -276,16 +289,30 @@ export interface NestedSubcategoryPickerProps {
 
 export interface TopBarProps {
   onBack: () => void;
+  title?: string;
+}
+
+export interface IOSPaymentScreenProps {
+  onBack: () => void;
+  listingId: string;
 }
 
 export interface ErrorBannerProps {
   message: string;
 }
 
-export interface PayFooterProps {
-  total: number;
-  methodMeta: PaymentMethodOption;
-  onPay: () => void;
+export interface CheckoutHeaderProps {
+  icon: MCIcon;
+  title: string;
+  subtitle?: string;
+}
+
+export interface CheckoutFooterProps {
+  label: string;
+  icon: MCIcon;
+  onPress: () => void;
+  disabled?: boolean;
+  showSecureNote?: boolean;
 }
 
 export interface ImageCarouselProps {

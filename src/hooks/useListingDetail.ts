@@ -7,7 +7,7 @@ import { useAuthStore } from '../store/hooks/authStore';
 import { trackItemView } from '../actions/categories/feed.actions';
 import { isAbortError } from '../util/helpers/api.format';
 import { showToast } from '../util/cache/toastService';
-import { ROUTES } from '../constants/constants';
+import { ROUTES } from '../constants';
 import type { ListingBase, UseListingDetailOptions } from '../util/types/listing.types';
 
 export function useListingDetail<T extends ListingBase>(

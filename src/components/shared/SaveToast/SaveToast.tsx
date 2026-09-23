@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import type { ToastPayload } from '../../../util/cache/toastService';
 import { createStyles } from '../../../util/styles/shared/saveToast.styles';
-import { NATIVE_DRIVER } from '../../../util/helpers/animation';
+import { NATIVE_DRIVER } from "../../../constants";
 
 export default function SaveToast() {
   const [payload, setPayload] = useState<ToastPayload | null>(null);

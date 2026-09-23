@@ -6,7 +6,7 @@ import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
 import { useResponsive } from "../../../hooks/useResponsive";
 import { tabletModalStyles } from "../../../util/styles/shared/tablet.styles";
 import { createStyles } from "../../../util/styles/shared/videoPopupModal.styles";
-import { TABLET_MODAL_ICON_SIZES } from '../../../constants/constants';
+import { TABLET_MODAL_ICON_SIZES } from '../../../constants';
 
 export default function VideoPopupModal({
   visible,

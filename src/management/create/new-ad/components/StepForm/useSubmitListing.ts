@@ -3,9 +3,7 @@ import { Alert } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../../../../store/store";
 import { submitListing, setFeeInfo } from "../../../../../store/slices/newAdSlice";
 import { getFeeForCategory } from "../../../../../actions/categories/fee.actions";
-import { CATEGORY_MAIN_LABEL } from "../../constants/config";
-import { NUMERIC_KEYS, BOOLEAN_KEYS } from "../../constants/fields";
-import { REGEX_NON_DIGITS } from "../../../../../constants";
+import { REGEX_NON_DIGITS, CATEGORY_MAIN_LABEL, NUMERIC_KEYS, BOOLEAN_KEYS } from "../../../../../constants";
 import type { ListingBody, UseSubmitListingArgs } from "../../../../../util/types";
 
 export function useSubmitListing({

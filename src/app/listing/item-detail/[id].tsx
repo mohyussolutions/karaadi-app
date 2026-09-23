@@ -7,10 +7,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
-import { MARKETPLACE_CONFIG, buildSpecItems } from '../../../constants';
+import { MARKETPLACE_CONFIG, buildSpecItems, DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, CONDITION_COLORS } from '../../../constants';
 import { MARKETPLACE_ENDPOINTS } from '../../../api/endpoints';
 import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
-import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, CONDITION_COLORS } from '../../../constants';
 import { useItemDetail } from '../../../hooks/useItemDetail';
 import ImageGallery from '../../../components/detail/ImageGallery/ImageGallery';
 import ZoomModal from '../../../components/modals/ZoomModal/ZoomModal';
@@ -143,15 +142,15 @@ export default function ItemDetailScreen() {
       <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
         {isTabletLandscape ? (
           <View style={tabletSplit.row}>
-            <ScrollView style={tabletSplit.leftCol} showsVerticalScrollIndicator={false}>
+            <ScrollView overScrollMode="never" style={tabletSplit.leftCol} showsVerticalScrollIndicator={false}>
               {galleryContent}
             </ScrollView>
-            <ScrollView style={tabletSplit.rightCol} showsVerticalScrollIndicator={false}>
+            <ScrollView overScrollMode="never" style={tabletSplit.rightCol} showsVerticalScrollIndicator={false}>
               {bodyContent}
             </ScrollView>
           </View>
         ) : (
-          <ScrollView
+          <ScrollView overScrollMode="never"
             showsVerticalScrollIndicator={false}
             contentContainerStyle={isTablet ? tabletPortrait.scrollContent : undefined}
           >
