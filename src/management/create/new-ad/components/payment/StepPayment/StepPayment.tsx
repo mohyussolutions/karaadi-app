@@ -10,8 +10,8 @@ import { LoadingSpinner } from '../../../../../../components/loading';
 import { useAppSelector } from '../../../../../../store/store';
 import type { StepPaymentProps } from '../../../../../../util/types';
 import type { TopBarProps, ErrorBannerProps, PayFooterProps } from '../../../../../../util/types/new-ad.types';
-import { MAX_POLL_ATTEMPTS } from '../../../../../../constants/constants';
-import { SITE_URL } from '../../../../../../constants';
+import { IOS_PAY_ON_WEBSITE, MAX_POLL_ATTEMPTS } from '../../../../../../constants/constants';
+import { getSitePayUrl } from '../../../../../../constants';
 import { PaymentMethodSelector } from './PaymentMethodSelector';
 import { PhoneInput } from './PhoneInput';
 import { PollingOverlay } from '../../../../../../components/modals/PollingOverlay/PollingOverlay';
@@ -74,26 +74,29 @@ const PayFooter = memo(function PayFooter({ total, methodMeta, onPay }: PayFoote
   );
 });
 
-function IOSPaymentScreen() {
+function IOSPaymentScreen({ onBack, listingId }: TopBarProps & { listingId: string }) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
   return (
-    <View style={[s.root, s.iosPaymentRoot]}>
-      <MaterialCommunityIcons name="web" size={56} color={Colors.primary} />
-      <Text style={s.iosPaymentTitle}>
-        {t('postAd.iosPaymentTitle')}
-      </Text>
-      <Text style={s.iosPaymentBody}>
-        {t('postAd.iosPaymentBody')}
-      </Text>
-      <TouchableOpacity
-        style={s.iosPaymentBtn}
-        onPress={() => Linking.openURL(SITE_URL)}
-        activeOpacity={0.85}
-      >
-        <Text style={s.iosPaymentBtnText}>{t('postAd.iosPaymentBtn')}</Text>
-      </TouchableOpacity>
+    <View style={s.root}>
+      <TopBar onBack={onBack} />
+      <View style={[s.root, s.iosPaymentRoot]}>
+        <MaterialCommunityIcons name="web" size={56} color={Colors.primary} />
+        <Text style={s.iosPaymentTitle}>
+          {t('postAd.iosPaymentTitle')}
+        </Text>
+        <Text style={s.iosPaymentBody}>
+          {t('postAd.iosPaymentBody')}
+        </Text>
+        <TouchableOpacity
+          style={s.iosPaymentBtn}
+          onPress={() => Linking.openURL(getSitePayUrl(listingId))}
+          activeOpacity={0.85}
+        >
+          <Text style={s.iosPaymentBtnText}>{t('postAd.iosPaymentBtn')}</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -109,8 +112,8 @@ export function StepPayment({
 
   if (payment.autoActivating) return <ActivatingScreen />;
 
-  if (Platform.OS === 'ios' && payment.total > 0) {
-    return <IOSPaymentScreen />;
+  if (IOS_PAY_ON_WEBSITE && Platform.OS === 'ios' && payment.total > 0) {
+    return <IOSPaymentScreen onBack={onBack} listingId={listingId} />;
   }
 
   if (payment.payStatus === 'success') {

@@ -262,6 +262,8 @@ export interface PlanCardProps {
   selected: boolean;
   isBestValue: boolean;
   onSelect: (p: Plan) => void;
+  compact?: boolean;
+  width?: number;
 }
 
 export interface NestedSubcategoryPickerProps {

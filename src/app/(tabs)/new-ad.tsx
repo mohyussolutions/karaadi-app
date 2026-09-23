@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from "react";
-import { View, Alert } from "react-native";
+import { View, Alert, BackHandler } from "react-native";
 import { useRouter } from "expo-router";
 import { useFocusEffect } from "expo-router";
 import { useTranslation } from "react-i18next";
@@ -72,6 +72,39 @@ export default function NewAdScreen() {
     }, [submitStatus]),
   );
 
+  // The listing already exists once the plan step is reached, so going back to
+  // the form would post a duplicate — leave checkout instead (Pay Now in My Ads).
+  const leaveCheckout = useCallback(() => {
+    Alert.alert(t("postAd.leaveCheckoutTitle"), t("postAd.leaveCheckoutBody"), [
+      { text: t("auth.common.cancel"), style: "cancel" },
+      {
+        text: t("postAd.leaveCheckoutConfirm"),
+        onPress: () => {
+          dispatch(resetNewAd());
+          router.replace(ROUTES.myAds);
+        },
+      },
+    ]);
+  }, [dispatch, router, t]);
+
+  const goBack = useCallback((): boolean => {
+    switch (step) {
+      case "category": goToStep("type"); return true;
+      case "form": goToStep("category"); return true;
+      case "plan": leaveCheckout(); return true;
+      case "summary": goToStep("plan"); return true;
+      case "payment": goToStep("summary"); return true;
+      default: return false;
+    }
+  }, [step, goToStep, leaveCheckout]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const sub = BackHandler.addEventListener("hardwareBackPress", goBack);
+      return () => sub.remove();
+    }, [goBack]),
+  );
+
   const categoryMeta = MAIN_CATEGORIES.find((c) => c.key === categoryKey);
   const AD_STEPS: StepItem[] = [
     { key: "type", label: t("postAd.steps.type") },
@@ -111,7 +144,7 @@ export default function NewAdScreen() {
           selected={categoryKey}
           onSelect={(key) => dispatch(setCategoryKey(key))}
           onNext={() => goToStep("form")}
-          onBack={() => goToStep("type")}
+          onBack={goBack}
         />
       )}
 
@@ -132,7 +165,7 @@ export default function NewAdScreen() {
                 goToStep("plan");
               }
             }}
-            onBack={() => goToStep("category")}
+            onBack={goBack}
           />
         );
       })()}
@@ -144,7 +177,7 @@ export default function NewAdScreen() {
           selected={selectedPlan}
           onSelect={(plan) => dispatch(setSelectedPlan(plan))}
           onNext={() => goToStep("summary")}
-          onBack={() => goToStep("form")}
+          onBack={goBack}
         />
       )}
 
@@ -153,7 +186,7 @@ export default function NewAdScreen() {
           plan={selectedPlan}
           categoryName={categoryMeta?.name}
           onNext={() => goToStep("payment")}
-          onBack={() => goToStep("plan")}
+          onBack={goBack}
         />
       )}
 
@@ -163,7 +196,7 @@ export default function NewAdScreen() {
           listingId={createdId}
           listingTitle={createdTitle}
           categoryKey={categoryKey}
-          onBack={() => goToStep("summary")}
+          onBack={goBack}
         />
       )}
     </View>

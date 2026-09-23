@@ -25,7 +25,7 @@ export function PollingOverlay({ visible, attempt, maxAttempts, onCancel }: Poll
   }, [visible]);
 
   return (
-    <Modal transparent animationType="fade" visible={visible} statusBarTranslucent>
+    <Modal transparent animationType="fade" visible={visible} statusBarTranslucent onRequestClose={onCancel}>
       <View style={s.backdrop}>
         <View style={s.card}>
           <Animated.View style={[s.circle, { transform: [{ scale: pulse }] }]}>

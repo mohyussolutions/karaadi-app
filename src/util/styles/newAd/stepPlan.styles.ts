@@ -3,6 +3,10 @@ import type { ColorPalette } from "../../../hooks/useTheme";
 import { shadow } from "../../helpers/shadow";
 import { createCommonStyles } from "../common/common.styles";
 
+export const PLAN_WIDE_MAX_WIDTH = 760;
+export const PLAN_GRID_GAP = 14;
+export const PLAN_COMPACT_MAX_WIDTH = 360;
+
 const centered = { alignItems: "center", justifyContent: "center" } as const;
 const rowCentered = { flexDirection: "row", alignItems: "center" } as const;
 
@@ -16,16 +20,16 @@ const planFrameStyles = (Colors: ColorPalette) =>
   ({
     card: {
       backgroundColor: Colors.card,
-      borderRadius: 14,
+      borderRadius: 18,
       borderWidth: 1,
       borderColor: Colors.border,
       overflow: "hidden",
       ...shadow({
         color: Colors.shadow,
         offset: { width: 0, height: 2 },
-        opacity: 0.06,
-        radius: 6,
-        elevation: 2,
+        opacity: 0.08,
+        radius: 10,
+        elevation: 3,
       }),
     },
     cardRecommended: { borderColor: Colors.primary, borderWidth: 1.5 },
@@ -34,58 +38,83 @@ const planFrameStyles = (Colors: ColorPalette) =>
       top: 0,
       right: 0,
       ...rowCentered,
-      gap: 3,
-      paddingHorizontal: 8,
-      paddingVertical: 4,
-      borderBottomLeftRadius: 10,
+      gap: 4,
+      paddingHorizontal: 12,
+      paddingVertical: 5,
+      borderBottomLeftRadius: 12,
     },
     badgeText: {
-      fontSize: 8.5,
+      fontSize: 10,
       fontWeight: "800",
       color: Colors.white,
       letterSpacing: 0.3,
     },
   }) as const;
 
-const planContentStyles = (Colors: ColorPalette) =>
+// `compact` scales the card down for narrow phones (< 360pt wide).
+const planContentStyles = (Colors: ColorPalette, compact: boolean) =>
   ({
-    inner: { padding: 10 },
-    topRow: { ...rowCentered, gap: 8, marginBottom: 8 },
-    iconBox: { width: 32, height: 32, borderRadius: 9, ...centered },
+    inner: compact
+      ? { paddingHorizontal: 12, paddingTop: 18, paddingBottom: 12 }
+      : { paddingHorizontal: 16, paddingTop: 22, paddingBottom: 16 },
+    topRow: { ...rowCentered, gap: compact ? 8 : 12 },
+    iconBox: {
+      width: compact ? 38 : 46,
+      height: compact ? 38 : 46,
+      borderRadius: compact ? 11 : 14,
+      ...centered,
+    },
     meta: { flex: 1 },
-    name: { fontSize: 14, fontWeight: "800" },
-    dur: { fontSize: 10.5, color: Colors.textMuted, marginTop: 1 },
+    name: { fontSize: compact ? 15 : 17, fontWeight: "800" },
+    dur: { fontSize: compact ? 11 : 12.5, color: Colors.textMuted, marginTop: 3 },
     priceBox: { alignItems: "flex-end" },
-    price: { fontSize: 17, fontWeight: "900", lineHeight: 19 },
-    priceSub: { fontSize: 8.5, color: Colors.textMuted, fontWeight: "600" },
+    price: {
+      fontSize: compact ? 20 : 24,
+      fontWeight: "900",
+      lineHeight: compact ? 24 : 28,
+    },
+    priceSub: {
+      fontSize: compact ? 9.5 : 10.5,
+      color: Colors.textMuted,
+      fontWeight: "600",
+      marginTop: 2,
+    },
     radio: {
-      width: 18,
-      height: 18,
-      borderRadius: 9,
-      borderWidth: 1.5,
+      width: 24,
+      height: 24,
+      borderRadius: 12,
+      borderWidth: 2,
       borderColor: Colors.border,
       ...centered,
       marginLeft: 8,
     },
   }) as const;
 
-const planFeatureStyles = (Colors: ColorPalette) =>
+const planFeatureStyles = (Colors: ColorPalette, compact: boolean) =>
   ({
     features: {
       flexDirection: "row",
       flexWrap: "wrap",
-      rowGap: 5,
-      columnGap: 10,
+      rowGap: 10,
+      columnGap: 12,
+      marginTop: compact ? 10 : 14,
+      paddingTop: compact ? 10 : 14,
+      borderTopWidth: 1,
+      borderTopColor: Colors.border,
     },
-    featureItem: { ...rowCentered, gap: 5, width: "47%" },
-    featureText: { fontSize: 11, color: Colors.textSecondary, flex: 1 },
+    featureItem: { ...rowCentered, gap: 6, width: compact ? "100%" : "47%" },
+    featureText: {
+      fontSize: compact ? 12 : 13,
+      color: Colors.textSecondary,
+      flex: 1,
+    },
   }) as const;
 
-export const createPlanCardStyles = (Colors: ColorPalette) =>
+export const createPlanCardStyles = (Colors: ColorPalette, compact: boolean) =>
   StyleSheet.create({
     ...planFrameStyles(Colors),
-    ...planContentStyles(Colors),
-    ...planFeatureStyles(Colors),
+    ...planContentStyles(Colors, compact),
+    ...planFeatureStyles(Colors, compact),
   });
 
 const screenStyles = (Colors: ColorPalette) => {
@@ -112,7 +141,11 @@ const screenStyles = (Colors: ColorPalette) => {
     },
     title: { fontSize: 19, fontWeight: "800", color: Colors.textPrimary },
     sub: { fontSize: 12.5, color: Colors.textMuted, textAlign: "center" },
-    cardsCol: { gap: 8 },
+    cardsCol: { gap: 14 },
+    // Tablets / landscape phones: two cards per row inside a centered column.
+    wideContent: { alignSelf: "center", width: "100%", maxWidth: PLAN_WIDE_MAX_WIDTH },
+    cardsGrid: { flexDirection: "row", flexWrap: "wrap", gap: PLAN_GRID_GAP },
+    footerWide: { alignSelf: "center", width: "100%", maxWidth: 460 },
   } as const;
 };
 

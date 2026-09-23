@@ -29,23 +29,22 @@ export const BADGE_MAX_COUNT = 9;
 export const BADGE_MAX_LABEL = '9+';
 
 export const SITE_URL = 'https://karaadi.com';
+// Website page that opens the plan/payment flow for one unpaid ad (login redirects back).
+export const getSitePayUrl = (listingId: string) =>
+  `${SITE_URL}/mine/pay/${encodeURIComponent(listingId)}`;
 
 export const DETAIL_PLACEHOLDER = NO_IMAGE_URI;
 
 export const DESCRIPTION_TRUNCATE = 300;
 
-export const FEED_BASE_PATH = '/api/feed';
-
-export const FEED_GROUPS = {
-  FAST: 'fast',
-  SLOW: 'slow',
-} as const;
-
-export type FeedGroup = (typeof FEED_GROUPS)[keyof typeof FEED_GROUPS];
-
-export const FEED_DEFAULT_PAGE = 1;
-export const FEED_DEFAULT_PAGE_SIZE = 100;
-export const FEED_MAX_ITEMS = 2000;
+export {
+  FEED_BASE_PATH,
+  FEED_GROUPS,
+  FEED_DEFAULT_PAGE,
+  FEED_DEFAULT_PAGE_SIZE,
+  FEED_MAX_ITEMS,
+  type FeedGroup,
+} from './feed';
 
 export const INITIAL_VISIBLE = 20;
 export const FEED_REVEAL_STEPS = [40, 20] as const;
@@ -129,6 +128,10 @@ export const PAYMENT_METHODS: PaymentMethodOption[] = [
   { key: 'sahal',  label: 'Sahal',    sublabel: 'Somtel (+252 90)',   prefix: '90', color: '#388E3C' },
 ];
 
+// true = iOS sends users to karaadi.com to pay (the flow Apple approved).
+// false = iOS uses the in-app EVC/Zaad/Sahal screen, same as Android.
+export const IOS_PAY_ON_WEBSITE = false;
+
 export const MAX_POLL_ATTEMPTS = 30;
 export const POLL_INTERVAL_MS  = 3000;
 
@@ -163,6 +166,7 @@ export const ROUTES = {
   notifications: '/profile/notifications',
   businessCreate: '/profile/business-create',
   tutorials: '/profile/tutorials',
+  myAds: '/profile/my-ads',
   myAdManage: '/profile/my-ads/[id]',
   vehicleDetail: '/listing/vehicle/[id]',
   itemDetail: '/listing/item-detail/[id]',

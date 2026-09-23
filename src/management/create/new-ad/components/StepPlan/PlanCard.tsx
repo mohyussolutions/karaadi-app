@@ -7,7 +7,7 @@ import type { PlanCardProps } from '../../../../../util/types/new-ad.types';
 import { createPlanCardStyles } from '../../../../../util/styles/newAd/stepPlan.styles';
 
 export function PlanCard({
-  plan, selected, isBestValue, onSelect,
+  plan, selected, isBestValue, onSelect, compact = false, width,
 }: PlanCardProps) {
   const Colors = useThemeColors();
   const { t } = useAppTranslation();
@@ -15,21 +15,22 @@ export function PlanCard({
   const planCardColors = getPlanCardColors(Colors);
   const showPopular = !!plan.popular && !isBestValue;
 
-  const pc = useThemedStyles(createPlanCardStyles);
+  const pc = useThemedStyles(createPlanCardStyles, compact);
 
   return (
     <TouchableOpacity
       style={[
         pc.card,
         !!plan.popular && !selected && pc.cardRecommended,
-        selected && { borderColor: ps.color, borderWidth: 2 },
+        selected && { borderColor: ps.color, borderWidth: 2, backgroundColor: ps.bg },
+        width !== undefined && { width },
       ]}
       onPress={() => onSelect(plan)}
       activeOpacity={0.88}
     >
       {(isBestValue || showPopular) && (
         <View style={[pc.badge, { backgroundColor: isBestValue ? ps.color : planCardColors.popularBadge }]}>
-          <MaterialCommunityIcons name={isBestValue ? 'star' : 'lightning-bolt'} size={9} color={Colors.white} />
+          <MaterialCommunityIcons name={isBestValue ? 'star' : 'lightning-bolt'} size={11} color={Colors.white} />
           <Text style={pc.badgeText}>{isBestValue ? t('postAd.bestValue') : t('postAd.popular')}</Text>
         </View>
       )}
@@ -37,7 +38,7 @@ export function PlanCard({
       <View style={pc.inner}>
         <View style={pc.topRow}>
           <View style={[pc.iconBox, { backgroundColor: selected ? ps.color : ps.bg }]}>
-            <MaterialCommunityIcons name={ps.icon} size={17} color={selected ? Colors.white : ps.color} />
+            <MaterialCommunityIcons name={ps.icon} size={compact ? 20 : 24} color={selected ? Colors.white : ps.color} />
           </View>
           <View style={pc.meta}>
             <Text style={[pc.name, { color: ps.color }]}>{plan.label}</Text>
@@ -54,14 +55,14 @@ export function PlanCard({
             )}
           </View>
           <View style={[pc.radio, selected && { borderColor: ps.color, backgroundColor: ps.color }]}>
-            {selected && <MaterialCommunityIcons name="check" size={11} color={Colors.white} />}
+            {selected && <MaterialCommunityIcons name="check" size={compact ? 13 : 15} color={Colors.white} />}
           </View>
         </View>
 
         <View style={pc.features}>
           {(plan.features || []).map((f, i) => (
             <View key={i} style={pc.featureItem}>
-              <MaterialCommunityIcons name="check-circle" size={13} color={Colors.successDark} />
+              <MaterialCommunityIcons name="check-circle" size={compact ? 14 : 16} color={Colors.successDark} />
               <Text style={pc.featureText} numberOfLines={1}>{f}</Text>
             </View>
           ))}
