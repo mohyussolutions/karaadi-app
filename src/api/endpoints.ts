@@ -4,7 +4,7 @@ import {
   FEED_DEFAULT_PAGE,
   FEED_DEFAULT_PAGE_SIZE,
   type FeedGroup,
-} from "../constants/constants";
+} from "../constants/feed";
 import { withId, withIdSuffix, createCrudEndpoints } from "../util/helpers/endpoint.builders";
 
 export const MARKETPLACE_ENDPOINTS = createCrudEndpoints(CAT_PATHS.marketplace);
