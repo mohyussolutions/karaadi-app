@@ -1870,8 +1870,6 @@ export const mine = {
   },
   myAds: {
     deleteFailed: "Tirtirka xayeysiiska wuu fashilmay.",
-    markSold: "Calaamadi La Iibiyay",
-    markActive: "Calaamadi Firfircoon",
     toggleSoldFailed: "Xaaladda iibka lama cusboonaysiin. Fadlan isku day mar kale.",
     relistConfirm: "Miyaa lacag $5 lagu soo celinayaa xayeysiiskan?",
     paymentSuccess: "Lacag-bixin guul! Xayeysiiskaaga waa firfircoon yahay.",
@@ -1907,6 +1905,14 @@ export const mine = {
     checkConnection: "Hubi xiriirkaaga internetka oo isku day mar kale.",
     retry: "Isku Day Mar Kale",
     listingsCount: "{{count}} xayeysiis",
+    manageTitle: "Maamul Xayeysiiska",
+    notFoundTitle: "Xayeysiiska lama helin",
+    notFoundMessage: "Xayeysiiskan waa la saarayaa ama mar dambe lama heli karo.",
+    backToMyAds: "Ku Noqo Xayeysiisyadayda",
+    viewAd: "Eeg Xayeysiiska",
+    soldToggleTitle: "Xaaladda Iibka",
+    soldToggleOnDesc: "Waa la iibiyey — iibsadayaasha uma muuqdo.",
+    soldToggleOffDesc: "Firfircoon — waxaa arki kara iibsadayaasha.",
   },
 } as const;
 

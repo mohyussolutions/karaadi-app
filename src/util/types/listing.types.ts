@@ -248,3 +248,10 @@ export interface UseListingDetailOptions<T extends ListingBase> {
   contactRole?: string;
   extraDeps?: unknown[];
 }
+
+export interface ListingExpiryInfo {
+  date: string;
+  status: string;
+  isExpired: boolean;
+  urgent: boolean;
+}

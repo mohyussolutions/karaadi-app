@@ -116,10 +116,8 @@ export interface ListingCardProps {
 export interface MyAdCardProps {
   item: ListingBase;
   deleting?: boolean;
-  toggling?: boolean;
   onDelete: (item: ListingBase) => void;
   onPayNow: (item: ListingBase) => void;
-  onToggleSold: (item: ListingBase) => void;
 }
 
 export interface SocialShareSheetProps extends ModalProps {

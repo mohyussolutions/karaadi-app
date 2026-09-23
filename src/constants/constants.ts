@@ -163,6 +163,7 @@ export const ROUTES = {
   notifications: '/profile/notifications',
   businessCreate: '/profile/business-create',
   tutorials: '/profile/tutorials',
+  myAdManage: '/profile/my-ads/[id]',
   vehicleDetail: '/listing/vehicle/[id]',
   itemDetail: '/listing/item-detail/[id]',
   realEstateDetail: '/listing/real-estate/[id]',

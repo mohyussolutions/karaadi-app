@@ -1725,8 +1725,6 @@ export const mine = {
   },
   myAds: {
     deleteFailed: "Delete ad failed.",
-    markSold: "Mark Sold",
-    markActive: "Mark Active",
     toggleSoldFailed: "Couldn't update sold status. Please try again.",
     relistConfirm: "Pay $5 to relist this item?",
     paymentSuccess: "Payment successful! Your ad is now active.",
@@ -1762,6 +1760,14 @@ export const mine = {
     checkConnection: "Check your connection and try again.",
     retry: "Retry",
     listingsCount: "{{count}} listings",
+    manageTitle: "Manage Ad",
+    notFoundTitle: "Ad not found",
+    notFoundMessage: "This ad may have been removed or is no longer available.",
+    backToMyAds: "Back to My Ads",
+    viewAd: "View Ad",
+    soldToggleTitle: "Sold Status",
+    soldToggleOnDesc: "Marked as sold — hidden from buyers.",
+    soldToggleOffDesc: "Active — visible to buyers.",
   },
 } as const;
 

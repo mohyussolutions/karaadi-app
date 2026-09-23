@@ -25,6 +25,7 @@ export type {
   AnyListing, VehicleListing,
   Subscription, SubscriptionPayload, SubscriptionEnvelope, Favorite, SearchResult, WantedFormState,
   CategorySpecField, CategoryTypeConfig, CreateJobData, CreateListingResponse, UseListingDetailOptions,
+  ListingExpiryInfo,
 } from './listing.types';
 export type {
   Chat, ChatMessage, ChatUser, Chatroom, GroupedChat, UseChatConversationArgs,

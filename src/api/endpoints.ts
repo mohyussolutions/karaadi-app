@@ -27,6 +27,7 @@ export const CATEGORY_ENDPOINTS: Record<string, string> = {
 
 export const MY_ADS_ENDPOINTS = {
   LIST: "/api/listings/my-ads",
+  BY_ID: withId("/api/listings"),
   DELETE: withId("/api/listings/delete"),
   PATCH: withId("/api/listings"),
   UPDATE: withId("/api/listings/update"),

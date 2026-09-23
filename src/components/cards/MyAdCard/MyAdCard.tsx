@@ -4,44 +4,26 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { formatPrice, getImageUrl, getListingDetailRoute } from '../../../util/helpers';
-import { PLACEHOLDER_IMAGE } from '../../../constants';
+import { formatPrice, getImageUrl, getListingDetailRoute, getListingExpiryInfo } from '../../../util/helpers';
+import { PLACEHOLDER_IMAGE, ROUTES } from '../../../constants';
 import type { MyAdCardProps } from '../../../util/types';
 import { createStyles } from '../../../util/styles/shared/myAdCard.styles';
 import RemoteImage from '../../shared/RemoteImage/RemoteImage';
 
-function getExpiryInfo(
-  expiryDate: string | null | undefined,
-  t: (key: string, opts?: Record<string, unknown>) => string,
-) {
-  if (!expiryDate) return null;
-  const d = new Date(expiryDate);
-  const daysLeft = Math.ceil((d.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-  const isExpired = daysLeft <= 0;
-  const urgent = !isExpired && daysLeft <= 7;
-  const date = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-  const status = isExpired
-    ? t('mine.myAds.expiredAgo', { count: Math.abs(daysLeft) })
-    : daysLeft === 1
-      ? t('mine.myAds.expiresTomorrow')
-      : t('mine.myAds.daysLeft', { count: daysLeft });
-  return { date, status, isExpired, urgent };
-}
-
-function MyAdCard({ item, deleting, toggling, onDelete, onPayNow, onToggleSold }: MyAdCardProps) {
+function MyAdCard({ item, deleting, onDelete, onPayNow }: MyAdCardProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
 
   const image = getImageUrl(item.images?.[0]) || PLACEHOLDER_IMAGE;
-  const expiryInfo = getExpiryInfo(item.expiryDate, t);
+  const expiryInfo = getListingExpiryInfo(item.expiryDate, t);
+  const adId = item._id || item.id;
 
   const isExpired = !item.isPaid && !!item.expiryDate;
   const isActive = !!item.isPaid && !item.maGaday;
   const isPending = !item.isPaid && !item.maGaday && !item.expiryDate;
   const canPay = !item.isPaid && !item.maGaday;
-  const canToggleSold = !isPending;
 
   const planKey = item.isPremium90
     ? 'tierPremium'
@@ -53,6 +35,10 @@ function MyAdCard({ item, deleting, toggling, onDelete, onPayNow, onToggleSold }
 
   function handlePress() {
     router.push(getListingDetailRoute(item, item.mainCategory) as never);
+  }
+
+  function handleManage() {
+    router.push({ pathname: ROUTES.myAdManage, params: { id: adId } } as never);
   }
 
   return (
@@ -147,29 +133,9 @@ function MyAdCard({ item, deleting, toggling, onDelete, onPayNow, onToggleSold }
               </Text>
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity style={[s.actionBtn, s.actionBtnView]} onPress={handlePress} activeOpacity={0.85}>
-              <MaterialCommunityIcons name="eye-outline" size={13} color={Colors.primary} />
-              <Text style={[s.actionBtnText, s.actionBtnTextView]}>{t('mine.myAds.view')}</Text>
-            </TouchableOpacity>
-          )}
-
-          {canToggleSold && (
-            <TouchableOpacity
-              style={[s.soldToggleBtn, item.maGaday && s.soldToggleBtnActive]}
-              onPress={() => onToggleSold(item)}
-              disabled={toggling}
-              activeOpacity={0.85}
-              accessibilityLabel={item.maGaday ? t('mine.myAds.markActive') : t('mine.myAds.markSold')}
-            >
-              {toggling ? (
-                <ActivityIndicator size="small" color={item.maGaday ? Colors.white : Colors.textMuted} />
-              ) : (
-                <MaterialCommunityIcons
-                  name={item.maGaday ? 'undo-variant' : 'tag-outline'}
-                  size={14}
-                  color={item.maGaday ? Colors.white : Colors.textMuted}
-                />
-              )}
+            <TouchableOpacity style={[s.actionBtn, s.actionBtnView]} onPress={handleManage} activeOpacity={0.85}>
+              <MaterialCommunityIcons name="pencil-outline" size={13} color={Colors.primary} />
+              <Text style={[s.actionBtnText, s.actionBtnTextView]}>{t('mine.myAds.edit')}</Text>
             </TouchableOpacity>
           )}
 

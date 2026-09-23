@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { Alert } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { getMyAds, deleteMyAd, setAdSold } from '../actions/core/myAds.actions';
+import { getMyAds, deleteMyAd } from '../actions/core/myAds.actions';
 import { useAuthStore } from '../store/hooks/authStore';
 import type { ListingBase } from '../util/types';
 
@@ -15,7 +15,6 @@ export function useMyAds() {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [togglingId, setTogglingId] = useState<string | null>(null);
 
   const load = useCallback(async (signal?: AbortSignal) => {
     if (!hasUser) { setLoading(false); return; }
@@ -73,21 +72,5 @@ export function useMyAds() {
     );
   }, [t]);
 
-  const handleToggleSold = useCallback(async (item: ListingBase) => {
-    const id = item._id || item.id;
-    const nextMaGaday = !item.maGaday;
-    setTogglingId(id);
-    setAds((prev) => prev.map((a) => ((a._id || a.id) === id ? { ...a, maGaday: nextMaGaday } : a)));
-    try {
-      const confirmed = await setAdSold(id, nextMaGaday);
-      setAds((prev) => prev.map((a) => ((a._id || a.id) === id ? { ...a, maGaday: confirmed } : a)));
-    } catch {
-      setAds((prev) => prev.map((a) => ((a._id || a.id) === id ? { ...a, maGaday: !nextMaGaday } : a)));
-      Alert.alert(t('auth.common.error'), t('mine.myAds.toggleSoldFailed'));
-    } finally {
-      setTogglingId(null);
-    }
-  }, [t]);
-
-  return { user, ads, loading, refreshing, error, deletingId, togglingId, onRefresh, retry, handleDelete, handleToggleSold };
+  return { user, ads, loading, refreshing, error, deletingId, onRefresh, retry, handleDelete };
 }
