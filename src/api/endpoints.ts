@@ -29,6 +29,7 @@ export const MY_ADS_ENDPOINTS = {
   LIST: "/api/listings/my-ads",
   DELETE: withId("/api/listings/delete"),
   PATCH: withId("/api/listings"),
+  UPDATE: withId("/api/listings/update"),
 };
 
 export const FEED_ENDPOINTS = {

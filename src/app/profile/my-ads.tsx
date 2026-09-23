@@ -20,7 +20,7 @@ export default function MyAdsScreen() {
   const { t } = useTranslation();
   const { width } = useGlobal();
   const dispatch = useAppDispatch();
-  const { user, ads, loading, refreshing, error, deletingId, onRefresh, retry, handleDelete } = useMyAds();
+  const { user, ads, loading, refreshing, error, deletingId, togglingId, onRefresh, retry, handleDelete, handleToggleSold } = useMyAds();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles, width);
   const insets = useSafeAreaInsets();
@@ -51,11 +51,13 @@ export default function MyAdsScreen() {
       <MyAdCard
         item={item}
         deleting={deletingId === (item._id || item.id)}
+        toggling={togglingId === (item._id || item.id)}
         onDelete={handleDelete}
         onPayNow={handlePayNow}
+        onToggleSold={handleToggleSold}
       />
     </View>
-  ), [styles.cardWrap, deletingId, handleDelete, handlePayNow]);
+  ), [styles.cardWrap, deletingId, togglingId, handleDelete, handlePayNow, handleToggleSold]);
 
   if (!user) {
     return (

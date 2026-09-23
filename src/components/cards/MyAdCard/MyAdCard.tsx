@@ -28,7 +28,7 @@ function getExpiryInfo(
   return { date, status, isExpired, urgent };
 }
 
-function MyAdCard({ item, deleting, onDelete, onPayNow }: MyAdCardProps) {
+function MyAdCard({ item, deleting, toggling, onDelete, onPayNow, onToggleSold }: MyAdCardProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const Colors = useThemeColors();
@@ -41,6 +41,7 @@ function MyAdCard({ item, deleting, onDelete, onPayNow }: MyAdCardProps) {
   const isActive = !!item.isPaid && !item.maGaday;
   const isPending = !item.isPaid && !item.maGaday && !item.expiryDate;
   const canPay = !item.isPaid && !item.maGaday;
+  const canToggleSold = !isPending;
 
   const planKey = item.isPremium90
     ? 'tierPremium'
@@ -149,6 +150,26 @@ function MyAdCard({ item, deleting, onDelete, onPayNow }: MyAdCardProps) {
             <TouchableOpacity style={[s.actionBtn, s.actionBtnView]} onPress={handlePress} activeOpacity={0.85}>
               <MaterialCommunityIcons name="eye-outline" size={13} color={Colors.primary} />
               <Text style={[s.actionBtnText, s.actionBtnTextView]}>{t('mine.myAds.view')}</Text>
+            </TouchableOpacity>
+          )}
+
+          {canToggleSold && (
+            <TouchableOpacity
+              style={[s.soldToggleBtn, item.maGaday && s.soldToggleBtnActive]}
+              onPress={() => onToggleSold(item)}
+              disabled={toggling}
+              activeOpacity={0.85}
+              accessibilityLabel={item.maGaday ? t('mine.myAds.markActive') : t('mine.myAds.markSold')}
+            >
+              {toggling ? (
+                <ActivityIndicator size="small" color={item.maGaday ? Colors.white : Colors.textMuted} />
+              ) : (
+                <MaterialCommunityIcons
+                  name={item.maGaday ? 'undo-variant' : 'tag-outline'}
+                  size={14}
+                  color={item.maGaday ? Colors.white : Colors.textMuted}
+                />
+              )}
             </TouchableOpacity>
           )}
 

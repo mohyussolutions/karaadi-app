@@ -137,6 +137,14 @@ const actionStyles = (Colors: ColorPalette) =>
     actionBtnText: { fontSize: 11, fontWeight: "700", color: Colors.white },
     actionBtnTextView: { color: Colors.primary },
     actionBtnTextDelete: { color: Colors.error },
+    soldToggleBtn: {
+      width: 28,
+      height: 28,
+      borderRadius: 14,
+      ...centered,
+      backgroundColor: Colors.gray100,
+    },
+    soldToggleBtnActive: { backgroundColor: Colors.amber },
   }) as const;
 
 export const createStyles = (Colors: ColorPalette) =>

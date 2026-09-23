@@ -11,3 +11,8 @@ export async function getMyAds(signal?: AbortSignal): Promise<ListingBase[]> {
 export async function deleteMyAd(id: string): Promise<void> {
   await apiClient.delete(MY_ADS_ENDPOINTS.DELETE(id));
 }
+
+export async function setAdSold(id: string, maGaday: boolean): Promise<boolean> {
+  const { data } = await apiClient.put<{ maGaday?: boolean }>(MY_ADS_ENDPOINTS.UPDATE(id), { maGaday });
+  return data?.maGaday ?? maGaday;
+}

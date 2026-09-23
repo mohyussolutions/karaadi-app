@@ -1725,6 +1725,9 @@ export const mine = {
   },
   myAds: {
     deleteFailed: "Delete ad failed.",
+    markSold: "Mark Sold",
+    markActive: "Mark Active",
+    toggleSoldFailed: "Couldn't update sold status. Please try again.",
     relistConfirm: "Pay $5 to relist this item?",
     paymentSuccess: "Payment successful! Your ad is now active.",
     paymentFailed: "Payment failed. Please try again.",

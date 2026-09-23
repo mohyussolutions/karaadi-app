@@ -1870,6 +1870,9 @@ export const mine = {
   },
   myAds: {
     deleteFailed: "Tirtirka xayeysiiska wuu fashilmay.",
+    markSold: "Calaamadi La Iibiyay",
+    markActive: "Calaamadi Firfircoon",
+    toggleSoldFailed: "Xaaladda iibka lama cusboonaysiin. Fadlan isku day mar kale.",
     relistConfirm: "Miyaa lacag $5 lagu soo celinayaa xayeysiiskan?",
     paymentSuccess: "Lacag-bixin guul! Xayeysiiskaaga waa firfircoon yahay.",
     paymentFailed: "Lacag-bixin la'aan. Fadlan isku day mar kale.",
