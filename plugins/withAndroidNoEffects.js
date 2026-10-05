@@ -4,11 +4,6 @@ const { assignStylesValue, getAppThemeGroup } = AndroidConfig.Styles;
 
 const NO_OVERSCROLL_STYLES = [
   { name: 'KaraadiScrollView', parent: 'android:Widget.ScrollView', themeKey: 'android:scrollViewStyle' },
-  {
-    name: 'KaraadiHorizontalScrollView',
-    parent: 'android:Widget.HorizontalScrollView',
-    themeKey: 'android:horizontalScrollViewStyle',
-  },
 ];
 
 module.exports = function withAndroidNoEffects(config) {
