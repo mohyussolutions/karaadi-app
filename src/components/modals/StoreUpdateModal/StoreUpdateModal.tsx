@@ -33,6 +33,7 @@ function isValidStoreUrl(value: string): boolean {
   }
 }
 
+// The timestamp param bypasses Apple's CDN cache so a new release is seen right away.
 async function fetchAppStoreRelease(): Promise<{ version: string; url: string } | null> {
   const response = await fetch(
     `${ITUNES_LOOKUP_URL}?bundleId=${encodeURIComponent(bundleId)}&_=${Date.now()}`,
