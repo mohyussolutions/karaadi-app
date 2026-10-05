@@ -2,21 +2,56 @@ import { useEffect, useRef, useState } from 'react';
 import { AppState, Linking, Modal, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Application from 'expo-application';
-import InAppUpdates, { IAUUpdateKind, type IosNeedsUpdateResponse } from 'sp-react-native-in-app-updates';
+import InAppUpdates, { IAUUpdateKind } from 'sp-react-native-in-app-updates';
 import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
 import { useAppTranslation } from '../../../hooks/app/useAppTranslation';
 import { createStyles } from '../../../utils/styles/modals/forceUpdateModal.styles';
 
 const inAppUpdates = new InAppUpdates(false);
 const currentVersion = Application.nativeApplicationVersion ?? undefined;
+const currentBuild = Application.nativeBuildVersion ?? undefined;
+const bundleId = Application.applicationId ?? 'com.karaadi.app';
 const SEMVER_PATTERN = /^\d+\.\d+(\.\d+)?$/;
+const ITUNES_LOOKUP_URL = 'https://itunes.apple.com/lookup';
+const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=';
+
+function compareSemver(a: string, b: string): number {
+  const pa = a.split('.').map(Number);
+  const pb = b.split('.').map(Number);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const diff = (pa[i] ?? 0) - (pb[i] ?? 0);
+    if (diff !== 0) return diff;
+  }
+  return 0;
+}
 
 function isValidStoreUrl(value: string): boolean {
   try {
-    const parsed = new URL(value);
-    return parsed.protocol === 'https:' || parsed.protocol === 'http:';
+    return new URL(value).protocol === 'https:';
   } catch {
     return false;
+  }
+}
+
+async function fetchAppStoreRelease(): Promise<{ version: string; url: string } | null> {
+  const response = await fetch(
+    `${ITUNES_LOOKUP_URL}?bundleId=${encodeURIComponent(bundleId)}&_=${Date.now()}`,
+  );
+  if (!response.ok) return null;
+  const json = await response.json();
+  const entry = json?.results?.[0];
+  const version = typeof entry?.version === 'string' ? entry.version.trim() : '';
+  const url = typeof entry?.trackViewUrl === 'string' ? entry.trackViewUrl.split('?')[0] : '';
+  if (!SEMVER_PATTERN.test(version) || !isValidStoreUrl(url)) return null;
+  return { version, url };
+}
+
+async function openPlayStoreUpdate(): Promise<void> {
+  try {
+    await inAppUpdates.startUpdate({ updateType: IAUUpdateKind.IMMEDIATE });
+  } catch (err) {
+    console.warn('StoreUpdateModal: Play Core update failed, falling back to Play Store', err);
+    await Linking.openURL(`${PLAY_STORE_URL}${bundleId}`);
   }
 }
 
@@ -31,21 +66,26 @@ export default function StoreUpdateModal() {
   const { t } = useAppTranslation();
 
   useEffect(() => {
+    async function checkAppStore() {
+      const release = await fetchAppStoreRelease();
+      if (!release || !currentVersion || compareSemver(release.version, currentVersion) <= 0) return;
+      setStoreVersion(release.version);
+      setStoreUrl(release.url);
+      setVisible(true);
+    }
+
+    async function checkPlayStore() {
+      const result = await inAppUpdates.checkNeedsUpdate({ curVersion: currentBuild });
+      if (!result.shouldUpdate) return;
+      setStoreVersion(null);
+      setVisible(true);
+    }
+
     async function checkNeedsUpdate() {
       if (checking.current) return;
       checking.current = true;
       try {
-        const result = await inAppUpdates.checkNeedsUpdate({ curVersion: currentVersion });
-        if (!result.shouldUpdate) return;
-        const nextVersion = result.storeVersion?.trim();
-        setStoreVersion(nextVersion && SEMVER_PATTERN.test(nextVersion) ? nextVersion : null);
-        if (Platform.OS === 'ios') {
-          const trackViewUrl = (result as IosNeedsUpdateResponse).other?.trackViewUrl;
-          const cleanUrl = trackViewUrl?.split('?')[0];
-          if (!cleanUrl || !isValidStoreUrl(cleanUrl)) return;
-          setStoreUrl(cleanUrl);
-        }
-        setVisible(true);
+        await (Platform.OS === 'ios' ? checkAppStore() : checkPlayStore());
       } catch {
       } finally {
         checking.current = false;
@@ -67,13 +107,7 @@ export default function StoreUpdateModal() {
     setUpdating(true);
     try {
       if (Platform.OS === 'android') {
-        try {
-          await inAppUpdates.startUpdate({ updateType: IAUUpdateKind.IMMEDIATE });
-        } catch (err) {
-          console.warn('StoreUpdateModal: Play Core update failed, falling back to Play Store', err);
-          const packageName = Application.applicationId ?? 'com.karaadi.app';
-          await Linking.openURL(`https://play.google.com/store/apps/details?id=${packageName}`);
-        }
+        await openPlayStoreUpdate();
       } else if (storeUrl && isValidStoreUrl(storeUrl)) {
         await Linking.openURL(storeUrl);
       }

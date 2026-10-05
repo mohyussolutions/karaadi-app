@@ -16,7 +16,16 @@ eas submit --platform android --latest --non-interactive
 # Option B: build and auto-submit in one step
 npm run deploy:android
 
-# Shared (iOS only — these are aliases for the :ios scripts, not cross-platform)
+# Shared
 
 npm run build   # same as build:ios
-npm run deploy  # same as deploy:ios
+
+# Both platforms
+
+# Full release in one step: local check, EAS build iOS + Android, submit both
+npm run deploy
+
+# Or run the steps one by one
+npm run build:local   # typecheck + bundle JS for iOS and Android on this Mac
+npm run build:all     # EAS cloud build for iOS and Android, waits until finished
+npm run submit        # submit the latest iOS and Android builds

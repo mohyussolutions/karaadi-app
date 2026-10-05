@@ -57,12 +57,15 @@
     "android": "expo run:android",
     "ios": "expo run:ios --device \"iPhone 15\"",
     "ipad": "xcrun simctl shutdown all 2>/dev/null; xcrun simctl boot D26B9490-2B8D-4E66-988F-1A73D1BEF39A 2>/dev/null; xcrun simctl bootstatus D26B9490-2B8D-4E66-988F-1A73D1BEF39A -b >/dev/null 2>&1; ~/Library/Android/sdk/emulator/emulator -avd Tablet_10 -no-audio &>/dev/null & ~/Library/Android/sdk/platform-tools/adb wait-for-device && ~/Library/Android/sdk/platform-tools/adb shell 'while [ \"$(getprop sys.boot_completed)\" != \"1\" ]; do sleep 2; done' && expo start --ios --android --go",
-    "deploy": "eas build --profile production --platform ios --auto-submit --non-interactive",
+    "deploy": "npm run build:local && npm run build:all && npm run submit",
+    "build:local": "tsc --noEmit && expo export --platform all --output-dir .expo/export-check",
+    "build:all": "eas build --profile production --platform all --non-interactive",
     "deploy:ios": "eas build --profile production --platform ios --auto-submit --non-interactive",
     "deploy:android": "eas build --profile production --platform android --auto-submit --non-interactive",
     "build": "npm run build:ios",
     "build:ios": "eas build --profile production --platform ios --non-interactive",
-    "build:android": "eas build --profile production --platform android --non-interactive"
+    "build:android": "eas build --profile production --platform android --non-interactive",
+    "submit": "eas submit --platform all --latest --profile production --non-interactive"
   },
   "private": true
 }
