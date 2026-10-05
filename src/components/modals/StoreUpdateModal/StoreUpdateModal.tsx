@@ -3,11 +3,13 @@ import { AppState, Linking, Modal, Platform, Text, TouchableOpacity, View } from
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Application from 'expo-application';
 import InAppUpdates, { IAUUpdateKind, type IosNeedsUpdateResponse } from 'sp-react-native-in-app-updates';
-import { useThemeColors } from '../../../hooks/useTheme';
-import { useAppTranslation } from '../../../hooks/useAppTranslation';
-import { styles } from '../../../util/styles/modals/forceUpdateModal.styles';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { useAppTranslation } from '../../../hooks/app/useAppTranslation';
+import { createStyles } from '../../../utils/styles/modals/forceUpdateModal.styles';
 
 const inAppUpdates = new InAppUpdates(false);
+const currentVersion = Application.nativeApplicationVersion ?? undefined;
+const SEMVER_PATTERN = /^\d+\.\d+(\.\d+)?$/;
 
 function isValidStoreUrl(value: string): boolean {
   try {
@@ -22,8 +24,10 @@ export default function StoreUpdateModal() {
   const [visible, setVisible] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [storeUrl, setStoreUrl] = useState<string | null>(null);
+  const [storeVersion, setStoreVersion] = useState<string | null>(null);
   const checking = useRef(false);
   const Colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const { t } = useAppTranslation();
 
   useEffect(() => {
@@ -31,8 +35,10 @@ export default function StoreUpdateModal() {
       if (checking.current) return;
       checking.current = true;
       try {
-        const result = await inAppUpdates.checkNeedsUpdate({ curVersion: Application.nativeApplicationVersion ?? undefined });
+        const result = await inAppUpdates.checkNeedsUpdate({ curVersion: currentVersion });
         if (!result.shouldUpdate) return;
+        const nextVersion = result.storeVersion?.trim();
+        setStoreVersion(nextVersion && SEMVER_PATTERN.test(nextVersion) ? nextVersion : null);
         if (Platform.OS === 'ios') {
           const trackViewUrl = (result as IosNeedsUpdateResponse).other?.trackViewUrl;
           const cleanUrl = trackViewUrl?.split('?')[0];
@@ -81,7 +87,7 @@ export default function StoreUpdateModal() {
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={handleDismiss}>
       <View style={styles.backdrop}>
-        <View style={[styles.card, { backgroundColor: Colors.card, borderColor: Colors.border }]}>
+        <View style={styles.card}>
           <TouchableOpacity
             style={styles.closeBtn}
             onPress={handleDismiss}
@@ -90,21 +96,38 @@ export default function StoreUpdateModal() {
           >
             <MaterialCommunityIcons name="close" size={20} color={Colors.textSecondary} />
           </TouchableOpacity>
-          <View style={[styles.iconWrap, { backgroundColor: Colors.primaryGhost }]}>
+          <View style={styles.iconWrap}>
             <MaterialCommunityIcons name="storefront-outline" size={36} color={Colors.primary} />
           </View>
-          <Text style={[styles.title, { color: Colors.text }]}>{t('common.storeUpdateTitle')}</Text>
-          <Text style={[styles.message, { color: Colors.textSecondary }]}>{t('common.storeUpdateMessage')}</Text>
-          <TouchableOpacity
-            style={[styles.updateBtn, { backgroundColor: Colors.primary }, updating && styles.updateBtnDisabled]}
-            onPress={handleUpdate}
-            disabled={updating}
-            activeOpacity={0.85}
-          >
-            <Text style={[styles.updateBtnText, { color: Colors.white }]}>
-              {updating ? t('common.updating') : t('common.updateNow')}
-            </Text>
-          </TouchableOpacity>
+          <Text style={styles.title}>{t('common.storeUpdateTitle')}</Text>
+          {storeVersion && (
+            <View style={styles.versionPill}>
+              {currentVersion && (
+                <>
+                  <Text style={styles.versionOld}>{currentVersion}</Text>
+                  <MaterialCommunityIcons name="arrow-right" size={14} color={Colors.textSecondary} />
+                </>
+              )}
+              <Text style={styles.versionNew}>{storeVersion}</Text>
+            </View>
+          )}
+          <Text style={styles.message}>
+            {storeVersion
+              ? t('common.storeUpdateVersionMessage', { version: storeVersion })
+              : t('common.storeUpdateMessage')}
+          </Text>
+          <View style={styles.actions}>
+            <TouchableOpacity
+              style={[styles.updateBtn, updating && styles.updateBtnDisabled]}
+              onPress={handleUpdate}
+              disabled={updating}
+              activeOpacity={0.85}
+            >
+              <Text style={styles.updateBtnText}>
+                {updating ? t('common.updating') : t('common.updateNow')}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>

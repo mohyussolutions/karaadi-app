@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors } from '../../../hooks/useTheme';
-import type { VerifiedBadgeProps } from '../../../util/types';
+import { useThemeColors } from '../../../hooks/app/useTheme';
+import type { VerifiedBadgeProps } from '../../../utils/types';
 
 export default function VerifiedBadge({ visible, size = 16 }: VerifiedBadgeProps) {
   const Colors = useThemeColors();

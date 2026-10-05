@@ -1,9 +1,8 @@
-import type { EmptyStateProps } from '../../../util/types';
-import type { IconName } from '../../../util/icons/icons';
+import type { EmptyStateProps, IconName } from '../../../utils/types';
 import { View, Text } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../util/styles/shared/emptyState.styles';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/shared/emptyState.styles';
 
 export default function EmptyState({ icon = 'inbox-outline', title, message }: EmptyStateProps) {
   const Colors = useThemeColors();

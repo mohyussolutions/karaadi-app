@@ -1,19 +1,15 @@
 import { memo } from 'react';
+import { useAppTranslation } from '../../../hooks/app/useAppTranslation';
 import { View, Text, TouchableOpacity } from 'react-native';
 import RemoteImage from '../../shared/RemoteImage/RemoteImage';
-import { getImageUrl, formatPrice } from '../../../util/helpers';
-import { PLACEHOLDER_IMAGE } from '../../../constants';
-import type { ListingBase } from '../../../util/types';
-import { createStyles } from '../../../util/styles/detail/recommendedSection.styles';
+import { getImageUrl, formatPrice } from '../../../lib/helpers';
+import { PLACEHOLDER_IMAGE } from '../../../actions/constants';
+import type { RecommendedItemProps } from "../../../utils/types";
 
 export const RecommendedItem = memo(function RecommendedItem({
   item, styles, onPress, priceOnRequestLabel,
-}: {
-  item: ListingBase;
-  styles: ReturnType<typeof createStyles>;
-  onPress: (item: ListingBase) => void;
-  priceOnRequestLabel: string;
-}) {
+}: RecommendedItemProps) {
+  const { t } = useAppTranslation();
   return (
     <TouchableOpacity style={styles.card} onPress={() => onPress(item)} activeOpacity={0.85}>
       <RemoteImage
@@ -22,9 +18,14 @@ export const RecommendedItem = memo(function RecommendedItem({
         contentFit="cover"
         recyclingKey={item._id || item.id}
       />
+      {item.maGaday && (
+        <View style={styles.soldBadge}>
+          <Text style={styles.soldBadgeText}>{t('common.sold')}</Text>
+        </View>
+      )}
       <View style={styles.info}>
         <Text style={styles.cardTitle} numberOfLines={2}>{item.title}</Text>
-        <Text style={styles.price}>
+        <Text style={[styles.price, item.maGaday && styles.priceSold]}>
           {item.price > 0 ? formatPrice(item.price) : priceOnRequestLabel}
         </Text>
         {item.city && (

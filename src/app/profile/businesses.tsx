@@ -8,12 +8,12 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
 import RemoteImage from '../../components/shared/RemoteImage/RemoteImage';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { useMyBusinesses } from '../../hooks/useMyBusinesses';
-import { placeholderAvatar, ROUTES } from '../../constants';
-import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL, BUSINESS_CATEGORY_KEY_REVERSE } from '../../util/types';
-import { createStyles } from '../../util/styles/profile/businesses.styles';
-const PLACEHOLDER = placeholderAvatar(80, '2563eb', 'B');
+import { useThemeColors, useThemedStyles } from '../../hooks/app/useTheme';
+import { useMyBusinesses } from '../../hooks/business/useBusiness';
+import { BUSINESS_LOGO_PLACEHOLDER, ROUTES } from '../../actions/constants';
+import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL, BUSINESS_CATEGORY_KEY_REVERSE } from '../../actions/constants';
+import { createStyles } from '../../utils/styles/profile/businesses.styles';
+import { paddingBottomOf } from '../../utils/styles/common/dynamic.styles';
 
 export default function BusinessesScreen() {
   const router = useRouter();
@@ -30,7 +30,7 @@ export default function BusinessesScreen() {
       <FlatList overScrollMode="never"
         data={businesses}
         keyExtractor={item => item._id || item.id || ''}
-        contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 84 }, businesses.length === 0 && styles.listEmpty]}
+        contentContainerStyle={[styles.list, paddingBottomOf(insets.bottom + 84), businesses.length === 0 && styles.listEmpty]}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}
         ListHeaderComponent={
@@ -61,9 +61,9 @@ export default function BusinessesScreen() {
               <TouchableOpacity
                 style={styles.card}
                 activeOpacity={0.85}
-                onPress={() => router.push(`/profile/business-create?id=${item._id || item.id}`)}
+                onPress={() => router.push(`${ROUTES.businessCreate}?id=${item._id || item.id}`)}
               >
-                <RemoteImage source={{ uri: item.logo || PLACEHOLDER }} style={styles.logo} />
+                <RemoteImage source={{ uri: item.logo || BUSINESS_LOGO_PLACEHOLDER }} style={styles.logo} />
                 <View style={styles.info}>
                   <Text style={styles.name}>{item.name}</Text>
                   <View style={styles.typeBadge}>

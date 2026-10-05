@@ -2,11 +2,13 @@ import { useEffect, useState, memo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors } from '../../../hooks/useTheme';
-import type { RemoteImageProps } from '../../../util/types';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/shared/remoteImage.styles';
+import type { RemoteImageProps } from '../../../utils/types';
 
 function RemoteImage({ style, source, iconSize = 22, recyclingKey, ...rest }: RemoteImageProps) {
   const Colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const [hasError, setHasError] = useState(false);
   const uri = typeof source === 'object' && source && 'uri' in source ? source.uri : undefined;
 
@@ -15,7 +17,7 @@ function RemoteImage({ style, source, iconSize = 22, recyclingKey, ...rest }: Re
   }, [uri]);
 
   return (
-    <View style={[styles.wrap, { backgroundColor: Colors.surface }, style]}>
+    <View style={[styles.wrap, style]}>
       {uri ? (
         <Image
           source={source}
@@ -28,22 +30,12 @@ function RemoteImage({ style, source, iconSize = 22, recyclingKey, ...rest }: Re
       ) : null}
 
       {(hasError || !uri) ? (
-        <View style={[StyleSheet.absoluteFill, styles.overlay, { backgroundColor: Colors.surface }]}>
+        <View style={styles.fallback}>
           <MaterialCommunityIcons name="image-off-outline" size={iconSize} color={Colors.textDisabled} />
         </View>
       ) : null}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  wrap: {
-    overflow: 'hidden',
-  },
-  overlay: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default memo(RemoteImage);

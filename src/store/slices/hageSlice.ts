@@ -1,7 +1,6 @@
-import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { sendHageChat } from '../../actions/sockets/hage.actions';
-import type { HageMessage } from '../../util/types/chat.types';
-import type { HageState } from '../../util/types/redux.types';
+import type { AddUserMessageAction, HageState, SendHageMessageArgs } from '../../utils/types';
 
 const initialState: HageState = {
   open: false,
@@ -11,7 +10,7 @@ const initialState: HageState = {
 
 export const sendHageMessage = createAsyncThunk(
   'hage/sendMessage',
-  async ({ content, lang, history }: { content: string; lang: string; history: HageMessage[] }) => {
+  async ({ content, lang, history }: SendHageMessageArgs) => {
     return sendHageChat(content, lang, history);
   },
 );
@@ -19,10 +18,13 @@ export const sendHageMessage = createAsyncThunk(
 const hageSlice = createSlice({
   name: 'hage',
   initialState,
+  selectors: {
+    selectHage: (state) => state,
+  },
   reducers: {
     toggleHage(state) { state.open = !state.open; },
     closeHage(state) { state.open = false; },
-    addUserMessage(state, action: PayloadAction<string>) {
+    addUserMessage(state, action: AddUserMessageAction) {
       state.messages.push({ id: Date.now(), content: action.payload, fromAI: false });
     },
     clearHage(state) { state.messages = []; },
@@ -51,4 +53,5 @@ const hageSlice = createSlice({
 });
 
 export const { toggleHage, closeHage, addUserMessage, clearHage } = hageSlice.actions;
+export const { selectHage } = hageSlice.selectors;
 export default hageSlice.reducer;

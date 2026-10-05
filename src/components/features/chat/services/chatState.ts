@@ -1,5 +1,6 @@
+import type { StringMap } from '../../../../utils/types';
 let _activeChatId: number | null = null;
-const _userNames: Record<string, string> = {};
+const _userNames: StringMap = {};
 
 export function setActiveChatId(id: number | null): void {
   _activeChatId = id;

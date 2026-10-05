@@ -6,20 +6,19 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { EmptyState } from '../../../../shared';
 import { LoadingSpinner } from '../../../../loading';
-import { useThemeColors, useThemedStyles } from '../../../../../hooks/useTheme';
-import { createStyles } from '../../../../../util/styles/profile/notifications.styles';
-import { useNotificationsData } from '../../../../../hooks/useNotificationsData';
-import { useUnreadCount } from '../../../../../hooks/useUnreadCount';
-import { useAuthStore } from '../../../../../store/hooks/authStore';
-import { handleNotificationData } from '../../../../../hooks/useNotificationTap';
-import type { Notification, NotificationFilter } from '../../../../../util/types';
-import { FILTERS, ICON_BY_TYPE } from "../../../../../constants";
+import { useThemeColors, useThemedStyles } from '../../../../../hooks/app/useTheme';
+import { createStyles } from '../../../../../utils/styles/profile/notifications.styles';
+import { useNotificationsData } from '../../../../../hooks/messaging/useNotifications';
+import { useUnreadCount } from '../../../../../hooks/messaging/useNotifications';
+import { useAuthStore } from '../../../../../store/hooks/useAuthStore';
+import { handleNotificationData } from '../../../../../hooks/messaging/useNotifications';
+import type { Notification, NotificationFilter, NotificationRenderInfo, NotificationRowProps } from '../../../../../utils/types';
+import { FILTERS, ICON_BY_TYPE, ROUTES } from "../../../../../actions/constants";
+import { fill, paddingBottomOf } from '../../../../../utils/styles/common/dynamic.styles';
+
 const NotificationRow = memo(function NotificationRow({
   item, onPress,
-}: {
-  item: Notification;
-  onPress: (item: Notification) => void;
-}) {
+}: NotificationRowProps) {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   return (
@@ -56,7 +55,7 @@ export default function NotificationsScreen() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.replace('/(auth)/login');
+      router.replace(ROUTES.login);
     }
   }, [authLoading, user]);
 
@@ -80,7 +79,7 @@ export default function NotificationsScreen() {
   const countFor = (f: NotificationFilter) =>
     f === 'unread' ? unreadCount : f === 'read' ? readCount : notifications.length;
 
-  const renderItem = useCallback(({ item }: { item: Notification }) => (
+  const renderItem = useCallback(({ item }: NotificationRenderInfo) => (
     <NotificationRow item={item} onPress={handleItemPress} />
   ), [handleItemPress]);
 
@@ -115,7 +114,7 @@ export default function NotificationsScreen() {
       <FlatList overScrollMode="never"
         data={visible}
         keyExtractor={(item) => item._id}
-        contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 84 }, visible.length === 0 && { flex: 1 }]}
+        contentContainerStyle={[styles.list, paddingBottomOf(insets.bottom + 84), visible.length === 0 && fill]}
         showsVerticalScrollIndicator={false}
         initialNumToRender={15}
         maxToRenderPerBatch={15}

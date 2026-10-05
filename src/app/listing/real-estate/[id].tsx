@@ -5,13 +5,13 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
-import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
-import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, REAL_ESTATE_CONFIG, buildSpecItems } from '../../../constants';
-import { REAL_ESTATE_ENDPOINTS } from '../../../api/endpoints';
-import { AMENITY_ICONS, AMENITY_KEYS } from '../../../util/icons/icons';
-import { useRealEstateDetail } from '../../../hooks/useRealEstateDetail';
+import { getImageUrl, formatPrice, formatDate } from '../../../lib/helpers';
+import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, REAL_ESTATE_CONFIG, buildSpecItems } from '../../../actions/constants';
+import { REAL_ESTATE_ENDPOINTS } from '../../../actions/constants/endpoints';
+import { AMENITY_ICONS, AMENITY_KEYS } from '../../../utils/icons';
+import { useRealEstateDetail } from '../../../hooks/listings/useListingDetail';
 import ImageGallery from '../../../components/detail/ImageGallery/ImageGallery';
 import ZoomModal from '../../../components/modals/ZoomModal/ZoomModal';
 import SellerCard from '../../../components/cards/SellerCard/SellerCard';
@@ -21,12 +21,13 @@ import RecommendedSection from '../../../components/detail/RecommendedSection/Re
 import { SocialShareSheet } from '../../../components/features/social/components';
 import DetailNotFound from '../../../components/detail/DetailNotFound/DetailNotFound';
 import SwipeDownToClose from '../../../components/modals/SwipeDownToClose/SwipeDownToClose';
-import { createStyles } from '../../../util/styles/listing/realEstateDetail.styles';
-import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplitLayout.styles';
-import { useResponsive } from '../../../hooks/useResponsive';
+import { createStyles } from '../../../utils/styles/listing/realEstateDetail.styles';
+import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../utils/styles/listing/tabletSplitLayout.styles';
+import { useResponsive } from '../../../hooks/app/useResponsive';
+import type { IdParams, UnknownMap } from '../../../utils/types';
 
 export default function RealEstateDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id } = useLocalSearchParams<IdParams>();
   const router = useRouter();
   const { t } = useTranslation();
   const { isTablet, isTabletLandscape } = useResponsive();
@@ -54,7 +55,7 @@ export default function RealEstateDetailScreen() {
 
   const specItems = buildSpecItems(item, REAL_ESTATE_CONFIG.fields, t);
 
-  const itemRecord = item as unknown as Record<string, unknown>;
+  const itemRecord = item as unknown as UnknownMap;
   const amenities = AMENITY_KEYS.filter((k) => itemRecord[k] === true);
 
   const locationStr = [item.city, item.region].filter(Boolean).join(', ') || t('vehicleDetail.locationFallback');

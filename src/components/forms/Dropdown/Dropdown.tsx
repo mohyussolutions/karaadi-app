@@ -1,14 +1,15 @@
 import { useCallback, useState } from 'react';
-import type { DropdownProps } from '../../../util/types';
+import type { DropdownProps } from '../../../utils/types';
 import {
   View, Text, TouchableOpacity, Modal, FlatList,
   TextInput,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { useDropdownOptions } from '../../../hooks/useDropdownOptions';
-import { createStyles } from '../../../util/styles/newAd/dropdown.styles';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { useDropdownOptions } from '../../../hooks/listings/useSearch';
+import { createStyles } from '../../../utils/styles/new-ad/dropdown.styles';
 import { DropdownOptionRow } from './DropdownOptionRow';
+import { INPUT_LIMITS } from '../../../actions/constants';
 
 export function Dropdown({ label, value, options, onChange, placeholder, required, error }: DropdownProps) {
   const Colors = useThemeColors();
@@ -48,6 +49,7 @@ export function Dropdown({ label, value, options, onChange, placeholder, require
         <View style={s.overlay}>
           <TouchableOpacity style={s.backdrop} onPress={close} />
           <View style={s.sheet}>
+            <View style={s.handle} />
             <View style={s.sheetHeader}>
               <Text style={s.sheetTitle}>{label}</Text>
               <TouchableOpacity onPress={close} hitSlop={12}>
@@ -60,6 +62,7 @@ export function Dropdown({ label, value, options, onChange, placeholder, require
                 <TextInput
                   style={s.searchInput}
                   value={search}
+                  maxLength={INPUT_LIMITS.search}
                   onChangeText={setSearch}
                   placeholder="Search…"
                   placeholderTextColor={Colors.placeholder}

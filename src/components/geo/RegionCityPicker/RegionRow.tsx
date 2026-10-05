@@ -1,17 +1,13 @@
 import { memo } from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import type { RegionPickerItem } from '../../../util/types';
-import { createStyles } from '../../../util/styles/geo/regionCityPicker.styles';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/geo/regionCityPicker.styles';
+import type { RegionRowProps } from "../../../utils/types";
 
 export const RegionRow = memo(function RegionRow({
   region, active, onSelectRegion,
-}: {
-  region: RegionPickerItem;
-  active: boolean;
-  onSelectRegion: (r: RegionPickerItem) => void;
-}) {
+}: RegionRowProps) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   return (

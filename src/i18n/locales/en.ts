@@ -165,6 +165,8 @@ const auth = {
     tooManyAttempts: "Too many attempts. Please wait 15 minutes.",
     accountLocked: "Account locked. Reset password or contact support.",
     failed: "Login failed. Check your credentials.",
+    invalidEmail: "Enter a valid email address.",
+    enterPassword: "Enter your password.",
     noAccount: "Don't have an account?",
     register: "Register",
   },
@@ -227,6 +229,7 @@ const auth = {
     resetButton: "Reset Password",
     resetting: "Resetting...",
     resendCode: "Resend code",
+    resendIn: "Resend code in {{seconds}}s",
     resending: "Sending...",
     successMessage: "Password reset successfully!",
     backToLogin: "Sign in",
@@ -1121,6 +1124,7 @@ const common = {
   updateNow: "Update Now",
   storeUpdateTitle: "New Version Available",
   storeUpdateMessage: "A new version of Karaadi is available on the store. Please update to get the latest features.",
+  storeUpdateVersionMessage: "Karaadi {{version}} is available on the store. Please update to get the latest features.",
   close: "Close",
 } as const;
 
@@ -1276,6 +1280,7 @@ const mine = {
     history: "Payment History",
     noPaymentsYet: "No payments yet",
     noPaymentsDesc: "Your payment history will appear here after your first purchase.",
+    transactionsCount: "{{count}} transactions",
     status: {
       completed: "Completed",
       pending: "Pending",
@@ -1340,8 +1345,8 @@ const mine = {
       inactive: "INACTIVE",
       expired: "EXPIRED",
     },
-    paid: "✓ Paid",
-    unpaid: "⚠ Unpaid",
+    paid: "Paid",
+    unpaid: "Unpaid",
     category: "Category",
     region: "Region",
     cities: "Cities",
@@ -1519,7 +1524,7 @@ const mine = {
     expiresTomorrow: "Expires tomorrow",
     daysLeft: "{{count}}d left",
     relist: "Relist",
-    payToRelist: "💳 Pay to Relist",
+    payToRelist: "Pay to relist",
     payNow: "Pay Now",
     view: "View",
     edit: "Edit",
@@ -1537,8 +1542,8 @@ const mine = {
     backToMyAds: "Back to My Ads",
     viewAd: "View Ad",
     soldToggleTitle: "Sold Status",
-    soldToggleOnDesc: "Marked as sold — hidden from buyers.",
-    soldToggleOffDesc: "Active — visible to buyers.",
+    soldToggleOnDesc: "Showing as sold to buyers. It is removed from listings 5 days after being marked sold.",
+    soldToggleOffDesc: "Visible to buyers.",
   },
 } as const;
 
@@ -1614,7 +1619,7 @@ const plan = {
   costSummary: "Cost Summary",
   expiresOn: "Listing expires",
   feePreview: "Estimated cost before selecting a plan",
-  selected: "✓ Selected",
+  selected: "Selected",
   clickToSelect: "Click to select",
   days: "days",
   currency: "USD",
@@ -1707,7 +1712,15 @@ const postAd = {
   paymentDeclined: "Payment was declined. Please try again.",
   paymentTimedOut: "Payment confirmation timed out. Please try again.",
   paymentInitFailed: "Payment could not be started. Please try again.",
+  paymentAmountChanged: "The plan price has changed. We've loaded the latest price — please check the total and tap Pay again.",
   activationFailed: "Could not activate your listing. Please try again.",
+  summaryHeading: "Review your listing",
+  summarySub: "Check the details and price before you pay.",
+  detailsLabel: "Details",
+  priceLabel: "Price",
+  planLine: "{{plan}} plan · {{days}} days",
+  youPay: "You pay",
+  payWithMethod: "Paid with your mobile money account",
   phoneNumberForMethod: "{{method}} Phone Number",
   enterPhoneForMethod: "Enter the number linked to your {{method}} account",
   paymentRequestNote: "You'll receive a payment request on your {{method}} app to approve.",
@@ -2109,9 +2122,22 @@ const tutorials = {
   play: "Tap to play",
 } as const;
 
+const supportChat = {
+  title: "Support AI",
+  subtitle: "Chat with Hage and the Karaadi team. Replies show up right here.",
+  intro: "Write to the Karaadi team. We usually reply within a day.",
+  placeholder: "Write to the Karaadi team…",
+  send: "Send",
+  team: "Karaadi team",
+  assistant: "Hage (AI)",
+  loginPrompt: "Log in to chat with Karaadi support.",
+  error: "Could not reach support. Please try again.",
+  noLinks: "Links, websites and email addresses are not allowed. Please describe the problem in words.",
+} as const;
+
 const aboutKaraadiPage = {
   title: "About Karaadi",
-  subtitle: "Everything you need to know about the Karaadi marketplace",
+  subtitle: "How buying, selling, payments and your account work on Karaadi",
   open: "Tap to view",
   followUs: "Follow Us",
   rightsShort: "{{brand}}. All rights reserved.",
@@ -2171,7 +2197,7 @@ const realEstateDetail = {
   showPhone: "Show phone number",
   reportItem: "Report this item",
   shareOnFacebook: "Share on Facebook",
-  waaLaGatay: "SOLD OUT",
+  waaLaGatay: "Sold",
 } as const;
 
 const report = {
@@ -2249,6 +2275,16 @@ const hage = {
   langSo:      "SO",
 } as const;
 
+const tracking = {
+  consentTitle: "Help us improve Karaadi",
+  consentBody: "With your permission we record which screens you open and what you search for in the app, so we can make Karaadi better. We never store passwords, payment details or what you type into forms.",
+  privacyLink: "Read our privacy policy",
+  accept: "Allow",
+  decline: "Don't allow",
+  settingTitle: "Usage analytics",
+  settingBody: "Share which screens you open and what you search for. No passwords, payment details or form contents are ever stored.",
+} as const;
+
 const en = {
   error: "Error",
   success: "Success",
@@ -2317,6 +2353,7 @@ const en = {
   noListings: "No listings yet",
   noResults: "No matching listings found",
   loadMore: "See More",
+  loadingMore: "Loading more...",
   priceOnRequest: "Price on request",
   negotiable: "Negotiable",
   signInRequired: "Sign in required",
@@ -2372,6 +2409,7 @@ const en = {
   homeScreen,
   tutorials,
   aboutKaraadiPage,
+  supportChat,
   recommendations,
   recommended,
   realEstateDetail,
@@ -2379,5 +2417,6 @@ const en = {
   vehicleDetail,
   report,
   hage,
+  tracking,
 } as const;
 export default en;

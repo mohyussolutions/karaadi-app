@@ -1,22 +1,38 @@
-import { useState, useEffect, useRef } from 'react';
+import { memo, useState } from 'react';
 import {
   View, Image, TouchableOpacity, Text, Modal, Pressable,
   TextInput, Switch,
 } from 'react-native';
-import { useGlobal } from '../../../hooks/useGlobal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, usePathname } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useAppTranslation } from '../../../hooks/useAppTranslation';
-import { useAppSelector, useAppDispatch } from '../../../store/store';
-import { setBrowseQuery, clearBrowseQuery } from '../../../store/slices/browseSearchSlice';
-import { useThemeColors, useThemedStyles, useThemeMode } from '../../../hooks/useTheme';
-import { useResponsive } from '../../../hooks/useResponsive';
-import { tabletHeaderStyles } from '../../../util/styles/shared/tablet.styles';
-import { createStyles } from '../../../util/styles/layout/globalHeader.styles';
-import { AUTH_RE, CHAT_RE, TAB_PATHS, LANGS, ROUTES, TABLET_HEADER_ICON_SIZES, TABLET_LANG_DROPDOWN_TOP_OFFSET } from '../../../constants';
-import type { Lang } from '../../../i18n/translations';
-import { useIsOverlayActive } from '../../../navigation/headerVisibility';
+import { useGlobal } from '../../../hooks/app/useResponsive';
+import { useAppTranslation } from '../../../hooks/app/useAppTranslation';
+import { useHeaderSearch } from '../../../hooks/listings/useSearch';
+import { useAppSelector } from '../../../store/store';
+import { useThemeColors, useThemedStyles, useThemeMode } from '../../../hooks/app/useTheme';
+import { useResponsive } from '../../../hooks/app/useResponsive';
+import { tabletHeaderStyles } from '../../../utils/styles/common/tablet.styles';
+import { createStyles } from '../../../utils/styles/layout/globalHeader.styles';
+import {
+  AUTH_RE, BRAND_LOGO, CHAT_RE, INPUT_LIMITS, LANG_DROPDOWN_TOP_OFFSET, LANGS, ROUTES,
+  TABLET_HEADER_ICON_SIZES, TABLET_LANG_DROPDOWN_TOP_OFFSET, TAB_PATHS,
+} from '../../../actions/constants';
+import { useIsOverlayActive } from '../../../navigation/header/headerVisibility';
+import type { HeaderLogoProps, LangModalProps } from '../../../utils/types';
+import { paddingTopOf, topOf } from '../../../utils/styles/common/dynamic.styles';
+
+import { selectUser } from '../../../store/slices/authSlice';
+import { selectUnreadCount } from '../../../store/slices/notificationsSlice';
+const HeaderLogo = memo(function HeaderLogo({ onPress }: HeaderLogoProps) {
+  const styles = useThemedStyles(createStyles);
+  const { logoSize } = useGlobal();
+  return (
+    <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
+      <Image source={BRAND_LOGO} style={[styles.logo, logoSize()]} resizeMode="contain" fadeDuration={0} />
+    </TouchableOpacity>
+  );
+});
 
 export default function GlobalHeader() {
   const insets = useSafeAreaInsets();
@@ -24,15 +40,10 @@ export default function GlobalHeader() {
   const pathname = usePathname();
   const { t, lang, switchLanguage } = useAppTranslation();
   const { mode, setMode } = useThemeMode();
-  const dispatch = useAppDispatch();
-  const unreadCount = useAppSelector((s) => s.notifications.unreadCount);
-  const user = useAppSelector((s) => s.auth.user);
-
-  const { logoSize } = useGlobal();
+  const unreadCount = useAppSelector(selectUnreadCount);
+  const user = useAppSelector(selectUser);
   const [showLangMenu, setShowLangMenu] = useState(false);
-  const [searchFocused, setSearchFocused] = useState(false);
-  const [searchInput, setSearchInput] = useState('');
-  const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const search = useHeaderSearch(pathname);
 
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
@@ -45,64 +56,10 @@ export default function GlobalHeader() {
   const showBack = !isTab && !isAuth && !isChat && !isDetail && router.canGoBack();
   const showSearchBar = !isDetail && !isAuth && !isChat;
 
-  useEffect(() => {
-    dispatch(clearBrowseQuery());
-    setSearchInput('');
-    return () => {
-      if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
-    };
-  }, [pathname, dispatch]);
-
-  function handleSearchChange(text: string) {
-    setSearchInput(text);
-    if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
-    searchDebounceRef.current = setTimeout(() => dispatch(setBrowseQuery(text)), 250);
-  }
-
-  function handleClearSearch() {
-    if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
-    setSearchInput('');
-    dispatch(clearBrowseQuery());
-  }
-
-  if (isChat) return null;
-  if (isDetail) return null;
-
-  if (isAuth) {
-    return (
-      <View style={[styles.wrapper, { paddingTop: insets.top }]}>
-        <View style={[styles.inner, isTablet && tabletHeaderStyles.inner]}>
-          <TouchableOpacity onPress={() => router.push(ROUTES.home)} activeOpacity={0.8}>
-            <Image source={require('../../../../assets/logo.jpg')} style={[styles.logo, logoSize()]} resizeMode="contain" />
-          </TouchableOpacity>
-          <View style={styles.rightGroup}>
-            <Switch
-              value={mode === 'dark'}
-              onValueChange={(v) => setMode(v ? 'dark' : 'light')}
-              trackColor={{ false: Colors.border, true: Colors.primary }}
-              thumbColor={Colors.white}
-              style={styles.themeSwitch}
-              accessibilityLabel="Toggle dark mode"
-            />
-            <TouchableOpacity style={[styles.langBtn, isTablet && tabletHeaderStyles.langBtn]} onPress={() => setShowLangMenu(true)}>
-              <Text style={[styles.langText, isTablet && tabletHeaderStyles.langText]}>{lang.toUpperCase()}</Text>
-              <MaterialCommunityIcons name="chevron-down" size={isTablet ? TABLET_HEADER_ICON_SIZES.langChevron : 12} color={Colors.white} />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <LangModal
-          visible={showLangMenu}
-          insets={insets}
-          lang={lang}
-          onClose={() => setShowLangMenu(false)}
-          onSelect={(code) => { switchLanguage(code); setShowLangMenu(false); }}
-        />
-      </View>
-    );
-  }
+  if (isChat || isDetail) return null;
 
   return (
-    <View style={[styles.wrapper, { paddingTop: insets.top }]}>
+    <View style={[styles.wrapper, paddingTopOf(insets.top)]}>
       <View style={[styles.inner, isTablet && tabletHeaderStyles.inner]}>
         <View style={styles.left}>
           <View style={[styles.backSlot, isTablet && tabletHeaderStyles.backSlot]}>
@@ -112,27 +69,27 @@ export default function GlobalHeader() {
               </TouchableOpacity>
             )}
           </View>
-          <TouchableOpacity onPress={() => router.push(ROUTES.home)} activeOpacity={0.8}>
-            <Image source={require('../../../../assets/logo.jpg')} style={[styles.logo, logoSize()]} resizeMode="contain" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.notifBtn, isTablet && tabletHeaderStyles.notifBtn]}
-            onPress={() => router.push(user ? ROUTES.notifications : ROUTES.login)}
-            activeOpacity={0.8}
-          >
-            <MaterialCommunityIcons name="bell-outline" size={isTablet ? TABLET_HEADER_ICON_SIZES.notif : 26} color={Colors.primary} />
-            {unreadCount > 0 && (
-              <View style={styles.notifBadge}>
-                <Text style={styles.notifBadgeText}>{unreadCount > 99 ? '99+' : unreadCount}</Text>
-              </View>
-            )}
-          </TouchableOpacity>
+          <HeaderLogo onPress={() => router.push(ROUTES.home)} />
+          {!isAuth && (
+            <TouchableOpacity
+              style={[styles.notifBtn, isTablet && tabletHeaderStyles.notifBtn]}
+              onPress={() => router.push(user ? ROUTES.notifications : ROUTES.login)}
+              activeOpacity={0.8}
+            >
+              <MaterialCommunityIcons name="bell-outline" size={isTablet ? TABLET_HEADER_ICON_SIZES.notif : 26} color={Colors.primary} />
+              {unreadCount > 0 && (
+                <View style={styles.notifBadge}>
+                  <Text style={styles.notifBadgeText}>{unreadCount > 99 ? '99+' : unreadCount}</Text>
+                </View>
+              )}
+            </TouchableOpacity>
+          )}
         </View>
 
         <View style={styles.rightGroup}>
           <Switch
             value={mode === 'dark'}
-            onValueChange={(v) => setMode(v ? 'dark' : 'light')}
+            onValueChange={(isDark) => setMode(isDark ? 'dark' : 'light')}
             trackColor={{ false: Colors.border, true: Colors.primary }}
             thumbColor={Colors.white}
             style={styles.themeSwitch}
@@ -150,23 +107,24 @@ export default function GlobalHeader() {
       </View>
 
       {showSearchBar && (
-        <View style={[styles.searchBar, isTablet && tabletHeaderStyles.searchBar, searchFocused && { borderColor: Colors.primary }]}>
-          <MaterialCommunityIcons name="magnify" size={isTablet ? TABLET_HEADER_ICON_SIZES.search : 16} color={searchFocused ? Colors.primary : Colors.textMuted} />
+        <View style={[styles.searchBar, isTablet && tabletHeaderStyles.searchBar, search.searchFocused && styles.searchBarFocused]}>
+          <MaterialCommunityIcons name="magnify" size={isTablet ? TABLET_HEADER_ICON_SIZES.search : 20} color={search.searchFocused ? Colors.primary : Colors.textMuted} />
           <TextInput
             style={[styles.searchInput, isTablet && tabletHeaderStyles.searchInput]}
-            value={searchInput}
-            onChangeText={handleSearchChange}
+            value={search.searchInput}
+            maxLength={INPUT_LIMITS.search}
+            onChangeText={search.handleSearchChange}
             placeholder={t('searchListings')}
             placeholderTextColor={Colors.placeholder}
             autoCorrect={false}
             returnKeyType="search"
             clearButtonMode="never"
-            onFocus={() => setSearchFocused(true)}
-            onBlur={() => setSearchFocused(false)}
+            onFocus={search.onSearchFocus}
+            onBlur={search.onSearchBlur}
           />
-          {searchInput.length > 0 && (
-            <TouchableOpacity onPress={handleClearSearch} hitSlop={8}>
-              <MaterialCommunityIcons name="close-circle" size={isTablet ? TABLET_HEADER_ICON_SIZES.searchClear : 16} color={Colors.textMuted} />
+          {search.searchInput.length > 0 && (
+            <TouchableOpacity onPress={search.clearSearch} hitSlop={8}>
+              <MaterialCommunityIcons name="close-circle" size={isTablet ? TABLET_HEADER_ICON_SIZES.searchClear : 20} color={Colors.textMuted} />
             </TouchableOpacity>
           )}
         </View>
@@ -183,27 +141,16 @@ export default function GlobalHeader() {
   );
 }
 
-function LangModal({ visible, insets, lang, onClose, onSelect }: {
-  visible: boolean;
-  insets: { top: number };
-  lang: Lang;
-  onClose: () => void;
-  onSelect: (code: Lang) => void;
-}) {
+function LangModal({ visible, insets, lang, onClose, onSelect }: LangModalProps) {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const { isTablet } = useResponsive();
+  const dropdownTop = insets.top + (isTablet ? TABLET_LANG_DROPDOWN_TOP_OFFSET : LANG_DROPDOWN_TOP_OFFSET);
 
   return (
     <Modal visible={visible} transparent animationType="none" statusBarTranslucent onRequestClose={onClose}>
       <Pressable style={styles.langOverlay} onPress={onClose}>
-        <View
-          style={[
-            styles.langDropdown,
-            { top: insets.top + (isTablet ? TABLET_LANG_DROPDOWN_TOP_OFFSET : 56) },
-            isTablet && tabletHeaderStyles.langDropdown,
-          ]}
-        >
+        <View style={[styles.langDropdown, topOf(dropdownTop), isTablet && tabletHeaderStyles.langDropdown]}>
           {LANGS.map((l) => (
             <TouchableOpacity
               key={l.code}

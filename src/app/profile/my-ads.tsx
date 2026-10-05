@@ -1,18 +1,19 @@
 import { useCallback } from 'react';
 import { View, FlatList, TouchableOpacity, Text, RefreshControl } from 'react-native';
-import { useGlobal } from '../../hooks/useGlobal';
+import { useGlobal } from '../../hooks/app/useResponsive';
 import { useRouter } from 'expo-router';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { EmptyState } from '../../components/shared';
 import MyAdCard from '../../components/cards/MyAdCard/MyAdCard';
 import { LoadingSpinner } from '../../components/loading';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../util/styles/profile/myAds.styles';
-import { useMyAds } from '../../hooks/useMyAds';
-import { usePayForAd } from '../../hooks/usePayForAd';
-import type { ListingBase } from '../../util/types';
-import { ROUTES } from '../../constants';
+import { useThemeColors, useThemedStyles } from '../../hooks/app/useTheme';
+import { createStyles } from '../../utils/styles/profile/myAds.styles';
+import { useMyAds } from '../../hooks/auth/useAccount';
+import { usePayForAd } from '../../hooks/business/usePayments';
+import type { ListingBase, ListingFlatListRenderInfo } from '../../utils/types';
+import { ROUTES } from '../../actions/constants';
+import { fill, marginBottomOf } from '../../utils/styles/common/dynamic.styles';
 
 export default function MyAdsScreen() {
   const router = useRouter();
@@ -27,7 +28,7 @@ export default function MyAdsScreen() {
 
   const keyExtractor = useCallback((item: ListingBase) => item._id || item.id, []);
 
-  const renderItem = useCallback(({ item }: { item: ListingBase }) => (
+  const renderItem = useCallback(({ item }: ListingFlatListRenderInfo) => (
     <View style={styles.cardWrap}>
       <MyAdCard
         item={item}
@@ -73,7 +74,7 @@ export default function MyAdsScreen() {
         keyExtractor={keyExtractor}
         numColumns={2}
         columnWrapperStyle={styles.row}
-        contentContainerStyle={[styles.list, ads.length === 0 && { flex: 1 }]}
+        contentContainerStyle={[styles.list, ads.length === 0 && fill]}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />
@@ -96,7 +97,7 @@ export default function MyAdsScreen() {
         }
         renderItem={renderItem}
       />
-      <TouchableOpacity style={[styles.postBtn, { marginBottom: insets.bottom + 84 }]} onPress={() => router.push(ROUTES.newAd)}>
+      <TouchableOpacity style={[styles.postBtn, marginBottomOf(insets.bottom + 84)]} onPress={() => router.push(ROUTES.newAd)}>
         <Text style={styles.postBtnText}>+ {t('postNewAd')}</Text>
       </TouchableOpacity>
     </SafeAreaView>

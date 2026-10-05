@@ -1,9 +1,11 @@
 import { View, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../../hooks/useTheme';
-import { createStyles } from '../../../../util/styles/layout/hageAssistant.styles';
-import type { HageInputBarProps } from '../../../../util/types';
-import { KEYBOARD_AVOIDING_BEHAVIOR } from "../../../../util/platform/common-for-ios-andriod";
+import { useThemeColors, useThemedStyles } from '../../../../hooks/app/useTheme';
+import { createStyles } from '../../../../utils/styles/layout/hageAssistant.styles';
+import type { HageInputBarProps } from '../../../../utils/types';
+import { KEYBOARD_AVOIDING_BEHAVIOR } from "../../../../lib/platform/platform";
+import { paddingBottomOf } from '../../../../utils/styles/common/dynamic.styles';
+import { INPUT_LIMITS } from '../../../../actions/constants';
 
 export function HageInputBar({ value, onChangeText, onSend, loading, placeholder, insets }: HageInputBarProps) {
   const Colors = useThemeColors();
@@ -11,10 +13,11 @@ export function HageInputBar({ value, onChangeText, onSend, loading, placeholder
 
   return (
     <KeyboardAvoidingView behavior={KEYBOARD_AVOIDING_BEHAVIOR}>
-      <View style={[styles.inputRow, { paddingBottom: Math.max(insets.bottom, 12) }]}>
+      <View style={[styles.inputRow, paddingBottomOf(Math.max(insets.bottom, 12))]}>
         <TextInput
           style={styles.input}
           value={value}
+          maxLength={INPUT_LIMITS.longText}
           onChangeText={onChangeText}
           placeholder={placeholder}
           placeholderTextColor={Colors.placeholder}

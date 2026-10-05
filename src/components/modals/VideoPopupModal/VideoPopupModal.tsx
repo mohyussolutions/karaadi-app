@@ -1,22 +1,19 @@
 import { useEffect, useState } from "react";
 import { Modal, Pressable } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useVideoPlayer, VideoView, type VideoSource } from "expo-video";
-import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { tabletModalStyles } from "../../../util/styles/shared/tablet.styles";
-import { createStyles } from "../../../util/styles/shared/videoPopupModal.styles";
-import { TABLET_MODAL_ICON_SIZES } from '../../../constants';
+import { useVideoPlayer, VideoView } from "expo-video";
+import { useThemeColors, useThemedStyles } from "../../../hooks/app/useTheme";
+import { useResponsive } from "../../../hooks/app/useResponsive";
+import { tabletModalStyles } from "../../../utils/styles/common/tablet.styles";
+import { createStyles } from "../../../utils/styles/modals/videoPopupModal.styles";
+import { TABLET_MODAL_ICON_SIZES } from '../../../actions/constants';
+import type { VideoPopupModalProps } from "../../../utils/types";
 
 export default function VideoPopupModal({
   visible,
   onClose,
   source,
-}: {
-  visible: boolean;
-  onClose: () => void;
-  source: VideoSource;
-}) {
+}: VideoPopupModalProps) {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const { isTablet } = useResponsive();

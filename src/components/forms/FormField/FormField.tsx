@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import type { FormFieldProps } from '../../../util/types';
+import type { FormFieldProps } from '../../../utils/types';
 import { View, Text, TextInput, Animated, Pressable } from 'react-native';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
 import { Dropdown } from '../Dropdown/Dropdown';
-import { createStyles } from '../../../util/styles/newAd/formField.styles';
-import { REGEX_NUMBER_INPUT_FILTER, REGEX_PHONE_INPUT_FILTER } from '../../../constants';
+import { createStyles } from '../../../utils/styles/new-ad/formField.styles';
+import { INPUT_LIMITS, REGEX_NUMBER_INPUT_FILTER, REGEX_PHONE_INPUT_FILTER } from '../../../actions/constants';
+import { animatedLabelPosition } from '../../../utils/styles/common/dynamic.styles';
 
 export function FormField({ field, value, onChange, error }: FormFieldProps) {
   const Colors = useThemeColors();
@@ -86,7 +87,7 @@ export function FormField({ field, value, onChange, error }: FormFieldProps) {
     <View style={s.wrap}>
       <View style={[s.field, isTextarea && s.fieldTextarea, focused && s.fieldFocused, error ? s.fieldError : null]}>
         <Animated.Text
-          style={[s.floatingLabel, { top: labelTop, fontSize: labelSize }, focused && s.floatingLabelActive]}
+          style={[s.floatingLabel, animatedLabelPosition(labelTop, labelSize), focused && s.floatingLabelActive]}
           numberOfLines={1}
         >
           {field.label}{field.required && ' *'}
@@ -94,6 +95,7 @@ export function FormField({ field, value, onChange, error }: FormFieldProps) {
         <TextInput
           style={[s.input, isTextarea && s.inputTextarea]}
           value={value}
+          maxLength={isTextarea ? INPUT_LIMITS.longText : isNumber ? INPUT_LIMITS.price : isPhone ? INPUT_LIMITS.phone : INPUT_LIMITS.shortText}
           onChangeText={handleChange}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}

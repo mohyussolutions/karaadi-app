@@ -2,8 +2,9 @@ import { AppState, Platform, Vibration } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { updatePushToken, removePushToken } from '../../../../actions/core/auth.actions';
 import { isSoundEnabled } from './soundService';
-import { COLORS } from '../../../../util/colors/colors';
-import { PUSH_TOKEN_CACHE_KEY } from "../../../../constants";
+import { COLORS } from '../../../../utils/colors/colors';
+import { PUSH_TOKEN_CACHE_KEY } from "../../../../actions/constants";
+import type { NotificationTriggerLike, NotificationsModule, UnknownMap } from '../../../../utils/types';
 
 async function syncPushToken(token: string): Promise<void> {
   try {
@@ -14,12 +15,12 @@ async function syncPushToken(token: string): Promise<void> {
   } catch {}
 }
 
-let Notifications: typeof import('expo-notifications') | null = null;
+let Notifications: NotificationsModule | null = null;
 try {
   Notifications = require('expo-notifications');
   Notifications!.setNotificationHandler({
     handleNotification: async (notification) => {
-      const trigger = notification.request.trigger as { type?: string } | null;
+      const trigger = notification.request.trigger as NotificationTriggerLike | null;
       const suppress = trigger?.type === 'push' && AppState.currentState === 'active';
       return {
         shouldShowBanner: !suppress,
@@ -95,7 +96,7 @@ export async function registerForPushNotifications(): Promise<string | null> {
 export async function scheduleLocalNotification(
   title: string,
   body: string,
-  data?: Record<string, unknown>,
+  data?: UnknownMap,
 ): Promise<void> {
   Vibration.vibrate(Platform.OS === 'android' ? [0, 250, 100, 250] : 400);
 

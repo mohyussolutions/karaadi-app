@@ -7,26 +7,29 @@ import {
   RefreshControl,
   ScrollView,
 } from "react-native";
-import { FlashList, type ListRenderItemInfo } from "@shopify/flash-list";
+import { FlashList } from "@shopify/flash-list";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
-import { getCategoryByKey, SUB_I18N_GROUP, H_PAD, GAP, GRID_GAP, ROUTES, SKELETON_COUNT } from "../../../constants";
-import { EmptyState, AppIcon } from "../../../components/shared";
+import { useThemeColors, useThemedStyles } from "../../../hooks/app/useTheme";
+import { H_PAD, GAP, GRID_GAP, ROUTES, SKELETON_COUNT } from "../../../actions/constants";
+import { useCategoryContext } from "../../../hooks/listings/useCategories";
+import { EmptyState, ThemedIcon, LoadMoreButton } from "../../../components/shared";
 import ListingCard from "../../../components/cards/ListingCard/ListingCard";
 import { ListingCardSkeleton } from "../../../components/loading";
 import BottomTabBar from "../../../navigation/tab-bar/BottomTabBar";
-import { useAppTranslation } from "../../../hooks/useAppTranslation";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { useCategoryFeed } from "../../../hooks/useCategoryFeed";
-import { useFilteredListings } from "../../../hooks/useFilteredListings";
+import { useAppTranslation } from "../../../hooks/app/useAppTranslation";
+import { useResponsive } from "../../../hooks/app/useResponsive";
+import { useCategoryFeed } from "../../../hooks/listings/useFeed";
+import { useFilteredListings } from "../../../hooks/listings/useFeed";
 import { useAppSelector } from "../../../store/store";
-import type { SubCategory } from "../../../constants";
-import type { ListingBase } from "../../../util/types/listing.types";
-import type { GridProps, SidebarProps } from "../../../util/types";
-import { createStyles } from "../../../util/styles/browse/categoryBrowse.styles";
+import type { CategoryParams, GridProps, ListingBase, ListingRenderInfo, SidebarProps, SubCategory } from "../../../utils/types";
+import { createStyles } from "../../../utils/styles/browse/categoryBrowse.styles";
+import { fixedWidth, gridCellPadding, paddingBottomOf } from '../../../utils/styles/common/dynamic.styles';
+import { useSearchTracking } from '../../../hooks/listings/useSearch';
 
+import { selectUser } from '../../../store/slices/authSlice';
+import { selectBrowseQuery } from '../../../store/slices/browseSearchSlice';
 function SubcategoryGrid({ subs, group, onPress }: GridProps) {
   const { t } = useAppTranslation();
   const Colors = useThemeColors();
@@ -47,12 +50,12 @@ function SubcategoryGrid({ subs, group, onPress }: GridProps) {
                 key={sub.key}
                 hitSlop={4}
                 onPress={() => onPress(sub)}
-                style={[styles.gridCell, { width: cellW }]}
+                style={[styles.gridCell, fixedWidth(cellW)]}
               >
                 {({ pressed }) => (
                   <>
                     <View style={[styles.gridIconWrap, pressed && styles.gridIconWrapPressed]}>
-                      <AppIcon name={sub.icon} size={22} color={pressed ? Colors.white : Colors.gray700} />
+                      <ThemedIcon name={sub.icon} size={22} color={pressed ? Colors.white : Colors.gray700} />
                     </View>
                     <Text style={[styles.gridLabel, pressed && styles.gridLabelPressed]} numberOfLines={2}>
                       {label}
@@ -85,7 +88,7 @@ function SubcategorySidebar({ subs, group, onPress, onPost }: SidebarProps) {
             {({ pressed }) => (
               <>
                 <View style={[styles.subIconWrap, pressed && styles.subIconActive]}>
-                  <AppIcon name={sub.icon} size={20} color={pressed ? Colors.white : Colors.gray700} />
+                  <ThemedIcon name={sub.icon} size={20} color={pressed ? Colors.white : Colors.gray700} />
                 </View>
                 <Text style={[styles.subLabel, pressed && styles.subLabelActive]} numberOfLines={2}>
                   {label}
@@ -105,30 +108,30 @@ function SubcategorySidebar({ subs, group, onPress, onPost }: SidebarProps) {
 }
 
 export default function CategoryScreen() {
-  const { category: categoryKey } = useLocalSearchParams<{ category: string }>();
+  const { category: categoryKey } = useLocalSearchParams<CategoryParams>();
   const router = useRouter();
   const { t } = useAppTranslation();
-  const user = useAppSelector((s) => s.auth.user);
-  const searchQuery = useAppSelector((s) => s.browseSearch.query);
+  const user = useAppSelector(selectUser);
+  const searchQuery = useAppSelector(selectBrowseQuery);
   const { isTabletLandscape, sidebarWidth, numColumns } = useResponsive();
-  const { listings, loading, refreshing, onRefresh } = useCategoryFeed(categoryKey);
+  const { listings, loading, refreshing, loadingMore, hasMore, onRefresh, loadMore } = useCategoryFeed(categoryKey, searchQuery);
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
 
-  const category = getCategoryByKey(categoryKey);
-  const group = SUB_I18N_GROUP[categoryKey] ?? categoryKey.toLowerCase();
+  const { category, i18nGroup: group } = useCategoryContext(categoryKey);
   const subs = category?.subCategories ?? [];
   const categoryLabel = t(`categories.${categoryKey}`, { defaultValue: category?.name ?? categoryKey });
 
   const filteredListings = useFilteredListings(listings, searchQuery);
+  useSearchTracking({ query: searchQuery, resultsCount: filteredListings.length, loading, filters: { category: categoryKey } });
 
   function handleSubPress(sub: SubCategory) {
     router.push({ pathname: ROUTES.browseSubcategory, params: { category: categoryKey, subcategory: sub.key } });
   }
 
   function handlePost() {
-    router.push(user ? "/(tabs)/new-ad" : "/(auth)/login");
+    router.push(user ? ROUTES.newAd : ROUTES.login);
   }
 
   const feedHeader = (
@@ -145,13 +148,9 @@ export default function CategoryScreen() {
 
   const skeletonData = Array.from({ length: SKELETON_COUNT }, (_, i) => ({ _id: `sk-${i}`, id: `sk-${i}` }));
 
-  const renderListItem = useCallback(({ item, index }: ListRenderItemInfo<ListingBase>) => (
+  const renderListItem = useCallback(({ item, index }: ListingRenderInfo) => (
     <View
-      style={{
-        paddingLeft: index % numColumns === 0 ? H_PAD : GAP / 2,
-        paddingRight: (index + 1) % numColumns === 0 ? H_PAD : GAP / 2,
-        paddingBottom: GAP,
-      }}
+      style={gridCellPadding(index, numColumns, H_PAD, GAP)}
     >
       {loading ? <ListingCardSkeleton /> : <ListingCard item={item} categoryKey={categoryKey} />}
     </View>
@@ -163,12 +162,15 @@ export default function CategoryScreen() {
       data={loading ? (skeletonData as unknown as ListingBase[]) : filteredListings}
       numColumns={numColumns}
       keyExtractor={(item) => item.id || item._id}
-      contentContainerStyle={filteredListings.length === 0 && !loading ? styles.emptyContainer : [styles.listContent, { paddingBottom: insets.bottom + 84 }]}
+      contentContainerStyle={filteredListings.length === 0 && !loading ? styles.emptyContainer : [styles.listContent, paddingBottomOf(insets.bottom + 84)]}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}
       showsVerticalScrollIndicator={false}
       ListHeaderComponent={feedHeader}
+      ListFooterComponent={!loading && hasMore ? <LoadMoreButton onPress={loadMore} loading={loadingMore} /> : null}
       ListEmptyComponent={
-        !loading ? <EmptyState icon="tag-off-outline" title={t("common.noResults")} message={categoryLabel} /> : null
+        !loading ? <View style={styles.emptyWrap}>
+<EmptyState icon="tag-off-outline" title={t("common.noResults")} message={categoryLabel} />
+</View> : null
       }
       renderItem={renderListItem}
     />
@@ -178,13 +180,13 @@ export default function CategoryScreen() {
     <View style={styles.root}>
       <SafeAreaView style={styles.safe} edges={[]}>
         <View style={styles.pageHeader}>
-          <AppIcon name={category?.icon ?? ""} size={18} color={Colors.primary} />
+          <ThemedIcon name={category?.icon ?? ""} size={18} color={Colors.primary} />
           <Text style={styles.headerTitle} numberOfLines={1}>{categoryLabel}</Text>
         </View>
 
         {isTabletLandscape ? (
           <View style={styles.outerRow}>
-            <View style={[styles.sidebar, { width: sidebarWidth }]}>
+            <View style={[styles.sidebar, fixedWidth(sidebarWidth)]}>
               <SubcategorySidebar subs={subs} group={group} onPress={handleSubPress} onPost={handlePost} />
             </View>
             <View style={styles.flexFull}>{feedList}</View>

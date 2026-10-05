@@ -1,13 +1,13 @@
-import * as SecureStore from '../../util/helpers/secureStorage';
+import * as SecureStore from '../../lib/helpers/device/secureStorage';
 import { io, Socket } from 'socket.io-client';
-import { API_BASE_URL } from '../../api/urls';
+import { API_BASE_URL } from '../constants/endpoints';
 import {
   AUTH_TOKEN_KEY,
   SOCKET_RECONNECT_ATTEMPTS,
   SOCKET_RECONNECT_DELAY_MS,
   SOCKET_RECONNECT_DELAY_MAX_MS,
   SOCKET_RECONNECT_JITTER,
-} from '../../constants';
+} from '../constants';
 
 let socket: Socket | null = null;
 const pendingReads = new Set<number>();

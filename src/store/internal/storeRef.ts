@@ -1,5 +1,5 @@
-import type { AppDispatch } from '../../util/types/common.types';
+import type { StoreRef } from "../../utils/types";
 
-export const storeRef: { dispatch: AppDispatch | null } = {
+export const storeRef: StoreRef = {
   dispatch: null,
 };

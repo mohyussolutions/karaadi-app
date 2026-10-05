@@ -3,23 +3,24 @@ import {
   View, Text, TouchableOpacity, ScrollView, Switch, Linking, Alert,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { useRouter, type Href } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
-import { useAuthStore } from '../../../store/hooks/authStore';
-import { toggleSound } from '../../../components/features/notifications/store/notificationSettingsSlice';
+import { useAuthStore } from '../../../store/hooks/useAuthStore';
+import { selectSoundEnabled, toggleSound } from '../../../store/slices/notificationSettingsSlice';
 import { playNotificationSound } from '../../../components/features/notifications/services/soundService';
 import { updatePhoneVisibility } from '../../../actions/core/auth.actions';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../util/styles/settings/settingsMenu.styles';
-import { SITE_URL, SETTINGS_ROWS } from '../../../constants';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/settings/settingsMenu.styles';
+import { SITE_URL, SETTINGS_ROWS } from '../../../actions/constants';
+import { paddingBottomOf } from '../../../utils/styles/common/dynamic.styles';
 
 export default function SettingsIndex() {
   const router = useRouter();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const soundEnabled = useAppSelector((s) => s.notificationSettings.soundEnabled);
+  const soundEnabled = useAppSelector(selectSoundEnabled);
   const { user, setUser } = useAuthStore();
 
   const Colors = useThemeColors();
@@ -56,14 +57,14 @@ export default function SettingsIndex() {
 
   return (
     <SafeAreaView style={s.safe} edges={['bottom']}>
-      <ScrollView overScrollMode="never" contentContainerStyle={[s.content, { paddingBottom: insets.bottom + 84 }]} showsVerticalScrollIndicator={false}>
+      <ScrollView overScrollMode="never" contentContainerStyle={[s.content, paddingBottomOf(insets.bottom + 84)]} showsVerticalScrollIndicator={false}>
         <Text style={s.sectionTitle}>{t('mine.settingsPage.account')}</Text>
         <View style={s.section}>
           {SETTINGS_ROWS.map((row) => (
             <TouchableOpacity
               key={row.route}
               style={s.row}
-              onPress={() => router.push(row.route as any)}
+              onPress={() => router.push(row.route as Href)}
               activeOpacity={0.75}
             >
               <View style={s.iconWrap}>

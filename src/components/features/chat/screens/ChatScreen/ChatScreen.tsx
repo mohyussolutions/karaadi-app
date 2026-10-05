@@ -1,26 +1,23 @@
 import { useCallback, useState } from 'react';
-import {
-  View, Text, FlatList,
-  KeyboardAvoidingView, ActivityIndicator,
-} from 'react-native';
+import { View, Text, FlatList, KeyboardAvoidingView, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { blockUser } from '../../../../../actions/core/block.actions';
 import { ConfirmModal } from '../../../../modals/ConfirmModal/ConfirmModal';
-import { useThemeColors, useThemedStyles } from '../../../../../hooks/useTheme';
-import { useChatConversation } from '../../../../../hooks/useChatConversation';
-import type { ChatMessage } from '../../../../../util/types';
-import { createStyles } from '../../../../../util/styles/profile/chatScreen.styles';
+import { useThemeColors, useThemedStyles } from '../../../../../hooks/app/useTheme';
+import { useChatConversation } from '../../../../../hooks/messaging/useChat';
+import type { ChatMessageRenderInfo, ChatParams } from '../../../../../utils/types';
+import { createStyles } from '../../../../../utils/styles/profile/chatScreen.styles';
 import { ChatHeader } from '../../components/ChatHeader/ChatHeader';
 import { ChatComposer } from '../../components/ChatComposer/ChatComposer';
 import { MessageBubble } from '../../components/MessageBubble/MessageBubble';
-import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../../../util/platform/common-for-ios-andriod';
+import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../../../lib/platform/platform';
 
 export default function ChatScreen() {
   const { chatId: chatIdParam, userId, username, listingId, listingType } =
-    useLocalSearchParams<{ chatId?: string; userId?: string; username?: string; listingId?: string; listingType?: string }>();
+    useLocalSearchParams<ChatParams>();
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -40,7 +37,7 @@ export default function ChatScreen() {
     router.back();
   }
 
-  const renderMessage = useCallback(({ item }: { item: ChatMessage }) => (
+  const renderMessage = useCallback(({ item }: ChatMessageRenderInfo) => (
     <MessageBubble item={item} isMe={String(item.senderId) === String(currentUserId)} />
   ), [currentUserId]);
 

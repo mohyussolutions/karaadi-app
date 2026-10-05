@@ -1,17 +1,13 @@
 import { memo } from 'react';
-import type { DropdownOption } from '../../../util/types';
 import { Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../util/styles/newAd/dropdown.styles';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/new-ad/dropdown.styles';
+import type { DropdownOptionRowProps } from "../../../utils/types";
 
 export const DropdownOptionRow = memo(function DropdownOptionRow({
   option, selected, onSelect,
-}: {
-  option: DropdownOption;
-  selected: boolean;
-  onSelect: (value: string) => void;
-}) {
+}: DropdownOptionRowProps) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   return (

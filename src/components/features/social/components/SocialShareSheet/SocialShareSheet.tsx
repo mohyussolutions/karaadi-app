@@ -5,19 +5,19 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../../../hooks/useTheme';
-import { useResponsive } from '../../../../../hooks/useResponsive';
-import { tabletModalStyles } from '../../../../../util/styles/shared/tablet.styles';
-import { SOCIAL_SHARE_URLS, SOCIAL_BRAND_COLORS, TABLET_MODAL_ICON_SIZES } from '../../../../../constants';
-import type { SocialShareSheetProps, SocialAction } from '../../../../../util/types';
-import { createStyles } from '../../../../../util/styles/social/socialShareSheet.styles';
+import { useThemeColors, useThemedStyles } from '../../../../../hooks/app/useTheme';
+import { useResponsive } from '../../../../../hooks/app/useResponsive';
+import { tabletModalStyles } from '../../../../../utils/styles/common/tablet.styles';
+import { SOCIAL_SHARE_URLS, TABLET_MODAL_ICON_SIZES } from '../../../../../actions/constants';
+import type { SocialShareSheetProps, SocialAction } from '../../../../../utils/types';
+import { createStyles } from '../../../../../utils/styles/social/socialShareSheet.styles';
+import { bgColor, paddingBottomOf, tint } from '../../../../../utils/styles/common/dynamic.styles';
 const SOCIALS: SocialAction[] = [
   {
     key: 'whatsapp',
     label: 'WhatsApp',
     icon: 'whatsapp',
-    color: SOCIAL_BRAND_COLORS.whatsapp.color,
-    bg: SOCIAL_BRAND_COLORS.whatsapp.bg,
+    colorKey: 'brandWhatsapp',
     onPress: (msg) =>
       Linking.openURL(SOCIAL_SHARE_URLS.whatsappApp(msg)).catch(() =>
         Linking.openURL(SOCIAL_SHARE_URLS.whatsappWeb(msg)),
@@ -27,8 +27,7 @@ const SOCIALS: SocialAction[] = [
     key: 'facebook',
     label: 'Facebook',
     icon: 'facebook',
-    color: SOCIAL_BRAND_COLORS.facebook.color,
-    bg: SOCIAL_BRAND_COLORS.facebook.bg,
+    colorKey: 'brandFacebook',
     onPress: (msg) =>
       Linking.openURL(SOCIAL_SHARE_URLS.facebook(msg))
         .catch(() => Share.share({ message: msg }).then(() => {})),
@@ -37,8 +36,7 @@ const SOCIALS: SocialAction[] = [
     key: 'tiktok',
     label: 'TikTok',
     icon: 'music-note',
-    color: SOCIAL_BRAND_COLORS.tiktok.color,
-    bg: SOCIAL_BRAND_COLORS.tiktok.bg,
+    colorKey: 'brandTiktok',
     onPress: (msg) => Share.share({ message: msg }).then(() => {}),
   },
 ];
@@ -65,15 +63,14 @@ function SocialShareSheet({ visible, onClose, title, message, monochrome }: Soci
       onRequestClose={onClose}
     >
       <Pressable style={styles.backdrop} onPress={onClose} />
-      <View style={[styles.sheet, { paddingBottom: insets.bottom + 8 }, isTablet && tabletModalStyles.shareSheet]}>
+      <View style={[styles.sheet, paddingBottomOf(insets.bottom + 8), isTablet && tabletModalStyles.shareSheet]}>
         <View style={styles.handle} />
         <Text style={[styles.heading, isTablet && tabletModalStyles.shareHeading]} numberOfLines={1}>{title}</Text>
         <Text style={[styles.sub, isTablet && tabletModalStyles.shareSub]}>Share via</Text>
 
         <View style={styles.row}>
           {SOCIALS.map((s) => {
-            const iconColor = monochrome ? Colors.textPrimary : s.color;
-            const iconBg = monochrome ? Colors.gray100 : s.bg;
+            const iconColor = monochrome ? Colors.textPrimary : Colors[s.colorKey];
             return (
               <TouchableOpacity
                 key={s.key}
@@ -81,7 +78,7 @@ function SocialShareSheet({ visible, onClose, title, message, monochrome }: Soci
                 onPress={() => handleSocial(s)}
                 activeOpacity={0.75}
               >
-                <View style={[styles.iconWrap, { backgroundColor: iconBg }, isTablet && tabletModalStyles.shareIconWrap]}>
+                <View style={[styles.iconWrap, monochrome ? bgColor(Colors.gray100) : tint(iconColor), isTablet && tabletModalStyles.shareIconWrap]}>
                   <MaterialCommunityIcons name={s.icon as never} size={isTablet ? TABLET_MODAL_ICON_SIZES.shareIcon : 26} color={iconColor} />
                 </View>
                 <Text style={[styles.label, isTablet && tabletModalStyles.shareLabel]}>{s.label}</Text>

@@ -7,16 +7,16 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { placeholderAvatar, REGEX_PHONE_INPUT_FILTER, DELETE_CONFIRM_TEXT } from '../../constants';
+import { DELETE_CONFIRM_TEXT, EDIT_PROFILE_AVATAR, INPUT_LIMITS, REGEX_PHONE_INPUT_FILTER, USERNAME_MAX_LENGTH, ROUTES } from '../../actions/constants';
 import { updateUsername, updatePhone, updateProfileImage, deleteAccount } from '../../actions/core/auth.actions';
-import { useAuthStore } from '../../store/hooks/authStore';
-import { getImageUrl, getApiErrorMessage } from '../../util/helpers';
+import { useAuthStore } from '../../store/hooks/useAuthStore';
+import { getImageUrl, getApiErrorMessage } from '../../lib/helpers';
 import RemoteImage from '../../components/shared/RemoteImage/RemoteImage';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../util/styles/profile/editProfile.styles';
+import { useThemeColors, useThemedStyles } from '../../hooks/app/useTheme';
+import { createStyles } from '../../utils/styles/profile/editProfile.styles';
 import { useTranslation } from 'react-i18next';
-import { usernameSchema, somaliPhoneSchema } from '../../util/validation/schemas';
-const AVATAR = placeholderAvatar(100, '2563eb', 'Me');
+import { usernameSchema, somaliPhoneSchema } from '../../lib/validation/schemas';
+import { paddingBottomOf } from '../../utils/styles/common/dynamic.styles';
 
 export default function EditProfileScreen() {
   const { t } = useTranslation();
@@ -107,7 +107,7 @@ export default function EditProfileScreen() {
             try {
               await deleteAccount();
               await clearAuth();
-              router.replace('/(auth)/login');
+              router.replace(ROUTES.login);
             } catch {
               Alert.alert(t('error'), t('mine.settingsPage.couldNotDelete'));
               setDeleting(false);
@@ -120,11 +120,11 @@ export default function EditProfileScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
-      <ScrollView overScrollMode="never" contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }]} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+      <ScrollView overScrollMode="never" contentContainerStyle={[styles.content, paddingBottomOf(insets.bottom + 84)]} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
 
         <View style={styles.avatarSection}>
           <RemoteImage
-            source={{ uri: getImageUrl(user?.profileImage) || AVATAR }}
+            source={{ uri: getImageUrl(user?.profileImage) || EDIT_PROFILE_AVATAR }}
             style={styles.avatar}
           />
           <TouchableOpacity style={styles.editPhotoBtn} onPress={handlePickPhoto} disabled={uploading}>
@@ -145,6 +145,7 @@ export default function EditProfileScreen() {
           <TextInput
             style={styles.input}
             value={username}
+            maxLength={USERNAME_MAX_LENGTH}
             onChangeText={setUsername}
             placeholder={t('mine.editProfile.usernamePlaceholder')}
             placeholderTextColor={Colors.placeholder}
@@ -166,6 +167,7 @@ export default function EditProfileScreen() {
           <TextInput
             style={styles.input}
             value={phone}
+            maxLength={INPUT_LIMITS.phone}
             onChangeText={(v) => setPhone(v.replace(REGEX_PHONE_INPUT_FILTER, ''))}
             placeholder={t('phonePlaceholder')}
             placeholderTextColor={Colors.placeholder}
@@ -191,6 +193,7 @@ export default function EditProfileScreen() {
           <TextInput
             style={styles.input}
             value={deleteConfirmText}
+            maxLength={INPUT_LIMITS.confirmText}
             onChangeText={setDeleteConfirmText}
             placeholder={t('mine.editProfile.deleteConfirmPlaceholder')}
             placeholderTextColor={Colors.placeholder}

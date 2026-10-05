@@ -1,7 +1,7 @@
 import { apiClient } from '../client';
-import { MY_ADS_ENDPOINTS } from '../../api/endpoints';
-import { extractList } from '../../util/helpers';
-import type { ListingBase } from '../../util/types/listing.types';
+import { MY_ADS_ENDPOINTS } from '../constants/endpoints';
+import { extractList } from '../../lib/helpers';
+import type { ListingBase, MyAdUpdateResponse } from '../../utils/types';
 
 export async function getMyAds(signal?: AbortSignal): Promise<ListingBase[]> {
   const { data } = await apiClient.get(MY_ADS_ENDPOINTS.LIST, { signal });
@@ -22,6 +22,6 @@ export async function deleteMyAd(id: string): Promise<void> {
 }
 
 export async function setAdSold(id: string, maGaday: boolean): Promise<boolean> {
-  const { data } = await apiClient.put<{ maGaday?: boolean }>(MY_ADS_ENDPOINTS.UPDATE(id), { maGaday });
+  const { data } = await apiClient.put<MyAdUpdateResponse>(MY_ADS_ENDPOINTS.UPDATE(id), { maGaday });
   return data?.maGaday ?? maGaday;
 }

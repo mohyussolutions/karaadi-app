@@ -1,9 +1,10 @@
 import { View, Text, TouchableOpacity, Animated } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import type { NotificationBannerProps } from "../../../../../util/types/notification.types";
-import { useThemeColors, useThemedStyles } from "../../../../../hooks/useTheme";
-import { createStyles } from "../../../../../util/styles/layout/notificationBanner.styles";
+import type { NotificationBannerProps } from "../../../../../utils/types";
+import { useThemeColors, useThemedStyles } from "../../../../../hooks/app/useTheme";
+import { createStyles } from "../../../../../utils/styles/layout/notificationBanner.styles";
+import { topOf, translateYOf } from '../../../../../utils/styles/common/dynamic.styles';
 
 export default function NotificationBanner({
   banner,
@@ -18,7 +19,7 @@ export default function NotificationBanner({
 
   return (
     <Animated.View
-      style={[b.wrap, { top: insets.top + 10, transform: [{ translateY }] }]}
+      style={[b.wrap, topOf(insets.top + 10), translateYOf(translateY)]}
     >
       <TouchableOpacity style={b.card} activeOpacity={0.92} onPress={onPress}>
         <View style={b.avatar}>

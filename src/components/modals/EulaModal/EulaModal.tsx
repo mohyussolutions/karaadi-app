@@ -1,8 +1,8 @@
 import { Modal, View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
-import { useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../util/styles/modals/eulaModal.styles';
-import type { EulaModalProps } from '../../../util/types/common.types';
-import { SITE_URL } from '../../../constants';
+import { useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/modals/eulaModal.styles';
+import type { EulaModalProps } from '../../../utils/types';
+import { SITE_URL } from '../../../actions/constants';
 
 export function EulaModal({ visible, onAccept }: EulaModalProps) {
   const styles = useThemedStyles(createStyles);

@@ -1,11 +1,12 @@
 import { memo } from "react";
 import { Text, Pressable } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useThemeColors, useThemedStyles, useThemeMode } from "../../hooks/useTheme";
-import { useAppTranslation } from "../../hooks/useAppTranslation";
-import { createLayoutStyles } from "../../util/styles/tabs/tabBar.styles";
+import { useThemeColors, useThemedStyles, useThemeMode } from "../../hooks/app/useTheme";
+import { useAppTranslation } from "../../hooks/app/useAppTranslation";
+import { createLayoutStyles } from "../../utils/styles/tabs/tabBar.styles";
 import { TabButtonBackground } from "./TabButtonBackground";
-import type { BottomTabItemProps } from "../../util/types/navigation.types";
+import type { BottomTabItemProps } from "../../utils/types";
+import { textColor } from '../../utils/styles/common/dynamic.styles';
 
 export const BottomTabItem = memo(function BottomTabItem({ item, focused, onPress }: BottomTabItemProps) {
   const Colors = useThemeColors();
@@ -24,11 +25,11 @@ export const BottomTabItem = memo(function BottomTabItem({ item, focused, onPres
         return (
           <TabButtonBackground image={item.image} focused={focused} pressed={pressed}>
             <MaterialCommunityIcons
-              name={(focused ? item.icon : item.iconOutline) as any}
+              name={focused ? item.icon : item.iconOutline}
               size={22}
               color={iconColor}
             />
-            <Text style={[styles.label, { color: labelColor }]} numberOfLines={1}>
+            <Text style={[styles.label, textColor(labelColor)]} numberOfLines={1}>
               {t(item.labelKey)}
             </Text>
           </TabButtonBackground>

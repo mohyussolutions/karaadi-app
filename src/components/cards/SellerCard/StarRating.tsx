@@ -1,9 +1,10 @@
 import { View, Text } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../util/styles/detail/sellerCard.styles';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/detail/sellerCard.styles';
+import type { StarRatingProps } from "../../../utils/types";
 
-export function StarRating({ rating, count }: { rating: number; count: number }) {
+export function StarRating({ rating, count }: StarRatingProps) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const stars = Math.round(rating);

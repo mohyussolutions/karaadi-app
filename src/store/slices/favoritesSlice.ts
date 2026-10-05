@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
 import { getFavorites, addFavorite, removeFavorite } from '../../actions/categories/favorite.actions';
-import type { Favorite, ListingBase } from '../../util/types';
-import type { FavoritesState } from '../../util/types/redux.types';
+import type { Favorite, FavoritesData, FavoritesRootState, FavoritesState, RootState, ToggleFavoriteArgs } from '../../utils/types';
 
 const initialState: FavoritesState = {
   ids: [],
@@ -10,7 +9,7 @@ const initialState: FavoritesState = {
   loaded: false,
 };
 
-function fromFavList(favs: Favorite[]): Pick<FavoritesState, 'ids' | 'idMap' | 'items'> {
+function fromFavList(favs: Favorite[]): FavoritesData {
   return {
     items: favs,
     ids: favs.map((f) => f.itemId).filter(Boolean),
@@ -27,11 +26,11 @@ export const loadFavorites = createAsyncThunk('favorites/load', async () => {
 export const toggleFavorite = createAsyncThunk(
   'favorites/toggle',
   async (
-    { itemId, wasFav, listing, categoryHint }: { itemId: string; wasFav: boolean; listing?: ListingBase | null; categoryHint?: string },
+    { itemId, wasFav, listing, categoryHint }: ToggleFavoriteArgs,
     { getState },
   ) => {
     if (wasFav) {
-      const state = (getState() as { favorites: FavoritesState }).favorites;
+      const state = (getState() as RootState).favorites;
       const favId = state.idMap[itemId];
       if (favId) await removeFavorite(favId);
       return { action: 'remove' as const, itemId };
@@ -118,6 +117,6 @@ export const { clearFavorites } = favoritesSlice.actions;
 export default favoritesSlice.reducer;
 
 export const selectFavoriteIdSet = createSelector(
-  (state: { favorites: FavoritesState }) => state.favorites.ids,
+  (state: FavoritesRootState) => state.favorites.ids,
   (ids) => new Set(ids),
 );

@@ -3,7 +3,7 @@
     "name": "Karaadi",
     "slug": "karaadi",
     "platforms": ["ios", "android"],
-    "version": "1.0.21",
+    "version": "1.0.22",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -41,7 +41,7 @@
         "android.permission.READ_MEDIA_VIDEO",
         "android.permission.RECORD_AUDIO"
       ],
-      "versionCode": 20
+      "versionCode": 21
     },
     "plugins": [
       "./plugins/withAbiFilters",

@@ -1,42 +1,33 @@
 import { apiClient } from '../client';
-import { AUTH_ENDPOINTS } from '../../api/endpoints';
-import type { User, AuthResponse } from '../../util/types/user.types';
+import { AUTH_ENDPOINTS } from '../constants/endpoints';
+import type { AuthResponse, MessageResponse, RegisterPayload, ResetPasswordPayload, User } from '../../utils/types';
 
 export async function login(email: string, password: string): Promise<AuthResponse> {
   const { data } = await apiClient.post(AUTH_ENDPOINTS.LOGIN, { email, password });
   return data;
 }
 
-export async function register(payload: {
-  username: string;
-  email: string;
-  password: string;
-  phone?: string;
-}): Promise<{ message: string }> {
+export async function register(payload: RegisterPayload): Promise<MessageResponse> {
   const { data } = await apiClient.post(AUTH_ENDPOINTS.REGISTER, payload);
   return data;
 }
 
-export async function confirmAccount(email: string, code: string): Promise<{ message: string }> {
+export async function confirmAccount(email: string, code: string): Promise<MessageResponse> {
   const { data } = await apiClient.post(AUTH_ENDPOINTS.CONFIRM, { email, code });
   return data;
 }
 
-export async function resendCode(email: string): Promise<{ message: string }> {
+export async function resendCode(email: string): Promise<MessageResponse> {
   const { data } = await apiClient.post(AUTH_ENDPOINTS.RESEND_CODE, { email });
   return data;
 }
 
-export async function forgotPassword(email: string): Promise<{ message: string }> {
+export async function forgotPassword(email: string): Promise<MessageResponse> {
   const { data } = await apiClient.post(AUTH_ENDPOINTS.FORGOT_PASSWORD, { email });
   return data;
 }
 
-export async function resetPassword(payload: {
-  email: string;
-  code: string;
-  password: string;
-}): Promise<{ message: string }> {
+export async function resetPassword(payload: ResetPasswordPayload): Promise<MessageResponse> {
   const { data } = await apiClient.post(AUTH_ENDPOINTS.RESET_PASSWORD, {
     email: payload.email,
     resetCode: payload.code,

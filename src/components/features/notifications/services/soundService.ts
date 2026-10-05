@@ -1,5 +1,6 @@
 import { createAudioPlayer, type AudioPlayer } from 'expo-audio';
 import { store } from '../../../../store/store';
+import { selectSoundEnabled } from '../../../../store/slices/notificationSettingsSlice';
 
 let player: AudioPlayer | null = null;
 
@@ -11,7 +12,7 @@ function getPlayer(): AudioPlayer {
 }
 
 export function isSoundEnabled(): boolean {
-  return store.getState().notificationSettings.soundEnabled;
+  return selectSoundEnabled(store.getState());
 }
 
 export function playNotificationSound(): void {

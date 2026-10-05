@@ -7,14 +7,15 @@ import { useTranslation } from 'react-i18next';
 import { EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
 import RemoteImage from '../../components/shared/RemoteImage/RemoteImage';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { useResponsive } from '../../hooks/useResponsive';
-import { useMyAds } from '../../hooks/useMyAds';
-import { usePayForAd } from '../../hooks/usePayForAd';
-import { createStyles } from '../../util/styles/profile/profileBadge.styles';
-import { formatPrice, getImageUrl } from '../../util/helpers';
-import { PLACEHOLDER_IMAGE, ROUTES } from '../../constants';
-import type { ListingBase } from '../../util/types';
+import { useThemeColors, useThemedStyles } from '../../hooks/app/useTheme';
+import { useResponsive } from '../../hooks/app/useResponsive';
+import { useMyAds } from '../../hooks/auth/useAccount';
+import { usePayForAd } from '../../hooks/business/usePayments';
+import { createStyles } from '../../utils/styles/profile/profileBadge.styles';
+import { formatPrice, getImageUrl } from '../../lib/helpers';
+import { PLACEHOLDER_IMAGE, ROUTES } from '../../actions/constants';
+import type { ListingBase } from '../../utils/types';
+import { paddingBottomOf } from '../../utils/styles/common/dynamic.styles';
 
 const adId = (ad: ListingBase) => ad._id || ad.id;
 const isUnpaid = (ad: ListingBase) => !ad.isPaid && !ad.maGaday && !ad.expiryDate;
@@ -82,7 +83,7 @@ export default function BadgeScreen() {
   return (
     <SafeAreaView style={s.safe} edges={['bottom']}>
       <ScrollView overScrollMode="never"
-        contentContainerStyle={[s.content, { paddingBottom: insets.bottom + 84 }]}
+        contentContainerStyle={[s.content, paddingBottomOf(insets.bottom + 84)]}
         showsVerticalScrollIndicator={false}
         refreshControl={refreshControl}
       >

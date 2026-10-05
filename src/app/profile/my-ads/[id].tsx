@@ -3,30 +3,34 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { useResponsive } from '../../../hooks/useResponsive';
-import { useMyAdManage } from '../../../hooks/useMyAdManage';
-import { formatPrice, getImageUrl, getListingDetailRoute, getListingExpiryInfo } from '../../../util/helpers';
-import { PLACEHOLDER_IMAGE, GRID_COLUMNS, GRID_H_PAD, MY_ADS_GRID_GAP } from '../../../constants';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { useGlobal } from '../../../hooks/app/useResponsive';
+import { useTabBarClearance } from '../../../hooks/app/useResponsive';
+import { useMyAdManage } from '../../../hooks/auth/useAccount';
+import { formatPrice, getImageUrl, getListingDetailRoute, getListingExpiryInfo } from '../../../lib/helpers';
+import { PLACEHOLDER_IMAGE, MY_AD_GALLERY_H_PAD } from '../../../actions/constants';
 import { LoadingSpinner } from '../../../components/loading';
 import { EmptyState } from '../../../components/shared';
-import RemoteImage from '../../../components/shared/RemoteImage/RemoteImage';
-import { createStyles } from '../../../util/styles/profile/myAdManage.styles';
+import MyAdGallery from '../../../components/detail/MyAdGallery/MyAdGallery';
+import { createStyles } from '../../../utils/styles/profile/myAdManage.styles';
+import { paddingBottomOf } from '../../../utils/styles/common/dynamic.styles';
+import type { IdParams } from '../../../utils/types';
 
 export default function MyAdManageScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id } = useLocalSearchParams<IdParams>();
   const router = useRouter();
   const { t } = useTranslation();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
-  const { gridCellWidth } = useResponsive();
+  const { width } = useGlobal();
+  const clearance = useTabBarClearance();
   const { ad, loading, notFound, toggling, toggleSold } = useMyAdManage(id);
 
   if (loading) return <LoadingSpinner fullScreen />;
 
   if (notFound || !ad) {
     return (
-      <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
+      <SafeAreaView style={styles.safe} edges={[]}>
         <View style={styles.center}>
           <EmptyState
             icon="clipboard-text-off-outline"
@@ -41,9 +45,9 @@ export default function MyAdManageScreen() {
     );
   }
 
-  const mainImage = getImageUrl(ad.images?.[0]) || PLACEHOLDER_IMAGE;
-  const restImages = (ad.images || []).slice(1);
-  const gridWidth = gridCellWidth(GRID_COLUMNS, GRID_H_PAD, MY_ADS_GRID_GAP);
+  const images = (ad.images || []).map(getImageUrl).filter(Boolean);
+  const galleryImages = images.length ? images : [PLACEHOLDER_IMAGE];
+  const galleryWidth = width - MY_AD_GALLERY_H_PAD * 2 - 2;
   const expiryInfo = getListingExpiryInfo(ad.expiryDate, t);
 
   const planKey = ad.isPremium90
@@ -55,14 +59,13 @@ export default function MyAdManageScreen() {
         : '';
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
-      <ScrollView overScrollMode="never" contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} hitSlop={10} style={styles.backBtn}>
-            <MaterialCommunityIcons name="chevron-left" size={28} color={Colors.text} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>{t('mine.myAds.manageTitle')}</Text>
-        </View>
+    <SafeAreaView style={styles.safe} edges={[]}>
+      <ScrollView
+        overScrollMode="never"
+        contentContainerStyle={[styles.content, paddingBottomOf(clearance + 16)]}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.headerTitle}>{t('mine.myAds.manageTitle')}</Text>
 
         {!!planKey && (
           <View style={styles.planBadge}>
@@ -71,27 +74,12 @@ export default function MyAdManageScreen() {
         )}
 
         <View style={styles.card}>
-          <View style={styles.mainImageWrap}>
-            <RemoteImage source={{ uri: mainImage }} style={styles.mainImage} contentFit="contain" />
-            {ad.maGaday && (
-              <View style={styles.soldOverlay}>
-                <Text style={styles.soldOverlayText}>{t('mine.myAds.sold')}</Text>
-              </View>
-            )}
-          </View>
-
-          {restImages.length > 0 && (
-            <View style={styles.gridWrap}>
-              {restImages.map((img, i) => (
-                <RemoteImage
-                  key={i}
-                  source={{ uri: getImageUrl(img) }}
-                  style={[styles.gridItem, { width: gridWidth, height: gridWidth }]}
-                  contentFit="cover"
-                />
-              ))}
-            </View>
-          )}
+          <MyAdGallery
+            images={galleryImages}
+            width={galleryWidth}
+            sold={!!ad.maGaday}
+            soldLabel={t('common.sold')}
+          />
 
           <View style={styles.body}>
             <Text style={styles.title}>{ad.title || t('mine.myAds.untitled')}</Text>
@@ -138,8 +126,10 @@ export default function MyAdManageScreen() {
             value={!!ad.maGaday}
             onValueChange={toggleSold}
             disabled={toggling}
-            trackColor={{ false: Colors.gray100, true: Colors.primary }}
+            trackColor={{ false: Colors.gray300, true: Colors.success }}
+            ios_backgroundColor={Colors.gray300}
             thumbColor={Colors.white}
+            accessibilityLabel={t('mine.myAds.soldToggleTitle')}
           />
         </View>
 

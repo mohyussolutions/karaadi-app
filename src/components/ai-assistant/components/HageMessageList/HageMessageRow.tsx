@@ -1,19 +1,14 @@
 import { memo } from 'react';
 import { View, Text } from 'react-native';
-import { useThemedStyles } from '../../../../hooks/useTheme';
-import { useHageSegments } from '../../../../hooks/useHageSegments';
-import { createStyles } from '../../../../util/styles/layout/hageAssistant.styles';
-import type { HageMessage, ListingRef } from '../../../../util/types/chat.types';
-import type { ListingRoute } from '../../../../util/types/common.types';
+import { useThemedStyles } from '../../../../hooks/app/useTheme';
+import { useHageSegments } from '../../../../hooks/messaging/useChat';
+import { createStyles } from '../../../../utils/styles/layout/hageAssistant.styles';
 import { ListingChip } from '../ListingChip/ListingChip';
+import type { HageMessageRowProps } from "../../../../utils/types";
 
 export const HageMessageRow = memo(function HageMessageRow({
   item, onListingPress, onLinkPress,
-}: {
-  item: HageMessage;
-  onListingPress: (listing: ListingRef) => void;
-  onLinkPress: (route: ListingRoute) => void;
-}) {
+}: HageMessageRowProps) {
   const styles = useThemedStyles(createStyles);
   const segments = useHageSegments(item);
 

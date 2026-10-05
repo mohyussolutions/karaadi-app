@@ -1,18 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
-import type { ZoomModalProps } from '../../../util/types';
+import type { ZoomModalProps } from '../../../utils/types';
 import {
   View, FlatList, TouchableOpacity, Modal, StatusBar, Text,
 } from 'react-native';
 import { Image } from 'expo-image';
-import { useGlobal } from '../../../hooks/useGlobal';
+import { useGlobal } from '../../../hooks/app/useResponsive';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { useResponsive } from '../../../hooks/useResponsive';
-import { getModalHeaderPaddingTop } from '../../../util/platform/common-for-ios-andriod';
-import { tabletModalStyles } from '../../../util/styles/shared/tablet.styles';
-import { createStyles } from '../../../util/styles/detail/zoomModal.styles';
-import { TABLET_MODAL_ICON_SIZES } from '../../../constants';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { useResponsive } from '../../../hooks/app/useResponsive';
+import { getModalHeaderPaddingTop } from '../../../lib/platform/platform';
+import { tabletModalStyles } from '../../../utils/styles/common/tablet.styles';
+import { createStyles } from '../../../utils/styles/detail/zoomModal.styles';
+import { TABLET_MODAL_ICON_SIZES } from '../../../actions/constants';
+import { paddingBottomOf, paddingTopOf } from '../../../utils/styles/common/dynamic.styles';
 
 export default function ZoomModal({ visible, images, startIndex, title, onClose }: ZoomModalProps) {
   const { width, height } = useGlobal();
@@ -42,7 +43,7 @@ export default function ZoomModal({ visible, images, startIndex, title, onClose 
   return (
     <Modal visible={visible} transparent={false} animationType="fade" statusBarTranslucent onRequestClose={onClose}>
       <StatusBar barStyle="light-content" backgroundColor={Colors.black} />
-      <View style={[styles.root, { paddingTop: getModalHeaderPaddingTop(insets.top) }]}>
+      <View style={[styles.root, paddingTopOf(getModalHeaderPaddingTop(insets.top))]}>
 
         <View style={styles.header}>
           <Text style={[styles.headerTitle, isTablet && tabletModalStyles.zoomHeaderTitle]} numberOfLines={1}>{title}</Text>
@@ -77,7 +78,7 @@ export default function ZoomModal({ visible, images, startIndex, title, onClose 
         />
 
         {images.length > 1 && (
-          <View style={[styles.thumbBar, { paddingBottom: insets.bottom + 10 }]}>
+          <View style={[styles.thumbBar, paddingBottomOf(insets.bottom + 10)]}>
             <FlatList overScrollMode="never"
               data={images}
               horizontal

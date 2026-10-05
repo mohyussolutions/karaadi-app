@@ -1,29 +1,39 @@
 import { Modal, View, Text, TouchableOpacity } from 'react-native';
-import { useThemeColors } from '../../../hooks/useTheme';
-import { styles } from '../../../util/styles/modals/confirmModal.styles';
-import type { ConfirmModalProps } from '../../../util/types/common.types';
+import { useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/modals/confirmModal.styles';
+import type { ConfirmModalProps } from '../../../utils/types';
 
 export function ConfirmModal({ visible, title, message, actions, onDismiss }: ConfirmModalProps) {
-  const Colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
+  const lastIndex = actions.length - 1;
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onDismiss}>
       <TouchableOpacity style={styles.backdrop} activeOpacity={1} onPress={onDismiss}>
-        <TouchableOpacity activeOpacity={1} style={[styles.card, { backgroundColor: Colors.card, borderColor: Colors.border }]}>
-          <Text style={[styles.title, { color: Colors.text }]}>{title}</Text>
-          {!!message && <Text style={[styles.message, { color: Colors.textSecondary }]}>{message}</Text>}
-          <View style={[styles.divider, { backgroundColor: Colors.border }]} />
-          {actions.map((action) => (
-            <TouchableOpacity
-              key={action.label}
-              style={styles.actionBtn}
-              onPress={() => { onDismiss(); action.onPress(); }}
-            >
-              <Text style={[styles.actionText, { color: action.destructive ? Colors.error : Colors.primary }]}>
-                {action.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
+        <TouchableOpacity activeOpacity={1} style={styles.card}>
+          <Text style={styles.title}>{title}</Text>
+          {!!message && <Text style={styles.message}>{message}</Text>}
+          <View style={styles.actions}>
+            {actions.map((action, index) => {
+              const filled = index === lastIndex;
+              const btnStyle = !filled
+                ? styles.actionBtn
+                : action.destructive ? styles.actionBtnDestructive : styles.actionBtnPrimary;
+              return (
+                <TouchableOpacity
+                  key={action.label}
+                  style={btnStyle}
+                  activeOpacity={0.85}
+                  accessibilityRole="button"
+                  onPress={() => { onDismiss(); action.onPress(); }}
+                >
+                  <Text style={filled ? styles.actionTextFilled : styles.actionText} numberOfLines={1}>
+                    {action.label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
         </TouchableOpacity>
       </TouchableOpacity>
     </Modal>

@@ -1,9 +1,10 @@
 import { View, Text, ScrollView } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useAppTranslation } from '../../../hooks/useAppTranslation';
-import { useThemedStyles } from '../../../hooks/useTheme';
-import { createDetailStyles } from '../../../util/styles/profile/aboutKaraadi.styles';
-import { WHAT_ITEM_KEYS } from "../../../constants";
+import { useAppTranslation } from '../../../hooks/app/useAppTranslation';
+import { useThemedStyles } from '../../../hooks/app/useTheme';
+import { createDetailStyles } from '../../../utils/styles/profile/aboutKaraadi.styles';
+import { WHAT_ITEM_KEYS } from "../../../actions/constants";
+import { paddingBottomOf } from '../../../utils/styles/common/dynamic.styles';
 
 export default function AboutScreen() {
   const { t } = useAppTranslation();
@@ -12,7 +13,7 @@ export default function AboutScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
-      <ScrollView overScrollMode="never" contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }]}>
+      <ScrollView overScrollMode="never" contentContainerStyle={[styles.content, paddingBottomOf(insets.bottom + 84)]}>
         <Text style={styles.title}>{t('about.heading')}</Text>
         <Text style={styles.lead}>{t('about.lead')}</Text>
 

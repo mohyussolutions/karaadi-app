@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Keyboard } from 'react-native';
-import type { RegionPickerItem, RegionCityPickerProps } from '../../../util/types';
+import type { RegionPickerItem, RegionCityPickerProps } from '../../../utils/types';
 import { clientAddCity } from '../../../actions/categories/geo.actions';
-import { toRegionPickerItems } from '../../../util/helpers';
-import { fetchGeoRegions, invalidateGeoCache } from '../../../store/slices/geoSlice';
+import { toRegionPickerItems } from '../../../lib/helpers';
+import { fetchGeoRegions, invalidateGeoCache, selectGeo } from '../../../store/slices/geoSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
-import { GEO_CACHE_TTL } from "../../../constants";
+import { GEO_CACHE_TTL } from "../../../actions/constants";
 
 export function useRegionCityPicker({
   selectedRegion,
@@ -14,7 +14,7 @@ export function useRegionCityPicker({
   onCityChange,
 }: RegionCityPickerProps) {
   const dispatch = useAppDispatch();
-  const geo = useAppSelector((s) => s.geo);
+  const geo = useAppSelector(selectGeo);
   const [regionsOverride, setRegionsOverride] = useState<RegionPickerItem[] | null>(null);
   const [selectedRegionObj, setSelectedRegionObj] = useState<RegionPickerItem | null>(null);
 

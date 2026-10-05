@@ -5,11 +5,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner } from '../../components/loading';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { useIdentification } from '../../hooks/useIdentification';
+import { useThemeColors, useThemedStyles } from '../../hooks/app/useTheme';
+import { useIdentification } from '../../hooks/auth/useAccount';
 import { IdentityCaptureForm } from '../../components/features/identification/components/IdentityCaptureForm/IdentityCaptureForm';
-import { createStyles } from '../../util/styles/profile/verifyIdentity.styles';
-import { ROUTES } from '../../constants';
+import { createStyles } from '../../utils/styles/profile/verifyIdentity.styles';
+import { ROUTES } from '../../actions/constants';
 
 export default function VerifyIdentityScreen() {
   const { t } = useTranslation();

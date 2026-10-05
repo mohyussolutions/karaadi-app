@@ -1,9 +1,9 @@
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../util/styles/geo/regionCityPicker.styles';
-import type { PickerFieldsProps } from '../../../util/types';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/geo/regionCityPicker.styles';
+import type { PickerFieldsProps } from '../../../utils/types';
 
 export function PickerFields({
   selectedRegion, cityText, loadingRegions, regionExpanded, cityExpanded,

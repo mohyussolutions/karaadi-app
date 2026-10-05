@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
 import { getReviewsByUser } from '../../../actions/core/reviews.actions';
-import { placeholderAvatar } from '../../../constants';
-import type { SellerCardProps } from '../../../util/types';
-import type { IconName } from '../../../util/icons/icons';
-import { createStyles } from '../../../util/styles/detail/sellerCard.styles';
+import { placeholderAvatar } from '../../../actions/constants';
+import type { IconName, Review, SellerCardProps } from '../../../utils/types';
+import { createStyles } from '../../../utils/styles/detail/sellerCard.styles';
 import RemoteImage from '../../shared/RemoteImage/RemoteImage';
 import VerifiedBadge from '../../shared/VerifiedBadge/VerifiedBadge';
 import { StarRating } from './StarRating';
@@ -30,7 +29,7 @@ const SellerCard = React.memo(function SellerCard({
     getReviewsByUser(userId)
       .then((list) => {
         if (list.length === 0) return;
-        const avg = list.reduce((sum: number, r: { rating?: number }) => sum + (r.rating || 0), 0) / list.length;
+        const avg = list.reduce((sum: number, r: Review) => sum + (r.rating || 0), 0) / list.length;
         setRating(avg);
         setReviewCount(list.length);
       })

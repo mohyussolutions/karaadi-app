@@ -1,13 +1,12 @@
 import { useCallback } from "react";
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
-import { FlashList, type ListRenderItemInfo } from "@shopify/flash-list";
+import { FlashList } from "@shopify/flash-list";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
-import { useAppTranslation } from "../../../hooks/useAppTranslation";
-import { AppIcon } from "../../shared";
-import type { NestedSubCategory } from "../../../constants";
-import type { SidebarNestedProps } from "../../../util/types";
-import { createStyles } from "../../../util/styles/browse/subcategoryBrowse.styles";
+import { useThemeColors, useThemedStyles } from "../../../hooks/app/useTheme";
+import { useAppTranslation } from "../../../hooks/app/useAppTranslation";
+import { ThemedIcon } from "../../shared";
+import type { NestedSubCategoryRenderInfo, SidebarNestedProps } from "../../../utils/types";
+import { createStyles } from "../../../utils/styles/browse/subcategoryBrowse.styles";
 import { NestedItem } from "./NestedItem";
 
 export function SidebarNested({ items, selectedKey, counts, onPress, subLabel, subIcon, onPost, onFilterPress, hasLocationFilter }: SidebarNestedProps) {
@@ -16,7 +15,7 @@ export function SidebarNested({ items, selectedKey, counts, onPress, subLabel, s
   const styles = useThemedStyles(createStyles);
 
   const renderItem = useCallback(
-    ({ item }: ListRenderItemInfo<NestedSubCategory>) => (
+    ({ item }: NestedSubCategoryRenderInfo) => (
       <NestedItem item={item} active={selectedKey === item.key} count={counts[item.key] ?? 0} onPress={onPress} />
     ),
     [selectedKey, counts, onPress],
@@ -25,7 +24,7 @@ export function SidebarNested({ items, selectedKey, counts, onPress, subLabel, s
   const header = (
     <View>
       <View style={styles.sidebarHeader}>
-        <AppIcon name={subIcon} size={18} color={Colors.primary} />
+        <ThemedIcon name={subIcon} size={18} color={Colors.primary} />
         <Text style={styles.sidebarTitle} numberOfLines={2}>{subLabel}</Text>
         <Pressable
           style={[styles.filterIconBtn, hasLocationFilter && styles.filterIconBtnActive]}

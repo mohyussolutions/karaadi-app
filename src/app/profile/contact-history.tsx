@@ -3,15 +3,16 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput, ActivityIndicator 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useAppTranslation } from '../../hooks/useAppTranslation';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { useAuthStore } from '../../store/hooks/authStore';
+import { useAppTranslation } from '../../hooks/app/useAppTranslation';
+import { useThemeColors, useThemedStyles } from '../../hooks/app/useTheme';
+import { useAuthStore } from '../../store/hooks/useAuthStore';
 import { getTicketHistory, getTicketDetails, addTicketMessage } from '../../actions/core/support.actions';
 import { EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
-import { createStyles } from '../../util/styles/profile/contactHistory.styles';
-import type { Ticket } from '../../util/types';
-import { ROUTES, STATUS_COLOR_KEY } from '../../constants';
+import { createStyles } from '../../utils/styles/profile/contactHistory.styles';
+import type { Ticket } from '../../utils/types';
+import { INPUT_LIMITS, ROUTES, STATUS_COLOR_KEY } from '../../actions/constants';
+import { bgColor } from '../../utils/styles/common/dynamic.styles';
 
 export default function ContactHistoryScreen() {
   const { t } = useAppTranslation();
@@ -89,7 +90,7 @@ export default function ContactHistoryScreen() {
         <View style={styles.center}>
           <EmptyState icon="lock-outline" title={t('ticketHistory.loginRequired')} />
           <TouchableOpacity onPress={() => router.push(ROUTES.login)}>
-            <Text style={{ textAlign: 'center', color: Colors.primary, fontWeight: '700', marginTop: 12 }}>
+            <Text style={styles.loginLink}>
               {t('auth.login.loginButton')}
             </Text>
           </TouchableOpacity>
@@ -123,7 +124,7 @@ export default function ContactHistoryScreen() {
                         {ticket.subject}
                       </Text>
                     </View>
-                    <View style={[styles.statusBadge, { backgroundColor: Colors[colorKey] }]}>
+                    <View style={[styles.statusBadge, bgColor(Colors[colorKey])]}>
                       <Text style={styles.statusBadgeText}>{statusLabel(ticket.status)}</Text>
                     </View>
                   </View>
@@ -180,6 +181,7 @@ export default function ContactHistoryScreen() {
                         placeholder={t('ticketHistory.typeMessage')}
                         placeholderTextColor={Colors.textMuted}
                         value={expandedId === ticket.id ? replyText : ''}
+                        maxLength={INPUT_LIMITS.longText}
                         onChangeText={setReplyText}
                         onSubmitEditing={() => handleSendMessage(ticket.id)}
                       />

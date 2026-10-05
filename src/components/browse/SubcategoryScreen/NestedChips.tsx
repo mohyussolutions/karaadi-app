@@ -1,16 +1,15 @@
 import { useCallback } from "react";
 import { View } from "react-native";
-import { FlashList, type ListRenderItemInfo } from "@shopify/flash-list";
-import { useThemedStyles } from "../../../hooks/useTheme";
-import type { NestedSubCategory } from "../../../constants";
-import type { NestedChipsProps } from "../../../util/types";
-import { createStyles } from "../../../util/styles/browse/subcategoryBrowse.styles";
+import { FlashList } from "@shopify/flash-list";
+import { useThemedStyles } from "../../../hooks/app/useTheme";
+import type { NestedChipsProps, NestedSubCategoryRenderInfo } from "../../../utils/types";
+import { createStyles } from "../../../utils/styles/browse/subcategoryBrowse.styles";
 import { ChipItem } from "./ChipItem";
 
 export function NestedChips({ items, selectedKey, onPress }: NestedChipsProps) {
   const styles = useThemedStyles(createStyles);
   const renderItem = useCallback(
-    ({ item }: ListRenderItemInfo<NestedSubCategory>) => (
+    ({ item }: NestedSubCategoryRenderInfo) => (
       <ChipItem item={item} active={selectedKey === item.key} onPress={onPress} />
     ),
     [selectedKey, onPress],

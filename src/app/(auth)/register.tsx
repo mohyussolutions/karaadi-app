@@ -6,11 +6,11 @@ import {
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useRegister } from '../../hooks/useRegister';
-import { useResponsive } from '../../hooks/useResponsive';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../util/styles/auth/register.styles';
-import { SITE_URL } from '../../constants';
+import { useRegister } from '../../hooks/auth/useAuth';
+import { useResponsive } from '../../hooks/app/useResponsive';
+import { useThemeColors, useThemedStyles } from '../../hooks/app/useTheme';
+import { createStyles } from '../../utils/styles/auth/register.styles';
+import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH, SITE_URL, USERNAME_MAX_LENGTH, ROUTES } from '../../actions/constants';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -65,6 +65,8 @@ export default function RegisterScreen() {
               placeholder={t('auth.register.usernamePlaceholder')}
               placeholderTextColor={Colors.placeholder}
               autoComplete="username"
+              maxLength={USERNAME_MAX_LENGTH}
+              autoCorrect={false}
               autoCapitalize="none"
             />
           </View>
@@ -78,6 +80,9 @@ export default function RegisterScreen() {
               placeholder={t('auth.register.emailPlaceholder')}
               placeholderTextColor={Colors.placeholder}
               keyboardType="email-address"
+              maxLength={EMAIL_MAX_LENGTH}
+              autoCorrect={false}
+              textContentType="emailAddress"
               autoCapitalize="none"
               autoComplete="email"
             />
@@ -93,6 +98,16 @@ export default function RegisterScreen() {
                 placeholder={t('auth.register.createPasswordPlaceholder')}
                 placeholderTextColor={Colors.placeholder}
                 secureTextEntry={!showPassword}
+
+                maxLength={PASSWORD_MAX_LENGTH}
+
+                autoCorrect={false}
+
+                autoCapitalize="none"
+
+                autoComplete="new-password"
+
+                textContentType="newPassword"
               />
               <TouchableOpacity style={styles.eyeBtn} onPress={() => setShowPassword((v) => !v)}>
                 <MaterialCommunityIcons
@@ -164,7 +179,7 @@ export default function RegisterScreen() {
 
           <View style={styles.loginRow}>
             <Text style={styles.loginText}>{t('auth.register.alreadyAccount')} </Text>
-            <TouchableOpacity onPress={() => router.replace('/(auth)/login')}>
+            <TouchableOpacity onPress={() => router.replace(ROUTES.login)}>
               <Text style={styles.loginLink}>{t('auth.register.signIn')}</Text>
             </TouchableOpacity>
           </View>

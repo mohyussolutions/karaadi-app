@@ -5,12 +5,12 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
-import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
-import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, getVehicleConfig, buildSpecItems, VEHICLE_REPORT_TYPES } from '../../../constants';
-import { VEHICLE_ENDPOINTS } from '../../../api/paths';
-import { useVehicleDetail } from '../../../hooks/useVehicleDetail';
+import { getImageUrl, formatPrice, formatDate } from '../../../lib/helpers';
+import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, getVehicleConfig, buildSpecItems, VEHICLE_REPORT_TYPES } from '../../../actions/constants';
+import { vehicleListPath } from '../../../actions/constants/paths';
+import { useVehicleDetail } from '../../../hooks/listings/useListingDetail';
 import ImageGallery from '../../../components/detail/ImageGallery/ImageGallery';
 import ZoomModal from '../../../components/modals/ZoomModal/ZoomModal';
 import SellerCard from '../../../components/cards/SellerCard/SellerCard';
@@ -21,12 +21,13 @@ import { SocialShareSheet } from '../../../components/features/social/components
 import DetailNotFound from '../../../components/detail/DetailNotFound/DetailNotFound';
 import DetailActionBar from '../../../components/detail/DetailActionBar/DetailActionBar';
 import SwipeDownToClose from '../../../components/modals/SwipeDownToClose/SwipeDownToClose';
-import { createStyles } from '../../../util/styles/listing/vehicleDetail.styles';
-import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplitLayout.styles';
-import { useResponsive } from '../../../hooks/useResponsive';
+import { createStyles } from '../../../utils/styles/listing/vehicleDetail.styles';
+import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../utils/styles/listing/tabletSplitLayout.styles';
+import { useResponsive } from '../../../hooks/app/useResponsive';
+import type { VehicleParams } from '../../../utils/types';
 
 export default function VehicleDetailScreen() {
-  const { id, category } = useLocalSearchParams<{ id: string; category: string }>();
+  const { id, category } = useLocalSearchParams<VehicleParams>();
   const router = useRouter();
   const { t } = useTranslation();
   const { isTablet, isTabletLandscape } = useResponsive();
@@ -119,7 +120,7 @@ export default function VehicleDetailScreen() {
       <ReportLink itemId={id} itemType={VEHICLE_REPORT_TYPES[category?.toLowerCase()] || 'CAR'} />
 
       <RecommendedSection
-        endpoint={VEHICLE_ENDPOINTS[category] || `/api/${category}`}
+        endpoint={vehicleListPath(category)}
         excludeId={id}
         categoryKey={category}
       />

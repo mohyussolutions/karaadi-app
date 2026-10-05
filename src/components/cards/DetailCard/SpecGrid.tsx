@@ -1,8 +1,9 @@
 import { View, Text } from 'react-native';
-import { useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../util/styles/detail/detailCard.styles';
+import { useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/detail/detailCard.styles';
+import type { SpecGridProps } from "../../../utils/types";
 
-export function SpecGrid({ title, items }: { title: string; items: { label: string; value: string }[] }) {
+export function SpecGrid({ title, items }: SpecGridProps) {
   const styles = useThemedStyles(createStyles);
 
   return (

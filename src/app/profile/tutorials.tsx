@@ -3,11 +3,12 @@ import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { VideoSource } from 'expo-video';
-import { useAppTranslation } from '../../hooks/useAppTranslation';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
+import { useAppTranslation } from '../../hooks/app/useAppTranslation';
+import { useThemeColors, useThemedStyles } from '../../hooks/app/useTheme';
 import VideoPopupModal from '../../components/modals/VideoPopupModal/VideoPopupModal';
-import { createStyles } from '../../util/styles/profile/tutorials.styles';
-import { TUTORIALS } from "../../constants";
+import { createStyles } from '../../utils/styles/profile/tutorials.styles';
+import { TUTORIALS } from "../../actions/constants";
+import { paddingBottomOf } from '../../utils/styles/common/dynamic.styles';
 
 export default function TutorialsScreen() {
   const { t } = useAppTranslation();
@@ -21,7 +22,7 @@ export default function TutorialsScreen() {
       <FlatList overScrollMode="never"
         data={TUTORIALS}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }]}
+        contentContainerStyle={[styles.content, paddingBottomOf(insets.bottom + 84)]}
         ListHeaderComponent={
           <View style={styles.header}>
             <Text style={styles.title}>{t('tutorials.title')}</Text>

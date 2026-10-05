@@ -91,7 +91,7 @@ const plan = {
   costSummary: "Koobarada Lacagta",
   expiresOn: "Listing wuu dhammaan doonaa",
   feePreview: "Qiimaha la filayo ka hor dooro qorshaha",
-  selected: "✓ La doortay",
+  selected: "La doortay",
   clickToSelect: "Guji si aad u doorato",
   days: "maalmo",
   currency: "USD",
@@ -126,6 +126,7 @@ const common = {
   updateNow: "Hadda Cusboonaysii",
   storeUpdateTitle: "Nooc Cusub Ayaa La Heli Karaa",
   storeUpdateMessage: "Nooc cusub oo Karaadi ah ayaa laga heli karaa bakhaarka. Fadlan cusboonaysii si aad u hesho astaamaha ugu dambeeyay.",
+  storeUpdateVersionMessage: "Karaadi {{version}} ayaa laga heli karaa bakhaarka. Fadlan cusboonaysii si aad u hesho astaamaha ugu dambeeyay.",
   close: "Xir",
 } as const;
 
@@ -214,7 +215,15 @@ const postAd = {
   paymentDeclined: "Lacag-bixinta waa la diiday. Fadlan isku day mar kale.",
   paymentTimedOut: "Xaqiijinta lacag-bixinta waqti ayay ka dhacday. Fadlan isku day mar kale.",
   paymentInitFailed: "Lacag-bixinta lama bilaabi karin. Fadlan isku day mar kale.",
+  paymentAmountChanged: "Qiimaha qorshaha wuu isbeddelay. Waxaan soo gelinnay qiimaha cusub — fadlan hubi wadarta oo mar kale taabo Bixi.",
   activationFailed: "Xayeysiiskaaga lama firfircoon karin. Fadlan isku day mar kale.",
+  summaryHeading: "Dib u eeg xayeysiiskaaga",
+  summarySub: "Hubi faahfaahinta iyo qiimaha ka hor intaadan bixin.",
+  detailsLabel: "Faahfaahin",
+  priceLabel: "Qiimaha",
+  planLine: "Qorshaha {{plan}} · {{days}} maalmood",
+  youPay: "Waxaad bixinaysaa",
+  payWithMethod: "Waxaa laga bixinayaa akoonkaaga lacagta mobile-ka",
   phoneNumberForMethod: "Lambarka Telefoonka {{method}}",
   enterPhoneForMethod: "Geli lambarka ku xiran akoonkaaga {{method}}",
   paymentRequestNote: "Waxaad ka heli doontaa codsi lacag-bixin app-kaaga {{method}} si aad u ansixiso.",
@@ -350,6 +359,8 @@ const auth = {
     tooManyAttempts: "Isku day badan. Fadlan sug 15 daqiiqo.",
     accountLocked: "Akaawntka waa xanniban yahay. Dib u dejiso furaha ama la xiriir taageerada.",
     failed: "Gelida way fashilantay. Hubi xogtaada.",
+    invalidEmail: "Geli email sax ah.",
+    enterPassword: "Geli furahaaga sirta ah.",
     noAccount: "Ma lihid akoon?",
     register: "Diiwaangeli",
   },
@@ -412,6 +423,7 @@ const auth = {
     resetButton: "Dib u Daji Furaha",
     resetting: "Waa la dejinayaa...",
     resendCode: "Dib u dir koodka",
+    resendIn: "Dib u dir koodka {{seconds}} ilbiriqsi kadib",
     resending: "Waa la dirayaa...",
     successMessage: "Furaha waa si guul leh dib loo dejiyey!",
     backToLogin: "Gal",
@@ -1436,6 +1448,7 @@ const mine = {
     history: "Taariikhda Lacag-bixinta",
     noPaymentsYet: "Weli wax lacag-bixin ah ma jiraan",
     noPaymentsDesc: "Taariikhda lacag-bixintaada halkan ayey ka soo muuqan doontaa ka dib markii aad sameyso iibsigaaga ugu horreeya.",
+    transactionsCount: "{{count}} lacag-bixin",
     status: {
       completed: "La Dhammeeyay",
       pending: "Sugaya",
@@ -1500,8 +1513,8 @@ const mine = {
       inactive: "INACTIVE",
       expired: "EXPIRED",
     },
-    paid: "✓ Paid",
-    unpaid: "⚠ Unpaid",
+    paid: "La bixiyay",
+    unpaid: "Lama bixin",
     category: "Qayb",
     region: "Gobol",
     cities: "Magaalooyinka",
@@ -1667,7 +1680,7 @@ const mine = {
     createFirst: "Abuur Xayeysiiskaaga Ugu Horeeya",
     itemPlaceholder: "sharaxaad",
     untitled: "Cinwaan la'aan",
-    sold: "La Iibiyey",
+    sold: "Waa La Gatay",
     active: "Firfircoon",
     pending: "Sugaya",
     expired: "Dhacay",
@@ -1680,7 +1693,7 @@ const mine = {
     expiresTomorrow: "Wuxuu dhacayaa berri",
     daysLeft: "{{count}} maalmood oo haray",
     relist: "Dib u Dalbo",
-    payToRelist: " Lacag Bixi Si Loo Soo Celiyo",
+    payToRelist: "Lacag bixi si loo soo celiyo",
     payNow: "Bixi Hadda",
     view: "Eeg",
     edit: "Tafatir",
@@ -1698,8 +1711,8 @@ const mine = {
     backToMyAds: "Ku Noqo Xayeysiisyadayda",
     viewAd: "Eeg Xayeysiiska",
     soldToggleTitle: "Xaaladda Iibka",
-    soldToggleOnDesc: "Waa la iibiyey — iibsadayaasha uma muuqdo.",
-    soldToggleOffDesc: "Firfircoon — waxaa arki kara iibsadayaasha.",
+    soldToggleOnDesc: "Iibsadayaasha waxay u arkaan in la gaday. Waxaa laga saarayaa liisaska 5 maalmood kadib.",
+    soldToggleOffDesc: "Waxaa arki kara iibsadayaasha.",
   },
 } as const;
 
@@ -2124,9 +2137,22 @@ const tutorials = {
   play: "Taabo si aad u daawato",
 } as const;
 
+const supportChat = {
+  title: "Caawimaad AI",
+  subtitle: "La sheekayso Hage iyo kooxda Karaadi. Jawaabaha halkan ayay ka muuqanayaan.",
+  intro: "U qor kooxda Karaadi. Badanaa waxaan ku jawaabnaa hal maalin gudaheed.",
+  placeholder: "U qor kooxda Karaadi…",
+  send: "Dir",
+  team: "Kooxda Karaadi",
+  assistant: "Hage (AI)",
+  loginPrompt: "Soo gal si aad ula sheekaysato taageerada Karaadi.",
+  error: "Taageerada lama gaari karin. Fadlan isku day mar kale.",
+  noLinks: "Linkiyada, website-yada iyo email-yada lama oggola. Fadlan dhibaatada ku qor erayo.",
+} as const;
+
 const aboutKaraadiPage = {
   title: "Ku Saabsan Karaadi",
-  subtitle: "Wax kasta oo aad u baahan tahay ku saabsan suuqa Karaadi",
+  subtitle: "Sida iibsiga, iibinta, lacag-bixinta iyo akoonkaagu uga shaqeeyaan Karaadi",
   open: "Taabo si aad u aragto",
   followUs: "Noo soo raac",
   rightsShort: "{{brand}}. Xuquuqda waa la ilaaliyaa.",
@@ -2187,7 +2213,7 @@ const realEstateDetail = {
   showPhone: "Tus lambarka telefoonka",
   reportItem: "Dacwad",
   shareOnFacebook: "Wadaag Facebook-ka",
-  waaLaGatay: "WAA LA GATAY",
+  waaLaGatay: "Waa La Gatay",
 } as const;
 
 const report = {
@@ -2266,6 +2292,16 @@ const hage = {
   langSo:      "SO",
 } as const;
 
+const tracking = {
+  consentTitle: "Naga caawi horumarinta Karaadi",
+  consentBody: "Ogolaanshahaaga, waxaan diiwaangelinaa shaashadaha aad furto iyo waxa aad ka raadiso app-ka si aan Karaadi uga dhigno mid ka wanaagsan. Weligeen ma kaydinno erayada sirta ah, xogta lacag bixinta ama waxa aad ku qorto foomamka.",
+  privacyLink: "Akhri siyaasadda sirta",
+  accept: "Oggolow",
+  decline: "Ha oggolaan",
+  settingTitle: "Falanqaynta isticmaalka",
+  settingBody: "La wadaag shaashadaha aad furto iyo waxa aad raadiso. Weligeen ma kaydinno erayada sirta ah, xogta lacag bixinta ama waxa foomamka lagu qoro.",
+} as const;
+
 const so = {
   error: "Khalad",
   success: "Guul",
@@ -2333,7 +2369,8 @@ const so = {
   seeAll: "Arag dhammaan",
   noListings: "Xayeysiis ma jiro",
   noResults: "Xayeysiis lama helin oo waafaqsan",
-  loadMore: "Arag Wax Dheeraad Ah",
+  loadMore: "Arag Dheeraad Ah",
+  loadingMore: "Waa la soo rarayaa...",
   priceOnRequest: "Qiimaha la weydiisto",
   negotiable: "Waxaa la wadahadlayaa",
   signInRequired: "Geli si aad u aragto",
@@ -2389,6 +2426,7 @@ const so = {
   homeScreen,
   tutorials,
   aboutKaraadiPage,
+  supportChat,
   recommendations,
   recommended,
   realEstateDetail,
@@ -2396,5 +2434,6 @@ const so = {
   vehicleDetail,
   report,
   hage,
+  tracking,
 } as const;
 export default so;

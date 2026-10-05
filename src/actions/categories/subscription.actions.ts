@@ -1,23 +1,22 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiClient } from '../client';
-import { SUBSCRIPTION_ENDPOINTS } from '../../api/endpoints';
+import { SUBSCRIPTION_ENDPOINTS } from '../constants/endpoints';
 import {
   SUBSCRIPTION_MATCH_LIMIT,
   ALERTS_LAST_CHECKED_KEY,
   ALERTS_SEEN_IDS_KEY,
   ALERTS_SEEN_IDS_MAX,
   ALERTS_MIN_CHECK_INTERVAL_MS,
-} from '../../constants';
+} from '../constants';
 import { storeRef } from '../../store/internal/storeRef';
-import { addNotification } from '../../components/features/notifications/store/notificationsSlice';
+import { addNotification } from '../../store/slices/notificationsSlice';
 import { searchCategory } from '../search/globalSearch';
 import { scheduleLocalNotification } from '../../components/features/notifications/services/notificationService';
-import type { Subscription, SubscriptionPayload, SubscriptionEnvelope } from '../../util/types';
-import type { RawItem } from '../../util/types/common.types';
+import type { Subscription, SubscriptionEnvelope, SubscriptionPayload, SubscriptionsResponse } from '../../utils/types';
 
 export async function fetchMySubscriptions(): Promise<Subscription[]> {
   try {
-    const { data } = await apiClient.get<{ subscriptions?: RawItem[]; data?: RawItem[] } | RawItem[]>(SUBSCRIPTION_ENDPOINTS.MY);
+    const { data } = await apiClient.get<SubscriptionsResponse>(SUBSCRIPTION_ENDPOINTS.MY);
     const list = (Array.isArray(data) ? data : data?.subscriptions ?? data?.data) ?? [];
     return (Array.isArray(list) ? list : []).map((item) => ({
       ...item,
@@ -144,7 +143,7 @@ export async function getSubscriptionById(id: string, signal?: AbortSignal): Pro
 
 export async function fetchAllPaidSubscriptions(signal?: AbortSignal): Promise<Subscription[]> {
   try {
-    const { data } = await apiClient.get<{ subscriptions?: RawItem[] } | RawItem[]>(SUBSCRIPTION_ENDPOINTS.ALL_PAID, { signal });
+    const { data } = await apiClient.get<SubscriptionsResponse>(SUBSCRIPTION_ENDPOINTS.ALL_PAID, { signal });
     const list = (Array.isArray(data) ? data : data?.subscriptions) ?? [];
     return list.map((item) => ({ ...item, id: item.id || item._id })) as Subscription[];
   } catch {

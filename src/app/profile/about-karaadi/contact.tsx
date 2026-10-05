@@ -3,13 +3,14 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput, Alert, ActivityInd
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useAppTranslation } from '../../../hooks/useAppTranslation';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { useAuthStore } from '../../../store/hooks/authStore';
+import { useAppTranslation } from '../../../hooks/app/useAppTranslation';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { useAuthStore } from '../../../store/hooks/useAuthStore';
 import { createTicket } from '../../../actions/core/support.actions';
-import { createDetailStyles } from '../../../util/styles/profile/aboutKaraadi.styles';
-import { maxLenSchema } from '../../../util/validation/schemas';
-import { ROUTES } from '../../../constants';
+import { createDetailStyles } from '../../../utils/styles/profile/aboutKaraadi.styles';
+import { maxLenSchema } from '../../../lib/validation/schemas';
+import { INPUT_LIMITS, ROUTES } from '../../../actions/constants';
+import { paddingBottomOf } from '../../../utils/styles/common/dynamic.styles';
 
 export default function ContactScreen() {
   const { t } = useAppTranslation();
@@ -62,7 +63,7 @@ export default function ContactScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
-      <ScrollView overScrollMode="never" contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }]}>
+      <ScrollView overScrollMode="never" contentContainerStyle={[styles.content, paddingBottomOf(insets.bottom + 84)]}>
         <View style={styles.headerRow}>
           <View style={styles.headerBody}>
             <Text style={styles.title}>{t('supportModule.title')}</Text>
@@ -94,6 +95,7 @@ export default function ContactScreen() {
               placeholder={t('supportModule.form.subjectPlaceholder')}
               placeholderTextColor={Colors.textMuted}
               value={subject}
+              maxLength={INPUT_LIMITS.shortText}
               onChangeText={setSubject}
             />
             <TextInput
@@ -101,6 +103,7 @@ export default function ContactScreen() {
               placeholder={t('supportModule.form.bodyPlaceholder')}
               placeholderTextColor={Colors.textMuted}
               value={message}
+              maxLength={INPUT_LIMITS.longText}
               onChangeText={setMessage}
               multiline
             />

@@ -1,12 +1,14 @@
-import { View, type DimensionValue } from 'react-native';
-import { useGlobal } from '../../../hooks/useGlobal';
+import { View } from 'react-native';
+import { useGlobal } from '../../../hooks/app/useResponsive';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../util/styles/loading/detailSkeleton.styles';
+import { useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/loading/detailSkeleton.styles';
+import type { BoneProps } from "../../../utils/types";
+import { fixedSize, radiusOf } from '../../../utils/styles/common/dynamic.styles';
 
-function Bone({ w, h, r = 8 }: { w: DimensionValue; h: number; r?: number }) {
-  const Colors = useThemeColors();
-  return <View style={{ width: w, height: h, borderRadius: r, backgroundColor: Colors.border }} />;
+function Bone({ w, h, r = 8 }: BoneProps) {
+  const styles = useThemedStyles(createStyles);
+  return <View style={[styles.bone, fixedSize(w, h), radiusOf(r)]} />;
 }
 
 export default function DetailSkeleton() {

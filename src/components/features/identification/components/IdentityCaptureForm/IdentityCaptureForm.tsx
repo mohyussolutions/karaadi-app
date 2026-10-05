@@ -5,12 +5,13 @@ import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../../../hooks/app/useTheme';
 import { CameraCapture } from '../../../../forms/CameraCapture/CameraCapture';
-import { compressToDataUri } from '../../util/compressImage';
-import { createStyles } from '../../../../../util/styles/profile/verifyIdentity.styles';
-import type { SlotKey, IdentityCaptureFormProps } from '../../../../../util/types';
+import { compressToDataUri } from '../../utils/compressImage';
+import { createStyles } from '../../../../../utils/styles/profile/verifyIdentity.styles';
+import type { IdentityCaptureFormProps, SlotKey, SlotPreview } from '../../../../../utils/types';
 import { Slot } from './Slot';
+import { paddingBottomOf } from '../../../../../utils/styles/common/dynamic.styles';
 
 function rawDataUri(base64: string, mime: string) {
   return `data:${mime};base64,${base64}`;
@@ -28,7 +29,7 @@ export function IdentityCaptureForm({
   const [selfieImage, setSelfieImage] = useState<string | null>(null);
   const [idCameraOpen, setIdCameraOpen] = useState(false);
   const [selfieCameraOpen, setSelfieCameraOpen] = useState(false);
-  const [preview, setPreview] = useState<{ slot: SlotKey; uri: string } | null>(null);
+  const [preview, setPreview] = useState<SlotPreview | null>(null);
   const [compressing, setCompressing] = useState<SlotKey | null>(null);
   const [submitError, setSubmitError] = useState(false);
 
@@ -157,9 +158,9 @@ export function IdentityCaptureForm({
       />
 
       <Modal visible={!!preview} animationType="fade" statusBarTranslucent onRequestClose={() => setPreview(null)}>
-        <View style={[s.previewRoot, { backgroundColor: Colors.black }]}>
+        <View style={s.previewRoot}>
           {preview && <Image source={{ uri: preview.uri }} style={s.previewImage} contentFit="contain" />}
-          <View style={[s.previewActions, { paddingBottom: insets.bottom + 16 }]}>
+          <View style={[s.previewActions, paddingBottomOf(insets.bottom + 16)]}>
             <TouchableOpacity style={s.previewBtnSecondary} onPress={retakePreview}>
               <MaterialCommunityIcons name="camera-retake-outline" size={18} color={Colors.white} />
               <Text style={s.previewBtnSecondaryText}>{t('mine.identification.retakePhoto')}</Text>

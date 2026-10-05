@@ -1,9 +1,9 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import type { RegionAccordionPanelProps } from '../../../util/types';
-import { createStyles } from '../../../util/styles/geo/regionCityPicker.styles';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import type { RegionAccordionPanelProps } from '../../../utils/types';
+import { createStyles } from '../../../utils/styles/geo/regionCityPicker.styles';
 import { RegionRow } from './RegionRow';
 
 export function RegionAccordionPanel({

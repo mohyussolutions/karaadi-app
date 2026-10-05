@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { View, Text } from 'react-native';
-import { useThemedStyles } from '../../../../../hooks/useTheme';
-import { createStyles } from '../../../../../util/styles/profile/chatScreen.styles';
-import type { MessageBubbleProps } from '../../../../../util/types';
+import { useThemedStyles } from '../../../../../hooks/app/useTheme';
+import { createStyles } from '../../../../../utils/styles/profile/chatScreen.styles';
+import type { MessageBubbleProps } from '../../../../../utils/types';
 
 export const MessageBubble = memo(function MessageBubble({ item, isMe }: MessageBubbleProps) {
   const styles = useThemedStyles(createStyles);

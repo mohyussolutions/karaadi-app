@@ -1,9 +1,9 @@
-import type { DetailNotFoundProps } from '../../../util/types';
+import type { DetailNotFoundProps } from '../../../utils/types';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../util/styles/detail/detailNotFound.styles';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/detail/detailNotFound.styles';
 
 export default function DetailNotFound({ icon = 'alert-circle-outline', message, onBack }: DetailNotFoundProps) {
   const { t } = useTranslation();

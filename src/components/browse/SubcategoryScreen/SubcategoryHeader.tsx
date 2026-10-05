@@ -1,10 +1,10 @@
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useThemeColors, useThemedStyles } from "../../../hooks/useTheme";
-import { useAppTranslation } from "../../../hooks/useAppTranslation";
-import { AppIcon } from "../../shared";
-import type { SubcategoryHeaderProps } from "../../../util/types";
-import { createStyles } from "../../../util/styles/browse/subcategoryBrowse.styles";
+import { useThemeColors, useThemedStyles } from "../../../hooks/app/useTheme";
+import { useAppTranslation } from "../../../hooks/app/useAppTranslation";
+import { ThemedIcon } from "../../shared";
+import type { SubcategoryHeaderProps } from "../../../utils/types";
+import { createStyles } from "../../../utils/styles/browse/subcategoryBrowse.styles";
 import { NestedChips } from "./NestedChips";
 
 export function SubcategoryHeader({
@@ -29,7 +29,7 @@ export function SubcategoryHeader({
   return (
     <View>
       <View style={styles.pageHeader}>
-        <AppIcon name={subIcon} size={16} color={Colors.primary} />
+        <ThemedIcon name={subIcon} size={16} color={Colors.primary} />
         <Text style={styles.pageTitle} numberOfLines={1}>{subLabel}</Text>
         <Text style={styles.pageBreadcrumb} numberOfLines={1}>{categoryLabel}</Text>
         <Pressable

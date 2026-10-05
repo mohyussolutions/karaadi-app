@@ -4,9 +4,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../util/styles/profile/savedSearches.styles';
-import { useSavedSearches } from '../../hooks/useSavedSearches';
+import { useThemeColors, useThemedStyles } from '../../hooks/app/useTheme';
+import { createStyles } from '../../utils/styles/profile/savedSearches.styles';
+import { useSavedSearches } from '../../hooks/listings/useSearch';
+import { fill, paddingBottomOf } from '../../utils/styles/common/dynamic.styles';
 
 export default function SavedSearchesScreen() {
   const { t } = useTranslation();
@@ -22,7 +23,7 @@ export default function SavedSearchesScreen() {
       <FlatList overScrollMode="never"
         data={searches}
         keyExtractor={(item) => item._id || item.id || ''}
-        contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 84 }, searches.length === 0 && { flex: 1 }]}
+        contentContainerStyle={[styles.list, paddingBottomOf(insets.bottom + 84), searches.length === 0 && fill]}
         ListEmptyComponent={
           <EmptyState
             icon="history"

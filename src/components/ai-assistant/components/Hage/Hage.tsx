@@ -1,31 +1,32 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Animated, useWindowDimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Animated, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
-import { toggleHage, closeHage, addUserMessage, sendHageMessage, clearHage } from '../../../../store/slices/hageSlice';
-import { useAuthStore } from '../../../../store/hooks/authStore';
-import { useAppTranslation } from '../../../../hooks/useAppTranslation';
-import { useThemeColors, useThemedStyles } from '../../../../hooks/useTheme';
-import { getListingDetailRoute, type ListingRoute } from '../../../../util/helpers/nav.routing';
-import { createStyles } from '../../../../util/styles/layout/hageAssistant.styles';
-import type { HageMessage, ListingRef } from '../../../../util/types/chat.types';
-import { SHEET_TOP, ROUTES, NATIVE_DRIVER } from '../../../../constants';
-import { useFabDrag } from '../../../../hooks/useFabDrag';
-import { useSheetDrag } from '../../../../hooks/useSheetDrag';
+import { addUserMessage, clearHage, closeHage, selectHage, sendHageMessage, toggleHage } from '../../../../store/slices/hageSlice';
+import { useAuthStore } from '../../../../store/hooks/useAuthStore';
+import { useAppTranslation } from '../../../../hooks/app/useAppTranslation';
+import { useThemeColors, useThemedStyles } from '../../../../hooks/app/useTheme';
+import { getListingDetailRoute } from '../../../../lib/helpers/listing/nav.routing';
+import { createStyles } from '../../../../utils/styles/layout/hageAssistant.styles';
+import type { HageMessageListRef, ListingRef, ListingRoute } from '../../../../utils/types';
+import { SHEET_TOP, ROUTES, NATIVE_DRIVER } from '../../../../actions/constants';
+import { useFabDrag } from '../../../../hooks/app/useDrag';
+import { useSheetDrag } from '../../../../hooks/app/useDrag';
 import { HageMessageList } from '../HageMessageList/HageMessageList';
 import { HageInputBar } from '../HageInputBar/HageInputBar';
+import { translateXY } from '../../../../utils/styles/common/dynamic.styles';
 
 export default function Hage() {
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { user } = useAuthStore();
-  const { open, messages, loading } = useAppSelector((s) => s.hage);
+  const { open, messages, loading } = useAppSelector(selectHage);
   const { t, lang } = useAppTranslation();
   const [input, setInput] = useState('');
-  const listRef = useRef<FlatList<HageMessage>>(null);
+  const listRef = useRef<HageMessageListRef>(null);
 
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
@@ -140,7 +141,7 @@ export default function Hage() {
       </Animated.View>
 
       <Animated.View
-        style={[styles.fabWrap, { transform: [{ translateX: fabPan.x }, { translateY: fabPan.y }] }]}
+        style={[styles.fabWrap, translateXY(fabPan.x, fabPan.y)]}
         {...fabResponder.panHandlers}
       >
         <TouchableOpacity

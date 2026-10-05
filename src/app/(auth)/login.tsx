@@ -7,11 +7,11 @@ import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useLogin } from '../../hooks/useLogin';
-import { useResponsive } from '../../hooks/useResponsive';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../util/styles/auth/login.styles';
-import { ROUTES } from '../../constants';
+import { useLogin } from '../../hooks/auth/useAuth';
+import { useResponsive } from '../../hooks/app/useResponsive';
+import { useThemeColors, useThemedStyles } from '../../hooks/app/useTheme';
+import { createStyles } from '../../utils/styles/auth/login.styles';
+import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH, ROUTES } from '../../actions/constants';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -53,6 +53,9 @@ export default function LoginScreen() {
               placeholder={t('auth.login.emailPlaceholder')}
               placeholderTextColor={Colors.placeholder}
               keyboardType="email-address"
+              maxLength={EMAIL_MAX_LENGTH}
+              autoCorrect={false}
+              textContentType="emailAddress"
               autoCapitalize="none"
               autoComplete="email"
               autoFocus
@@ -68,7 +71,14 @@ export default function LoginScreen() {
                 placeholder={t('auth.login.passwordPlaceholder')}
                 placeholderTextColor={Colors.placeholder}
                 secureTextEntry={!showPassword}
+
+                maxLength={PASSWORD_MAX_LENGTH}
+
+                autoCorrect={false}
+
+                autoCapitalize="none"
                 autoComplete="password"
+                textContentType="password"
               />
               <TouchableOpacity style={styles.eyeBtn} onPress={() => setShowPassword((v) => !v)}>
                 <MaterialCommunityIcons
@@ -104,7 +114,7 @@ export default function LoginScreen() {
 
           <View style={styles.registerRow}>
             <Text style={styles.registerText}>{t('auth.login.noAccount')} </Text>
-            <TouchableOpacity onPress={() => router.replace('/(auth)/register')}>
+            <TouchableOpacity onPress={() => router.replace(ROUTES.register)}>
               <Text style={styles.registerLink}>{t('auth.login.register')}</Text>
             </TouchableOpacity>
           </View>

@@ -12,17 +12,19 @@ import { LoadingSpinner } from "../../components/loading";
 import RemoteImage from "../../components/shared/RemoteImage/RemoteImage";
 import BottomTabBar from "../../navigation/tab-bar/BottomTabBar";
 import { useTranslation } from "react-i18next";
-import { useThemeColors, useThemedStyles } from "../../hooks/useTheme";
-import { SOCIAL_LINK_BUILDERS, placeholderAvatar } from "../../constants";
-import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL, BUSINESS_CATEGORY_KEY_REVERSE } from "../../util/types";
-import { useBusinessDetail } from "../../hooks/useBusinessDetail";
-import { SOCIAL_ICONS, type SocialIcons } from "../../util/icons/icons";
-import { createStyles } from "../../util/styles/business/businessDetail.styles";
-import { createTabletPortraitStyles } from "../../util/styles/listing/tabletSplitLayout.styles";
-import { useResponsive } from "../../hooks/useResponsive";
+import { useThemeColors, useThemedStyles } from "../../hooks/app/useTheme";
+import { SOCIAL_LINK_BUILDERS, placeholderAvatar } from "../../actions/constants";
+import { BUSINESS_TYPE_ICON, BUSINESS_TYPE_LABEL, BUSINESS_CATEGORY_KEY_REVERSE } from "../../actions/constants";
+import { useBusinessDetail } from "../../hooks/business/useBusiness";
+import { SOCIAL_ICONS } from "../../utils/icons";
+import { createStyles } from "../../utils/styles/business/businessDetail.styles";
+import { createTabletPortraitStyles } from "../../utils/styles/listing/tabletSplitLayout.styles";
+import { useResponsive } from "../../hooks/app/useResponsive";
+import { paddingBottomOf } from '../../utils/styles/common/dynamic.styles';
+import type { IdParams, SocialIcons, StringMap } from '../../utils/types';
 
 export default function BusinessDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id } = useLocalSearchParams<IdParams>();
   const router = useRouter();
   const { business, loading } = useBusinessDetail(id);
   const { t } = useTranslation();
@@ -35,7 +37,7 @@ export default function BusinessDetailScreen() {
   const ALLOWED_URL_SCHEMES = ['http://', 'https://', 'tel:', 'mailto:'];
 
   function openLink(type: string, value: string) {
-    const map: Record<string, string> = {
+    const map: StringMap = {
       phone: `tel:${value}`,
       whatsapp: SOCIAL_LINK_BUILDERS.whatsapp(value),
       facebook: SOCIAL_LINK_BUILDERS.facebook(value),
@@ -82,7 +84,7 @@ export default function BusinessDetailScreen() {
       <SafeAreaView style={s.flexFull} edges={[]}>
       <ScrollView overScrollMode="never"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={[isTablet ? tabletPortrait.scrollContent : null, { paddingBottom: insets.bottom + 84 }]}
+        contentContainerStyle={[isTablet ? tabletPortrait.scrollContent : null, paddingBottomOf(insets.bottom + 84)]}
       >
       <View style={isTablet ? tabletPortrait.inner : undefined}>
         <View style={s.hero}>

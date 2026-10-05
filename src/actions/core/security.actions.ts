@@ -1,14 +1,14 @@
 import { apiClient } from '../client';
-import { SECURITY_ENDPOINTS } from '../../api/endpoints';
-import type { Session, LoginEntry } from '../../util/types/user.types';
+import { SECURITY_ENDPOINTS } from '../constants/endpoints';
+import type { LoginEntry, LoginHistoryResponse, Session, SessionsResponse } from '../../utils/types';
 
 export async function getSessions(): Promise<Session[]> {
-  const { data } = await apiClient.post<Session[] | { sessions?: Session[] }>(SECURITY_ENDPOINTS.SESSIONS);
+  const { data } = await apiClient.post<SessionsResponse>(SECURITY_ENDPOINTS.SESSIONS);
   return Array.isArray(data) ? data : data?.sessions || [];
 }
 
 export async function getLoginHistory(): Promise<LoginEntry[]> {
-  const { data } = await apiClient.get<LoginEntry[] | { history?: LoginEntry[] }>(SECURITY_ENDPOINTS.LOGIN_HISTORY);
+  const { data } = await apiClient.get<LoginHistoryResponse>(SECURITY_ENDPOINTS.LOGIN_HISTORY);
   return Array.isArray(data) ? data : data?.history || [];
 }
 

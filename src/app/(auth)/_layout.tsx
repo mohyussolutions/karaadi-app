@@ -2,17 +2,19 @@ import { useEffect } from "react";
 import { Platform } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import { useAppSelector } from "../../store/store";
-import { useThemeColors } from "../../hooks/useTheme";
+import { useThemeColors } from "../../hooks/app/useTheme";
 
+import { ROUTES } from '../../actions/constants';
+import { selectAuthLoading, selectUser } from '../../store/slices/authSlice';
 export default function AuthLayout() {
   const router = useRouter();
-  const user = useAppSelector((s) => s.auth.user);
-  const loading = useAppSelector((s) => s.auth.loading);
+  const user = useAppSelector(selectUser);
+  const loading = useAppSelector(selectAuthLoading);
   const Colors = useThemeColors();
 
   useEffect(() => {
     if (!loading && user) {
-      router.replace("/(tabs)/home");
+      router.replace(ROUTES.home);
     }
   }, [user, loading]);
 

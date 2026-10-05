@@ -1,5 +1,5 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { BrowseSearchState } from '../../util/types/redux.types';
+import { createSlice } from '@reduxjs/toolkit';
+import type { BrowseSearchState, SetBrowseQueryAction } from '../../utils/types';
 
 const initialState: BrowseSearchState = {
   query: '',
@@ -8,8 +8,11 @@ const initialState: BrowseSearchState = {
 const browseSearchSlice = createSlice({
   name: 'browseSearch',
   initialState,
+  selectors: {
+    selectBrowseQuery: (state) => state.query,
+  },
   reducers: {
-    setBrowseQuery(state, action: PayloadAction<string>) {
+    setBrowseQuery(state, action: SetBrowseQueryAction) {
       state.query = action.payload;
     },
     clearBrowseQuery(state) {
@@ -19,4 +22,5 @@ const browseSearchSlice = createSlice({
 });
 
 export const { setBrowseQuery, clearBrowseQuery } = browseSearchSlice.actions;
+export const { selectBrowseQuery } = browseSearchSlice.selectors;
 export default browseSearchSlice.reducer;

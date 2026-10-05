@@ -1,12 +1,13 @@
 import { View, Text, FlatList, TouchableOpacity, Linking } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { useRouter, type Href } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useAppTranslation } from '../../../hooks/useAppTranslation';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../util/styles/profile/aboutKaraadi.styles';
-import { SOCIAL_LINKS, SOCIAL_BRAND_COLORS, PAGES } from '../../../constants';
-import { SOCIAL_ICONS } from '../../../util/icons/icons';
+import { useAppTranslation } from '../../../hooks/app/useAppTranslation';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/profile/aboutKaraadi.styles';
+import { SOCIAL_LINKS, PAGES } from '../../../actions/constants';
+import { SOCIAL_ICONS } from '../../../utils/icons';
+import { paddingBottomOf, tint } from '../../../utils/styles/common/dynamic.styles';
 
 export default function AboutKaraadiScreen() {
   const { t } = useAppTranslation();
@@ -20,7 +21,7 @@ export default function AboutKaraadiScreen() {
       <FlatList overScrollMode="never"
         data={PAGES}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }]}
+        contentContainerStyle={[styles.content, paddingBottomOf(insets.bottom + 84)]}
         ListHeaderComponent={
           <View style={styles.header}>
             <Text style={styles.title}>{t('aboutKaraadiPage.title')}</Text>
@@ -30,7 +31,7 @@ export default function AboutKaraadiScreen() {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.card}
-            onPress={() => router.push(item.route as any)}
+            onPress={() => router.push(item.route as Href)}
             activeOpacity={0.85}
           >
             <View style={styles.iconBg}>
@@ -48,20 +49,20 @@ export default function AboutKaraadiScreen() {
             <Text style={styles.followUsLabel}>{t('aboutKaraadiPage.followUs')}</Text>
             <View style={styles.socialRow}>
               <TouchableOpacity
-                style={[styles.socialIconBg, { backgroundColor: SOCIAL_BRAND_COLORS.facebook.bg }]}
+                style={[styles.socialIconBg, tint(Colors.brandFacebook)]}
                 onPress={() => Linking.openURL(SOCIAL_LINKS.FACEBOOK)}
                 activeOpacity={0.8}
                 accessibilityLabel="Facebook"
               >
-                <MaterialCommunityIcons name={SOCIAL_ICONS.facebook} size={22} color={SOCIAL_BRAND_COLORS.facebook.color} />
+                <MaterialCommunityIcons name={SOCIAL_ICONS.facebook} size={22} color={Colors.brandFacebook} />
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.socialIconBg, { backgroundColor: SOCIAL_BRAND_COLORS.tiktok.bg }]}
+                style={[styles.socialIconBg, tint(Colors.brandTiktok)]}
                 onPress={() => Linking.openURL(SOCIAL_LINKS.TIKTOK)}
                 activeOpacity={0.8}
                 accessibilityLabel="TikTok"
               >
-                <MaterialCommunityIcons name={SOCIAL_ICONS.tiktok} size={22} color={SOCIAL_BRAND_COLORS.tiktok.color} />
+                <MaterialCommunityIcons name={SOCIAL_ICONS.tiktok} size={22} color={Colors.brandTiktok} />
               </TouchableOpacity>
             </View>
 

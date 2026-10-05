@@ -1,15 +1,16 @@
-import { Platform, View } from 'react-native';
+import { View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming,
 } from 'react-native-reanimated';
-import { useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../util/styles/detail/swipeDownToClose.styles';
-import type { SwipeDownToCloseProps } from '../../../util/types';
-import { useHideGlobalChrome } from '../../../navigation/headerVisibility';
-import { SCREEN_HEIGHT, DISMISS_DISTANCE, DISMISS_VELOCITY } from "../../../constants";
+import { useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/detail/swipeDownToClose.styles';
+import type { SwipeDownToCloseProps } from '../../../utils/types';
+import { useHideGlobalChrome } from '../../../navigation/header/headerVisibility';
+import { SCREEN_HEIGHT, DISMISS_DISTANCE, DISMISS_VELOCITY } from "../../../actions/constants";
+import { paddingTopOf, topOf } from '../../../utils/styles/common/dynamic.styles';
 
 export default function SwipeDownToClose({ children }: SwipeDownToCloseProps) {
   const router = useRouter();
@@ -42,15 +43,11 @@ export default function SwipeDownToClose({ children }: SwipeDownToCloseProps) {
     transform: [{ translateY: translateY.value }],
   }));
 
-  if (Platform.OS !== 'android') {
-    return <>{children}</>;
-  }
-
   return (
-    <Animated.View style={[s.flex, animatedStyle]}>
+    <Animated.View style={[s.flex, paddingTopOf(insets.top), animatedStyle]}>
       {children}
       <GestureDetector gesture={pan}>
-        <View style={[s.handleBar, { top: insets.top }]}>
+        <View style={[s.handleBar, topOf(insets.top)]}>
           <View style={s.handle} />
         </View>
       </GestureDetector>

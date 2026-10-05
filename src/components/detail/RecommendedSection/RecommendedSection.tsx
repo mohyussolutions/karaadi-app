@@ -3,14 +3,14 @@ import {
   View, Text,
 } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { useGlobal } from '../../../hooks/useGlobal';
+import { useGlobal } from '../../../hooks/app/useResponsive';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { getRecommendedByEndpoint } from '../../../actions/categories/feed.actions';
-import { prefetchImages, getListingDetailRoute } from '../../../util/helpers';
-import { useThemedStyles } from '../../../hooks/useTheme';
-import type { ListingBase, RecommendedSectionProps } from '../../../util/types';
-import { createStyles } from '../../../util/styles/detail/recommendedSection.styles';
+import { prefetchImages, getListingDetailRoute } from '../../../lib/helpers';
+import { useThemedStyles } from '../../../hooks/app/useTheme';
+import type { ListingBase, ListingRenderInfo, RecommendedSectionProps } from '../../../utils/types';
+import { createStyles } from '../../../utils/styles/detail/recommendedSection.styles';
 import { RecommendedItem } from './RecommendedItem';
 
 function RecommendedSection({ endpoint, excludeId, title, categoryKey }: RecommendedSectionProps) {
@@ -39,7 +39,7 @@ function RecommendedSection({ endpoint, excludeId, title, categoryKey }: Recomme
   }, [router, categoryKey]);
 
   const priceOnRequestLabel = t('priceOnRequest');
-  const renderItem = useCallback(({ item }: { item: ListingBase }) => (
+  const renderItem = useCallback(({ item }: ListingRenderInfo) => (
     <RecommendedItem item={item} styles={styles} onPress={handlePress} priceOnRequestLabel={priceOnRequestLabel} />
   ), [styles, handlePress, priceOnRequestLabel]);
 

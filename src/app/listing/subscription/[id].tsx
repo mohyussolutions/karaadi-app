@@ -3,26 +3,27 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
-import { SUBSCRIPTION_ENDPOINTS } from '../../../api/endpoints';
-import { formatPrice, formatDate } from '../../../util/helpers';
-import { useSubscriptionDetail } from '../../../hooks/useSubscriptionDetail';
+import { SUBSCRIPTION_ENDPOINTS } from '../../../actions/constants/endpoints';
+import { formatPrice, formatDate } from '../../../lib/helpers';
+import { useSubscriptionDetail } from '../../../hooks/listings/useListingDetail';
 import SellerCard from '../../../components/cards/SellerCard/SellerCard';
 import ReportLink from '../../../components/detail/ReportLink/ReportLink';
-import { styles as reportLinkStyles } from '../../../util/styles/detail/reportLink.styles';
+import { createStyles as createReportLinkStyles } from '../../../utils/styles/detail/reportLink.styles';
 import RecommendedSection from '../../../components/detail/RecommendedSection/RecommendedSection';
 import { SocialShareSheet } from '../../../components/features/social/components';
 import DetailNotFound from '../../../components/detail/DetailNotFound/DetailNotFound';
 import DetailActionBar from '../../../components/detail/DetailActionBar/DetailActionBar';
 import SwipeDownToClose from '../../../components/modals/SwipeDownToClose/SwipeDownToClose';
-import { createStyles } from '../../../util/styles/listing/subscriptionDetail.styles';
-import { createTabletSplitNarrowStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplitLayout.styles';
-import { useResponsive } from '../../../hooks/useResponsive';
-import { getCategoryByKey, SUB_I18N_GROUP } from '../../../constants';
+import { createStyles } from '../../../utils/styles/listing/subscriptionDetail.styles';
+import { createTabletSplitNarrowStyles, createTabletPortraitStyles } from '../../../utils/styles/listing/tabletSplitLayout.styles';
+import { useResponsive } from '../../../hooks/app/useResponsive';
+import { getCategoryContext } from '../../../lib/helpers/category/listingCategory.selectors';
+import type { IdParams, InfoRow } from '../../../utils/types';
 
 export default function SubscriptionDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id } = useLocalSearchParams<IdParams>();
   const router = useRouter();
   const { t } = useTranslation();
   const { isTablet, isTabletLandscape } = useResponsive();
@@ -36,6 +37,7 @@ export default function SubscriptionDetailScreen() {
 
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const reportLinkStyles = useThemedStyles(createReportLinkStyles);
   const tabletSplitNarrow = useThemedStyles(createTabletSplitNarrowStyles);
   const tabletPortrait = useThemedStyles(createTabletPortraitStyles);
 
@@ -48,12 +50,10 @@ export default function SubscriptionDetailScreen() {
 
   const isActive = item.isActive ?? (item.status === 'active');
 
-  const categoryDef = item.category ? getCategoryByKey(item.category) : undefined;
+  const { category: categoryDef, subCategory: subCategoryDef, i18nGroup } = getCategoryContext(item.category, item.subCategory);
   const categoryLabel = item.category
     ? t(`categories.${item.category}`, { defaultValue: categoryDef?.name ?? item.category })
     : null;
-  const i18nGroup = item.category ? (SUB_I18N_GROUP[item.category] ?? item.category.toLowerCase()) : '';
-  const subCategoryDef = categoryDef?.subCategories.find((s) => s.key === item.subCategory);
   const subCategoryLabel = item.subCategory
     ? t(`subcategories.${i18nGroup}.${item.subCategory}`, { defaultValue: subCategoryDef?.name ?? item.subCategory })
     : null;
@@ -64,7 +64,7 @@ export default function SubscriptionDetailScreen() {
     : item.priceMin ? `${t('subscriptionDetail.priceFrom')} ${formatPrice(item.priceMin)}`
     : t('priceOnRequest');
 
-  const infoRows: { icon: string; label: string; value: string }[] = [
+  const infoRows: InfoRow[] = [
     categoryLabel       && { icon: 'tag-outline',          label: t('subscriptionDetail.category'),    value: categoryLabel },
     subCategoryLabel    && { icon: 'tag-multiple-outline', label: t('subscriptionDetail.subCategory'), value: subCategoryLabel },
     item.condition     && { icon: 'check-circle-outline', label: t('subscriptionDetail.condition'),   value: item.condition },
@@ -73,7 +73,7 @@ export default function SubscriptionDetailScreen() {
     item.createdAt     && { icon: 'calendar-plus',        label: t('subscriptionDetail.posted'),      value: formatDate(item.createdAt) },
     item.notificationCount != null && item.notificationCount > 0
       && { icon: 'bell-ring-outline', label: t('subscriptionDetail.matches'), value: String(item.notificationCount) },
-  ].filter(Boolean) as { icon: string; label: string; value: string }[];
+  ].filter(Boolean) as InfoRow[];
 
   const heroPanel = (
     <View style={styles.hero}>
@@ -154,12 +154,12 @@ export default function SubscriptionDetailScreen() {
       <ReportLink itemId={id} itemType="SUBSCRIPTION" />
       <View style={reportLinkStyles.wrapper}>
         <TouchableOpacity
-          style={[reportLinkStyles.btn, { borderColor: Colors.primary + '40', backgroundColor: Colors.primary + '0D' }]}
+          style={[reportLinkStyles.btn, reportLinkStyles.btnPrimary]}
           onPress={handleShare}
           activeOpacity={0.75}
         >
           <MaterialCommunityIcons name="share-variant-outline" size={18} color={Colors.primary} />
-          <Text style={[reportLinkStyles.label, { color: Colors.primary }]}>
+          <Text style={[reportLinkStyles.label, reportLinkStyles.labelPrimary]}>
             {t('subscriptionDetail.share', { defaultValue: 'Share' })}
           </Text>
           <MaterialCommunityIcons name="chevron-right" size={18} color={Colors.primary + '80'} />

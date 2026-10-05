@@ -2,20 +2,15 @@ import { memo } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import RemoteImage from '../../../../shared/RemoteImage/RemoteImage';
-import { useThemedStyles } from '../../../../../hooks/useTheme';
-import { placeholderAvatar } from '../../../../../constants';
-import { createStyles } from '../../../../../util/styles/tabs/messagesTab.styles';
-import type { GroupedChat } from '../../../../../util/types';
+import { useThemedStyles } from '../../../../../hooks/app/useTheme';
+import { CHAT_AVATAR_PLACEHOLDER } from '../../../../../actions/constants';
+import { createStyles } from '../../../../../utils/styles/tabs/messagesTab.styles';
+import type { ConvoItemProps } from "../../../../../utils/types";
 
-const AVATAR = placeholderAvatar(48, '9ca3af', '?');
 
 export const ConvoItem = memo(function ConvoItem({
   item, currentUserId, onPress,
-}: {
-  item: GroupedChat;
-  currentUserId: string;
-  onPress: (item: GroupedChat) => void;
-}) {
+}: ConvoItemProps) {
   const { t } = useTranslation();
   const styles = useThemedStyles(createStyles);
   const other = item.senderId === currentUserId ? item.receiver : item.sender;
@@ -32,7 +27,7 @@ export const ConvoItem = memo(function ConvoItem({
       onPress={() => onPress(item)}
     >
       <RemoteImage
-        source={{ uri: other?.profileImage || AVATAR }}
+        source={{ uri: other?.profileImage || CHAT_AVATAR_PLACEHOLDER }}
         style={styles.avatar}
         contentFit="cover"
         recyclingKey={String(item.id)}

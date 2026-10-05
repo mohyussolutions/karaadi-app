@@ -1,8 +1,8 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../util/styles/detail/detailActionBar.styles';
-import type { DetailActionBarProps } from '../../../util/types';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/detail/detailActionBar.styles';
+import type { DetailActionBarProps } from '../../../utils/types';
 
 export default function DetailActionBar({
   onMessage,

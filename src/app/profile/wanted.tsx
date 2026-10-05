@@ -6,16 +6,17 @@ import { useRouter } from 'expo-router';
 import { EmptyState } from '../../components/shared';
 import { LoadingSpinner } from '../../components/loading';
 import ListingCard from '../../components/cards/ListingCard/ListingCard';
-import { WantedAlertForm } from '../../management/create/new-ad/components/WantedAlertForm/WantedAlertForm';
-import { useAuthStore } from '../../store/hooks/authStore';
-import { useAppTranslation } from '../../hooks/useAppTranslation';
-import { useGlobal } from '../../hooks/useGlobal';
-import { useSubscriptionRows } from '../../hooks/useSubscriptionRows';
+import { WantedAlertForm } from '../../components/management/create/new-ad/components/WantedAlertForm/WantedAlertForm';
+import { useAuthStore } from '../../store/hooks/useAuthStore';
+import { useAppTranslation } from '../../hooks/app/useAppTranslation';
+import { useGlobal } from '../../hooks/app/useResponsive';
+import { useSubscriptionRows } from '../../hooks/business/usePayments';
 import { fetchMySubscriptions, deleteSubscription } from '../../actions/categories/subscription.actions';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles, createSheetInlineStyles } from '../../util/styles/profile/wantedAlerts.styles';
-import type { Subscription } from '../../util/types';
-import { ROUTES } from '../../constants';
+import { useThemeColors, useThemedStyles } from '../../hooks/app/useTheme';
+import { createStyles, createSheetInlineStyles } from '../../utils/styles/profile/wantedAlerts.styles';
+import type { Subscription, SubscriptionRow, SubscriptionRowRenderInfo } from '../../utils/types';
+import { ROUTES } from '../../actions/constants';
+import { fixedWidth, paddingBottomOf } from '../../utils/styles/common/dynamic.styles';
 
 export default function WantedScreen() {
   const { t } = useAppTranslation();
@@ -62,10 +63,10 @@ export default function WantedScreen() {
 
   const rows = useSubscriptionRows(subs);
 
-  const keyExtractor = useCallback((row: (typeof rows)[number]) => row.sub.id, []);
+  const keyExtractor = useCallback((row: SubscriptionRow) => row.sub.id, []);
 
-  const renderItem = useCallback(({ item }: { item: (typeof rows)[number] }) => (
-    <View style={{ width: CARD_WIDTH }}>
+  const renderItem = useCallback(({ item }: SubscriptionRowRenderInfo) => (
+    <View style={fixedWidth(CARD_WIDTH)}>
       <ListingCard
         item={item.listingItem}
         priceLabel={item.priceLabel}
@@ -107,7 +108,7 @@ export default function WantedScreen() {
         keyExtractor={keyExtractor}
         numColumns={2}
         columnWrapperStyle={styles.row}
-        contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 84 }, subs.length === 0 && styles.flexFull]}
+        contentContainerStyle={[styles.list, paddingBottomOf(insets.bottom + 84), subs.length === 0 && styles.flexFull]}
         ListEmptyComponent={
           <EmptyState
             icon="bell-alert-outline"

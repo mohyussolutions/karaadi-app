@@ -5,12 +5,12 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
-import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, JOBS_CONFIG, buildSpecItems } from '../../../constants';
-import { JOBS_ENDPOINTS } from '../../../api/endpoints';
-import { getImageUrl, formatDate } from '../../../util/helpers';
-import { useJobDetail, formatSalary } from '../../../hooks/useJobDetail';
+import { DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, JOBS_CONFIG, buildSpecItems } from '../../../actions/constants';
+import { JOBS_ENDPOINTS } from '../../../actions/constants/endpoints';
+import { getImageUrl, formatDate } from '../../../lib/helpers';
+import { useJobDetail, formatSalary } from '../../../hooks/listings/useListingDetail';
 import ImageGallery from '../../../components/detail/ImageGallery/ImageGallery';
 import ZoomModal from '../../../components/modals/ZoomModal/ZoomModal';
 import { SpecGrid } from '../../../components/cards/DetailCard/DetailCard';
@@ -21,12 +21,13 @@ import { SocialShareSheet } from '../../../components/features/social/components
 import DetailNotFound from '../../../components/detail/DetailNotFound/DetailNotFound';
 import DetailActionBar from '../../../components/detail/DetailActionBar/DetailActionBar';
 import SwipeDownToClose from '../../../components/modals/SwipeDownToClose/SwipeDownToClose';
-import { createStyles } from '../../../util/styles/listing/jobDetail.styles';
-import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplitLayout.styles';
-import { useResponsive } from '../../../hooks/useResponsive';
+import { createStyles } from '../../../utils/styles/listing/jobDetail.styles';
+import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../utils/styles/listing/tabletSplitLayout.styles';
+import { useResponsive } from '../../../hooks/app/useResponsive';
+import type { IdParams } from '../../../utils/types';
 
 export default function JobDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id } = useLocalSearchParams<IdParams>();
   const router = useRouter();
   const { t } = useTranslation();
   const { isTablet, isTabletLandscape } = useResponsive();

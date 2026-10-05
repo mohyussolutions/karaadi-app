@@ -1,15 +1,13 @@
 import { useRef, useCallback, useState } from 'react';
-import type { ImageGalleryProps } from '../../../util/types';
-import {
-  View, ScrollView, Pressable, Text, Platform, Modal, TouchableOpacity,
-  NativeSyntheticEvent, NativeScrollEvent,
-} from 'react-native';
+import type { ImageGalleryProps, ScrollEvent } from '../../../utils/types';
+import { View, ScrollView, Pressable, Text, Platform, Modal, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useGlobal } from '../../../hooks/useGlobal';
+import { useGlobal } from '../../../hooks/app/useResponsive';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles, createSheetStyles } from '../../../util/styles/detail/imageGallery.styles';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles, createSheetStyles } from '../../../utils/styles/detail/imageGallery.styles';
 import RemoteImage from '../../shared/RemoteImage/RemoteImage';
+import { bgColor, fixedSize, topOf } from '../../../utils/styles/common/dynamic.styles';
 
 export default function ImageGallery({
   images, activeIndex, onActiveChange, onImagePress,
@@ -31,7 +29,7 @@ export default function ImageGallery({
     scrollRef.current?.scrollTo({ x: next * width, animated: true });
   }
 
-  const onScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
+  const onScroll = useCallback((e: ScrollEvent) => {
     const i = Math.round(e.nativeEvent.contentOffset.x / width);
     if (i !== activeIndex) onActiveChange(i);
   }, [activeIndex, onActiveChange]);
@@ -57,7 +55,7 @@ export default function ImageGallery({
             key={i}
             onPress={onImagePress}
             disabled={!onImagePress}
-            style={{ width, height: imgH }}
+            style={fixedSize(width, imgH)}
           >
             <RemoteImage
               source={{ uri: img }}
@@ -68,7 +66,7 @@ export default function ImageGallery({
         ))}
       </ScrollView>
 
-      <View style={[styles.topLeft, { top: insets.top + 12 }]}>
+      <View style={[styles.topLeft, topOf(insets.top + 12)]}>
         {onImagePress && (
           <Pressable style={styles.actionBtn} onPress={onImagePress} hitSlop={8}>
             <MaterialCommunityIcons name="magnify-plus-outline" size={20} color={Colors.white} />
@@ -80,14 +78,14 @@ export default function ImageGallery({
           </View>
         )}
         {badge && !isSold && (
-          <View style={[styles.badge, { backgroundColor: badge.color }]}>
+          <View style={[styles.badge, bgColor(badge.color)]}>
             <Text style={styles.badgeText}>{badge.label}</Text>
           </View>
         )}
       </View>
 
       {(onFavorite || onShare) && (
-        <View style={[styles.rightActions, { top: insets.top + 12 }]}>
+        <View style={[styles.rightActions, topOf(insets.top + 12)]}>
           {onFavorite && (
             <Pressable
               style={styles.actionBtn}

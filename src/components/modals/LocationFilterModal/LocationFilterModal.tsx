@@ -1,31 +1,22 @@
 import { memo, useCallback } from "react";
-import {
-  View, Text, TextInput, Pressable, TouchableOpacity,
-  FlatList, Modal, KeyboardAvoidingView,
-} from "react-native";
+import { View, Text, TextInput, Pressable, TouchableOpacity, FlatList, Modal, KeyboardAvoidingView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useThemeColors, useThemedStyles, type ColorPalette } from "../../../hooks/useTheme";
-import { useResponsive } from "../../../hooks/useResponsive";
-import { useAppTranslation } from "../../../hooks/useAppTranslation";
-import { useLocationFilterRows } from "../../../hooks/useLocationFilterRows";
-import type { LocationFilterModalProps, FilterRow } from "../../../util/types";
-import { tabletModalStyles } from "../../../util/styles/shared/tablet.styles";
-import { createStyles } from "../../../util/styles/browse/subcategoryBrowse.styles";
+import { useThemeColors, useThemedStyles } from "../../../hooks/app/useTheme";
+import { useResponsive } from "../../../hooks/app/useResponsive";
+import { useAppTranslation } from "../../../hooks/app/useAppTranslation";
+import { useLocationFilterRows } from "../../../hooks/listings/useSearch";
+import type { FilterModalFooterProps, FilterModalHeaderProps, FilterRowItemProps, FilterRowRenderInfo, FilterSearchBoxProps, LocationFilterModalProps } from "../../../utils/types";
+import { tabletModalStyles } from "../../../utils/styles/common/tablet.styles";
+import { createStyles } from "../../../utils/styles/browse/subcategoryBrowse.styles";
 import { isCityRow } from "./LocationFilterModal.helpers";
-import { TABLET_MODAL_ICON_SIZES } from '../../../constants';
-import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../util/platform/common-for-ios-andriod';
-
-type FilterStyles = ReturnType<typeof createStyles>;
+import { INPUT_LIMITS, TABLET_MODAL_ICON_SIZES } from '../../../actions/constants';
+import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../lib/platform/platform';
+import { paddingBottomOf } from '../../../utils/styles/common/dynamic.styles';
 
 const FilterRowItem = memo(function FilterRowItem({
   item, active, onToggleRegion, onToggleCity,
-}: {
-  item: FilterRow;
-  active: boolean;
-  onToggleRegion: (name: string) => void;
-  onToggleCity: (name: string) => void;
-}) {
+}: FilterRowItemProps) {
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const { isTablet } = useResponsive();
@@ -60,13 +51,7 @@ const FilterRowItem = memo(function FilterRowItem({
 
 const FilterModalHeader = memo(function FilterModalHeader({
   title, onClose, isTablet, Colors, styles,
-}: {
-  title: string;
-  onClose: () => void;
-  isTablet: boolean;
-  Colors: ColorPalette;
-  styles: FilterStyles;
-}) {
+}: FilterModalHeaderProps) {
   return (
     <View style={styles.filterSheetHeader}>
       <Text style={[styles.filterSheetTitle, isTablet && tabletModalStyles.filterSheetTitle]}>{title}</Text>
@@ -79,20 +64,14 @@ const FilterModalHeader = memo(function FilterModalHeader({
 
 const FilterSearchBox = memo(function FilterSearchBox({
   search, onSearchChange, placeholder, isTablet, Colors, styles,
-}: {
-  search: string;
-  onSearchChange: (value: string) => void;
-  placeholder: string;
-  isTablet: boolean;
-  Colors: ColorPalette;
-  styles: FilterStyles;
-}) {
+}: FilterSearchBoxProps) {
   return (
     <View style={[styles.filterSearchBox, isTablet && tabletModalStyles.filterSearchBox]}>
       <MaterialCommunityIcons name="magnify" size={isTablet ? TABLET_MODAL_ICON_SIZES.filterSearch : 18} color={Colors.primary} />
       <TextInput
         style={[styles.filterSearchInput, isTablet && tabletModalStyles.filterSearchInput]}
         value={search}
+        maxLength={INPUT_LIMITS.search}
         onChangeText={onSearchChange}
         placeholder={placeholder}
         placeholderTextColor={Colors.placeholder}
@@ -109,17 +88,9 @@ const FilterSearchBox = memo(function FilterSearchBox({
 
 const FilterModalFooter = memo(function FilterModalFooter({
   totalSelected, onClear, onApply, insetBottom, isTablet, t, styles,
-}: {
-  totalSelected: number;
-  onClear: () => void;
-  onApply: () => void;
-  insetBottom: number;
-  isTablet: boolean;
-  t: (key: string) => string;
-  styles: FilterStyles;
-}) {
+}: FilterModalFooterProps) {
   return (
-    <View style={[styles.filterFooter, { paddingBottom: insetBottom + 12 }]}>
+    <View style={[styles.filterFooter, paddingBottomOf(insetBottom + 12)]}>
       <TouchableOpacity style={[styles.filterClearBtn, isTablet && tabletModalStyles.filterFooterBtn]} onPress={onClear} activeOpacity={0.8}>
         <Text style={[styles.filterClearText, isTablet && tabletModalStyles.filterClearText]}>{t("filters.location.clearAll")}</Text>
       </TouchableOpacity>
@@ -156,7 +127,7 @@ export function LocationFilterModal({
 
   const totalSelected = selectedRegions.length + selectedCities.length;
 
-  const renderRow = useCallback(({ item }: { item: FilterRow }) => {
+  const renderRow = useCallback(({ item }: FilterRowRenderInfo) => {
     const active = isCityRow(item) ? selectedCities.includes(item.name) : selectedRegions.includes(item.name);
     return (
       <FilterRowItem

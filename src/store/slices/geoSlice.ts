@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { clientGetAllRegions } from '../../actions/categories/geo.actions';
-import type { GeoState } from '../../util/types/redux.types';
+import type { GeoState } from '../../utils/types';
 
 const initialState: GeoState = {
   regions: [],
@@ -15,6 +15,9 @@ export const fetchGeoRegions = createAsyncThunk('geo/fetchRegions', async () => 
 const geoSlice = createSlice({
   name: 'geo',
   initialState,
+  selectors: {
+    selectGeo: (state) => state,
+  },
   reducers: {
     invalidateGeoCache(state) {
       state.fetchedAt = null;
@@ -37,4 +40,5 @@ const geoSlice = createSlice({
 });
 
 export const { invalidateGeoCache } = geoSlice.actions;
+export const { selectGeo } = geoSlice.selectors;
 export default geoSlice.reducer;

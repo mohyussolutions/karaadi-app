@@ -1,7 +1,7 @@
 import { apiClient } from '../client';
-import { NOTIFICATIONS_ENDPOINTS } from '../../api/endpoints';
-import type { Notification, ServerNotification } from '../../util/types/notification.types';
-import { NOTIFICATIONS_FETCH_LIMIT } from "../../constants";
+import { NOTIFICATIONS_ENDPOINTS } from '../constants/endpoints';
+import type { Notification, NotificationStatsResponse, NotificationsResponse, ServerNotification } from '../../utils/types';
+import { NOTIFICATIONS_FETCH_LIMIT } from "../constants";
 
 function normalizeNotification(raw: ServerNotification): Notification {
   return {
@@ -19,12 +19,12 @@ function normalizeNotification(raw: ServerNotification): Notification {
 }
 
 export async function getUnreadNotificationCount(userId: string): Promise<number> {
-  const { data } = await apiClient.get<{ stats?: { unread?: number } }>(NOTIFICATIONS_ENDPOINTS.STATS(userId));
+  const { data } = await apiClient.get<NotificationStatsResponse>(NOTIFICATIONS_ENDPOINTS.STATS(userId));
   return data?.stats?.unread ?? 0;
 }
 
 export async function getNotifications(userId: string, signal?: AbortSignal): Promise<Notification[]> {
-  const { data } = await apiClient.get<ServerNotification[] | { notifications?: ServerNotification[] }>(
+  const { data } = await apiClient.get<NotificationsResponse>(
     NOTIFICATIONS_ENDPOINTS.LIST(userId),
     { signal, params: { limit: NOTIFICATIONS_FETCH_LIMIT } },
   );

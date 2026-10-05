@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator, Linking } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { useAppTranslation } from '../../../hooks/useAppTranslation';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { useAppTranslation } from '../../../hooks/app/useAppTranslation';
 import { getSocialStatus, postSocialUpdate } from '../../../actions/core/social.actions';
-import { SOCIAL_BRAND_COLORS, SOCIAL_SHARE_URLS } from '../../../constants';
-import { SOCIAL_ICONS } from '../../../util/icons/icons';
-import type { SocialPostCardProps, PostOutcome } from '../../../util/types';
-import { createStyles } from '../../../util/styles/social/socialPostCard.styles';
+import { SOCIAL_SHARE_URLS } from '../../../actions/constants';
+import { SOCIAL_ICONS } from '../../../utils/icons';
+import type { OwnShareButtonProps, PostOutcome, SocialPostCardProps } from '../../../utils/types';
+import { createStyles } from '../../../utils/styles/social/socialPostCard.styles';
+import { bgColor } from '../../../utils/styles/common/dynamic.styles';
 
 export default function SocialPostCard({ title, description, price, images, listingUrl, listingId, isPremium90 }: SocialPostCardProps) {
   const { t } = useAppTranslation();
@@ -20,7 +21,7 @@ export default function SocialPostCard({ title, description, price, images, list
 
   useEffect(() => {
     getSocialStatus()
-      .then((d: { facebook: boolean }) => setAvail(!!d?.facebook))
+      .then((status) => setAvail(!!status?.facebook))
       .catch(() => {});
   }, []);
 
@@ -66,7 +67,7 @@ export default function SocialPostCard({ title, description, price, images, list
       {!isPremium90 ? (
         <>
           <View style={[s.platformRow, s.lockedRow]}>
-            <View style={[s.platformIconBadge, { backgroundColor: SOCIAL_BRAND_COLORS.facebook.color }]}>
+            <View style={[s.platformIconBadge, bgColor(Colors.brandFacebook)]}>
               <MaterialCommunityIcons name={SOCIAL_ICONS.facebook as never} size={18} color={Colors.white} />
             </View>
             <View style={s.platformInfo}>
@@ -104,12 +105,13 @@ export default function SocialPostCard({ title, description, price, images, list
   );
 }
 
-function OwnShareButton({ onPress }: { onPress: () => void }) {
+function OwnShareButton({ onPress }: OwnShareButtonProps) {
+  const Colors = useThemeColors();
   const { t } = useAppTranslation();
   const s = useThemedStyles(createStyles);
   return (
     <TouchableOpacity style={s.secondaryBtn} onPress={onPress} activeOpacity={0.88}>
-      <MaterialCommunityIcons name="share-variant" size={16} color={SOCIAL_BRAND_COLORS.facebook.color} style={s.confirmBtnIcon} />
+      <MaterialCommunityIcons name="share-variant" size={16} color={Colors.brandFacebook} style={s.confirmBtnIcon} />
       <Text style={s.secondaryBtnText}>{t('postAd.socialShareOwnFacebook')}</Text>
     </TouchableOpacity>
   );

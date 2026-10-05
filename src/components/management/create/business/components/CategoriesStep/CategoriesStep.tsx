@@ -1,0 +1,96 @@
+import { useState } from 'react';
+import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useThemeColors, useThemedStyles } from '../../../../../../hooks/app/useTheme';
+import { useAppTranslation } from '../../../../../../hooks/app/useAppTranslation';
+import { useBusinessCategoryOptions } from '../../../../../../hooks/business/useBusiness';
+import { updateBusiness } from '../../../../../../actions/core/business.actions';
+import { BUSINESS_CATEGORY_KEY_MAP } from '../../../../../../actions/constants';
+import type { BusinessCategoriesStepProps } from '../../../../../../utils/types';
+import { createStyles } from '../../../../../../utils/styles/business/businessCreate.styles';
+import { getApiErrorMessage } from '../../helpers/business.helpers';
+import { paddingBottomOf } from '../../../../../../utils/styles/common/dynamic.styles';
+
+export function CategoriesStep({
+  business,
+  onSaved,
+}: BusinessCategoriesStepProps) {
+  const Colors = useThemeColors();
+  const s = useThemedStyles(createStyles);
+  const { t } = useAppTranslation();
+  const insets = useSafeAreaInsets();
+
+  const OPTIONS = useBusinessCategoryOptions();
+
+  const [selected, setSelected] = useState<string[]>(() => {
+    const backendKeys: string[] = business.categories ?? [];
+    return OPTIONS
+      .filter((opt) => backendKeys.includes(BUSINESS_CATEGORY_KEY_MAP[opt.value]))
+      .map((opt) => opt.value);
+  });
+  const [saving, setSaving] = useState(false);
+
+  function toggle(key: string) {
+    setSelected((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]));
+  }
+
+  async function handleSave() {
+    if (selected.length === 0) return;
+    setSaving(true);
+    try {
+      const backendCategories = selected.map((k) => BUSINESS_CATEGORY_KEY_MAP[k]).filter(Boolean);
+      const id = business._id || business.id || '';
+      await updateBusiness(id, { categories: backendCategories });
+      onSaved({ ...business, categories: backendCategories });
+    } catch (err) {
+      Alert.alert(t('auth.common.error'), getApiErrorMessage(err) || t('mine.businesses.saveError'));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <ScrollView overScrollMode="never" contentContainerStyle={[s.scroll, paddingBottomOf(insets.bottom + 84)]} keyboardShouldPersistTaps="handled">
+      <Text style={s.heading}>{t('mine.businesses.selectCategoriesTitle')}</Text>
+      <Text style={s.statusMessage}>{t('mine.businesses.selectCategoriesDesc')}</Text>
+
+      <View style={s.categoryGrid}>
+        {OPTIONS.map((opt) => {
+          const active = selected.includes(opt.value);
+          return (
+            <TouchableOpacity
+              key={opt.value}
+              style={[s.categoryGridItem, active && s.categoryGridItemActive]}
+              onPress={() => toggle(opt.value)}
+              activeOpacity={0.85}
+            >
+              <View style={[s.categoryGridIconWrap, active && s.categoryGridIconWrapActive]}>
+                <MaterialCommunityIcons name={opt.icon} size={28} color={active ? Colors.white : Colors.primary} />
+              </View>
+              <Text style={s.categoryGridLabel}>{opt.label}</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+
+      <TouchableOpacity
+        style={[s.submitBtn, (selected.length === 0 || saving) && s.submitBtnDisabled]}
+        onPress={handleSave}
+        disabled={selected.length === 0 || saving}
+        activeOpacity={0.88}
+      >
+        {saving ? (
+          <ActivityIndicator size="small" color={Colors.white} />
+        ) : (
+          <>
+            <Text style={s.submitText}>{t('mine.businesses.saveAndContinue')}</Text>
+            <MaterialCommunityIcons name="arrow-right" size={18} color={Colors.white} />
+          </>
+        )}
+      </TouchableOpacity>
+
+      <View style={s.spacer40} />
+    </ScrollView>
+  );
+}

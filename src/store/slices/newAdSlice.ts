@@ -1,9 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
 import { fetchPlansFromAPI } from '../../actions/categories/plan.actions';
 import { createListing } from '../../actions/categories/listing.actions';
-import type { ListingType, Step, Plan, CreatedItemSummary, NewAdState } from '../../util/types/new-ad.types';
-import type { RootState } from '../../util/types/common.types';
+import type { ForceRefresh, NewAdState, PrefillForPaymentAction, RootState, SetBusinessIdAction, SetCategoryKeyAction, SetFeeInfoAction, SetListingTypeAction, SetSelectedPlanAction, SetStepAction, Step, SubmitListingArgs } from '../../utils/types';
+import { getApiErrorMessage } from '../../lib/helpers/api/api.format';
 
 const initialState: NewAdState = {
   step: 'type',
@@ -22,12 +21,12 @@ const initialState: NewAdState = {
   feeAmount: 0,
 };
 
-export const fetchPlans = createAsyncThunk('newAd/fetchPlans', () => fetchPlansFromAPI());
+export const fetchPlans = createAsyncThunk('newAd/fetchPlans', (force: ForceRefresh) => fetchPlansFromAPI(Boolean(force)));
 
 export const submitListing = createAsyncThunk(
   'newAd/submit',
   async (
-    { categoryKey, body, summary }: { categoryKey: string; body: Record<string, unknown>; summary?: CreatedItemSummary },
+    { categoryKey, body, summary }: SubmitListingArgs,
     { rejectWithValue, getState },
   ) => {
     try {
@@ -39,10 +38,7 @@ export const submitListing = createAsyncThunk(
         summary: summary ? { ...summary, images: images ?? summary.images } : null,
       };
     } catch (err) {
-      const data = err instanceof Error && 'response' in err
-        ? (err as { response?: { data?: { message?: string; error?: string } } }).response?.data
-        : undefined;
-      return rejectWithValue(data?.error || data?.message || 'Failed to create listing. Please try again.');
+      return rejectWithValue(getApiErrorMessage(err) || 'Failed to create listing. Please try again.');
     }
   },
 );
@@ -50,34 +46,45 @@ export const submitListing = createAsyncThunk(
 const newAdSlice = createSlice({
   name: 'newAd',
   initialState,
+  selectors: {
+    selectNewAdBusinessId: (state) => state.businessId,
+    selectNewAdCategoryKey: (state) => state.categoryKey,
+    selectNewAdCreatedId: (state) => state.createdId,
+    selectNewAdCreatedItem: (state) => state.createdItem,
+    selectNewAdCreatedTitle: (state) => state.createdTitle,
+    selectNewAdFeeAmount: (state) => state.feeAmount,
+    selectNewAdFeeId: (state) => state.feeId,
+    selectNewAdListingType: (state) => state.listingType,
+    selectNewAdPlans: (state) => state.plans,
+    selectNewAdPlansLoading: (state) => state.plansLoading,
+    selectNewAdSelectedPlan: (state) => state.selectedPlan,
+    selectNewAdStep: (state) => state.step,
+    selectNewAdSubmitError: (state) => state.submitError,
+    selectNewAdSubmitStatus: (state) => state.submitStatus,
+  },
   reducers: {
-    setStep(state, action: PayloadAction<Step>) {
+    setStep(state, action: SetStepAction) {
       state.step = action.payload;
     },
-    setListingType(state, action: PayloadAction<ListingType>) {
+    setListingType(state, action: SetListingTypeAction) {
       state.listingType = action.payload;
     },
-    setCategoryKey(state, action: PayloadAction<string>) {
+    setCategoryKey(state, action: SetCategoryKeyAction) {
       state.categoryKey = action.payload;
     },
-    setBusinessId(state, action: PayloadAction<string | null>) {
+    setBusinessId(state, action: SetBusinessIdAction) {
       state.businessId = action.payload;
     },
-    setSelectedPlan(state, action: PayloadAction<Plan | null>) {
+    setSelectedPlan(state, action: SetSelectedPlanAction) {
       state.selectedPlan = action.payload;
     },
-    setFeeInfo(state, action: PayloadAction<{ feeId: string; feeAmount: number }>) {
+    setFeeInfo(state, action: SetFeeInfoAction) {
       state.feeId = action.payload.feeId;
       state.feeAmount = action.payload.feeAmount;
     },
     prefillForPayment(
       _state,
-      action: PayloadAction<{
-        categoryKey: string;
-        createdId: string;
-        createdTitle: string;
-        createdItem: CreatedItemSummary;
-      }>,
+      action: PrefillForPaymentAction,
     ) {
       return {
         ...initialState,
@@ -99,6 +106,8 @@ const newAdSlice = createSlice({
       .addCase(fetchPlans.fulfilled, (state, action) => {
         state.plans = action.payload;
         state.plansLoading = false;
+        const selectedKey = state.selectedPlan?.key;
+        if (selectedKey) state.selectedPlan = action.payload.find((p) => p.key === selectedKey) ?? state.selectedPlan;
       })
       .addCase(fetchPlans.rejected, (state) => {
         state.plansLoading = false;
@@ -125,4 +134,5 @@ export const {
   prefillForPayment, resetNewAd,
 } = newAdSlice.actions;
 
+export const { selectNewAdBusinessId, selectNewAdCategoryKey, selectNewAdCreatedId, selectNewAdCreatedItem, selectNewAdCreatedTitle, selectNewAdFeeAmount, selectNewAdFeeId, selectNewAdListingType, selectNewAdPlans, selectNewAdPlansLoading, selectNewAdSelectedPlan, selectNewAdStep, selectNewAdSubmitError, selectNewAdSubmitStatus } = newAdSlice.selectors;
 export default newAdSlice.reducer;

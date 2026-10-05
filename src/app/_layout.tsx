@@ -1,141 +1,20 @@
-import { useEffect, useState } from "react";
-
-import { Appearance, Platform, View } from "react-native";
-
-import { Stack, usePathname } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { NavigationBar } from "expo-navigation-bar";
-import * as SystemUI from "expo-system-ui";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-import GlobalHeader from "../components/layout/GlobalHeader/GlobalHeader";
-import BottomTabBar from "../navigation/tab-bar/BottomTabBar";
-import { EulaModal } from "../components/modals/EulaModal/EulaModal";
-import ForceUpdateModal from "../components/modals/ForceUpdateModal/ForceUpdateModal";
-import StoreUpdateModal from "../components/modals/StoreUpdateModal/StoreUpdateModal";
-import { IdentityGate } from "../components/modals/IdentityGate/IdentityGate";
-import { useIdentityGate } from "../hooks/useIdentityGate";
-import { SaveToast } from "../components/shared";
-import Hage from "../components/ai-assistant/components/Hage/Hage";
-import NotificationBanner from "../components/features/notifications/components/NotificationBanner/NotificationBanner";
-import LanguageSync from "../i18n/LanguageSync";
-import { useAppInit } from "../hooks/useAppInit";
-import { useThemeColors, useThemeMode } from "../hooks/useTheme";
-import { useTabBarVisibility } from "../navigation/tab-bar/useTabBarVisibility";
-import { ROOT_STACK_SCREENS } from "../navigation/config/rootStackScreens";
-import { useMessageBanner } from "../hooks/useMessageBanner";
-import { useSocketMessages } from "../hooks/useSocketMessages";
-import { useSocketNotifications } from "../hooks/useSocketNotifications";
-import { useNotificationTap } from "../hooks/useNotificationTap";
-import { useIsOverlayActive } from "../navigation/headerVisibility";
-import { DEFAULT_HEADER_CONTENT_HEIGHT, AUTH_HEADER_CONTENT_HEIGHT } from "../constants";
+import { View } from 'react-native';
+import LanguageSync from '../i18n/LanguageSync';
+import RootStack from '../navigation/stack/RootStack';
+import { RootOverlays } from '../components/layout';
+import { useRootSetup } from '../hooks/app/useApp';
+import { useThemedStyles } from '../hooks/app/useTheme';
+import { createStyles } from '../utils/styles/layout/rootLayout.styles';
 
 export default function RootLayout() {
-  const [showEula, setShowEula] = useState(false);
-  const insets = useSafeAreaInsets();
-  const defaultHeaderPadding = insets.top + DEFAULT_HEADER_CONTENT_HEIGHT;
-  const authHeaderPadding = insets.top + AUTH_HEADER_CONTENT_HEIGHT;
-
-  useEffect(() => {
-    AsyncStorage.getItem("karaadi_eula_accepted_v1").then((val) => {
-      if (!val) setShowEula(true);
-    });
-  }, []);
-
-  useAppInit();
-  const { gateOpen, idCardRequired, selfieRequired, onVerified } = useIdentityGate();
-  const {
-    messageBanner,
-    bannerY,
-    showBanner,
-    dismissBanner,
-    handleBannerPress,
-  } = useMessageBanner();
-  useSocketMessages(showBanner);
-  useSocketNotifications();
-  useNotificationTap();
-
-  const { mode, resolved } = useThemeMode();
-  const Colors = useThemeColors();
-  const pathname = usePathname();
-  const overlayActive = useIsOverlayActive();
-  const showTabBar = useTabBarVisibility(pathname) && !overlayActive;
-
-  useEffect(() => {
-    if (Platform.OS !== "web") {
-      Appearance.setColorScheme(mode);
-    }
-  }, [mode]);
-
-  useEffect(() => {
-    SystemUI.setBackgroundColorAsync(Colors.background);
-    if (Platform.OS === "android") {
-      NavigationBar.setStyle(resolved === "dark" ? "light" : "dark");
-    }
-  }, [resolved, Colors.background]);
+  const styles = useThemedStyles(createStyles);
+  const banner = useRootSetup();
 
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.background }}>
+    <View style={styles.root}>
       <LanguageSync />
-      <StatusBar style={resolved === "dark" ? "light" : "dark"} />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          title: "",
-          contentStyle: { backgroundColor: Colors.background, paddingTop: defaultHeaderPadding },
-          animation: Platform.OS === "ios" ? "default" : "none",
-        }}
-      >
-        {ROOT_STACK_SCREENS.map(({ name, options, contentPadding }) => (
-          <Stack.Screen
-            key={name}
-            name={name}
-            options={
-              contentPadding
-                ? {
-                    ...options,
-                    contentStyle: {
-                      backgroundColor: Colors.background,
-                      paddingTop: contentPadding === "auth" ? authHeaderPadding : 0,
-                    },
-                  }
-                : options
-            }
-          />
-        ))}
-      </Stack>
-      <GlobalHeader />
-      {showTabBar && <BottomTabBar />}
-      {showTabBar && <Hage />}
-      <SaveToast />
-      <ForceUpdateModal />
-      <StoreUpdateModal />
-
-      <EulaModal
-        visible={showEula}
-        onAccept={() => {
-          AsyncStorage.setItem("karaadi_eula_accepted_v1", "1");
-          setShowEula(false);
-        }}
-      />
-
-      <IdentityGate
-        visible={gateOpen}
-        idCardRequired={idCardRequired}
-        selfieRequired={selfieRequired}
-        onVerified={onVerified}
-      />
-
-      {messageBanner && (
-        <NotificationBanner
-          banner={messageBanner}
-          translateY={bannerY}
-          onPress={handleBannerPress}
-          onDismiss={dismissBanner}
-        />
-      )}
+      <RootStack />
+      <RootOverlays banner={banner} />
     </View>
   );
 }

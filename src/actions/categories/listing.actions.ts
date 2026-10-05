@@ -1,10 +1,9 @@
 import { apiClient } from '../client';
-import { CATEGORY_ENDPOINTS } from '../../api/endpoints';
-import type { VehicleListing, CreateListingResponse } from '../../util/types/listing.types';
+import { categoryListPath } from '../constants/endpoints';
+import type { CreateListingResponse, UnknownMap, VehicleListing } from '../../utils/types';
 
-export async function createListing(categoryKey: string, body: Record<string, unknown>, businessId?: string | null) {
-  const endpoint = CATEGORY_ENDPOINTS[categoryKey] || '/api/marketplace';
-  const { data } = await apiClient.post<CreateListingResponse>(endpoint, businessId ? { ...body, businessId } : body);
+export async function createListing(categoryKey: string, body: UnknownMap, businessId?: string | null) {
+  const { data } = await apiClient.post<CreateListingResponse>(categoryListPath(categoryKey), businessId ? { ...body, businessId } : body);
   const images: string[] | undefined = Array.isArray(data?.images) && data.images.length ? data.images : undefined;
   return {
     id: data?._id || data?.id || data?.listing?._id || '',

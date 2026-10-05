@@ -1,7 +1,7 @@
-import type { LoadingSpinnerProps } from '../../../util/types';
+import type { LoadingSpinnerProps } from '../../../utils/types';
 import { ActivityIndicator, View } from 'react-native';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../util/styles/loading/loadingSpinner.styles';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/loading/loadingSpinner.styles';
 
 export default function LoadingSpinner({
   fullScreen = false,

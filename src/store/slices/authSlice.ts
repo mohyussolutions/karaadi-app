@@ -1,9 +1,12 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import * as SecureStore from '../../util/helpers/secureStorage';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import * as SecureStore from '../../lib/helpers/device/secureStorage';
 import { connectSocket, disconnectSocket } from '../../actions/sockets/socket.actions';
 import { login as apiLogin, logout as apiLogout, register as apiRegister, getProfile } from '../../actions/core/auth.actions';
-import type { User, LoginResponse } from '../../util/types/user.types';
-import type { AuthState } from '../../util/types/redux.types';
+import type { AuthState, LoginArgs, LoginResponse, RegisterPayload, SessionPayload, SetCredentialsAction, User } from '../../utils/types';
+import { AUTH_TOKEN_KEY, AUTH_USER_KEY } from '../../actions/constants/app.constants';
+import { clearCredentials } from '../actions/authActions';
+
+export { clearCredentials };
 
 const initialState: AuthState = {
   user: null,
@@ -13,7 +16,7 @@ const initialState: AuthState = {
 
 export const login = createAsyncThunk(
   'auth/login',
-  async ({ email, password }: { email: string; password: string }, { rejectWithValue }) => {
+  async ({ email, password }: LoginArgs, { rejectWithValue }) => {
     try {
       const response = await apiLogin(email, password) as LoginResponse;
       const user: User = {
@@ -24,8 +27,8 @@ export const login = createAsyncThunk(
         token: response.token,
       };
       const token = response.token;
-      await SecureStore.setItemAsync('karaadi_token', token);
-      await SecureStore.setItemAsync('karaadi_user', JSON.stringify(user));
+      await SecureStore.setItemAsync(AUTH_TOKEN_KEY, token);
+      await SecureStore.setItemAsync(AUTH_USER_KEY, JSON.stringify(user));
       if (user.id) connectSocket(user.id);
       return { user, token };
     } catch (err) {
@@ -36,7 +39,7 @@ export const login = createAsyncThunk(
 
 export const register = createAsyncThunk(
   'auth/register',
-  async (payload: { username: string; email: string; password: string; phone?: string }, { rejectWithValue }) => {
+  async (payload: RegisterPayload, { rejectWithValue }) => {
     try {
       return await apiRegister(payload);
     } catch (err) {
@@ -47,16 +50,33 @@ export const register = createAsyncThunk(
 
 export const logout = createAsyncThunk('auth/logout', async () => {
   await apiLogout();
-  await SecureStore.deleteItemAsync('karaadi_token');
-  await SecureStore.deleteItemAsync('karaadi_user');
+  await SecureStore.deleteItemAsync(AUTH_TOKEN_KEY);
+  await SecureStore.deleteItemAsync(AUTH_USER_KEY);
   disconnectSocket();
+});
+
+export const saveSession = createAsyncThunk(
+  'auth/saveSession',
+  async ({ user, token }: SessionPayload, { dispatch }) => {
+    await SecureStore.setItemAsync(AUTH_TOKEN_KEY, token);
+    await SecureStore.setItemAsync(AUTH_USER_KEY, JSON.stringify(user));
+    dispatch(setCredentials({ user, token }));
+    if (user.id) connectSocket(user.id);
+  },
+);
+
+export const clearSession = createAsyncThunk('auth/clearSession', async (_: void, { dispatch }) => {
+  await SecureStore.deleteItemAsync(AUTH_TOKEN_KEY);
+  await SecureStore.deleteItemAsync(AUTH_USER_KEY);
+  disconnectSocket();
+  dispatch(clearCredentials());
 });
 
 export const loadFromStorage = createAsyncThunk(
   'auth/loadFromStorage',
   async (_: void, { dispatch }) => {
-    const token = await SecureStore.getItemAsync('karaadi_token');
-    const userJson = await SecureStore.getItemAsync('karaadi_user');
+    const token = await SecureStore.getItemAsync(AUTH_TOKEN_KEY);
+    const userJson = await SecureStore.getItemAsync(AUTH_USER_KEY);
     if (!token || !userJson) return null;
 
     const user = JSON.parse(userJson) as User;
@@ -66,7 +86,7 @@ export const loadFromStorage = createAsyncThunk(
         if (fresh) {
           const updated = { ...user, ...fresh, token };
           dispatch(setCredentials({ user: updated, token }));
-          SecureStore.setItemAsync('karaadi_user', JSON.stringify(updated));
+          SecureStore.setItemAsync(AUTH_USER_KEY, JSON.stringify(updated));
         }
       })
       .catch(() => {});
@@ -78,19 +98,24 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setCredentials: (state, action: PayloadAction<{ user: User; token: string }>) => {
+    setCredentials: (state, action: SetCredentialsAction) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.loading = false;
     },
-    clearCredentials: (state) => {
-      state.user = null;
-      state.token = null;
-      state.loading = false;
-    },
+  },
+  selectors: {
+    selectUser: (state) => state.user,
+    selectAuthToken: (state) => state.token,
+    selectAuthLoading: (state) => state.loading,
   },
   extraReducers: (builder) => {
     builder
+      .addCase(clearCredentials, (state) => {
+        state.user = null;
+        state.token = null;
+        state.loading = false;
+      })
       .addCase(login.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.token = action.payload.token;
@@ -117,5 +142,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, clearCredentials } = authSlice.actions;
+export const { setCredentials } = authSlice.actions;
+export const { selectUser, selectAuthToken, selectAuthLoading } = authSlice.selectors;
 export default authSlice.reducer;

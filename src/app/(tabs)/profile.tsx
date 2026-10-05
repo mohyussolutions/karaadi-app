@@ -3,21 +3,22 @@ import {
   View, Text, ScrollView, TouchableOpacity,
 } from 'react-native';
 import { ConfirmModal } from '../../components/modals/ConfirmModal/ConfirmModal';
-import { useRouter } from 'expo-router';
+import { useRouter, type Href } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useAuthStore } from '../../store/hooks/authStore';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { useResponsive } from '../../hooks/useResponsive';
-import { getImageUrl } from '../../util/helpers';
+import { useAuthStore } from '../../store/hooks/useAuthStore';
+import { useThemeColors, useThemedStyles } from '../../hooks/app/useTheme';
+import { useResponsive } from '../../hooks/app/useResponsive';
+import { getImageUrl } from '../../lib/helpers';
 import RemoteImage from '../../components/shared/RemoteImage/RemoteImage';
-import { placeholderAvatar, ROUTES, PROFILE_MENU_ITEMS } from '../../constants';
-import type { MenuItem } from '../../util/types';
-import { createStyles } from '../../util/styles/tabs/profileTab.styles';
-const AVATAR = placeholderAvatar(80, '2563eb', 'Me');
+import { PROFILE_AVATAR, PROFILE_MENU_ITEMS, ROUTES } from '../../actions/constants';
+import { createStyles } from '../../utils/styles/tabs/profileTab.styles';
+import type { MenuCardProps } from "../../utils/types";
+import { paddingBottomOf } from '../../utils/styles/common/dynamic.styles';
 
-const MenuCard = memo(function MenuCard({ item, onPress }: { item: MenuItem; onPress: () => void }) {
+
+const MenuCard = memo(function MenuCard({ item, onPress }: MenuCardProps) {
   const { t } = useTranslation();
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
@@ -44,7 +45,7 @@ export default function ProfileScreen() {
   const handleLogout = useCallback(() => setShowLogoutModal(true), []);
   const confirmLogout = useCallback(async () => {
     await logout();
-    router.replace('/(auth)/login');
+    router.replace(ROUTES.login);
   }, [logout, router]);
 
   if (!user) {
@@ -68,10 +69,10 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={[]}>
-      <ScrollView overScrollMode="never" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
+      <ScrollView overScrollMode="never" showsVerticalScrollIndicator={false} contentContainerStyle={paddingBottomOf(120)}>
         <View style={isTablet && styles.tabletInner}>
         <View style={styles.profileCard}>
-          <RemoteImage source={{ uri: getImageUrl(user.profileImage) || AVATAR }} style={styles.avatar} />
+          <RemoteImage source={{ uri: getImageUrl(user.profileImage) || PROFILE_AVATAR }} style={styles.avatar} />
           <Text style={styles.username}>{user.username}</Text>
           <Text style={styles.email}>{user.email}</Text>
           {user.phone && <Text style={styles.phone}>{user.phone}</Text>}
@@ -79,7 +80,7 @@ export default function ProfileScreen() {
 
         <View style={styles.menuGrid}>
           {PROFILE_MENU_ITEMS.map((item) => (
-            <MenuCard key={item.route} item={item} onPress={() => router.push(item.route as any)} />
+            <MenuCard key={item.route} item={item} onPress={() => router.push(item.route as Href)} />
           ))}
         </View>
 

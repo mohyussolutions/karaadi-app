@@ -1,6 +1,6 @@
 import { apiClient } from '../client';
-import { SUPPORT_ENDPOINTS } from '../../api/endpoints';
-import type { Ticket, CreateTicketPayload, AddTicketMessagePayload } from '../../util/types';
+import { SUPPORT_ENDPOINTS } from '../constants/endpoints';
+import type { Ticket, CreateTicketPayload, AddTicketMessagePayload } from '../../utils/types';
 
 export async function createTicket(payload: CreateTicketPayload): Promise<Ticket> {
   const { data } = await apiClient.post<Ticket>(SUPPORT_ENDPOINTS.TICKETS, payload);

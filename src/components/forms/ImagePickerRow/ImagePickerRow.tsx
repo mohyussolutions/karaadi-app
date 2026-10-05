@@ -1,20 +1,15 @@
 import { useRef, useState } from 'react';
-import type { ImagePickerRowProps } from '../../../util/types';
+import type { ImagePickerRowProps, ImageSource } from '../../../utils/types';
 import { View, Image, TouchableOpacity, Text, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { useAppTranslation } from '../../../hooks/useAppTranslation';
-import { createStyles } from '../../../util/styles/newAd/imagePickerRow.styles';
-import { compressImageToDataUri } from '../../../util/helpers/imageCompression';
-import { IMAGE_MAX_COUNT, MIN_IMAGES_REQUIRED } from '../../../constants';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { useAppTranslation } from '../../../hooks/app/useAppTranslation';
+import { createStyles } from '../../../utils/styles/new-ad/imagePickerRow.styles';
+import { compressImageToDataUri } from '../../../lib/helpers/device/imageCompression';
+import { IMAGE_MAX_COUNT, MIN_IMAGES_REQUIRED } from '../../../actions/constants';
 import { CameraCapture } from '../CameraCapture/CameraCapture';
-
-interface ImageSource {
-  uri: string;
-  width?: number;
-  height?: number;
-}
+import { textColor } from '../../../utils/styles/common/dynamic.styles';
 
 export function ImagePickerRow({ images, onChange, error }: ImagePickerRowProps) {
   const Colors = useThemeColors();
@@ -68,7 +63,7 @@ export function ImagePickerRow({ images, onChange, error }: ImagePickerRowProps)
         <Text style={s.label}>
           {t('postAd.photosLabel')} <Text style={s.req}>*</Text>
         </Text>
-        <Text style={[s.counter, { color: countColor }]}>
+        <Text style={[s.counter, textColor(countColor)]}>
           {images.length} / {IMAGE_MAX_COUNT}
           {images.length < MIN_IMAGES_REQUIRED && (
             <Text style={s.minHint}>  {t('postAd.minPhotosHint', { min: MIN_IMAGES_REQUIRED })}</Text>

@@ -2,24 +2,19 @@ import { useEffect, useCallback } from "react";
 import { View, Alert, BackHandler } from "react-native";
 import { useRouter, useFocusEffect } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { useThemedStyles } from "../../hooks/useTheme";
-import { createStyles } from "../../util/styles/tabs/newAdTab.styles";
+import { useThemedStyles } from "../../hooks/app/useTheme";
+import { createStyles } from "../../utils/styles/tabs/newAdTab.styles";
 import { LoadingSpinner } from "../../components/loading";
-import { useAuthStore } from "../../store/hooks/authStore";
+import { useAuthStore } from "../../store/hooks/useAuthStore";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import {
-  setListingType,
-  setCategoryKey,
-  setSelectedPlan,
-  resetNewAd,
-  fetchPlans,
-} from "../../store/slices/newAdSlice";
-import { useNewAdStepNavigation } from "../../hooks/useNewAdStepNavigation";
-import { CheckoutBar } from "../../components/features/subscription/components/checklist";
-import { StepType, StepCategory, StepPlan, StepSummary, StepPayment, CATEGORY_FORMS } from "../../management/create/new-ad";
+import { fetchPlans, resetNewAd, selectNewAdBusinessId, selectNewAdCategoryKey, selectNewAdCreatedId, selectNewAdCreatedTitle, selectNewAdListingType, selectNewAdPlans, selectNewAdPlansLoading, selectNewAdSelectedPlan, selectNewAdStep, selectNewAdSubmitStatus, setCategoryKey, setListingType, setSelectedPlan } from "../../store/slices/newAdSlice";
+import { useNewAdStepNavigation } from "../../hooks/listings/useNewAd";
+import { useNewAdFlowTracking } from "../../hooks/listings/useNewAd";
+import { CheckoutBar } from "../../components/features/subscription/components/checkout";
+import { StepType, StepCategory, StepPlan, StepSummary, StepPayment, CATEGORY_FORMS } from "../../components/management/create/new-ad";
 
-import type { ListingType, StepItem } from "../../util/types/new-ad.types";
-import { MAIN_CATEGORIES, ROUTES, STEP_INDEX } from "../../constants";
+import type { ListingType, StepItem } from "../../utils/types";
+import { MAIN_CATEGORIES, ROUTES, STEP_INDEX } from "../../actions/constants";
 
 export default function NewAdScreen() {
   const router = useRouter();
@@ -29,19 +24,19 @@ export default function NewAdScreen() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.replace("/(auth)/login");
+      router.replace(ROUTES.login);
     }
   }, [authLoading, user]);
 
-  const step = useAppSelector((s) => s.newAd.step);
-  const listingType = useAppSelector((s) => s.newAd.listingType);
-  const categoryKey = useAppSelector((s) => s.newAd.categoryKey);
-  const businessId = useAppSelector((s) => s.newAd.businessId);
-  const plans = useAppSelector((s) => s.newAd.plans);
-  const plansLoading = useAppSelector((s) => s.newAd.plansLoading);
-  const selectedPlan = useAppSelector((s) => s.newAd.selectedPlan);
-  const createdId = useAppSelector((s) => s.newAd.createdId);
-  const createdTitle = useAppSelector((s) => s.newAd.createdTitle);
+  const step = useAppSelector(selectNewAdStep);
+  const listingType = useAppSelector(selectNewAdListingType);
+  const categoryKey = useAppSelector(selectNewAdCategoryKey);
+  const businessId = useAppSelector(selectNewAdBusinessId);
+  const plans = useAppSelector(selectNewAdPlans);
+  const plansLoading = useAppSelector(selectNewAdPlansLoading);
+  const selectedPlan = useAppSelector(selectNewAdSelectedPlan);
+  const createdId = useAppSelector(selectNewAdCreatedId);
+  const createdTitle = useAppSelector(selectNewAdCreatedTitle);
 
   useEffect(() => {
     if (step === "plan" && plans.length === 0) {
@@ -50,8 +45,9 @@ export default function NewAdScreen() {
   }, [step]);
 
   const goToStep = useNewAdStepNavigation();
+  useNewAdFlowTracking(step, categoryKey);
 
-  const submitStatus = useAppSelector((s) => s.newAd.submitStatus);
+  const submitStatus = useAppSelector(selectNewAdSubmitStatus);
   useFocusEffect(
     useCallback(() => {
       return () => {
@@ -145,7 +141,7 @@ export default function NewAdScreen() {
                 Alert.alert(
                   t("postAd.businessPostedTitle"),
                   t("postAd.businessPostedMessage"),
-                  [{ text: t("auth.common.ok"), onPress: () => router.replace("/profile/businesses") }],
+                  [{ text: t("auth.common.ok"), onPress: () => router.replace(ROUTES.profileBusinesses) }],
                 );
               } else {
                 goToStep("plan");

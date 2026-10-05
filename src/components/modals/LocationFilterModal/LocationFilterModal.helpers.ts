@@ -1,6 +1,6 @@
-import type { FilterRow } from '../../../util/types';
-import { FILTER_KIND_CITY } from '../../../constants';
+import type { CityFilterRow, FilterRow } from '../../../utils/types';
+import { FILTER_KIND_CITY } from '../../../actions/constants';
 
-export function isCityRow(item: FilterRow): item is Extract<FilterRow, { kind: typeof FILTER_KIND_CITY }> {
+export function isCityRow(item: FilterRow): item is CityFilterRow {
   return item.kind === FILTER_KIND_CITY;
 }

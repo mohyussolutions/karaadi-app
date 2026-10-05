@@ -1,9 +1,9 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../../../hooks/useTheme';
-import { createStyles } from '../../../../../util/styles/profile/chatScreen.styles';
-import type { ChatHeaderProps } from '../../../../../util/types';
+import { useThemeColors, useThemedStyles } from '../../../../../hooks/app/useTheme';
+import { createStyles } from '../../../../../utils/styles/profile/chatScreen.styles';
+import type { ChatHeaderProps } from '../../../../../utils/types';
 
 export function ChatHeader({ username, userId, onBack, onBlockPress }: ChatHeaderProps) {
   const { t } = useTranslation();
@@ -19,7 +19,7 @@ export function ChatHeader({ username, userId, onBack, onBlockPress }: ChatHeade
       <View style={styles.avatar}>
         <Text style={styles.avatarText}>{initial}</Text>
       </View>
-      <Text style={[styles.headerName, { flex: 1 }]} numberOfLines={1}>
+      <Text style={styles.headerName} numberOfLines={1}>
         {username || t('chats.chatFallback')}
       </Text>
       {!!userId && (

@@ -1,8 +1,7 @@
 import { apiClient } from '../client';
-import { REAL_ESTATE_ENDPOINTS } from '../../api/endpoints';
-import { isAbortError } from '../../util/helpers/api.format';
-import type { RawItem } from '../../util/types/common.types';
-import type { RealEstate } from '../../util/types/listing.types';
+import { REAL_ESTATE_ENDPOINTS } from '../constants/endpoints';
+import { isAbortError } from '../../lib/helpers/api/api.format';
+import type { RawItem, RealEstate } from '../../utils/types';
 
 function normItem<T>(item: RawItem): T {
   const id = String(item._id ?? item.id ?? '');

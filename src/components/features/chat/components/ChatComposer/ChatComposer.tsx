@@ -1,9 +1,9 @@
 import { View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../../../hooks/useTheme';
-import { createStyles } from '../../../../../util/styles/profile/chatScreen.styles';
-import type { ChatComposerProps } from '../../../../../util/types';
+import { useThemeColors, useThemedStyles } from '../../../../../hooks/app/useTheme';
+import { createStyles } from '../../../../../utils/styles/profile/chatScreen.styles';
+import type { ChatComposerProps } from '../../../../../utils/types';
 
 export function ChatComposer({ value, onChangeText, onSend, sending }: ChatComposerProps) {
   const { t } = useTranslation();

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   View, Text, TouchableOpacity, Modal,
   StyleSheet, Alert, Linking,
@@ -6,20 +6,21 @@ import {
 import {
   CameraView,
   useCameraPermissions,
+  type CameraMountError,
   type CameraViewRef,
 } from 'expo-camera';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useAppTranslation } from '../../../hooks/useAppTranslation';
-import { useThemeColors } from '../../../hooks/useTheme';
-import { COLORS } from '../../../util/colors/colors';
-import type { CameraCaptureProps } from '../../../util/types';
-import type { IconName } from '../../../util/icons/icons';
+import { useAppTranslation } from '../../../hooks/app/useAppTranslation';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/forms/cameraCapture.styles';
+import { paddingBottomOf, paddingTopOf } from '../../../utils/styles/common/dynamic.styles';
+import type { CameraCaptureProps, CameraFacing, CameraFlashMode, CameraRef, IconName } from '../../../utils/types';
 
 export function CameraCapture({ visible, onCapture, onClose, initialFacing = 'back' }: CameraCaptureProps) {
   const [permission, requestPermission] = useCameraPermissions();
-  const [facing, setFacing] = useState<'back' | 'front'>(initialFacing);
-  const [flash, setFlash] = useState<'off' | 'on' | 'auto'>('off');
+  const [facing, setFacing] = useState<CameraFacing>(initialFacing);
+  const [flash, setFlash] = useState<CameraFlashMode>('off');
   const [capturing, setCapturing] = useState(false);
   const [cameraReady, setCameraReady] = useState(false);
   const [mountError, setMountError] = useState<string | null>(null);
@@ -27,6 +28,7 @@ export function CameraCapture({ visible, onCapture, onClose, initialFacing = 'ba
   const insets = useSafeAreaInsets();
   const { t } = useAppTranslation();
   const Colors = useThemeColors();
+  const s = useThemedStyles(createStyles);
 
   useEffect(() => {
     if (!visible) return;
@@ -68,7 +70,7 @@ export function CameraCapture({ visible, onCapture, onClose, initialFacing = 'ba
     }
   }
 
-  function handleMountError(event: { message: string }) {
+  function handleMountError(event: CameraMountError) {
     console.warn('[CameraCapture] Camera failed to mount:', event.message);
     setMountError(
       event.message
@@ -98,16 +100,16 @@ export function CameraCapture({ visible, onCapture, onClose, initialFacing = 'ba
     }
 
     return (
-      <View style={[s.permWrap, { backgroundColor: Colors.background }]}>
+      <View style={s.permWrap}>
         <MaterialCommunityIcons name="camera-off" size={52} color={Colors.textMuted} />
-        <Text style={[s.permTitle, { color: Colors.textPrimary }]}>
+        <Text style={s.permTitle}>
           {t('postAd.cameraPermissionTitle')}
         </Text>
-        <Text style={[s.permSub, { color: Colors.textMuted }]}>
+        <Text style={s.permSub}>
           {t('postAd.cameraPermissionMessage')}
         </Text>
         <TouchableOpacity
-          style={[s.permBtn, { backgroundColor: Colors.primary }]}
+          style={s.permBtn}
           onPress={handlePermissionPress}
           activeOpacity={0.85}
         >
@@ -118,7 +120,7 @@ export function CameraCapture({ visible, onCapture, onClose, initialFacing = 'ba
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={s.permCancel} onPress={onClose}>
-          <Text style={[s.permCancelText, { color: Colors.textMuted }]}>
+          <Text style={s.permCancelText}>
             {t('auth.common.cancel', { defaultValue: 'Cancel' })}
           </Text>
         </TouchableOpacity>
@@ -128,16 +130,16 @@ export function CameraCapture({ visible, onCapture, onClose, initialFacing = 'ba
 
   function MountErrorScreen() {
     return (
-      <View style={[s.permWrap, { backgroundColor: Colors.background }]}>
+      <View style={s.permWrap}>
         <MaterialCommunityIcons name="camera-off" size={52} color={Colors.textMuted} />
-        <Text style={[s.permTitle, { color: Colors.textPrimary }]}>
+        <Text style={s.permTitle}>
           {t('postAd.cameraUnavailableTitle', { defaultValue: 'Camera unavailable' })}
         </Text>
-        <Text style={[s.permSub, { color: Colors.textMuted }]}>
+        <Text style={s.permSub}>
           {mountError}
         </Text>
         <TouchableOpacity style={s.permCancel} onPress={onClose}>
-          <Text style={[s.permCancelText, { color: Colors.textMuted }]}>
+          <Text style={s.permCancelText}>
             {t('auth.common.cancel', { defaultValue: 'Cancel' })}
           </Text>
         </TouchableOpacity>
@@ -154,7 +156,7 @@ export function CameraCapture({ visible, onCapture, onClose, initialFacing = 'ba
       ) : (
         <View style={s.root}>
           <CameraView
-            ref={cameraRef as unknown as React.Ref<CameraView>}
+            ref={cameraRef as unknown as CameraRef}
             style={StyleSheet.absoluteFill}
             facing={facing}
             flash={flash}
@@ -170,7 +172,7 @@ export function CameraCapture({ visible, onCapture, onClose, initialFacing = 'ba
             </View>
           )}
 
-          <View style={[s.topBar, { paddingTop: insets.top + 8 }]}>
+          <View style={[s.topBar, paddingTopOf(insets.top + 8)]}>
             <TouchableOpacity style={s.iconBtn} onPress={onClose} hitSlop={8}>
               <MaterialCommunityIcons name="close" size={24} color={Colors.white} />
             </TouchableOpacity>
@@ -179,7 +181,7 @@ export function CameraCapture({ visible, onCapture, onClose, initialFacing = 'ba
             </TouchableOpacity>
           </View>
 
-          <View style={[s.bottomBar, { paddingBottom: insets.bottom + 16 }]}>
+          <View style={[s.bottomBar, paddingBottomOf(insets.bottom + 16)]}>
             <TouchableOpacity style={s.flipBtn} onPress={toggleFacing} hitSlop={8}>
               <MaterialCommunityIcons name="camera-flip-outline" size={28} color={Colors.white} />
             </TouchableOpacity>
@@ -200,52 +202,3 @@ export function CameraCapture({ visible, onCapture, onClose, initialFacing = 'ba
     </Modal>
   );
 }
-
-const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: COLORS.black },
-  flipBtnSpacer: { width: 52 },
-  topBar: {
-    position: 'absolute', top: 0, left: 0, right: 0,
-    flexDirection: 'row', justifyContent: 'space-between',
-    paddingHorizontal: 20, zIndex: 10,
-  },
-  iconBtn: {
-    width: 44, height: 44, borderRadius: 22,
-    backgroundColor: COLORS.shadow42,
-    alignItems: 'center', justifyContent: 'center',
-  },
-  bottomBar: {
-    position: 'absolute', bottom: 0, left: 0, right: 0,
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    paddingHorizontal: 36, zIndex: 10,
-  },
-  flipBtn: {
-    width: 52, height: 52, borderRadius: 26,
-    backgroundColor: COLORS.shadow42,
-    alignItems: 'center', justifyContent: 'center',
-  },
-  shutterOuter: {
-    width: 76, height: 76, borderRadius: 38,
-    borderWidth: 4, borderColor: COLORS.white,
-    alignItems: 'center', justifyContent: 'center',
-  },
-  shutterCapturing: { opacity: 0.5 },
-  loadingOverlay: {
-    backgroundColor: COLORS.black, alignItems: 'center', justifyContent: 'center',
-  },
-  loadingText: { color: COLORS.white, fontSize: 14, fontWeight: '600' },
-  shutterInner: {
-    width: 60, height: 60, borderRadius: 30,
-    backgroundColor: COLORS.white,
-  },
-  permWrap: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32 },
-  permTitle: { fontSize: 20, fontWeight: '800', marginTop: 20, textAlign: 'center' },
-  permSub: { fontSize: 14, textAlign: 'center', marginTop: 10, lineHeight: 20 },
-  permBtn: {
-    marginTop: 28, paddingVertical: 14, paddingHorizontal: 36,
-    borderRadius: 14, width: '100%', alignItems: 'center',
-  },
-  permBtnText: { color: COLORS.white, fontWeight: '700', fontSize: 16 },
-  permCancel: { marginTop: 14, paddingVertical: 8 },
-  permCancelText: { fontSize: 14, fontWeight: '600' },
-});

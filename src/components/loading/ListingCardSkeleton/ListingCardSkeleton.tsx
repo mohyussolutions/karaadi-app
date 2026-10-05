@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Animated } from 'react-native';
-import { useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../util/styles/loading/listingCardSkeleton.styles';
-import { NATIVE_DRIVER } from "../../../constants";
+import { useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/loading/listingCardSkeleton.styles';
+import { NATIVE_DRIVER } from "../../../actions/constants";
+import { opacityOf } from '../../../utils/styles/common/dynamic.styles';
 
 function ListingCardSkeleton() {
   const opacity = useRef(new Animated.Value(1)).current;
@@ -20,14 +21,14 @@ function ListingCardSkeleton() {
   }, [opacity]);
 
   return (
-    <Animated.View style={[s.card, { opacity }]}>
+    <Animated.View style={[s.card, opacityOf(opacity)]}>
       <View style={s.img} />
       <View style={s.body}>
-        <View style={[s.line, { width: '90%', height: 13 }]} />
-        <View style={[s.line, { width: '60%', height: 13, marginTop: 4 }]} />
+        <View style={[s.line, s.lineTitle]} />
+        <View style={[s.line, s.lineSubtitle]} />
         <View style={s.footer}>
-          <View style={[s.line, { width: 60, height: 13 }]} />
-          <View style={[s.line, { width: 70, height: 11 }]} />
+          <View style={[s.line, s.linePrice]} />
+          <View style={[s.line, s.lineMeta]} />
         </View>
       </View>
     </Animated.View>

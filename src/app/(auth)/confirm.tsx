@@ -4,17 +4,20 @@ import {
 } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { useConfirm } from '../../hooks/useConfirm';
-import { useResponsive } from '../../hooks/useResponsive';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../util/styles/auth/confirmCode.styles';
+import { useConfirm } from '../../hooks/auth/useAuth';
+import { useResponsive } from '../../hooks/app/useResponsive';
+import { useThemeColors, useThemedStyles } from '../../hooks/app/useTheme';
+import { createStyles } from '../../utils/styles/auth/confirmCode.styles';
+import { completeFlow } from '../../lib/tracking/tracker';
+import { FLOWS } from '../../actions/constants/tracking.constants';
+import type { EmailParams } from '../../utils/types';
 
 export default function ConfirmScreen() {
   const { t } = useTranslation();
-  const { email } = useLocalSearchParams<{ email: string }>();
+  const { email } = useLocalSearchParams<EmailParams>();
   const {
     code, setCode,
-    isConfirmLoading, isResendLoading,
+    isConfirmLoading, isResendLoading, resendSecondsLeft,
     error, resendError,
     handleConfirm, handleResendCode,
   } = useConfirm(email ?? '');
@@ -29,6 +32,7 @@ export default function ConfirmScreen() {
     }
     const result = await handleConfirm();
     if (result.success) {
+      completeFlow(FLOWS.SIGNUP);
       Alert.alert(t('auth.common.success'), t('auth.confirm.successMessage'));
     }
   }
@@ -76,6 +80,8 @@ export default function ConfirmScreen() {
               placeholderTextColor={Colors.placeholder}
               keyboardType="number-pad"
               maxLength={6}
+              textContentType="oneTimeCode"
+              autoComplete="one-time-code"
               textAlign="center"
               autoFocus
             />
@@ -97,9 +103,13 @@ export default function ConfirmScreen() {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.resendBtn} onPress={onResend} disabled={isResendLoading}>
+          <TouchableOpacity style={styles.resendBtn} onPress={onResend} disabled={isResendLoading || resendSecondsLeft > 0}>
             <Text style={styles.resendText}>
-              {isResendLoading ? t('auth.confirm.resending') : t('auth.confirm.resendCode')}
+              {isResendLoading
+                ? t('auth.confirm.resending')
+                : resendSecondsLeft > 0
+                  ? t('auth.resetPassword.resendIn', { seconds: resendSecondsLeft })
+                  : t('auth.confirm.resendCode')}
             </Text>
           </TouchableOpacity>
         </View>

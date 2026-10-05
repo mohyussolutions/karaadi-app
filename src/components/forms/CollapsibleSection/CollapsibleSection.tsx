@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, LayoutAnimation, Platform, UIManager } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../util/styles/newAd/collapsibleSection.styles';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/new-ad/collapsibleSection.styles';
+import type { CollapsibleSectionProps } from "../../../utils/types";
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -13,12 +14,7 @@ export function CollapsibleSection({
   children,
   defaultOpen = false,
   hasError = false,
-}: {
-  title: string;
-  children: React.ReactNode;
-  defaultOpen?: boolean;
-  hasError?: boolean;
-}) {
+}: CollapsibleSectionProps) {
   const Colors = useThemeColors();
   const s = useThemedStyles(createStyles);
   const [open, setOpen] = useState(defaultOpen);

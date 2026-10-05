@@ -1,6 +1,6 @@
 import { apiClient } from '../client';
-import { BUSINESSES_ENDPOINTS } from '../../api/endpoints';
-import type { Business } from '../../util/types/business.types';
+import { BUSINESSES_ENDPOINTS } from '../constants/endpoints';
+import type { Business, CreateBusinessResponse, UnknownMap } from '../../utils/types';
 
 export async function getBusinessById(id: string, signal?: AbortSignal): Promise<Business> {
   const { data } = await apiClient.get(BUSINESSES_ENDPOINTS.BY_ID(id), { signal });
@@ -12,12 +12,12 @@ export async function getMyBusinesses(signal?: AbortSignal): Promise<Business[]>
   return Array.isArray(data) ? data : data?.businesses ?? [];
 }
 
-export async function createBusiness(payload: Record<string, unknown>): Promise<Business & { business?: Business }> {
+export async function createBusiness(payload: UnknownMap): Promise<CreateBusinessResponse> {
   const { data } = await apiClient.post(BUSINESSES_ENDPOINTS.CREATE, payload);
   return data;
 }
 
-export async function updateBusiness(id: string, payload: Record<string, unknown>): Promise<void> {
+export async function updateBusiness(id: string, payload: UnknownMap): Promise<void> {
   await apiClient.patch(BUSINESSES_ENDPOINTS.UPDATE(id), payload);
 }
 

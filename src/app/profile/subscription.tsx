@@ -1,18 +1,19 @@
 import { useEffect, useState, useCallback } from 'react';
 import { View, FlatList, Alert } from 'react-native';
-import { useGlobal } from '../../hooks/useGlobal';
+import { useGlobal } from '../../hooks/app/useResponsive';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner } from '../../components/loading';
 import { EmptyState } from '../../components/shared';
 import ListingCard from '../../components/cards/ListingCard/ListingCard';
-import { useThemedStyles } from '../../hooks/useTheme';
-import { createSubscriptionListStyles } from '../../util/styles/profile/mySubscription.styles';
+import { useThemedStyles } from '../../hooks/app/useTheme';
+import { createSubscriptionListStyles } from '../../utils/styles/profile/mySubscription.styles';
 import { fetchMySubscriptions, deleteSubscription } from '../../actions/categories/subscription.actions';
-import { subscriptionToListingItem, subscriptionPriceLabel } from '../../util/helpers';
-import type { Subscription } from '../../util/types/listing.types';
-import { ROUTES, COLUMN_GAP, SUBSCRIPTION_H_PAD } from '../../constants';
+import { subscriptionToListingItem, subscriptionPriceLabel } from '../../lib/helpers';
+import type { Subscription } from '../../utils/types';
+import { ROUTES, COLUMN_GAP, SUBSCRIPTION_H_PAD } from '../../actions/constants';
+import { fill, fixedWidth, paddingBottomOf } from '../../utils/styles/common/dynamic.styles';
 
 export default function SubscriptionScreen() {
   const router = useRouter();
@@ -61,7 +62,7 @@ export default function SubscriptionScreen() {
         keyExtractor={(item) => item.id || item._id || ''}
         numColumns={2}
         columnWrapperStyle={styles.row}
-        contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }, subs.length === 0 && { flex: 1 }]}
+        contentContainerStyle={[styles.content, paddingBottomOf(insets.bottom + 84), subs.length === 0 && fill]}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <EmptyState
@@ -71,7 +72,7 @@ export default function SubscriptionScreen() {
           />
         }
         renderItem={({ item }) => (
-          <View style={{ width: CARD_WIDTH }}>
+          <View style={fixedWidth(CARD_WIDTH)}>
             <ListingCard
               item={subscriptionToListingItem(item)}
               priceLabel={subscriptionPriceLabel(item, t('priceOnRequest'))}

@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, ScrollView, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import type { CityAccordionPanelProps } from '../../../util/types';
-import { createStyles } from '../../../util/styles/geo/regionCityPicker.styles';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import type { CityAccordionPanelProps } from '../../../utils/types';
+import { createStyles } from '../../../utils/styles/geo/regionCityPicker.styles';
 import { CityRow } from './CityRow';
+import { INPUT_LIMITS } from '../../../actions/constants';
 
 export function CityAccordionPanel({
   search, onSearchChange, cities, selectedCity, savingCity,
@@ -32,6 +33,7 @@ export function CityAccordionPanel({
           <TextInput
             style={s.searchInput}
             value={search}
+            maxLength={INPUT_LIMITS.search}
             onChangeText={onSearchChange}
             placeholder={t('citySelect.search')}
             placeholderTextColor={Colors.placeholder}
@@ -79,6 +81,7 @@ export function CityAccordionPanel({
             <TextInput
               style={s.addCityInput}
               value={newName}
+              maxLength={INPUT_LIMITS.shortText}
               onChangeText={setNewName}
               placeholder={t('citySelect.newPlaceholder')}
               placeholderTextColor={Colors.placeholder}

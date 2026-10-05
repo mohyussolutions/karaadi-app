@@ -1,6 +1,8 @@
 import { View, Image, ActivityIndicator, useWindowDimensions } from 'react-native';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { createStyles } from '../../../util/styles/loading/appLoadingScreen.styles';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { createStyles } from '../../../utils/styles/loading/appLoadingScreen.styles';
+import { fixedWidth } from '../../../utils/styles/common/dynamic.styles';
+import { BRAND_LOGO } from '../../../actions/constants';
 
 export default function AppLoadingScreen() {
   const Colors = useThemeColors();
@@ -11,8 +13,8 @@ export default function AppLoadingScreen() {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../../../../assets/logo.jpg')}
-        style={[styles.logo, { width: logoWidth }]}
+        source={BRAND_LOGO}
+        style={[styles.logo, fixedWidth(logoWidth)]}
         resizeMode="contain"
       />
       <ActivityIndicator size="large" color={Colors.primary} style={styles.spinner} />

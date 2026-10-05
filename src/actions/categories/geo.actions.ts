@@ -1,6 +1,6 @@
 import { apiClient } from '../client';
-import { GEO_ENDPOINTS } from '../../api/endpoints';
-import type { GeoRegion } from '../../util/types/browse.types';
+import { GEO_ENDPOINTS } from '../constants/endpoints';
+import type { AddCityPayload, AddCityResponse, ApiErrorWithData, GeoRegion } from '../../utils/types';
 
 export async function clientGetAllRegions(): Promise<GeoRegion[]> {
   try {
@@ -11,15 +11,12 @@ export async function clientGetAllRegions(): Promise<GeoRegion[]> {
   }
 }
 
-export async function clientAddCity(payload: {
-  name: string;
-  regionId: string;
-}): Promise<{ success: boolean; data: Record<string, unknown> }> {
+export async function clientAddCity(payload: AddCityPayload): Promise<AddCityResponse> {
   try {
     const res = await apiClient.post(GEO_ENDPOINTS.CITIES, payload);
     return { success: true, data: res.data };
   } catch (err: unknown) {
-    const apiErr = err as { response?: { data?: Record<string, unknown> } };
+    const apiErr = err as ApiErrorWithData;
     return { success: false, data: apiErr?.response?.data ?? {} };
   }
 }

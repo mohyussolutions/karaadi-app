@@ -1,8 +1,7 @@
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Image } from 'expo-image';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import type { SlotProps } from '../../../../../util/types';
-import type { IconName } from '../../../../../util/icons/icons';
+import type { IconName, SlotProps } from '../../../../../utils/types';
 
 export function Slot({
   slotKey, label, hint, icon, image, compressing, s, Colors, t, onTakePhoto, onUpload, onClear,

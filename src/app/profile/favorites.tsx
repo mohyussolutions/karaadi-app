@@ -5,18 +5,18 @@ import {
   RefreshControl,
 } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { useRouter } from 'expo-router';
+import { useRouter, type Href } from 'expo-router';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner } from '../../components/loading';
 import ListingCard from '../../components/cards/ListingCard/ListingCard';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { useFavoritesData } from '../../hooks/useFavoritesData';
-import type { Favorite } from '../../util/types';
-import type { ListingBase } from '../../util/types/listing.types';
-import { createStyles } from '../../util/styles/profile/favorites.styles';
-import { ROUTES, FAVORITES_H_PAD, FAVORITES_COL_GAP, NUM_COLUMNS } from '../../constants';
+import { useThemeColors, useThemedStyles } from '../../hooks/app/useTheme';
+import { useFavoritesData } from '../../hooks/auth/useAccount';
+import type { Favorite, ListingBase } from '../../utils/types';
+import { createStyles } from '../../utils/styles/profile/favorites.styles';
+import { ROUTES, FAVORITES_H_PAD, FAVORITES_COL_GAP, NUM_COLUMNS } from '../../actions/constants';
+import { fill, gridCellPadding, paddingBottomOf } from '../../utils/styles/common/dynamic.styles';
 
 function toListingItem(fav: Favorite): ListingBase {
   return {
@@ -88,7 +88,7 @@ export default function FavoritesScreen() {
         data={favorites}
         keyExtractor={(fav) => fav.id || fav.itemId}
         numColumns={NUM_COLUMNS}
-        contentContainerStyle={[s.list, { paddingBottom: insets.bottom + 84 }, favorites.length === 0 && { flex: 1 }]}
+        contentContainerStyle={[s.list, paddingBottomOf(insets.bottom + 84), favorites.length === 0 && fill]}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />
@@ -111,7 +111,7 @@ export default function FavoritesScreen() {
             <Text style={s.emptySub}>{t('mine.favorites.emptySub')}</Text>
             <TouchableOpacity
               style={s.browseBtn}
-              onPress={() => router.push(ROUTES.home as any)}
+              onPress={() => router.push(ROUTES.home as Href)}
             >
               <Text style={s.browseBtnText}>{t('mine.favorites.browseListings')}</Text>
             </TouchableOpacity>
@@ -119,11 +119,7 @@ export default function FavoritesScreen() {
         }
         renderItem={({ item: fav, index }) => (
           <View
-            style={{
-              paddingLeft: index % NUM_COLUMNS === 0 ? FAVORITES_H_PAD : FAVORITES_COL_GAP / 2,
-              paddingRight: (index + 1) % NUM_COLUMNS === 0 ? FAVORITES_H_PAD : FAVORITES_COL_GAP / 2,
-              paddingBottom: FAVORITES_COL_GAP,
-            }}
+            style={gridCellPadding(index, NUM_COLUMNS, FAVORITES_H_PAD, FAVORITES_COL_GAP)}
           >
             <ListingCard
               item={toListingItem(fav)}

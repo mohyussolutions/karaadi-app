@@ -1,33 +1,32 @@
 import { useCallback, useEffect } from 'react';
-import {
-  View, Text, FlatList,
-} from 'react-native';
+import { View, Text, FlatList } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { EmptyState } from '../../../../shared';
 import { LoadingSpinner } from '../../../../loading';
-import { useThemedStyles } from '../../../../../hooks/useTheme';
-import { useResponsive } from '../../../../../hooks/useResponsive';
-import { useChatsData } from '../../../../../hooks/useChatsData';
-import { useGroupedChats } from '../../../../../hooks/useGroupedChats';
+import { useThemedStyles } from '../../../../../hooks/app/useTheme';
+import { useResponsive } from '../../../../../hooks/app/useResponsive';
+import { useChatsData } from '../../../../../hooks/messaging/useChat';
+import { useGroupedChats } from '../../../../../hooks/messaging/useChat';
 import { useAppSelector } from '../../../../../store/store';
-import { createStyles } from '../../../../../util/styles/tabs/messagesTab.styles';
-import type { GroupedChat } from '../../../../../util/types';
+import { createStyles } from '../../../../../utils/styles/tabs/messagesTab.styles';
+import type { GroupedChat, GroupedChatRenderInfo } from '../../../../../utils/types';
 import { ConvoItem } from './ConvoItem';
-import { ROUTES } from '../../../../../constants';
+import { ROUTES } from '../../../../../actions/constants';
 
+import { selectAuthLoading } from '../../../../../store/slices/authSlice';
 export default function MessagesScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { user, chats, loaded } = useChatsData();
-  const authLoading = useAppSelector((s) => s.auth.loading);
+  const authLoading = useAppSelector(selectAuthLoading);
   const { isTablet } = useResponsive();
   const styles = useThemedStyles(createStyles);
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.replace('/(auth)/login');
+      router.replace(ROUTES.login);
     }
   }, [authLoading, user]);
 
@@ -45,7 +44,7 @@ export default function MessagesScreen() {
     });
   }, [router, user, t]);
 
-  const renderItem = useCallback(({ item }: { item: GroupedChat }) => (
+  const renderItem = useCallback(({ item }: GroupedChatRenderInfo) => (
     <ConvoItem item={item} currentUserId={user!.id} onPress={handleItemPress} />
   ), [user, handleItemPress]);
 

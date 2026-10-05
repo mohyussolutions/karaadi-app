@@ -7,18 +7,19 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { useAuthStore } from '../../../store/hooks/authStore';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { useAuthStore } from '../../../store/hooks/useAuthStore';
 import { createReport } from '../../../actions/core/report.actions';
-import { getApiErrorMessage } from '../../../util/helpers';
-import { createStyles } from '../../../util/styles/listing/reportListing.styles';
-import { maxLenSchema } from '../../../util/validation/schemas';
-import { useHideGlobalChrome } from '../../../navigation/headerVisibility';
-import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../util/platform/common-for-ios-andriod';
-import { REASON_OPTIONS } from "../../../constants";
+import { getApiErrorMessage } from '../../../lib/helpers';
+import { createStyles } from '../../../utils/styles/listing/reportListing.styles';
+import { maxLenSchema } from '../../../lib/validation/schemas';
+import { useHideGlobalChrome } from '../../../navigation/header/headerVisibility';
+import { KEYBOARD_AVOIDING_BEHAVIOR } from '../../../lib/platform/platform';
+import { INPUT_LIMITS, REASON_OPTIONS, ROUTES } from '../../../actions/constants';
+import type { ReportParams } from '../../../utils/types';
 
 export default function ReportScreen() {
-  const { id, itemType } = useLocalSearchParams<{ id: string; itemType?: string }>();
+  const { id, itemType } = useLocalSearchParams<ReportParams>();
   const router = useRouter();
   const { t } = useTranslation();
   const { user } = useAuthStore();
@@ -33,7 +34,7 @@ export default function ReportScreen() {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    if (!user) router.replace('/(auth)/login');
+    if (!user) router.replace(ROUTES.login);
   }, [user]);
 
   useEffect(() => {
@@ -128,6 +129,7 @@ export default function ReportScreen() {
           <TextInput
             style={styles.textarea}
             value={details}
+            maxLength={INPUT_LIMITS.longText}
             onChangeText={setDetails}
             placeholder={t('report.detailsPlaceholder')}
             placeholderTextColor={Colors.textMuted}

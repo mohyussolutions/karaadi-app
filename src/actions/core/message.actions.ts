@@ -1,18 +1,13 @@
 import { apiClient } from '../client';
-import { CHATS_ENDPOINTS, MESSAGES_ENDPOINTS } from '../../api/endpoints';
-import type { Chat, ChatMessage } from '../../util/types';
+import { CHATS_ENDPOINTS, MESSAGES_ENDPOINTS } from '../constants/endpoints';
+import type { Chat, ChatMessage, CreateChatPayload, CreateChatResponse, SendMessagePayload } from '../../utils/types';
 
 export async function getMyChats(userId: string): Promise<Chat[]> {
   const { data } = await apiClient.get(CHATS_ENDPOINTS.MY_CHATS(userId));
   return Array.isArray(data) ? data : [];
 }
 
-export async function createOrFindChat(payload: {
-  senderId: string;
-  receiverId: string;
-  itemId: string;
-  itemModel: string;
-}): Promise<{ chat: Chat; isNew: boolean }> {
+export async function createOrFindChat(payload: CreateChatPayload): Promise<CreateChatResponse> {
   const { data } = await apiClient.post(CHATS_ENDPOINTS.CREATE, payload);
   return data;
 }
@@ -26,13 +21,7 @@ export async function getChatMessages(chatId: number, userId: string): Promise<C
   return [];
 }
 
-export async function sendMessage(payload: {
-  chatId: number;
-  senderId: string;
-  receiverId: string;
-  content: string;
-  imageUrl?: string;
-}): Promise<ChatMessage> {
+export async function sendMessage(payload: SendMessagePayload): Promise<ChatMessage> {
   const { data } = await apiClient.post(MESSAGES_ENDPOINTS.SEND, {
     ...payload,
     chatId: String(payload.chatId),

@@ -1,6 +1,7 @@
-import * as SecureStore from "../util/helpers/secureStorage";
-import { API_BASE_URL } from "../api/urls";
+import * as SecureStore from "../lib/helpers/device/secureStorage";
+import { API_BASE_URL } from "./constants/endpoints";
 import { storeRef } from "../store/internal/storeRef";
+import { clearCredentials } from "../store/actions/authActions";
 import { disconnectSocket } from "./sockets/socket.actions";
 import {
   AUTH_TOKEN_KEY,
@@ -16,13 +17,8 @@ import {
   RETRY_BASE_DELAY_MS,
   RETRY_MAX_DELAY_MS,
   RETRY_STATUS_CODES,
-} from "../constants";
-import type {
-  ExtraHeaders,
-  Params,
-  RequestOptions,
-} from "../util/types/common.types";
-import type { ApiData, ApiResponse } from "../util/types/generic.types";
+} from "./constants";
+import type { ApiData, ApiResponse, ExtraHeaders, Params, RequestOptions, StringMap } from "../utils/types";
 
 function buildUrl(path: string, params?: Params): string {
   const base = `${API_BASE_URL}${path}`;
@@ -41,7 +37,7 @@ async function buildHeaders(
   isFormData?: boolean,
 ): Promise<Record<string, string>> {
   const token = await SecureStore.getItemAsync(AUTH_TOKEN_KEY);
-  const headers: Record<string, string> = isFormData
+  const headers: StringMap = isFormData
     ? {}
     : { [CONTENT_TYPE_HEADER]: JSON_CONTENT_TYPE };
   if (token) {
@@ -78,7 +74,7 @@ async function handle401() {
   await SecureStore.deleteItemAsync(AUTH_TOKEN_KEY);
   await SecureStore.deleteItemAsync(AUTH_USER_KEY);
   disconnectSocket();
-  storeRef.dispatch?.({ type: "auth/clearCredentials" });
+  storeRef.dispatch?.(clearCredentials());
 }
 
 async function ensureOk(res: Response): Promise<void> {

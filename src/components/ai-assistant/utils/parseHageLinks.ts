@@ -1,6 +1,6 @@
-import { getListingDetailRoute } from '../../../util/helpers/nav.routing';
-import type { ListingRoute, HageReplySegment } from '../../../util/types';
-import { MD_LINK } from "../../../constants";
+import { getListingDetailRoute } from '../../../lib/helpers/listing/nav.routing';
+import type { ListingRoute, HageReplySegment } from '../../../utils/types';
+import { MD_LINK } from "../../../actions/constants";
 
 function routeFromUrl(url: string): ListingRoute | null {
   let pathname: string;

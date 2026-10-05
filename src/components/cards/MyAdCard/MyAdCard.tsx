@@ -3,11 +3,11 @@ import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
-import { formatPrice, getImageUrl, getListingDetailRoute, getListingExpiryInfo } from '../../../util/helpers';
-import { PLACEHOLDER_IMAGE, ROUTES } from '../../../constants';
-import type { MyAdCardProps } from '../../../util/types';
-import { createStyles } from '../../../util/styles/shared/myAdCard.styles';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
+import { formatPrice, getImageUrl, getListingDetailRoute, getListingExpiryInfo } from '../../../lib/helpers';
+import { PLACEHOLDER_IMAGE, ROUTES } from '../../../actions/constants';
+import type { MyAdCardProps } from '../../../utils/types';
+import { createStyles } from '../../../utils/styles/cards/myAdCard.styles';
 import RemoteImage from '../../shared/RemoteImage/RemoteImage';
 
 function MyAdCard({ item, deleting, onDelete, onPayNow }: MyAdCardProps) {

@@ -2,8 +2,9 @@ import { useEffect } from 'react';
 import { useAppSelector } from '../store/store';
 import i18n from './i18n';
 
+import { selectLang } from '../store/slices/languageSlice';
 export default function LanguageSync() {
-  const lang = useAppSelector((s) => s.language.lang);
+  const lang = useAppSelector(selectLang);
 
   useEffect(() => {
     if (i18n.language !== lang) {

@@ -5,12 +5,12 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
 import { DetailSkeleton } from '../../../components/loading';
-import { MARKETPLACE_CONFIG, buildSpecItems, DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, CONDITION_COLORS } from '../../../constants';
-import { MARKETPLACE_ENDPOINTS } from '../../../api/endpoints';
-import { getImageUrl, formatPrice, formatDate } from '../../../util/helpers';
-import { useItemDetail } from '../../../hooks/useItemDetail';
+import { MARKETPLACE_CONFIG, buildSpecItems, DETAIL_PLACEHOLDER, DESCRIPTION_TRUNCATE, CONDITION_COLOR_KEYS } from '../../../actions/constants';
+import { MARKETPLACE_ENDPOINTS } from '../../../actions/constants/endpoints';
+import { getImageUrl, formatPrice, formatDate } from '../../../lib/helpers';
+import { useItemDetail } from '../../../hooks/listings/useListingDetail';
 import ImageGallery from '../../../components/detail/ImageGallery/ImageGallery';
 import ZoomModal from '../../../components/modals/ZoomModal/ZoomModal';
 import SellerCard from '../../../components/cards/SellerCard/SellerCard';
@@ -19,12 +19,14 @@ import RecommendedSection from '../../../components/detail/RecommendedSection/Re
 import { SocialShareSheet } from '../../../components/features/social/components';
 import DetailNotFound from '../../../components/detail/DetailNotFound/DetailNotFound';
 import SwipeDownToClose from '../../../components/modals/SwipeDownToClose/SwipeDownToClose';
-import { createStyles } from '../../../util/styles/listing/itemDetail.styles';
-import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../util/styles/listing/tabletSplitLayout.styles';
-import { useResponsive } from '../../../hooks/useResponsive';
+import { createStyles } from '../../../utils/styles/listing/itemDetail.styles';
+import { createTabletSplitStyles, createTabletPortraitStyles } from '../../../utils/styles/listing/tabletSplitLayout.styles';
+import { useResponsive } from '../../../hooks/app/useResponsive';
+import { outlinedTint, textColor } from '../../../utils/styles/common/dynamic.styles';
+import type { IdParams } from '../../../utils/types';
 
 export default function ItemDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id } = useLocalSearchParams<IdParams>();
   const router = useRouter();
   const { t } = useTranslation();
   const { isTablet, isTabletLandscape } = useResponsive();
@@ -52,7 +54,7 @@ export default function ItemDetailScreen() {
   const badge = item.maGaday ? { label: t('realEstateDetail.waaLaGatay'), color: Colors.error } : null;
 
   const conditionColor = item.condition
-    ? (CONDITION_COLORS[item.condition.toLowerCase()] ?? Colors.textMuted)
+    ? Colors[CONDITION_COLOR_KEYS[item.condition.toLowerCase()] ?? 'textMuted']
     : null;
 
   const metaItems = buildSpecItems(item, MARKETPLACE_CONFIG.fields, t);
@@ -73,8 +75,8 @@ export default function ItemDetailScreen() {
       <View style={styles.titleRow}>
         <Text style={styles.title} numberOfLines={3}>{item.title}</Text>
         {conditionColor && (
-          <View style={[styles.conditionBadge, { backgroundColor: conditionColor + '20', borderColor: conditionColor }]}>
-            <Text style={[styles.conditionText, { color: conditionColor }]}>{item.condition}</Text>
+          <View style={[styles.conditionBadge, outlinedTint(conditionColor)]}>
+            <Text style={[styles.conditionText, textColor(conditionColor)]}>{item.condition}</Text>
           </View>
         )}
       </View>

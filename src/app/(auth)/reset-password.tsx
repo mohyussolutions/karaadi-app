@@ -6,19 +6,21 @@ import {
 import { useLocalSearchParams } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { useResetPassword } from '../../hooks/useResetPassword';
-import { useResponsive } from '../../hooks/useResponsive';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../util/styles/auth/resetPassword.styles';
+import { useResetPassword } from '../../hooks/auth/useAuth';
+import { useResponsive } from '../../hooks/app/useResponsive';
+import { useThemeColors, useThemedStyles } from '../../hooks/app/useTheme';
+import { createStyles } from '../../utils/styles/auth/resetPassword.styles';
+import { PASSWORD_MAX_LENGTH } from '../../actions/constants';
+import type { EmailParams } from '../../utils/types';
 
 export default function ResetPasswordScreen() {
   const { t } = useTranslation();
-  const { email } = useLocalSearchParams<{ email: string }>();
+  const { email } = useLocalSearchParams<EmailParams>();
   const {
     code, setCode,
     password, setPassword,
     confirmPassword, setConfirmPassword,
-    isLoading, isResendLoading, error,
+    isLoading, isResendLoading, resendSecondsLeft, error,
     handleReset, handleResendCode,
   } = useResetPassword(email ?? '');
   const [showPassword, setShowPassword] = useState(false);
@@ -73,6 +75,8 @@ export default function ResetPasswordScreen() {
               placeholderTextColor={Colors.placeholder}
               keyboardType="number-pad"
               maxLength={6}
+              textContentType="oneTimeCode"
+              autoComplete="one-time-code"
               textAlign="center"
             />
           </View>
@@ -87,6 +91,16 @@ export default function ResetPasswordScreen() {
                 placeholder={t('auth.resetPassword.newPasswordPlaceholder')}
                 placeholderTextColor={Colors.placeholder}
                 secureTextEntry={!showPassword}
+
+                maxLength={PASSWORD_MAX_LENGTH}
+
+                autoCorrect={false}
+
+                autoCapitalize="none"
+
+                autoComplete="new-password"
+
+                textContentType="newPassword"
               />
               <TouchableOpacity style={styles.eyeBtn} onPress={() => setShowPassword((v) => !v)}>
                 <MaterialCommunityIcons
@@ -108,6 +122,16 @@ export default function ResetPasswordScreen() {
                 placeholder={t('auth.resetPassword.confirmPasswordPlaceholder')}
                 placeholderTextColor={Colors.placeholder}
                 secureTextEntry={!showConfirm}
+
+                maxLength={PASSWORD_MAX_LENGTH}
+
+                autoCorrect={false}
+
+                autoCapitalize="none"
+
+                autoComplete="new-password"
+
+                textContentType="newPassword"
               />
               <TouchableOpacity style={styles.eyeBtn} onPress={() => setShowConfirm((v) => !v)}>
                 <MaterialCommunityIcons
@@ -135,9 +159,13 @@ export default function ResetPasswordScreen() {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.resendBtn} onPress={onResend} disabled={isResendLoading}>
+          <TouchableOpacity style={styles.resendBtn} onPress={onResend} disabled={isResendLoading || resendSecondsLeft > 0}>
             <Text style={styles.resendText}>
-              {isResendLoading ? t('auth.resetPassword.resending') : t('auth.resetPassword.resendCode')}
+              {isResendLoading
+                ? t('auth.resetPassword.resending')
+                : resendSecondsLeft > 0
+                  ? t('auth.resetPassword.resendIn', { seconds: resendSecondsLeft })
+                  : t('auth.resetPassword.resendCode')}
             </Text>
           </TouchableOpacity>
         </View>

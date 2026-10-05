@@ -3,22 +3,25 @@ import { View, Text, TouchableOpacity, ActivityIndicator, type GestureResponderE
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { formatPrice, getImageUrl, truncate, truncateWords, getListingDetailRoute } from '../../../util/helpers';
-import { PLACEHOLDER_IMAGE, ROUTES } from '../../../constants';
-import { showToast } from '../../../util/cache/toastService';
+import { formatPrice, getImageUrl, truncate, truncateWords, getListingDetailRoute } from '../../../lib/helpers';
+import { PLACEHOLDER_IMAGE, ROUTES } from '../../../actions/constants';
+import { showToast } from '../../../lib/cache/toastService';
 import { useAppSelector, useAppDispatch } from '../../../store/store';
 import { toggleFavorite, selectFavoriteIdSet } from '../../../store/slices/favoritesSlice';
-import { useThemeColors, useThemedStyles } from '../../../hooks/useTheme';
+import { useThemeColors, useThemedStyles } from '../../../hooks/app/useTheme';
 import RemoteImage from '../../shared/RemoteImage/RemoteImage';
-import type { ListingCardProps } from '../../../util/types';
-import { createStyles } from '../../../util/styles/shared/listingCard.styles';
+import { trackResultClick } from '../../../lib/tracking/tracker';
+import type { ListingCardProps } from '../../../utils/types';
+import { createStyles } from '../../../utils/styles/cards/listingCard.styles';
+import { aspectRatioOf } from '../../../utils/styles/common/dynamic.styles';
+import { selectUser } from '../../../store/slices/authSlice';
 const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey, imageAspectRatio, priceLabel, onDelete, removing }: ListingCardProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const listingId = item.id || item._id;
   const image = getImageUrl(item.images?.[0]) || PLACEHOLDER_IMAGE;
-  const user = useAppSelector((s) => s.auth.user);
+  const user = useAppSelector(selectUser);
   const favoriteIds = useAppSelector(selectFavoriteIdSet);
   const isFav = favoriteIds.has(listingId);
 
@@ -30,6 +33,7 @@ const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey
 
   function handlePress() {
     if (removing) return;
+    if (listingId) trackResultClick(String(listingId), category);
     if (onPress) { onPress(); return; }
     if (isWanted) {
       router.push({ pathname: ROUTES.subscriptionDetail, params: { id: listingId } } as never);
@@ -61,7 +65,7 @@ const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey
       activeOpacity={0.88}
       disabled={removing}
     >
-      <View style={[styles.imgWrap, imageAspectRatio ? { aspectRatio: imageAspectRatio } : null]}>
+      <View style={[styles.imgWrap, imageAspectRatio ? aspectRatioOf(imageAspectRatio) : null]}>
         {isWanted ? (
           <View style={[styles.img, styles.wantedPlaceholder]}>
             <Text style={styles.wantedPlaceholderText} numberOfLines={3}>
@@ -124,7 +128,7 @@ const ListingCard = React.memo(function ListingCard({ item, onPress, categoryKey
         </Text>
 
         <View style={styles.footer}>
-          <Text style={styles.price} numberOfLines={1}>
+          <Text style={[styles.price, item.maGaday && styles.priceSold]} numberOfLines={1}>
             {priceLabel ?? (item.price > 0 ? formatPrice(item.price) : t('priceOnRequest'))}
           </Text>
 

@@ -1,56 +1,56 @@
 import { useCallback } from 'react';
 import {
-  View, Text, TouchableOpacity, RefreshControl, ScrollView, ActivityIndicator,
+  View, Text, TouchableOpacity, RefreshControl, ScrollView,
 } from 'react-native';
-import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list';
+import { FlashList } from '@shopify/flash-list';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { CategoryGrid, HowToUseVideo } from '../../components/shared';
+import { CategoryGrid, TutorialsButton, LoadMoreButton } from '../../components/shared';
 import ListingCard from '../../components/cards/ListingCard/ListingCard';
 import { ListingCardSkeleton } from '../../components/loading';
-import { useAppTranslation } from '../../hooks/useAppTranslation';
-import { useResponsive } from '../../hooks/useResponsive';
-import { useHomeFeed } from '../../hooks/useHomeFeed';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { useSearchFilteredListings } from '../../hooks/useFilteredListings';
-import { useSkeletonListings } from '../../hooks/useSkeletonListings';
+import { useAppTranslation } from '../../hooks/app/useAppTranslation';
+import { useResponsive } from '../../hooks/app/useResponsive';
+import { useHomeFeed } from '../../hooks/listings/useFeed';
+import { useThemeColors, useThemedStyles } from '../../hooks/app/useTheme';
+import { useGlobalSearch } from '../../hooks/listings/useSearch';
+import { useSkeletonListings } from '../../hooks/listings/useFeed';
 import { useAppSelector } from '../../store/store';
-import { H_PAD, COL_GAP, SKELETON_COUNT } from '../../constants';
-import { createStyles } from '../../util/styles/tabs/homeTab.styles';
-import type { ListingBase } from '../../util/types/listing.types';
+import { H_PAD, COL_GAP, SKELETON_COUNT, ROUTES } from '../../actions/constants';
+import { createStyles } from '../../utils/styles/tabs/homeTab.styles';
+import type { ListingRenderInfo } from '../../utils/types';
+import { fixedWidth, gridCellPadding } from '../../utils/styles/common/dynamic.styles';
+import { useSearchTracking } from '../../hooks/listings/useSearch';
 
+import { selectBrowseQuery } from '../../store/slices/browseSearchSlice';
 export default function HomeScreen() {
   const router = useRouter();
   const { t } = useAppTranslation();
   const { isTabletLandscape, sidebarWidth, mainWidth, numColumns, cardWidth } = useResponsive();
   const { user, listings, recommendations, refreshing, loading, visibleListings, hasMore, loadingMore, onRefresh, showMore } = useHomeFeed();
-  const searchQuery = useAppSelector((s) => s.browseSearch.query);
+  const searchQuery = useAppSelector(selectBrowseQuery);
   const Colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
 
   const REC_CARD_W = cardWidth(mainWidth, numColumns, H_PAD, COL_GAP) * 1.12;
 
-  const filteredListings = useSearchFilteredListings(listings, searchQuery);
+  const filteredListings = useGlobalSearch(searchQuery, listings);
+  useSearchTracking({ query: searchQuery, resultsCount: filteredListings?.length ?? 0, loading, filters: { category: 'home' } });
 
   const displayListings = filteredListings ?? visibleListings;
   const showLoadMore = !filteredListings && hasMore;
   const showSkeleton = loading && !filteredListings;
   const skeletonData = useSkeletonListings(SKELETON_COUNT);
 
-  const renderFeedItem = useCallback(({ item, index }: ListRenderItemInfo<ListingBase>) => (
+  const renderFeedItem = useCallback(({ item, index }: ListingRenderInfo) => (
     <View
-      style={{
-        paddingLeft: index % numColumns === 0 ? H_PAD : COL_GAP / 2,
-        paddingRight: (index + 1) % numColumns === 0 ? H_PAD : COL_GAP / 2,
-        paddingBottom: COL_GAP,
-      }}
+      style={gridCellPadding(index, numColumns, H_PAD, COL_GAP)}
     >
       {showSkeleton ? <ListingCardSkeleton /> : <ListingCard item={item} />}
     </View>
   ), [numColumns, showSkeleton]);
 
-  const renderRecItem = useCallback(({ item }: ListRenderItemInfo<ListingBase>) => (
-    <View style={{ width: REC_CARD_W, marginRight: 8 }}>
+  const renderRecItem = useCallback(({ item }: ListingRenderInfo) => (
+    <View style={[styles.recCard, fixedWidth(REC_CARD_W)]}>
       <ListingCard item={item} imageAspectRatio={0.85} />
     </View>
   ), [REC_CARD_W]);
@@ -58,7 +58,7 @@ export default function HomeScreen() {
   const postBtn = (
     <TouchableOpacity
       style={styles.postBtn}
-      onPress={() => router.push(user ? '/(tabs)/new-ad' : '/(auth)/login')}
+      onPress={() => router.push(user ? ROUTES.newAd : ROUTES.login)}
       activeOpacity={0.88}
     >
       <MaterialCommunityIcons name="plus" size={20} color={Colors.white} />
@@ -71,7 +71,7 @@ export default function HomeScreen() {
     <View>
       {!isTabletLandscape && (
         <View style={styles.videoSection}>
-          <HowToUseVideo />
+          <TutorialsButton />
         </View>
       )}
       {!isTabletLandscape && (
@@ -113,23 +113,7 @@ export default function HomeScreen() {
       contentContainerStyle={styles.scroll}
       ListHeaderComponent={feedHeader}
       ListFooterComponent={
-        showLoadMore ? (
-          <TouchableOpacity
-            style={styles.readMoreBtn}
-            onPress={showMore}
-            disabled={loadingMore}
-            activeOpacity={0.8}
-          >
-            {loadingMore ? (
-              <ActivityIndicator size="small" color={Colors.primary} />
-            ) : (
-              <>
-                <Text style={styles.readMoreText}>{t('loadMore')}</Text>
-                <MaterialCommunityIcons name="chevron-down" size={16} color={Colors.primary} />
-              </>
-            )}
-          </TouchableOpacity>
-        ) : null
+        showLoadMore ? <LoadMoreButton onPress={showMore} loading={loadingMore} /> : null
       }
       ListEmptyComponent={
         !showSkeleton && displayListings.length === 0 ? (
@@ -144,10 +128,10 @@ export default function HomeScreen() {
     return (
       <View style={styles.safe}>
         <View style={styles.outerRow}>
-          <View style={[styles.sidebar, { width: sidebarWidth }]}>
+          <View style={[styles.sidebar, fixedWidth(sidebarWidth)]}>
             <ScrollView overScrollMode="never" showsVerticalScrollIndicator={false} contentContainerStyle={styles.sidebarContent}>
               <View style={styles.videoSection}>
-                <HowToUseVideo />
+                <TutorialsButton />
               </View>
               <CategoryGrid />
               {postBtn}

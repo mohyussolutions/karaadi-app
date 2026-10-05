@@ -4,10 +4,11 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { useForgotPassword } from '../../hooks/useForgotPassword';
-import { useResponsive } from '../../hooks/useResponsive';
-import { useThemeColors, useThemedStyles } from '../../hooks/useTheme';
-import { createStyles } from '../../util/styles/auth/forgotPassword.styles';
+import { useForgotPassword } from '../../hooks/auth/useAuth';
+import { useResponsive } from '../../hooks/app/useResponsive';
+import { useThemeColors, useThemedStyles } from '../../hooks/app/useTheme';
+import { createStyles } from '../../utils/styles/auth/forgotPassword.styles';
+import { EMAIL_MAX_LENGTH } from '../../actions/constants';
 
 export default function ForgotPasswordScreen() {
   const router = useRouter();
@@ -47,6 +48,9 @@ export default function ForgotPasswordScreen() {
               placeholder={t('auth.forgotPassword.emailPlaceholder')}
               placeholderTextColor={Colors.placeholder}
               keyboardType="email-address"
+              maxLength={EMAIL_MAX_LENGTH}
+              autoCorrect={false}
+              textContentType="emailAddress"
               autoCapitalize="none"
               autoComplete="email"
               autoFocus
